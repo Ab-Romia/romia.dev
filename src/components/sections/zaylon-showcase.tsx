@@ -26,7 +26,7 @@ function StatCard({
         ref={ref}
         {...handlers}
         style={style}
-        className="glass-card rounded-lg p-5 hover:border-accent/30 transition-colors hover-glow"
+        className="bg-card border border-border rounded-lg p-5 hover:border-accent/30 transition-colors hover-glow"
       >
         <p className="text-3xl font-bold text-accent">
           <CountUp value={highlight.value as number} />
