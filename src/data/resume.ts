@@ -2,7 +2,6 @@ export const PERSONAL = {
   name: "Abdelrahman Abouroumia",
   displayName: "Romia",
   title: "AI Engineer",
-  location: "Alexandria, Egypt",
   email: "aabouroumia@gmail.com",
   tagline:
     "Building intelligent systems and scalable backends. From multi-agent architectures to production-grade APIs.",
@@ -216,7 +215,6 @@ export const EDUCATION = {
   degree: "B.Sc. in Computer & Communications Engineering (AI Concentration)",
   gpa: "3.73 / 4.0",
   expected: "Expected Jul 2026",
-  location: "Alexandria, Egypt",
 } as const;
 
 export const CERTIFICATIONS = [
@@ -239,7 +237,7 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I'm Romia, an AI/ML Engineer and Co-Founder of Zaylon AI based in Alexandria, Egypt. I build intelligent systems ranging from multi-agent architectures to production RAG pipelines, and I design scalable backend systems that power them. Currently finishing my B.Sc. in Computer & Communications Engineering with an AI concentration at Alexandria University (3.73 GPA). I'm passionate about conversational AI, NLP for Arabic, and building products that serve the MENA region. Outside of engineering, I play guitar and learn Spanish and German.",
+  bio: "I'm Romia, an AI/ML Engineer and Co-Founder of Zaylon AI. I build intelligent systems ranging from multi-agent architectures to production RAG pipelines, and I design scalable backend systems that power them. Currently finishing my B.Sc. in Computer & Communications Engineering with an AI concentration at Alexandria University (3.73 GPA). I'm passionate about conversational AI, multilingual NLP, and building products that scale globally. Outside of engineering, I play guitar and learn Spanish and German.",
 } as const;
 
 export const BLOG_POSTS = [
