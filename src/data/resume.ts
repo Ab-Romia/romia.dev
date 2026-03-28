@@ -29,10 +29,10 @@ export const ZAYLON_SHOWCASE = {
     "Zaylon turns WhatsApp and Instagram into full sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and complete purchases without ever leaving the chat. Behind the scenes, a supervisor agent routes each conversation to specialized Sales, Support, or Checkout agents with scoped tool access.",
   url: "https://zaylon.ai",
   highlights: [
-    { label: "AI Tools Deployed", value: 10 },
-    { label: "E-Commerce Platforms", value: 6 },
-    { label: "Messaging Channels", value: 3 },
-    { label: "Languages Supported", value: 3 },
+    { label: "AI Tools", detail: "Search, Cart, Orders, CRM & more", value: 10 },
+    { label: "Platforms", detail: "Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho", value: 6 },
+    { label: "Channels", detail: "WhatsApp, Instagram, Messenger", value: 3 },
+    { label: "Languages", detail: "English, Egyptian Arabic, Franco-Arabic", value: 3 },
   ],
   features: [
     "Multi-agent supervisor routes conversations to specialized Sales, Support, and Checkout agents",
