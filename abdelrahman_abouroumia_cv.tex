@@ -1,0 +1,160 @@
+\documentclass[10pt,a4paper]{article}
+
+% PACKAGES
+\usepackage[utf8]{inputenc}
+\usepackage[top=0.4in, bottom=0.35in, left=0.4in, right=0.4in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontawesome}
+\usepackage{charter}
+
+% COLOR DEFINITIONS
+\definecolor{primarycolor}{RGB}{34, 34, 85}
+\definecolor{secondarycolor}{RGB}{50, 110, 160}
+\definecolor{rulecolor}{RGB}{160, 170, 190}
+
+% HYPERLINK SETUP
+\hypersetup{
+    colorlinks=true,
+    linkcolor=secondarycolor,
+    urlcolor=secondarycolor,
+    citecolor=secondarycolor
+}
+
+% PAGE STYLE
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% SECTION FORMATTING
+\titleformat{\section}
+  {\normalsize\bfseries\color{primarycolor}}
+  {}
+  {0em}
+  {}[\vspace{-2pt}{\color{rulecolor}\titlerule}]
+\titlespacing{\section}{0pt}{6pt}{4pt}
+
+% COMPACT LIST SPACING
+\setlist[itemize]{leftmargin=12pt, noitemsep, topsep=2pt, parsep=0pt, partopsep=0pt}
+
+\begin{document}
+
+% -------------------- HEADER --------------------
+\begin{center}
+    {\LARGE\bfseries\color{primarycolor} Abdelrahman Abouroumia}
+    \vspace{4pt}
+
+    \small
+    \faEnvelope\ \href{mailto:aabouroumia@gmail.com}{aabouroumia@gmail.com} \quad
+    \faPhone\ +20 110 047 1572 \quad
+    \faGlobe\ \href{https://romia.dev}{\textbf{romia.dev}} \\[2pt]
+    \faLinkedin\ \href{https://linkedin.com/in/abdelrahman-abouroumia}{linkedin.com/in/abdelrahman-abouroumia} \quad
+    \faGithub\ \href{https://github.com/Ab-Romia}{github.com/Ab-Romia} \quad
+    \faCode\ \href{https://huggingface.co/Ab-Romia}{huggingface.co/Ab-Romia}
+\end{center}
+
+\vspace{-2pt}
+
+% -------------------- EXPERIENCE --------------------
+\section{Experience}
+
+\textbf{AI Engineer \& Co-Founder} \hfill \textbf{May 2025 -- Present} \\
+\textit{\href{https://zaylon.ai}{Zaylon AI}} \hfill \href{https://zaylon.ai}{\faGlobe\ zaylon.ai}
+\begin{itemize}
+\item Built a multi-agent \textbf{LangGraph} supervisor routing to Sales, Support, and Checkout agents with 10 scoped AI tools.
+\item Integrated \textbf{6 e-commerce platforms} (Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho) for real-time catalog sync and orders.
+\item Developed hybrid search (keyword + semantic \textbf{RRF}) and visual search via \textbf{GPT-4o} across WhatsApp, Instagram, Messenger.
+\item Engineered \textbf{DialectBridge} tri-lingual NLP for English, Egyptian Arabic, and Franco-Arabic with auto-detection.
+\item Built merchant dashboard with real-time inbox, analytics, \textbf{RFM segmentation}, and A/B testing (\textbf{Next.js}).
+\end{itemize}
+
+\vspace{2pt}
+\textbf{Software Integration Engineering Intern} \hfill \textbf{Jul 2025} \\
+\textit{Ejada}
+\begin{itemize}
+\item Built RESTful API endpoints for core banking using \textbf{Spring Boot} with query optimization and \textbf{Redis} caching.
+\item Configured \textbf{Apache Kafka} producers/consumers for async transaction processing, decoupling services.
+\item Implemented API security (OAuth2, rate limiting) with \textbf{WSO2 API Manager} in a BFF architecture.
+\end{itemize}
+
+\vspace{2pt}
+\textbf{AI Coding Expert (Freelance)} \hfill \textbf{Sep 2024 -- Present} \\
+\textit{Scale AI \& Turing}
+\begin{itemize}
+\item Contribute to \textbf{RLHF data pipelines}, evaluating and improving LLM-generated coding solutions for Python and backend logic.
+\item Develop quality rubrics and prompting strategies for evaluation workflows.
+\end{itemize}
+
+\vspace{2pt}
+\textbf{Automotive Cybersecurity Intern} \hfill \textbf{Aug 2024 -- Oct 2024} \\
+\textit{Swift-ACT}
+\begin{itemize}
+\item Created a threat analysis catalog documenting attack vectors on CAN bus and ECU systems for a security knowledge base.
+\item Conducted fuzz testing on Automotive Emergency Braking (AEB) components; documented vulnerabilities with test cases.
+\end{itemize}
+
+% -------------------- SELECTED PROJECTS --------------------
+\section{Selected Projects}
+
+\textbf{AI-Powered Collaborative Workspace} (Graduation Project) \hfill \textbf{Ongoing}
+\begin{itemize}
+\item Building a \textbf{FastAPI} microservices backend with a context-aware AI assistant for an organizational collaboration platform.
+\item Implementing a multi-source \textbf{RAG pipeline} with \textbf{PostgreSQL/pgvector} for grounded answers from organizational data.
+\end{itemize}
+
+\vspace{2pt}
+\textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{\faGithub\ GitHub}
+\begin{itemize}
+\item Architected event-driven microservices with \textbf{Spring Boot} and \textbf{Kafka} for banking operations with OAuth2 security.
+\item Integrated an AI agent microservice combining Spring Boot with \textbf{LangChain}-powered conversational AI for assistance.
+\end{itemize}
+
+\vspace{2pt}
+\textbf{ContextIQ: Production RAG System} \hfill \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{\faCode\ Demo} \quad \href{https://github.com/Ab-Romia/ContextIQ-RAG}{\faGithub\ GitHub} \\
+RAG API with \textbf{FastAPI} supporting 11+ file formats, TF-IDF embeddings with \textbf{ChromaDB} vector search and smart caching.
+
+\vspace{2pt}
+\textbf{Multimodal Emotion Recognition} \hfill \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{\faCode\ Demo} \quad \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{\faGithub\ GitHub} \\
+Cross-modal attention model using \textbf{HuBERT} audio and \textbf{EfficientNet} visual encoders with bidirectional fusion (8 classes).
+
+\vspace{2pt}
+\textbf{VoicePrint: AI Text Humanizer} \hfill \href{https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer}{\faCode\ Demo} \quad \href{https://github.com/Ab-Romia/Style-Echo-AI-Humanizer}{\faGithub\ GitHub} \\
+NLP system learning writing style from text samples using \textbf{Sentence-BERT} embeddings and stylometric analysis.
+
+\vspace{2pt}
+\textbf{Other Deployed:}
+\href{https://huggingface.co/spaces/Ab-Romia/connect4-ai}{Connect4 AI Agent} (minimax, alpha-beta pruning) $\cdot$
+\href{https://huggingface.co/spaces/Ab-Romia/sudoku-ai}{CSP Sudoku Solver} (backtracking, AC-3, MRV)
+
+% -------------------- EDUCATION --------------------
+\section{Education}
+\textbf{Alexandria University, Faculty of Engineering} \\
+B.Sc. in Computer \& Communications Engineering (AI Concentration) \hfill \textbf{Expected Jul 2026} \\
+Cumulative GPA: \textbf{3.73 / 4.0}
+
+% -------------------- TECHNICAL SKILLS --------------------
+\section{Technical Skills}
+\textbf{AI/ML:} PyTorch, LangChain, LangGraph, Transformers, RAG, Vector DBs (ChromaDB, pgvector), Prompt Engineering, NLP \\[2pt]
+\textbf{Backend:} Spring Boot (Java), FastAPI (Python), Microservices, Event-Driven Systems (Kafka), REST APIs, PostgreSQL, Redis \\[2pt]
+\textbf{DevOps \& Tools:} Docker, Git, GitHub Actions, AWS, Google Cloud, Linux, Bash, Hugging Face, Postman \\[2pt]
+\textbf{Programming:} Python, Java, SQL, JavaScript/TypeScript, C/C++
+
+% -------------------- CERTIFICATIONS --------------------
+\section{Certifications}
+\begin{itemize}
+\item \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{\textbf{Google AI Agents Intensive Capstone}} -- Kaggle, 2025
+\item \textbf{Meta Back-end Developer Specialization} -- Coursera \quad $\cdot$ \quad \textbf{AWS Cloud \& ML Foundations} -- AWS Academy
+\end{itemize}
+
+% -------------------- COMPETITIONS --------------------
+\section{Competitions \& Hackathons}
+\begin{itemize}
+\item \textbf{MTC-AIC3 BCI Challenge} -- Egypt National AI Competition \quad $\cdot$ \quad \textbf{ECPC} -- 3x participant
+\item \textbf{Hepsiburada Address Resolution Hackathon} -- TEKNOFEST 2025: NLP-based address parsing
+\end{itemize}
+
+\vspace{2pt}
+\noindent\textbf{Spoken Languages:}\quad English (Fluent) \quad \textbullet \quad Arabic (Native) \quad \textbullet \quad German (A2) \quad \textbullet \quad Spanish (Conversational)
+
+\end{document}
