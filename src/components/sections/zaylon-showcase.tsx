@@ -7,6 +7,7 @@ import {
   StaggerContainer,
   StaggerItemScale,
 } from "@/components/motion-wrapper";
+import { ZaylonArchitecture } from "@/components/sections/zaylon-architecture";
 import { ZAYLON_SHOWCASE } from "@/data/resume";
 import { ArrowUpRight } from "lucide-react";
 import { useTilt } from "@/hooks/use-tilt";
@@ -92,7 +93,14 @@ export function ZaylonShowcase() {
           </ul>
         </FadeUp>
 
-        <FadeUp delay={0.4}>
+        <FadeUp delay={0.35}>
+          <div className="mt-12">
+            <h3 className="text-lg font-semibold mb-6">System Architecture</h3>
+            <ZaylonArchitecture />
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.5}>
           <div className="flex flex-wrap gap-2 mt-8">
             {ZAYLON_SHOWCASE.techStack.map((tech) => (
               <span
@@ -105,7 +113,7 @@ export function ZaylonShowcase() {
           </div>
         </FadeUp>
 
-        <FadeUp delay={0.5}>
+        <FadeUp delay={0.6}>
           <Magnetic className="inline-block mt-6">
             <a
               href={ZAYLON_SHOWCASE.url}

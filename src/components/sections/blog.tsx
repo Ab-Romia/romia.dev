@@ -1,37 +1,5 @@
-"use client";
-
 import { BLOG_POSTS } from "@/data/resume";
-import { BlurIn, StaggerContainer, StaggerItemScale } from "@/components/motion-wrapper";
-import { useTilt } from "@/hooks/use-tilt";
-
-function BlogCard({ post }: { post: (typeof BLOG_POSTS)[number] }) {
-  const { ref, style, handlers } = useTilt(3);
-
-  return (
-    <StaggerItemScale>
-      <div
-        ref={ref}
-        style={style}
-        {...handlers}
-        className="relative bg-card border border-border rounded-lg p-6 h-full hover:border-accent/30 hover-glow transition-colors"
-      >
-        <div className="absolute top-3 right-3">
-          <span className="text-[10px] font-mono text-accent border border-accent/30 bg-accent/5 px-2 py-0.5 rounded-full hover:bg-accent/10 transition-colors">
-            {"eta" in post ? post.eta : "Coming Soon"}
-          </span>
-        </div>
-        <h3 className="text-base font-semibold leading-snug pr-16">
-          {post.title}
-        </h3>
-        <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground font-mono">
-          <span>Draft</span>
-          <span>&middot;</span>
-          <span>Coming Soon</span>
-        </div>
-      </div>
-    </StaggerItemScale>
-  );
-}
+import { BlurIn, FadeUp } from "@/components/motion-wrapper";
 
 export function Blog() {
   return (
@@ -43,11 +11,33 @@ export function Blog() {
           </h2>
         </BlurIn>
 
-        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mt-8">
-          {BLOG_POSTS.map((post) => (
-            <BlogCard key={post.slug} post={post} />
-          ))}
-        </StaggerContainer>
+        <FadeUp delay={0.1}>
+          <div className="relative mt-8">
+            <div
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 opacity-40 blur-[2px] pointer-events-none select-none"
+              aria-hidden="true"
+            >
+              {BLOG_POSTS.map((post) => (
+                <div
+                  key={post.slug}
+                  className="bg-card border border-border rounded-lg p-6 h-full"
+                >
+                  <h3 className="text-base font-semibold leading-snug">
+                    {post.title}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground font-mono">
+                    <span>{"eta" in post ? post.eta : "Draft"}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-sm font-mono text-muted-foreground bg-background/80 backdrop-blur-sm px-4 py-2 rounded-lg border border-border">
+                Posts in progress
+              </span>
+            </div>
+          </div>
+        </FadeUp>
       </div>
     </section>
   );
