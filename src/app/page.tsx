@@ -9,6 +9,10 @@ import { Blog } from "@/components/sections/blog";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
 
+function SectionDivider() {
+  return <div className="section-divider max-w-5xl mx-auto" />;
+}
+
 export default function Home() {
   return (
     <>
@@ -17,8 +21,11 @@ export default function Home() {
         <Hero />
         <ZaylonShowcase />
         <Projects />
+        <SectionDivider />
         <Experience />
+        <SectionDivider />
         <Skills />
+        <SectionDivider />
         <About />
         <Blog />
         <Contact />

@@ -5,27 +5,29 @@ import {
   COMPETITIONS,
   LANGUAGES_SPOKEN,
 } from "@/data/resume";
-import { FadeUp } from "@/components/motion-wrapper";
+import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
 
 export function About() {
   return (
     <section id="about" className="py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <h2 className="text-3xl font-bold tracking-tight leading-tight">
-          About
-        </h2>
+        <BlurIn>
+          <h2 className="text-3xl font-bold tracking-tight leading-tight">
+            About
+          </h2>
+        </BlurIn>
 
-        <FadeUp>
+        <BlurIn delay={0.1}>
           <p className="text-muted-foreground leading-relaxed mt-6 max-w-3xl">
             {ABOUT.bio}
           </p>
-        </FadeUp>
+        </BlurIn>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-          {/* Education */}
-          <FadeUp delay={0.1}>
+          <ScaleUp delay={0.1}>
             <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4">
+              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-accent" />
                 Education
               </h3>
               <p className="font-semibold text-sm">{EDUCATION.degree}</p>
@@ -37,20 +39,17 @@ export function About() {
                 <span>{EDUCATION.expected}</span>
               </div>
             </div>
-          </FadeUp>
+          </ScaleUp>
 
-          {/* Languages */}
-          <FadeUp delay={0.15}>
+          <ScaleUp delay={0.15}>
             <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4">
+              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-accent" />
                 Languages
               </h3>
               <div className="flex flex-wrap gap-3">
                 {LANGUAGES_SPOKEN.map((lang) => (
-                  <div
-                    key={lang.language}
-                    className="flex items-center gap-2 text-sm"
-                  >
+                  <div key={lang.language} className="flex items-center gap-2 text-sm">
                     <span className="text-foreground">{lang.language}</span>
                     <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                       {lang.level}
@@ -59,54 +58,52 @@ export function About() {
                 ))}
               </div>
             </div>
-          </FadeUp>
+          </ScaleUp>
 
-          {/* Certifications */}
-          <FadeUp delay={0.2}>
+          <ScaleUp delay={0.2}>
             <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4">
+              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-accent" />
                 Certifications
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {CERTIFICATIONS.map((cert) => (
-                  <div key={cert.name} className="flex items-start gap-2 text-sm">
-                    <span className="text-accent mt-0.5 shrink-0">&#10003;</span>
-                    <span>
-                      <span className="text-foreground">{cert.name}</span>
-                      <span className="text-muted-foreground">
-                        {" — "}
+                  <div key={cert.name} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                    <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0">
+                      <span className="text-accent text-sm font-bold">{cert.issuer.charAt(0)}</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium leading-tight">{cert.name}</p>
+                      <p className="text-xs text-muted-foreground">
                         {cert.issuer}
-                        {"year" in cert && cert.year && `, ${cert.year}`}
-                      </span>
-                    </span>
+                        {"year" in cert && cert.year && ` · ${cert.year}`}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          </FadeUp>
+          </ScaleUp>
 
-          {/* Competitions */}
-          <FadeUp delay={0.25}>
+          <ScaleUp delay={0.25}>
             <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4">
+              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-accent" />
                 Competitions & Hackathons
               </h3>
               <div className="space-y-2">
                 {COMPETITIONS.map((comp) => (
                   <div key={comp.name} className="flex items-start gap-2 text-sm">
-                    <span className="text-accent mt-0.5 shrink-0">&#9679;</span>
+                    <span className="text-accent mt-0.5 shrink-0">&#9656;</span>
                     <span>
                       <span className="text-foreground">{comp.name}</span>
-                      <span className="text-muted-foreground">
-                        {" — "}
-                        {comp.detail}
-                      </span>
+                      <span className="text-muted-foreground"> · {comp.detail}</span>
                     </span>
                   </div>
                 ))}
               </div>
             </div>
-          </FadeUp>
+          </ScaleUp>
         </div>
       </div>
     </section>

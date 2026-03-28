@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Romia",
   },
   description:
-    "Romia — AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production ML pipelines.",
+    "Romia - AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production-grade APIs.",
   openGraph: {
     title: "Romia | AI Engineer",
     description:

@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
+import {
+  AnimatePresence,
+  LazyMotion,
+  domAnimation,
+  m,
+  LayoutGroup,
+  useScroll,
+} from "motion/react";
 import { Menu, X, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS, PERSONAL } from "@/data/resume";
@@ -11,6 +18,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Navbar() {
   const { direction, isAtTop } = useScrollDirection();
+  const { scrollYProgress } = useScroll();
   const sectionIds = useMemo(
     () => NAV_LINKS.map((link) => link.href.replace("#", "")),
     []
@@ -31,6 +39,12 @@ export function Navbar() {
 
   return (
     <LazyMotion features={domAnimation}>
+      {/* Scroll progress bar */}
+      <m.div
+        className="fixed top-0 left-0 right-0 h-0.5 bg-accent z-[60] origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
+
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 h-16 transition-transform duration-300 motion-reduce:transition-none",
@@ -52,24 +66,37 @@ export function Navbar() {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center gap-1">
-            {NAV_LINKS.map((link) => {
-              const sectionId = link.href.replace("#", "");
-              const isActive = activeSection === sectionId;
-              return (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-3 py-2 text-sm font-medium rounded-lg transition-colors",
-                    isActive
-                      ? "text-accent"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {link.label}
-                </a>
-              );
-            })}
+            <LayoutGroup>
+              {NAV_LINKS.map((link) => {
+                const sectionId = link.href.replace("#", "");
+                const isActive = activeSection === sectionId;
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "relative px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                      isActive
+                        ? "text-accent"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {link.label}
+                    {isActive && (
+                      <m.span
+                        layoutId="nav-underline"
+                        className="absolute -bottom-0.5 left-2 right-2 h-0.5 bg-accent rounded-full"
+                        transition={{
+                          type: "spring",
+                          stiffness: 350,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </a>
+                );
+              })}
+            </LayoutGroup>
             <ThemeToggle />
             <a
               href="/resume.pdf"

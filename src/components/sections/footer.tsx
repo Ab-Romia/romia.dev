@@ -1,5 +1,8 @@
+"use client";
+
 import { PERSONAL, NAV_LINKS } from "@/data/resume";
 import { Mail } from "lucide-react";
+import { m, MotionProvider } from "@/components/motion-wrapper";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -36,42 +39,40 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-10 mt-auto">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        {/* Nav links */}
         <div className="flex flex-wrap justify-center gap-6 mb-6">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline"
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        {/* Social icons */}
         <div className="flex items-center justify-center gap-4 mb-6">
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={link.label}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <link.Icon className="size-5" />
-            </a>
-          ))}
+          <MotionProvider>
+            {socialLinks.map((link) => (
+              <m.a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                whileHover={{ scale: 1.15, y: -2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <link.Icon className="size-5" />
+              </m.a>
+            ))}
+          </MotionProvider>
         </div>
 
-        {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-6 border-t border-border">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-6 border-t border-border">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} {PERSONAL.displayName}. All rights reserved.
-          </p>
-          <p className="text-xs text-muted-foreground/60">
-            Built with Next.js &middot; Deployed on Vercel
           </p>
         </div>
       </div>

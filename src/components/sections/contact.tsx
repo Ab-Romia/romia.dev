@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PERSONAL } from "@/data/resume";
-import { FadeUp } from "@/components/motion-wrapper";
+import { BlurIn, FadeUp, m, MotionProvider } from "@/components/motion-wrapper";
 import { Mail, Check, Copy } from "lucide-react";
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -46,20 +46,30 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24">
+    <section id="contact" className="relative py-16 md:py-24 overflow-hidden">
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background: `
+            radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 50%, rgba(187, 154, 247, 0.06) 0%, transparent 50%)
+          `,
+        }}
+      />
+
       <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
-        <FadeUp>
+        <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">
             Let&apos;s Connect
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-lg mx-auto leading-relaxed">
+          <p className="text-muted-foreground font-light mt-4 max-w-lg mx-auto leading-relaxed">
             Open to AI/ML Engineer and Software Engineer opportunities at
             innovative companies.
           </p>
-        </FadeUp>
+        </BlurIn>
 
         <FadeUp delay={0.1}>
-          <div className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3">
+          <div className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-shadow">
             <Mail className="size-4 text-accent" />
             <span className="text-sm font-mono">{PERSONAL.email}</span>
             <button
@@ -79,16 +89,20 @@ export function Contact() {
         <FadeUp delay={0.2}>
           <div className="flex items-center justify-center gap-4 mt-8">
             {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="p-3 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all"
-              >
-                <link.Icon className="size-5" />
-              </a>
+              <MotionProvider key={link.label}>
+                <m.a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="p-3 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 transition-colors"
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <link.Icon className="size-5" />
+                </m.a>
+              </MotionProvider>
             ))}
           </div>
         </FadeUp>
