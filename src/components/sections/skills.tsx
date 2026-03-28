@@ -3,7 +3,7 @@ import { StaggerContainer, StaggerItem } from "@/components/motion-wrapper";
 
 export function Skills() {
   return (
-    <section className="py-16 md:py-24">
+    <section id="skills" className="py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight leading-tight">
           Tech Stack
