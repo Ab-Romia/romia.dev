@@ -5,7 +5,7 @@ export const PERSONAL = {
   location: "Alexandria, Egypt",
   email: "aabouroumia@gmail.com",
   tagline:
-    "Building intelligent systems — from multi-agent architectures to production ML pipelines.",
+    "Building intelligent systems and scalable backends. From multi-agent architectures to production-grade APIs.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -25,27 +25,37 @@ export const ZAYLON_SHOWCASE = {
   title: "Zaylon AI",
   role: "Co-Founder & AI Engineer",
   heading: "Co-Founding Zaylon AI",
-  subtitle: "AI-Powered Conversational Commerce for MENA Merchants",
+  subtitle: "Production Multi-Tenant Conversational Commerce for MENA",
   description:
-    "A multi-agent conversational commerce platform built for MENA merchants. Zaylon connects to Shopify, Salla, and Zid — enabling real-time catalog sync, order management, and AI-powered customer interactions across WhatsApp and Instagram.",
+    "A production-grade, multi-tenant SaaS platform powering AI-driven customer interactions for MENA e-commerce merchants. 40,000+ lines of backend code with a supervisor multi-agent architecture that routes conversations through specialized Sales, Support, and Checkout agents, each with scoped tool access.",
   url: "https://zaylon.ai",
   highlights: [
-    { label: "AI Tools", value: "10" },
-    { label: "Platform Integrations", value: "3" },
-    { label: "Architecture", value: "Multi-Agent" },
-    { label: "NLP", value: "Bilingual" },
+    { label: "Lines of Code", value: 40, suffix: "k+" },
+    { label: "E-Commerce Platforms", value: 6 },
+    { label: "DB Migrations", value: 84 },
+    { label: "Test Files", value: 59 },
+  ],
+  features: [
+    "Supervisor multi-agent routing with 3 specialist agents (Sales, Support, Checkout)",
+    "DialectBridge tri-lingual NLP: English, Egyptian Arabic, and Franco-Arabic with auto-detection",
+    "Vision AI for product image search via GPT-4o (multimodal-safe checkpointing)",
+    "Redis-backed message accumulation batching rapid-fire customer messages",
+    "Proactive engagement engine with 6 detection rules and LLM-powered triage",
+    "3-layer encryption: Fernet + AES-256-GCM + PostgreSQL Row-Level Security",
+    "Hybrid search with Reciprocal Rank Fusion (semantic + keyword via pgvector)",
+    "A/B testing framework with variant assignment and outcome tracking",
   ],
   techStack: [
     "LangGraph",
-    "Python",
     "FastAPI",
     "Supabase",
     "Next.js",
-    "Shopify",
-    "Salla",
-    "Zid",
-    "WhatsApp API",
+    "PostgreSQL",
+    "pgvector",
+    "Redis",
     "GPT-4o",
+    "Gemini",
+    "Docker",
   ],
 } as const;
 
@@ -229,7 +239,7 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I'm Romia — an AI/ML Engineer and Co-Founder of Zaylon AI based in Alexandria, Egypt. I build intelligent systems ranging from multi-agent architectures to production RAG pipelines. Currently finishing my B.Sc. in Computer & Communications Engineering with an AI concentration at Alexandria University (3.73 GPA). I'm passionate about conversational AI, NLP for Arabic, and building products that serve the MENA region. Outside of engineering, I play guitar, learn Spanish and German, and train at the gym.",
+  bio: "I'm Romia, an AI/ML Engineer and Co-Founder of Zaylon AI based in Alexandria, Egypt. I build intelligent systems ranging from multi-agent architectures to production RAG pipelines, and I design scalable backend systems that power them. Currently finishing my B.Sc. in Computer & Communications Engineering with an AI concentration at Alexandria University (3.73 GPA). I'm passionate about conversational AI, NLP for Arabic, and building products that serve the MENA region. Outside of engineering, I play guitar and learn Spanish and German.",
 } as const;
 
 export const BLOG_POSTS = [
@@ -237,15 +247,18 @@ export const BLOG_POSTS = [
     title: "Building Production RAG Systems: Lessons from Zaylon AI",
     slug: "building-production-rag-systems",
     comingSoon: true,
+    eta: "Q3 2026",
   },
   {
     title: "Multi-Agent Architecture Patterns with LangGraph",
     slug: "multi-agent-architecture-patterns",
     comingSoon: true,
+    eta: "Q3 2026",
   },
   {
     title: "Arabic NLP in Conversational Commerce",
     slug: "arabic-nlp-conversational-commerce",
     comingSoon: true,
+    eta: "Q4 2026",
   },
 ] as const;

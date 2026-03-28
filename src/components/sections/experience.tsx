@@ -1,5 +1,18 @@
 import { EXPERIENCE } from "@/data/resume";
-import { FadeUp } from "@/components/motion-wrapper";
+import { FadeUp, SlideFromLeft } from "@/components/motion-wrapper";
+
+function highlightNumbers(text: string) {
+  const parts = text.split(/(\d+[\w+]*)/g);
+  return parts.map((part, i) =>
+    /^\d/.test(part) ? (
+      <span key={i} className="text-foreground font-medium">
+        {part}
+      </span>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+}
 
 export function Experience() {
   return (
@@ -10,57 +23,82 @@ export function Experience() {
         </h2>
 
         <div className="mt-8 space-y-0">
-          {EXPERIENCE.map((entry, i) => (
-            <FadeUp key={entry.company} delay={i * 0.1}>
-              <div className="relative pl-8 pb-10 last:pb-0 border-l border-border">
-                {/* Timeline dot */}
-                <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-accent border-2 border-background" />
+          {EXPERIENCE.map((entry, i) => {
+            const isCurrent = entry.period.includes("Present");
+            const Wrapper = i < 2 ? SlideFromLeft : FadeUp;
 
-                <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                  <div>
-                    <h3 className="text-base font-semibold">
-                      {entry.role}
-                      <span className="text-muted-foreground font-normal">
-                        {" — "}
-                        {"url" in entry && entry.url ? (
-                          <a
-                            href={entry.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-accent transition-colors"
-                          >
-                            {entry.company}
-                          </a>
-                        ) : (
-                          entry.company
+            return (
+              <Wrapper key={entry.company} delay={i * 0.1}>
+                <div
+                  className={`relative pl-8 pb-10 last:pb-0 border-l ${
+                    isCurrent ? "border-accent/40" : "border-border"
+                  }`}
+                >
+                  {/* Timeline dot */}
+                  {isCurrent ? (
+                    <>
+                      <div className="absolute -left-[7px] top-1 size-3.5 rounded-full bg-accent border-2 border-background shadow-[0_0_8px_rgba(0,212,255,0.4)]" />
+                      <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-accent/30 animate-ping" />
+                    </>
+                  ) : (
+                    <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-muted-foreground/50 border-2 border-background" />
+                  )}
+
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                    <div>
+                      <h3 className="text-base font-semibold">
+                        {entry.role}
+                        <span className="text-muted-foreground font-normal">
+                          {" at "}
+                          {"url" in entry && entry.url ? (
+                            <a
+                              href={entry.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-accent transition-colors link-underline"
+                            >
+                              {entry.company}
+                            </a>
+                          ) : (
+                            entry.company
+                          )}
+                        </span>
+                        {"type" in entry && entry.type && (
+                          <span className="text-xs text-muted-foreground font-normal ml-2">
+                            ({entry.type})
+                          </span>
                         )}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground font-mono shrink-0">
+                        {entry.period}
                       </span>
-                      {"type" in entry && entry.type && (
-                        <span className="text-xs text-muted-foreground font-normal ml-2">
-                          ({entry.type})
+                      {isCurrent && (
+                        <span className="text-[10px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/20">
+                          Current
                         </span>
                       )}
-                    </h3>
+                    </div>
                   </div>
-                  <span className="text-sm text-muted-foreground font-mono shrink-0">
-                    {entry.period}
-                  </span>
-                </div>
 
-                <ul className="mt-3 space-y-2">
-                  {entry.highlights.map((highlight) => (
-                    <li
-                      key={highlight}
-                      className="text-sm text-muted-foreground leading-relaxed flex gap-2"
-                    >
-                      <span className="text-accent mt-1.5 shrink-0">&#8226;</span>
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </FadeUp>
-          ))}
+                  <ul className="mt-3 space-y-2">
+                    {entry.highlights.map((highlight) => (
+                      <li
+                        key={highlight}
+                        className="text-sm text-muted-foreground leading-relaxed flex gap-2"
+                      >
+                        <span className="text-accent mt-1.5 shrink-0">
+                          &#8226;
+                        </span>
+                        <span>{highlightNumbers(highlight)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Wrapper>
+            );
+          })}
         </div>
       </div>
     </section>
