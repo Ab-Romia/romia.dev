@@ -17,29 +17,57 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://romia.dev"),
   title: {
-    default: "Romia | AI Engineer",
-    template: "%s | Romia",
+    default: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    template: "%s | Abdelrahman Abouroumia",
   },
   description:
-    "Romia - AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production-grade APIs.",
+    "Abdelrahman Abouroumia (Romia) - AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend APIs.",
+  keywords: [
+    "Abdelrahman Abouroumia",
+    "Romia",
+    "Abouroumia",
+    "Ab-Romia",
+    "AI Engineer",
+    "Co-Founder Zaylon AI",
+    "LangGraph",
+    "Multi-Agent Systems",
+    "RAG",
+    "FastAPI",
+    "Backend Engineer",
+  ],
+  authors: [{ name: "Abdelrahman Abouroumia", url: "https://romia.dev" }],
+  creator: "Abdelrahman Abouroumia",
   openGraph: {
-    title: "Romia | AI Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
     description:
-      "AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production ML pipelines.",
+      "AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend APIs.",
     url: "https://romia.dev",
-    siteName: "Romia",
+    siteName: "Abdelrahman Abouroumia - Portfolio",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Romia | AI Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
     description:
-      "AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production ML pipelines.",
+      "AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend APIs.",
+  },
+  alternates: {
+    canonical: "/",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  other: {
+    "theme-color": "#09090B",
   },
 };
 
