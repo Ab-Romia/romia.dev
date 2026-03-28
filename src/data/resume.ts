@@ -160,7 +160,7 @@ export const EXPERIENCE = [
     company: "Scale AI",
     role: "AI Coding Expert",
     type: "Freelance",
-    period: "Sep 2024 – Present",
+    period: "Sep 2024 – Feb 2026",
     highlights: [
       "Contribute to RLHF data pipelines evaluating and improving LLM-generated coding solutions",
       "Develop quality rubrics and prompting strategies for Python and backend logic",

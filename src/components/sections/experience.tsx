@@ -1,3 +1,5 @@
+"use client";
+
 import { EXPERIENCE } from "@/data/resume";
 import { FadeUp, SlideFromLeft } from "@/components/motion-wrapper";
 
@@ -16,7 +18,7 @@ function highlightNumbers(text: string) {
 
 export function Experience() {
   return (
-    <section id="experience" className="py-16 md:py-24">
+    <section id="experience" className="py-16 md:py-20">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight leading-tight">
           Experience
@@ -30,18 +32,19 @@ export function Experience() {
             return (
               <Wrapper key={entry.company} delay={i * 0.1}>
                 <div
-                  className={`relative pl-8 pb-10 last:pb-0 border-l ${
-                    isCurrent ? "border-accent/40" : "border-border"
+                  className={`group relative pl-8 pb-10 last:pb-0 border-l transition-colors duration-300 ${
+                    isCurrent
+                      ? "border-accent/40 hover:border-accent/60"
+                      : "border-border hover:border-accent/20"
                   }`}
                 >
-                  {/* Timeline dot */}
                   {isCurrent ? (
                     <>
-                      <div className="absolute -left-[7px] top-1 size-3.5 rounded-full bg-accent border-2 border-background shadow-[0_0_8px_rgba(0,212,255,0.4)]" />
+                      <div className="absolute -left-[7px] top-1 size-3.5 rounded-full bg-accent border-2 border-background shadow-[0_0_8px_rgba(0,212,255,0.4)] group-hover:shadow-[0_0_14px_rgba(0,212,255,0.6)] transition-shadow" />
                       <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-accent/30 animate-ping" />
                     </>
                   ) : (
-                    <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-muted-foreground/50 border-2 border-background" />
+                    <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-muted-foreground/50 border-2 border-background group-hover:bg-accent/50 group-hover:shadow-[0_0_6px_rgba(0,212,255,0.3)] transition-all" />
                   )}
 
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
@@ -88,9 +91,7 @@ export function Experience() {
                         key={highlight}
                         className="text-sm text-muted-foreground leading-relaxed flex gap-2"
                       >
-                        <span className="text-accent mt-1.5 shrink-0">
-                          &#8226;
-                        </span>
+                        <span className="text-accent mt-1.5 shrink-0">&#8226;</span>
                         <span>{highlightNumbers(highlight)}</span>
                       </li>
                     ))}
