@@ -4,7 +4,6 @@ import { useState } from "react";
 import { PERSONAL } from "@/data/resume";
 import { BlurIn, FadeUp } from "@/components/motion-wrapper";
 import { Mail, Check, Copy } from "lucide-react";
-import { useTilt } from "@/hooks/use-tilt";
 import { Magnetic } from "@/components/magnetic";
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -40,8 +39,6 @@ const socialLinks = [
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
-  const emailTilt = useTilt(3);
-
   const copyEmail = async () => {
     await navigator.clipboard.writeText(PERSONAL.email);
     setCopied(true);
@@ -72,12 +69,7 @@ export function Contact() {
         </BlurIn>
 
         <FadeUp delay={0.1}>
-          <div
-            ref={emailTilt.ref}
-            style={emailTilt.style}
-            {...emailTilt.handlers}
-            className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 hover-glow transition-all"
-          >
+          <div className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-all">
             <Mail className="size-4 text-accent" />
             <span className="text-sm font-mono">{PERSONAL.email}</span>
             <button
