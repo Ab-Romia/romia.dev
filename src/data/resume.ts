@@ -76,6 +76,7 @@ export const PROJECTS = [
       "Production RAG API supporting 11+ file formats with TF-IDF embeddings, ChromaDB vector search, and smart caching.",
     tags: ["FastAPI", "ChromaDB", "LangChain", "Python"],
     github: "https://github.com/Ab-Romia",
+    demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
     status: "Demo" as ProjectStatus,
     featured: true,
   },
@@ -94,6 +95,7 @@ export const PROJECTS = [
       "Cross-modal attention model combining HuBERT audio and EfficientNet visual encoders with bidirectional fusion across 8 emotion classes.",
     tags: ["PyTorch", "HuBERT", "EfficientNet", "Multimodal AI"],
     github: "https://github.com/Ab-Romia",
+    demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
     status: "Demo" as ProjectStatus,
   },
   {
@@ -102,6 +104,7 @@ export const PROJECTS = [
       "NLP system that learns individual writing style from samples using Sentence-BERT embeddings and stylometric analysis.",
     tags: ["NLP", "Sentence-BERT", "Python"],
     github: "https://github.com/Ab-Romia",
+    demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer",
     status: "Demo" as ProjectStatus,
   },
   {
@@ -109,6 +112,7 @@ export const PROJECTS = [
     description:
       "Intelligent game-playing agent using Minimax search with alpha-beta pruning for optimal move selection.",
     tags: ["AI", "Python", "Game Theory"],
+    demo: "https://huggingface.co/spaces/Ab-Romia/connect4-ai",
     status: "Deployed" as ProjectStatus,
   },
   {
@@ -116,6 +120,7 @@ export const PROJECTS = [
     description:
       "Constraint satisfaction solver using backtracking, AC-3 arc consistency, and MRV heuristic for efficient puzzle solving.",
     tags: ["AI", "Python", "CSP"],
+    demo: "https://huggingface.co/spaces/Ab-Romia/sudoku-ai",
     status: "Deployed" as ProjectStatus,
   },
 ] as const;
