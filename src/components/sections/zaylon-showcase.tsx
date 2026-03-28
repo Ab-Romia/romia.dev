@@ -7,7 +7,6 @@ import { ArrowUpRight } from "lucide-react";
 export function ZaylonShowcase() {
   return (
     <section
-      id="zaylon"
       className="relative py-20 md:py-28 border-t border-b border-accent/10 overflow-hidden"
     >
       {/* Accent glow background */}
@@ -20,27 +19,23 @@ export function ZaylonShowcase() {
       />
 
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        {/* Featured badge */}
         <FadeUp>
           <span className="inline-flex items-center gap-2 text-accent font-mono text-sm uppercase tracking-wider">
             <span className="size-2 rounded-full bg-accent animate-pulse" />
-            Featured Project
+            {ZAYLON_SHOWCASE.role}
           </span>
         </FadeUp>
 
-        {/* Title */}
         <FadeUp delay={0.1}>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight mt-4">
-            {ZAYLON_SHOWCASE.title}
+            {ZAYLON_SHOWCASE.heading}
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground mt-2">
             {ZAYLON_SHOWCASE.subtitle}
           </p>
         </FadeUp>
 
-        {/* Two-column content */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 mt-10">
-          {/* Left column: description + tech + CTA */}
           <div className="md:col-span-3 space-y-6">
             <FadeUp delay={0.2}>
               <p className="text-muted-foreground leading-relaxed">
@@ -74,7 +69,6 @@ export function ZaylonShowcase() {
             </FadeUp>
           </div>
 
-          {/* Right column: highlight stat cards */}
           <StaggerContainer className="md:col-span-2 grid grid-cols-2 gap-3">
             {ZAYLON_SHOWCASE.highlights.map((highlight) => (
               <StaggerItem key={highlight.label}>

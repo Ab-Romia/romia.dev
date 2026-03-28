@@ -1,5 +1,9 @@
-import { PERSONAL, NAV_LINKS } from "@/data/resume";
-import { Mail } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { PERSONAL } from "@/data/resume";
+import { FadeUp } from "@/components/motion-wrapper";
+import { Mail, Check, Copy } from "lucide-react";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -32,49 +36,63 @@ const socialLinks = [
   { label: "Email", href: `mailto:${PERSONAL.email}`, Icon: Mail },
 ];
 
-export function Footer() {
+export function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(PERSONAL.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <footer className="border-t border-border py-10 mt-auto">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        {/* Nav links */}
-        <div className="flex flex-wrap justify-center gap-6 mb-6">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Social icons */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={link.label}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <link.Icon className="size-5" />
-            </a>
-          ))}
-        </div>
-
-        {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-6 border-t border-border">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} {PERSONAL.displayName}. All rights reserved.
+    <section id="contact" className="py-16 md:py-24">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
+        <FadeUp>
+          <h2 className="text-3xl font-bold tracking-tight leading-tight">
+            Let&apos;s Connect
+          </h2>
+          <p className="text-muted-foreground mt-4 max-w-lg mx-auto leading-relaxed">
+            Open to AI/ML Engineer and Software Engineer opportunities at
+            innovative companies.
           </p>
-          <p className="text-xs text-muted-foreground/60">
-            Built with Next.js &middot; Deployed on Vercel
-          </p>
-        </div>
+        </FadeUp>
+
+        <FadeUp delay={0.1}>
+          <div className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3">
+            <Mail className="size-4 text-accent" />
+            <span className="text-sm font-mono">{PERSONAL.email}</span>
+            <button
+              onClick={copyEmail}
+              className="ml-2 p-1 rounded hover:bg-muted transition-colors"
+              aria-label="Copy email"
+            >
+              {copied ? (
+                <Check className="size-4 text-green-400" />
+              ) : (
+                <Copy className="size-4 text-muted-foreground" />
+              )}
+            </button>
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.2}>
+          <div className="flex items-center justify-center gap-4 mt-8">
+            {socialLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                className="p-3 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all"
+              >
+                <link.Icon className="size-5" />
+              </a>
+            ))}
+          </div>
+        </FadeUp>
       </div>
-    </footer>
+    </section>
   );
 }

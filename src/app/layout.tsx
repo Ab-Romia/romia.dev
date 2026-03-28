@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,9 +15,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://romia.dev"),
-  title: "Romia | AI Engineer",
+  title: {
+    default: "Romia | AI Engineer",
+    template: "%s | Romia",
+  },
   description:
-    "AI Engineer building intelligent systems — from multi-agent architectures to production ML pipelines.",
+    "Romia — AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production ML pipelines.",
+  openGraph: {
+    title: "Romia | AI Engineer",
+    description:
+      "AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production ML pipelines.",
+    url: "https://romia.dev",
+    siteName: "Romia",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Romia | AI Engineer",
+    description:
+      "AI/ML Engineer and Co-Founder of Zaylon AI. Building intelligent systems from multi-agent architectures to production ML pipelines.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -27,9 +50,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }
