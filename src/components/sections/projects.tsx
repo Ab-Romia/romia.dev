@@ -84,6 +84,7 @@ function ProjectCard({
 }) {
   const hasUrl = "url" in project && project.url;
   const hasGithub = "github" in project && project.github;
+  const hasDemo = "demo" in project && project.demo;
   const hasBadge = "badge" in project && project.badge;
 
   return (
@@ -149,6 +150,17 @@ function ProjectCard({
         </div>
 
         <div className="flex items-center gap-2 shrink-0 ml-2">
+          {hasDemo && (
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} live demo`}
+              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors"
+            >
+              Demo
+            </a>
+          )}
           {hasGithub && (
             <a
               href={project.github}

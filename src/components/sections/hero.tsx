@@ -34,8 +34,11 @@ export function Hero() {
 
         <FadeUp delay={0.1}>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight mt-4">
-            {PERSONAL.displayName}.
+            {PERSONAL.name}
           </h1>
+          <p className="text-lg text-muted-foreground mt-1 font-mono">
+            aka {PERSONAL.displayName}
+          </p>
         </FadeUp>
 
         <FadeUp delay={0.2}>
