@@ -84,7 +84,7 @@ export const PROJECTS = [
     description:
       "Production RAG API supporting 11+ file formats with TF-IDF embeddings, ChromaDB vector search, and smart caching.",
     tags: ["FastAPI", "ChromaDB", "LangChain", "Python"],
-    github: "https://github.com/Ab-Romia",
+    github: "https://github.com/Ab-Romia/ContextIQ-RAG",
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
     status: "Demo" as ProjectStatus,
     featured: true,
@@ -94,7 +94,7 @@ export const PROJECTS = [
     description:
       "Event-driven banking platform with microservices architecture, async Kafka messaging, and AI-powered conversational assistant.",
     tags: ["Spring Boot", "Kafka", "Java", "LangChain", "Docker"],
-    github: "https://github.com/Ab-Romia",
+    github: "https://github.com/Ab-Romia/Virtual-Bank-System",
     status: "Demo" as ProjectStatus,
     featured: true,
   },
@@ -103,7 +103,7 @@ export const PROJECTS = [
     description:
       "Cross-modal attention model combining HuBERT audio and EfficientNet visual encoders with bidirectional fusion across 8 emotion classes.",
     tags: ["PyTorch", "HuBERT", "EfficientNet", "Multimodal AI"],
-    github: "https://github.com/Ab-Romia",
+    github: "https://github.com/Ab-Romia/RAVDESS-emotion-recognition",
     demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
     status: "Demo" as ProjectStatus,
   },
@@ -112,7 +112,7 @@ export const PROJECTS = [
     description:
       "NLP system that learns individual writing style from samples using Sentence-BERT embeddings and stylometric analysis.",
     tags: ["NLP", "Sentence-BERT", "Python"],
-    github: "https://github.com/Ab-Romia",
+    github: "https://github.com/Ab-Romia/Style-Echo-AI-Humanizer",
     demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer",
     status: "Demo" as ProjectStatus,
   },
@@ -121,6 +121,7 @@ export const PROJECTS = [
     description:
       "Intelligent game-playing agent using Minimax search with alpha-beta pruning for optimal move selection.",
     tags: ["AI", "Python", "Game Theory"],
+    github: "https://github.com/Ab-Romia/AI_Connect4_Agent",
     demo: "https://huggingface.co/spaces/Ab-Romia/connect4-ai",
     status: "Deployed" as ProjectStatus,
   },
@@ -129,6 +130,7 @@ export const PROJECTS = [
     description:
       "Constraint satisfaction solver using backtracking, AC-3 arc consistency, and MRV heuristic for efficient puzzle solving.",
     tags: ["AI", "Python", "CSP"],
+    github: "https://github.com/Ab-Romia/Sudoku_CSP",
     demo: "https://huggingface.co/spaces/Ab-Romia/sudoku-ai",
     status: "Deployed" as ProjectStatus,
   },
