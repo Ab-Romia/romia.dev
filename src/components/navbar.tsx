@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { NAV_LINKS, PERSONAL } from "@/data/resume";
 import { useScrollDirection } from "@/hooks/use-scroll-direction";
 import { useActiveSection } from "@/hooks/use-active-section";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Navbar() {
   const { direction, isAtTop } = useScrollDirection();
@@ -69,10 +70,11 @@ export function Navbar() {
                 </a>
               );
             })}
+            <ThemeToggle />
             <a
               href="/resume.pdf"
               download
-              className="ml-2 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
+              className="ml-1 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
             >
               <Download className="size-4" />
               Resume
