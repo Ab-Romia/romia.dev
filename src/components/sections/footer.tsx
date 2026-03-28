@@ -2,7 +2,7 @@
 
 import { PERSONAL, NAV_LINKS } from "@/data/resume";
 import { Mail } from "lucide-react";
-import { m, MotionProvider } from "@/components/motion-wrapper";
+import { Magnetic } from "@/components/magnetic";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -52,22 +52,19 @@ export function Footer() {
         </div>
 
         <div className="flex items-center justify-center gap-4 mb-6">
-          <MotionProvider>
-            {socialLinks.map((link) => (
-              <m.a
-                key={link.label}
+          {socialLinks.map((link) => (
+            <Magnetic key={link.label} strength={0.3}>
+              <a
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
                 className="text-muted-foreground hover:text-foreground transition-colors"
-                whileHover={{ scale: 1.15, y: -2 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <link.Icon className="size-5" />
-              </m.a>
-            ))}
-          </MotionProvider>
+              </a>
+            </Magnetic>
+          ))}
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-6 border-t border-border">

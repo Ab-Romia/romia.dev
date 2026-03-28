@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { PERSONAL } from "@/data/resume";
-import { BlurIn, FadeUp, m, MotionProvider } from "@/components/motion-wrapper";
+import { BlurIn, FadeUp } from "@/components/motion-wrapper";
 import { Mail, Check, Copy } from "lucide-react";
+import { useTilt } from "@/hooks/use-tilt";
+import { Magnetic } from "@/components/magnetic";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -38,6 +40,7 @@ const socialLinks = [
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
+  const emailTilt = useTilt(3);
 
   const copyEmail = async () => {
     await navigator.clipboard.writeText(PERSONAL.email);
@@ -46,7 +49,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-16 md:py-24 overflow-hidden">
+    <section id="contact" className="relative py-20 md:py-28 overflow-hidden">
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -69,12 +72,17 @@ export function Contact() {
         </BlurIn>
 
         <FadeUp delay={0.1}>
-          <div className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-shadow">
+          <div
+            ref={emailTilt.ref}
+            style={emailTilt.style}
+            {...emailTilt.handlers}
+            className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 hover-glow transition-all"
+          >
             <Mail className="size-4 text-accent" />
             <span className="text-sm font-mono">{PERSONAL.email}</span>
             <button
               onClick={copyEmail}
-              className="ml-2 p-1 rounded hover:bg-muted transition-colors"
+              className="ml-2 p-1 rounded hover:bg-muted transition-colors active:scale-90"
               aria-label="Copy email"
             >
               {copied ? (
@@ -89,20 +97,17 @@ export function Contact() {
         <FadeUp delay={0.2}>
           <div className="flex items-center justify-center gap-4 mt-8">
             {socialLinks.map((link) => (
-              <MotionProvider key={link.label}>
-                <m.a
+              <Magnetic key={link.label} strength={0.4}>
+                <a
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="p-3 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 transition-colors"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="p-3 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 hover-glow transition-all"
                 >
                   <link.Icon className="size-5" />
-                </m.a>
-              </MotionProvider>
+                </a>
+              </Magnetic>
             ))}
           </div>
         </FadeUp>

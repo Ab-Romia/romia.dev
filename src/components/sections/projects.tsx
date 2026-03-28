@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { PROJECTS } from "@/data/resume";
 import {
   BlurIn,
   FadeUp,
   StaggerContainer,
   StaggerItemScale,
-  m,
-  MotionProvider,
 } from "@/components/motion-wrapper";
 import { ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTilt } from "@/hooks/use-tilt";
+import { useMouseGlow } from "@/hooks/use-mouse-glow";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -35,7 +35,7 @@ export function Projects() {
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <section id="projects" className="py-16 md:py-24">
+    <section id="projects" className="py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">
@@ -89,129 +89,108 @@ function ProjectCard({
   const hasDemo = "demo" in project && project.demo;
   const hasBadge = "badge" in project && project.badge;
 
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [hovering, setHovering] = useState(false);
+  const tilt = useTilt(featured ? 4 : 0);
+  const glow = useMouseGlow();
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
+  const cardRef = featured ? tilt.ref : undefined;
+  const cardStyle = featured ? tilt.style : undefined;
+  const cardHandlers = featured
+    ? {
+        onMouseMove: (e: React.MouseEvent) => {
+          tilt.handlers.onMouseMove(e);
+          glow.handlers.onMouseMove(e);
+        },
+        onMouseLeave: () => {
+          tilt.handlers.onMouseLeave();
+          glow.handlers.onMouseLeave();
+        },
+        onMouseEnter: glow.handlers.onMouseEnter,
+      }
+    : undefined;
 
   return (
-    <MotionProvider>
-      <m.div
-        ref={cardRef}
-        onMouseMove={featured ? handleMouseMove : undefined}
-        onMouseEnter={featured ? () => setHovering(true) : undefined}
-        onMouseLeave={featured ? () => setHovering(false) : undefined}
-        whileHover={{ y: -6 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className={cn(
-          "group relative border rounded-lg h-full overflow-hidden transition-colors duration-300",
-          featured
-            ? "glass-card hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
-            : "bg-card border-border hover:border-accent/30",
-          compact ? "p-4" : "p-6"
-        )}
-      >
-        {featured && hovering && (
-          <div
-            className="absolute inset-0 -z-10 pointer-events-none"
-            style={{
-              background: `radial-gradient(250px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0, 212, 255, 0.07), transparent 70%)`,
-            }}
-          />
-        )}
+    <div
+      ref={cardRef}
+      style={cardStyle}
+      {...cardHandlers}
+      className={cn(
+        "group relative border rounded-lg h-full overflow-hidden transition-colors duration-300",
+        featured
+          ? "glass-card hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
+          : "bg-card border-border hover:border-accent/30 hover-glow",
+        compact ? "p-4" : "p-6"
+      )}
+    >
+      {featured && glow.glowStyle && (
+        <div className="absolute inset-0 -z-10 pointer-events-none" style={glow.glowStyle} />
+      )}
 
-        <div className="flex items-start justify-between gap-2">
-          <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
-            {hasUrl ? (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-accent transition-colors inline-flex items-center gap-1"
-              >
-                {project.title}
-                <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
-            ) : (
-              project.title
-            )}
-          </h3>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {hasBadge && (
-              <span className="text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 px-1.5 py-0.5 rounded">
-                {project.badge}
-              </span>
-            )}
-            <span
-              className={cn(
-                "text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border inline-flex items-center gap-1",
-                statusColors[project.status]
-              )}
+      <div className="flex items-start justify-between gap-2">
+        <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
+          {hasUrl ? (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent transition-colors inline-flex items-center gap-1"
             >
-              {project.status === "Production" && (
-                <span className="size-1.5 rounded-full bg-green-400 animate-pulse" />
-              )}
-              {project.status}
+              {project.title}
+              <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </a>
+          ) : (
+            project.title
+          )}
+        </h3>
+        <div className="flex items-center gap-2 shrink-0">
+          {hasBadge && (
+            <span className="text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 px-1.5 py-0.5 rounded">
+              {project.badge}
             </span>
-          </div>
+          )}
+          <span
+            className={cn(
+              "text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border inline-flex items-center gap-1",
+              statusColors[project.status]
+            )}
+          >
+            {project.status === "Production" && (
+              <span className="size-1.5 rounded-full bg-green-400 animate-pulse" />
+            )}
+            {project.status}
+          </span>
         </div>
+      </div>
 
-        <p className={cn("text-muted-foreground leading-relaxed mt-2", compact ? "text-xs" : "text-sm")}>
-          {project.description}
-        </p>
+      <p className={cn("text-muted-foreground leading-relaxed mt-2", compact ? "text-xs" : "text-sm")}>
+        {project.description}
+      </p>
 
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex flex-wrap gap-2">
-            {project.tags.slice(0, compact ? 3 : undefined).map((tag) => (
-              <span key={tag} className="text-xs font-mono bg-muted text-muted-foreground px-2 py-1 rounded">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0 ml-2">
-            {hasDemo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.title} live demo`}
-                className="text-xs font-mono text-accent hover:text-accent-muted transition-colors"
-              >
-                Demo
-              </a>
-            )}
-            {hasGithub && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.title} on GitHub`}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <GitHubIcon className="size-4" />
-              </a>
-            )}
-            {hasUrl && (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Visit ${project.title}`}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ArrowUpRight className="size-4" />
-              </a>
-            )}
-          </div>
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex flex-wrap gap-2">
+          {project.tags.slice(0, compact ? 3 : undefined).map((tag) => (
+            <span key={tag} className="text-xs font-mono bg-muted text-muted-foreground px-2 py-1 rounded">
+              {tag}
+            </span>
+          ))}
         </div>
-      </m.div>
-    </MotionProvider>
+        <div className="flex items-center gap-2 shrink-0 ml-2">
+          {hasDemo && (
+            <a href={project.demo} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-accent hover:text-accent-muted transition-colors">
+              Demo
+            </a>
+          )}
+          {hasGithub && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <GitHubIcon className="size-4" />
+            </a>
+          )}
+          {hasUrl && (
+            <a href={project.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowUpRight className="size-4" />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
