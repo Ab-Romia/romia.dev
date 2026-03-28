@@ -29,14 +29,7 @@ function StatCard({
           <div className="absolute inset-0 -z-10 pointer-events-none" style={glowStyle} />
         )}
         <p className="text-2xl font-bold text-accent">
-          {"suffix" in highlight ? (
-            <CountUp
-              value={highlight.value as number}
-              suffix={(highlight as { suffix?: string }).suffix || ""}
-            />
-          ) : (
-            <CountUp value={highlight.value as number} />
-          )}
+          <CountUp value={highlight.value as number} />
         </p>
         <p className="text-xs text-muted-foreground mt-1">
           {highlight.label}
