@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export function Hero() {
   return (
-    <section className="relative py-32 md:py-48 overflow-hidden">
+    <section id="hero" className="relative py-32 md:py-48 overflow-hidden">
       <div
         className="absolute inset-0 -z-10"
         style={{
