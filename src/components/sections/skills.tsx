@@ -26,7 +26,7 @@ function SkillCard({
         {...handlers}
         className={cn(
           "border border-border rounded-lg p-6 h-full",
-          isFirst ? "glass-card sm:col-span-2" : "bg-card hover-glow"
+          isFirst ? "glass-card border-border" : "bg-card hover-glow"
         )}
       >
         <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
@@ -64,7 +64,9 @@ export function Skills() {
 
         <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-8">
           {categories.map(([category, skills], i) => (
-            <SkillCard key={category} category={category} skills={skills} isFirst={i === 0} />
+            <div key={category} className={i === 0 ? "sm:col-span-2" : ""}>
+              <SkillCard category={category} skills={skills} isFirst={i === 0} />
+            </div>
           ))}
         </StaggerContainer>
       </div>
