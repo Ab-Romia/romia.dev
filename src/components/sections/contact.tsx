@@ -89,13 +89,13 @@ export function Contact() {
         <FadeUp delay={0.2}>
           <div className="flex items-center justify-center gap-4 mt-8">
             {socialLinks.map((link) => (
-              <Magnetic key={link.label} strength={0.4}>
+              <Magnetic key={link.label} strength={0.3}>
                 <a
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="p-3 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 hover-glow transition-all"
+                  className="p-3 text-muted-foreground hover:text-accent transition-colors"
                 >
                   <link.Icon className="size-5" />
                 </a>
