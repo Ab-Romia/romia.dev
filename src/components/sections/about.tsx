@@ -35,11 +35,21 @@ export function About() {
           </h2>
         </BlurIn>
 
-        <BlurIn delay={0.1}>
-          <p className="text-muted-foreground leading-relaxed mt-6 max-w-3xl">
-            {ABOUT.bio}
-          </p>
-        </BlurIn>
+        <div className="flex flex-col-reverse md:flex-row gap-8 mt-6">
+          <BlurIn delay={0.1}>
+            <p className="text-muted-foreground leading-relaxed max-w-2xl">
+              {ABOUT.bio}
+            </p>
+          </BlurIn>
+
+          <ScaleUp delay={0.15}>
+            <div className="relative size-32 md:size-40 rounded-full overflow-hidden border-2 border-accent/30 shadow-[0_0_20px_rgba(0,212,255,0.15)] shrink-0 mx-auto md:mx-0">
+              <div className="w-full h-full bg-card flex items-center justify-center">
+                <span className="text-3xl font-bold text-accent">RA</span>
+              </div>
+            </div>
+          </ScaleUp>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
           <ScaleUp delay={0.1}>

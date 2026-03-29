@@ -8,6 +8,7 @@ import { About } from "@/components/sections/about";
 import { Blog } from "@/components/sections/blog";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import Script from "next/script";
 
 const personSchema = {
@@ -85,7 +86,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
       <Navbar />
-      <main className="pt-16">
+      <main id="main-content" className="pt-16">
         <Hero />
         <ZaylonShowcase />
         <Projects />
@@ -99,6 +100,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <ScrollToTop />
     </>
   );
 }

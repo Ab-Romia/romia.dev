@@ -67,9 +67,12 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-6 border-t border-border">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-6 border-t border-border">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} {PERSONAL.displayName}. All rights reserved.
+          </p>
+          <p className="text-xs text-muted-foreground/50">
+            Last updated March 2026
           </p>
         </div>
       </div>
