@@ -6,6 +6,7 @@ import { PROJECTS, getProjectBySlug, getAdjacentProjects } from "@/data/resume";
 import { FadeUp, BlurIn, StaggerContainer, StaggerItem } from "@/components/motion-wrapper";
 import { DemoEmbed } from "@/components/demo-embed";
 import { Connect4Wrapper } from "@/components/connect4-wrapper";
+import { SudokuWrapper } from "@/components/sudoku-wrapper";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
 import { cn } from "@/lib/utils";
@@ -199,6 +200,9 @@ export default async function ProjectPage({
               )}
               {cs.embedDemo.type === "component" && cs.embedDemo.component === "connect4" && (
                 <Connect4Wrapper />
+              )}
+              {cs.embedDemo.type === "component" && cs.embedDemo.component === "sudoku" && (
+                <SudokuWrapper />
               )}
             </div>
           </FadeUp>

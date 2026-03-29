@@ -278,8 +278,8 @@ export const PROJECTS: Project[] = [
         "Brute-force Sudoku solving is computationally expensive for complex puzzles. Intelligent constraint propagation can solve most puzzles without any backtracking.",
       approach:
         "Constraint satisfaction with backtracking, AC-3 arc consistency preprocessing, and MRV heuristic for intelligent variable ordering.",
-      results: "Efficient solver with deployed demo on HuggingFace.",
-      embedDemo: { type: "iframe", src: "https://ab-romia-sudoku-ai.hf.space" },
+      results: "Efficient solver with interactive browser demo. The AI Solve button demonstrates the CSP algorithm solving any puzzle instantly.",
+      embedDemo: { type: "component", component: "sudoku" },
     },
   },
 ];
