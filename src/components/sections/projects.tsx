@@ -6,8 +6,6 @@ import { PROJECTS } from "@/data/resume";
 import {
   BlurIn,
   FadeUp,
-  StaggerContainer,
-  StaggerItemScale,
 } from "@/components/motion-wrapper";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -67,25 +65,24 @@ export function Projects() {
           </div>
         </FadeUp>
 
-        {/* Featured */}
-        {featured.length > 0 && (
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8">
-            {featured.map((project) => (
-              <StaggerItemScale key={project.slug}>
-                <ProjectCard project={project} featured />
-              </StaggerItemScale>
-            ))}
-          </StaggerContainer>
-        )}
+        {/* Projects grid - key forces remount on filter change */}
+        <div key={filter} className="mt-8 space-y-6">
+          {featured.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {featured.map((project) => (
+                <ProjectCard key={project.slug} project={project} featured />
+              ))}
+            </div>
+          )}
 
-        {/* Others */}
-        {others.length > 0 && (
-          <FadeUp className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-            {others.map((project) => (
-              <ProjectCard key={project.slug} project={project} compact />
-            ))}
-          </FadeUp>
-        )}
+          {others.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {others.map((project) => (
+                <ProjectCard key={project.slug} project={project} compact />
+              ))}
+            </div>
+          )}
+        </div>
 
         {filtered.length === 0 && (
           <p className="text-muted-foreground text-sm mt-8">No projects in this category.</p>
