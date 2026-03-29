@@ -11,6 +11,8 @@ import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTilt } from "@/hooks/use-tilt";
 import { useMouseGlow } from "@/hooks/use-mouse-glow";
+import { Connect4Wrapper } from "@/components/connect4-wrapper";
+import { SudokuWrapper } from "@/components/sudoku-wrapper";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -86,6 +88,20 @@ export function Projects() {
 
         {filtered.length === 0 && (
           <p className="text-muted-foreground text-sm mt-8">No projects in this category.</p>
+        )}
+
+        {/* Inline demos for Games/Puzzles */}
+        {filter === "Games/Puzzles" && (
+          <div key="demos" className="mt-12 space-y-12">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Play Connect4 vs AI</h3>
+              <Connect4Wrapper />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Solve a Sudoku Puzzle</h3>
+              <SudokuWrapper />
+            </div>
+          </div>
         )}
       </div>
     </section>
