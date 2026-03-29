@@ -32,7 +32,7 @@ const categories = ["All", "AI/ML", "Backend", "Full-Stack", "Games/Puzzles"] as
 export function Projects() {
   const [filter, setFilter] = useState<string>("All");
 
-  const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
+  const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.categories.includes(filter as never));
   const featured = filtered.filter((p) => p.featured);
   const others = filtered.filter((p) => !p.featured);
 

@@ -76,7 +76,7 @@ export interface Project {
   description: string;
   tags: string[];
   slug: string;
-  category: "AI/ML" | "Backend" | "Full-Stack" | "Games/Puzzles";
+  categories: ("AI/ML" | "Backend" | "Full-Stack" | "Games/Puzzles")[];
   status: ProjectStatus;
   badge?: string;
   featured?: boolean;
@@ -90,7 +90,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Zaylon AI",
     slug: "zaylon-ai",
-    category: "AI/ML",
+    categories: ["AI/ML", "Backend", "Full-Stack"],
     description:
       "Multi-agent conversational commerce system built with LangGraph, serving real users across MENA markets via WhatsApp and Instagram.",
     tags: ["LangGraph", "Python", "Multi-Agent", "Shopify", "Next.js"],
@@ -124,7 +124,7 @@ export const PROJECTS: Project[] = [
   {
     title: "AI Collaborative Workspace",
     slug: "ai-collaborative-workspace",
-    category: "Full-Stack",
+    categories: ["AI/ML", "Backend", "Full-Stack"],
     description:
       "Full-stack graduation project with a context-aware AI assistant and multi-source RAG pipeline for organizational collaboration.",
     tags: ["FastAPI", "RAG", "pgvector", "React", "PostgreSQL"],
@@ -151,7 +151,7 @@ export const PROJECTS: Project[] = [
   {
     title: "ContextIQ: Production RAG System",
     slug: "contextiq-rag",
-    category: "AI/ML",
+    categories: ["AI/ML"],
     description:
       "Production RAG API supporting 11+ file formats with TF-IDF embeddings, ChromaDB vector search, and smart caching.",
     tags: ["FastAPI", "ChromaDB", "LangChain", "Python"],
@@ -181,7 +181,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Virtual Banking Microservices",
     slug: "virtual-banking",
-    category: "Backend",
+    categories: ["Backend", "Full-Stack"],
     description:
       "Event-driven banking platform with microservices architecture, async Kafka messaging, and AI-powered conversational assistant.",
     tags: ["Spring Boot", "Kafka", "Java", "LangChain", "Docker"],
@@ -209,7 +209,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Multimodal Emotion Recognition",
     slug: "emotion-recognition",
-    category: "AI/ML",
+    categories: ["AI/ML"],
     description:
       "Cross-modal attention model combining HuBERT audio and EfficientNet visual encoders with bidirectional fusion across 8 emotion classes.",
     tags: ["PyTorch", "HuBERT", "EfficientNet", "Multimodal AI"],
@@ -228,7 +228,7 @@ export const PROJECTS: Project[] = [
   {
     title: "VoicePrint: AI Text Humanizer",
     slug: "voiceprint-humanizer",
-    category: "AI/ML",
+    categories: ["AI/ML"],
     description:
       "NLP system that learns individual writing style from samples using Sentence-BERT embeddings and stylometric analysis.",
     tags: ["NLP", "Sentence-BERT", "Python"],
@@ -247,7 +247,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Connect4 AI Agent",
     slug: "connect4-ai",
-    category: "Games/Puzzles",
+    categories: ["Games/Puzzles"],
     description:
       "Intelligent game-playing agent using Minimax search with alpha-beta pruning for optimal move selection.",
     tags: ["AI", "Python", "Game Theory"],
@@ -266,7 +266,7 @@ export const PROJECTS: Project[] = [
   {
     title: "CSP Sudoku Solver",
     slug: "sudoku-solver",
-    category: "Games/Puzzles",
+    categories: ["Games/Puzzles"],
     description:
       "Constraint satisfaction solver using backtracking, AC-3 arc consistency, and MRV heuristic for efficient puzzle solving.",
     tags: ["AI", "Python", "CSP"],
@@ -352,7 +352,7 @@ export const SKILLS = {
     "Docker", "Git", "GitHub Actions", "AWS",
     "Google Cloud", "Linux", "Bash",
   ],
-  Languages: ["Python", "Java", "SQL", "TypeScript", "C/C++"],
+  Languages: ["Python", "Java", "Go", "SQL", "TypeScript", "C/C++"],
 } as const;
 
 export const EDUCATION = {
