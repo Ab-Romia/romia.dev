@@ -88,9 +88,11 @@ export default async function ProjectPage({
             >
               {project.status}
             </span>
-            <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
-              {project.category}
-            </span>
+            {project.categories.map((cat) => (
+              <span key={cat} className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
+                {cat}
+              </span>
+            ))}
             {project.badge && (
               <span className="text-xs font-mono text-accent border border-accent/30 px-2 py-0.5 rounded">
                 {project.badge}
