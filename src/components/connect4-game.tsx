@@ -8,7 +8,7 @@ const COLS = 7;
 const EMPTY = 0;
 const PLAYER = 1;
 const AI = 2;
-const DEPTH = 5;
+const DEPTH = 7;
 
 type Board = number[][];
 
