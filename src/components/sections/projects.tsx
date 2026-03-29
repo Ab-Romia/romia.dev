@@ -183,14 +183,12 @@ function ProjectCard({
         </div>
       </div>
 
-      {!compact && (
-        <Link
-          href={`/projects/${project.slug}`}
-          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
-        >
-          View Case Study <ArrowUpRight className="size-3" />
-        </Link>
-      )}
+      <Link
+        href={`/projects/${project.slug}`}
+        className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
+      >
+        View Case Study <ArrowUpRight className="size-3" />
+      </Link>
     </div>
   );
 }

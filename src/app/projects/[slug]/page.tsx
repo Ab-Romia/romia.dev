@@ -6,6 +6,8 @@ import { PROJECTS, getProjectBySlug, getAdjacentProjects } from "@/data/resume";
 import { FadeUp, BlurIn, StaggerContainer, StaggerItem } from "@/components/motion-wrapper";
 import { DemoEmbed } from "@/components/demo-embed";
 import { Connect4Wrapper } from "@/components/connect4-wrapper";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/sections/footer";
 import { cn } from "@/lib/utils";
 
 const statusColors: Record<string, string> = {
@@ -60,6 +62,8 @@ export default async function ProjectPage({
   const cs = project.caseStudy;
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         {/* Back link */}
@@ -229,5 +233,7 @@ export default async function ProjectPage({
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
