@@ -83,7 +83,10 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
   }
   body {
     @apply bg-background text-foreground;
@@ -162,6 +165,14 @@
 
 .hover-glow:hover {
   animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 :is(.dark) .glass-card {

@@ -7,6 +7,7 @@ import {
   COMPETITIONS,
   LANGUAGES_SPOKEN,
 } from "@/data/resume";
+import Image from "next/image";
 import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
 import { useTilt } from "@/hooks/use-tilt";
 
@@ -44,10 +45,13 @@ export function About() {
 
           <ScaleUp delay={0.15}>
             <div className="relative size-32 md:size-40 rounded-full overflow-hidden border-2 border-accent/30 shadow-[0_0_20px_rgba(0,212,255,0.15)] shrink-0 mx-auto md:mx-0">
-              <img
+              <Image
                 src="/photo.jpeg"
                 alt="Abdelrahman Abouroumia"
+                width={160}
+                height={160}
                 className="w-full h-full object-cover"
+                priority={false}
               />
             </div>
           </ScaleUp>
