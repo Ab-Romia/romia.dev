@@ -27,6 +27,8 @@ export function Blog() {
                   </h3>
                   <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground font-mono">
                     <span>{"eta" in post ? post.eta : "Draft"}</span>
+                    <span>&middot;</span>
+                    <span>5 min read</span>
                   </div>
                 </div>
               ))}
