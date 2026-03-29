@@ -45,96 +45,256 @@ export const ZAYLON_SHOWCASE = {
     "Multi-tenant architecture with per-merchant encryption and row-level data isolation",
   ],
   techStack: [
-    "LangGraph",
-    "FastAPI",
-    "Supabase",
-    "Next.js",
-    "PostgreSQL",
-    "pgvector",
-    "Redis",
-    "GPT-4o",
-    "Gemini",
-    "Docker",
+    "LangGraph", "FastAPI", "Supabase", "Next.js", "PostgreSQL",
+    "pgvector", "Redis", "GPT-4o", "Gemini", "Docker",
   ],
 } as const;
 
 export type ProjectStatus = "Production" | "Demo" | "Ongoing" | "Deployed";
 
-export const PROJECTS = [
+interface TechnicalDecision {
+  title: string;
+  reasoning: string;
+}
+
+interface EmbedDemo {
+  type: "iframe" | "component";
+  src?: string;
+  component?: string;
+}
+
+interface CaseStudy {
+  problem: string;
+  approach: string;
+  decisions?: TechnicalDecision[];
+  results: string;
+  embedDemo?: EmbedDemo;
+}
+
+export interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  slug: string;
+  category: "AI/ML" | "Backend" | "Full-Stack" | "Games/Puzzles";
+  status: ProjectStatus;
+  badge?: string;
+  featured?: boolean;
+  url?: string;
+  github?: string;
+  demo?: string;
+  caseStudy: CaseStudy;
+}
+
+export const PROJECTS: Project[] = [
   {
     title: "Zaylon AI",
+    slug: "zaylon-ai",
+    category: "AI/ML",
     description:
       "Multi-agent conversational commerce system built with LangGraph, serving real users across MENA markets via WhatsApp and Instagram.",
     tags: ["LangGraph", "Python", "Multi-Agent", "Shopify", "Next.js"],
     url: "https://zaylon.ai",
-    status: "Production" as ProjectStatus,
+    status: "Production",
     badge: "Co-Founded",
     featured: true,
+    caseStudy: {
+      problem:
+        "MENA merchants lose sales because customers abandon messaging channels when they can't get instant, dialect-aware product assistance. Traditional chatbots fail with Arabic dialects and can't handle complex multi-step purchases.",
+      approach:
+        "Built a multi-agent supervisor architecture with LangGraph that routes conversations to specialized agents, each with scoped tool access and dialect-aware NLP. The system handles the full purchase lifecycle from product discovery to payment processing across multiple messaging channels.",
+      decisions: [
+        {
+          title: "LangGraph over plain LangChain",
+          reasoning: "State machine routing gives deterministic conversation flow control that chain-based approaches can't guarantee. Each conversation phase (browsing, carting, checkout) has well-defined transitions.",
+        },
+        {
+          title: "Supervisor pattern over flat multi-agent",
+          reasoning: "Scoped tool access per agent prevents hallucinated actions and reduces the attack surface. A sales agent should never be able to process payments.",
+        },
+        {
+          title: "Redis message accumulation",
+          reasoning: "WhatsApp users send 3-5 rapid messages instead of one coherent prompt. Without batching, each triggers a separate agent invocation, wasting tokens and producing fragmented responses.",
+        },
+      ],
+      results:
+        "Production system serving merchants across 6 e-commerce platforms, handling tri-lingual conversations with automated sales, support, and checkout flows.",
+    },
   },
   {
     title: "AI Collaborative Workspace",
+    slug: "ai-collaborative-workspace",
+    category: "Full-Stack",
     description:
       "Full-stack graduation project with a context-aware AI assistant and multi-source RAG pipeline for organizational collaboration.",
     tags: ["FastAPI", "RAG", "pgvector", "React", "PostgreSQL"],
-    status: "Ongoing" as ProjectStatus,
+    status: "Ongoing",
     featured: true,
+    caseStudy: {
+      problem:
+        "Organizations need AI assistants that understand their specific context, not generic chatbots. Knowledge is scattered across documents, databases, and team communications.",
+      approach:
+        "Building a multi-source RAG pipeline with PostgreSQL/pgvector for grounded answers from organizational documents, files, and databases. FastAPI microservices architecture allows each service to scale independently.",
+      decisions: [
+        {
+          title: "pgvector over dedicated vector DB",
+          reasoning: "Keeps everything in one database, simplifies deployment and operations. PostgreSQL is battle-tested for production workloads.",
+        },
+        {
+          title: "FastAPI microservices architecture",
+          reasoning: "Each service (auth, documents, AI, collaboration) scales independently. A spike in AI queries doesn't affect document uploads.",
+        },
+      ],
+      results: "Ongoing graduation project with context-aware AI assistance for organizational collaboration.",
+    },
   },
   {
     title: "ContextIQ: Production RAG System",
+    slug: "contextiq-rag",
+    category: "AI/ML",
     description:
       "Production RAG API supporting 11+ file formats with TF-IDF embeddings, ChromaDB vector search, and smart caching.",
     tags: ["FastAPI", "ChromaDB", "LangChain", "Python"],
     github: "https://github.com/Ab-Romia/ContextIQ-RAG",
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
-    status: "Demo" as ProjectStatus,
+    status: "Demo",
     featured: true,
+    caseStudy: {
+      problem:
+        "Most RAG demos handle PDFs only. Real organizations have knowledge spread across 11+ file formats, and retrieval quality degrades without hybrid search strategies.",
+      approach:
+        "Production RAG API with hybrid retrieval combining TF-IDF keyword search and vector similarity search, smart caching for repeated queries, and multi-format document processing.",
+      decisions: [
+        {
+          title: "Hybrid retrieval with Reciprocal Rank Fusion",
+          reasoning: "Pure semantic search misses exact keyword matches that users expect. Combining keyword and vector search with RRF scoring gives the best of both worlds.",
+        },
+        {
+          title: "Smart caching layer",
+          reasoning: "Repeated queries to the same document corpus shouldn't re-embed or re-retrieve. Caching dramatically reduces latency and API costs for common queries.",
+        },
+      ],
+      results: "API supporting 11+ file formats with deployed demo on HuggingFace.",
+      embedDemo: { type: "iframe", src: "https://ab-romia-context-aware-ai.hf.space" },
+    },
   },
   {
     title: "Virtual Banking Microservices",
+    slug: "virtual-banking",
+    category: "Backend",
     description:
       "Event-driven banking platform with microservices architecture, async Kafka messaging, and AI-powered conversational assistant.",
     tags: ["Spring Boot", "Kafka", "Java", "LangChain", "Docker"],
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
-    status: "Demo" as ProjectStatus,
+    status: "Demo",
     featured: true,
+    caseStudy: {
+      problem:
+        "Monolithic banking backends can't scale individual services independently. A spike in transaction processing shouldn't affect account lookups or user authentication.",
+      approach:
+        "Event-driven microservices with Spring Boot and Kafka for decoupled, independently scalable banking operations with OAuth2 security and an embedded AI assistant.",
+      decisions: [
+        {
+          title: "Kafka over synchronous REST for inter-service communication",
+          reasoning: "Eventual consistency is acceptable for banking ledgers, and decoupling prevents cascade failures. If the notification service goes down, transactions still process.",
+        },
+        {
+          title: "AI agent as a separate microservice",
+          reasoning: "Allows independent scaling and model updates without redeploying core banking logic. The AI service can be versioned, A/B tested, and rolled back independently.",
+        },
+      ],
+      results: "Complete banking platform with transaction processing, account management, and AI assistant.",
+    },
   },
   {
     title: "Multimodal Emotion Recognition",
+    slug: "emotion-recognition",
+    category: "AI/ML",
     description:
       "Cross-modal attention model combining HuBERT audio and EfficientNet visual encoders with bidirectional fusion across 8 emotion classes.",
     tags: ["PyTorch", "HuBERT", "EfficientNet", "Multimodal AI"],
     github: "https://github.com/Ab-Romia/RAVDESS-emotion-recognition",
     demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
-    status: "Demo" as ProjectStatus,
+    status: "Demo",
+    caseStudy: {
+      problem:
+        "Single-modality emotion detection misses context. Audio tone and facial expressions together reveal more than either alone.",
+      approach:
+        "Cross-modal attention model fusing HuBERT audio and EfficientNet visual encoders with bidirectional attention and learnable modality weights.",
+      results: "8-class emotion classification with deployed demo on HuggingFace.",
+      embedDemo: { type: "iframe", src: "https://ab-romia-ravdess-emotion-recognition.hf.space" },
+    },
   },
   {
     title: "VoicePrint: AI Text Humanizer",
+    slug: "voiceprint-humanizer",
+    category: "AI/ML",
     description:
       "NLP system that learns individual writing style from samples using Sentence-BERT embeddings and stylometric analysis.",
     tags: ["NLP", "Sentence-BERT", "Python"],
     github: "https://github.com/Ab-Romia/Style-Echo-AI-Humanizer",
     demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer",
-    status: "Demo" as ProjectStatus,
+    status: "Demo",
+    caseStudy: {
+      problem:
+        "AI-generated text is detectable because it lacks individual writing fingerprints. Each person has measurable stylistic patterns.",
+      approach:
+        "Style learning system using Sentence-BERT embeddings and 20+ stylometric features to build and apply personal writing profiles.",
+      results: "Style transfer system with deployed demo on HuggingFace.",
+      embedDemo: { type: "iframe", src: "https://ab-romia-voiceprint-humanizer.hf.space" },
+    },
   },
   {
     title: "Connect4 AI Agent",
+    slug: "connect4-ai",
+    category: "Games/Puzzles",
     description:
       "Intelligent game-playing agent using Minimax search with alpha-beta pruning for optimal move selection.",
     tags: ["AI", "Python", "Game Theory"],
     github: "https://github.com/Ab-Romia/AI_Connect4_Agent",
     demo: "https://huggingface.co/spaces/Ab-Romia/connect4-ai",
-    status: "Deployed" as ProjectStatus,
+    status: "Deployed",
+    caseStudy: {
+      problem:
+        "Building an AI that plays optimally requires efficient search through massive game trees. Connect4 has over 4 trillion possible positions.",
+      approach:
+        "Minimax algorithm with alpha-beta pruning for optimal move selection, cutting the search space dramatically while maintaining perfect play at reasonable depths.",
+      results: "Playable AI opponent with interactive browser demo.",
+      embedDemo: { type: "component", component: "connect4" },
+    },
   },
   {
     title: "CSP Sudoku Solver",
+    slug: "sudoku-solver",
+    category: "Games/Puzzles",
     description:
       "Constraint satisfaction solver using backtracking, AC-3 arc consistency, and MRV heuristic for efficient puzzle solving.",
     tags: ["AI", "Python", "CSP"],
     github: "https://github.com/Ab-Romia/Sudoku_CSP",
     demo: "https://huggingface.co/spaces/Ab-Romia/sudoku-ai",
-    status: "Deployed" as ProjectStatus,
+    status: "Deployed",
+    caseStudy: {
+      problem:
+        "Brute-force Sudoku solving is computationally expensive for complex puzzles. Intelligent constraint propagation can solve most puzzles without any backtracking.",
+      approach:
+        "Constraint satisfaction with backtracking, AC-3 arc consistency preprocessing, and MRV heuristic for intelligent variable ordering.",
+      results: "Efficient solver with deployed demo on HuggingFace.",
+      embedDemo: { type: "iframe", src: "https://ab-romia-sudoku-ai.hf.space" },
+    },
   },
-] as const;
+];
+
+export function getProjectBySlug(slug: string): Project | undefined {
+  return PROJECTS.find((p) => p.slug === slug);
+}
+
+export function getAdjacentProjects(slug: string) {
+  const idx = PROJECTS.findIndex((p) => p.slug === slug);
+  return {
+    prev: idx > 0 ? PROJECTS[idx - 1] : null,
+    next: idx < PROJECTS.length - 1 ? PROJECTS[idx + 1] : null,
+  };
+}
 
 export const EXPERIENCE = [
   {
@@ -181,33 +341,16 @@ export const EXPERIENCE = [
 
 export const SKILLS = {
   "AI / ML": [
-    "PyTorch",
-    "LangChain",
-    "LangGraph",
-    "Transformers",
-    "RAG",
-    "ChromaDB",
-    "pgvector",
-    "NLP",
-    "Prompt Engineering",
+    "PyTorch", "LangChain", "LangGraph", "Transformers", "RAG",
+    "ChromaDB", "pgvector", "NLP", "Prompt Engineering",
   ],
   Backend: [
-    "Spring Boot",
-    "FastAPI",
-    "Microservices",
-    "Kafka",
-    "REST APIs",
-    "PostgreSQL",
-    "Redis",
+    "Spring Boot", "FastAPI", "Microservices", "Kafka",
+    "REST APIs", "PostgreSQL", "Redis",
   ],
   "DevOps & Cloud": [
-    "Docker",
-    "Git",
-    "GitHub Actions",
-    "AWS",
-    "Google Cloud",
-    "Linux",
-    "Bash",
+    "Docker", "Git", "GitHub Actions", "AWS",
+    "Google Cloud", "Linux", "Bash",
   ],
   Languages: ["Python", "Java", "SQL", "TypeScript", "C/C++"],
 } as const;
