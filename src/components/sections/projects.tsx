@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PROJECTS } from "@/data/resume";
 import {
   BlurIn,
@@ -21,15 +22,15 @@ function GitHubIcon({ className }: { className?: string }) {
   );
 }
 
-const statusColors: Record<string, string> = {
+export const statusColors: Record<string, string> = {
   Production: "bg-green-500/10 text-green-400 border-green-500/20",
   Demo: "bg-blue-500/10 text-blue-400 border-blue-500/20",
   Ongoing: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
   Deployed: "bg-purple-500/10 text-purple-400 border-purple-500/20",
 };
 
-const featuredProjects = PROJECTS.filter((p) => "featured" in p && p.featured);
-const otherProjects = PROJECTS.filter((p) => !("featured" in p && p.featured));
+const featuredProjects = PROJECTS.filter((p) => p.featured);
+const otherProjects = PROJECTS.filter((p) => !p.featured);
 
 export function Projects() {
   const [showAll, setShowAll] = useState(false);
@@ -84,16 +85,9 @@ function ProjectCard({
   compact?: boolean;
   featured?: boolean;
 }) {
-  const hasUrl = "url" in project && project.url;
-  const hasGithub = "github" in project && project.github;
-  const hasDemo = "demo" in project && project.demo;
-  const hasBadge = "badge" in project && project.badge;
-
   const tilt = useTilt(featured ? 4 : 0);
   const glow = useMouseGlow();
 
-  const cardRef = featured ? tilt.ref : undefined;
-  const cardStyle = featured ? tilt.style : undefined;
   const cardHandlers = featured
     ? {
         onMouseMove: (e: React.MouseEvent) => {
@@ -110,8 +104,8 @@ function ProjectCard({
 
   return (
     <div
-      ref={cardRef}
-      style={cardStyle}
+      ref={featured ? tilt.ref : undefined}
+      style={featured ? tilt.style : undefined}
       {...cardHandlers}
       className={cn(
         "group relative border rounded-lg h-full overflow-hidden transition-colors duration-300",
@@ -127,22 +121,16 @@ function ProjectCard({
 
       <div className="flex items-start justify-between gap-2">
         <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
-          {hasUrl ? (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-accent transition-colors inline-flex items-center gap-1"
-            >
-              {project.title}
-              <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </a>
-          ) : (
-            project.title
-          )}
+          <Link
+            href={`/projects/${project.slug}`}
+            className="hover:text-accent transition-colors inline-flex items-center gap-1"
+          >
+            {project.title}
+            <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
         </h3>
         <div className="flex items-center gap-2 shrink-0">
-          {hasBadge && (
+          {project.badge && (
             <span className="text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 px-1.5 py-0.5 rounded">
               {project.badge}
             </span>
@@ -174,23 +162,35 @@ function ProjectCard({
           ))}
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-2">
-          {hasDemo && (
-            <a href={project.demo} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-accent hover:text-accent-muted transition-colors">
+          {project.demo && (
+            <a href={project.demo} target="_blank" rel="noopener noreferrer"
+              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors">
               Demo
             </a>
           )}
-          {hasGithub && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+          {project.github && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors">
               <GitHubIcon className="size-4" />
             </a>
           )}
-          {hasUrl && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+          {project.url && (
+            <a href={project.url} target="_blank" rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors">
               <ArrowUpRight className="size-4" />
             </a>
           )}
         </div>
       </div>
+
+      {!compact && (
+        <Link
+          href={`/projects/${project.slug}`}
+          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
+        >
+          View Case Study <ArrowUpRight className="size-3" />
+        </Link>
+      )}
     </div>
   );
 }
