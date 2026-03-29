@@ -14,6 +14,9 @@ export function SpotlightBg() {
   }, []);
 
   useEffect(() => {
+    const isTouch = !window.matchMedia("(hover: hover)").matches;
+    if (isTouch) return;
+
     const handleMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
       cancelAnimationFrame(raf.current);

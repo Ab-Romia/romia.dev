@@ -9,7 +9,7 @@ import {
   StaggerContainer,
   StaggerItemScale,
 } from "@/components/motion-wrapper";
-import { ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTilt } from "@/hooks/use-tilt";
 import { useMouseGlow } from "@/hooks/use-mouse-glow";
@@ -29,47 +29,66 @@ export const statusColors: Record<string, string> = {
   Deployed: "bg-purple-500/10 text-purple-400 border-purple-500/20",
 };
 
-const featuredProjects = PROJECTS.filter((p) => p.featured);
-const otherProjects = PROJECTS.filter((p) => !p.featured);
+const categories = ["All", "AI/ML", "Backend", "Full-Stack", "Games/Puzzles"] as const;
 
 export function Projects() {
-  const [showAll, setShowAll] = useState(false);
+  const [filter, setFilter] = useState<string>("All");
+
+  const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
+  const featured = filtered.filter((p) => p.featured);
+  const others = filtered.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">
-            Featured Projects
+            Projects
           </h2>
         </BlurIn>
 
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8">
-          {featuredProjects.map((project) => (
-            <StaggerItemScale key={project.title}>
-              <ProjectCard project={project} featured />
-            </StaggerItemScale>
-          ))}
-        </StaggerContainer>
-
-        {otherProjects.length > 0 && (
-          <div className="mt-8">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {showAll ? "Show Less" : `View All Projects (${PROJECTS.length})`}
-              {showAll ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-            </button>
-
-            {showAll && (
-              <FadeUp className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                {otherProjects.map((project) => (
-                  <ProjectCard key={project.title} project={project} compact />
-                ))}
-              </FadeUp>
-            )}
+        {/* Category filters */}
+        <FadeUp delay={0.05}>
+          <div className="flex flex-wrap gap-2 mt-6">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={cn(
+                  "text-xs font-mono px-3 py-1.5 rounded-full border transition-all duration-200",
+                  filter === cat
+                    ? "bg-accent text-accent-foreground border-accent"
+                    : "text-muted-foreground border-border hover:border-accent/30 hover:text-foreground"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
+        </FadeUp>
+
+        {/* Featured */}
+        {featured.length > 0 && (
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8">
+            {featured.map((project) => (
+              <StaggerItemScale key={project.slug}>
+                <ProjectCard project={project} featured />
+              </StaggerItemScale>
+            ))}
+          </StaggerContainer>
+        )}
+
+        {/* Others */}
+        {others.length > 0 && (
+          <FadeUp className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+            {others.map((project) => (
+              <ProjectCard key={project.slug} project={project} compact />
+            ))}
+          </FadeUp>
+        )}
+
+        {filtered.length === 0 && (
+          <p className="text-muted-foreground text-sm mt-8">No projects in this category.</p>
         )}
       </div>
     </section>
