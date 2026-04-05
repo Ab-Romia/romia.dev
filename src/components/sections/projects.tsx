@@ -120,19 +120,24 @@ function ProjectCard({
   const tilt = useTilt(featured ? 4 : 0);
   const glow = useMouseGlow();
 
-  const cardHandlers = featured
-    ? {
-        onMouseMove: (e: React.MouseEvent) => {
-          tilt.handlers.onMouseMove(e);
-          glow.handlers.onMouseMove(e);
-        },
-        onMouseLeave: () => {
-          tilt.handlers.onMouseLeave();
-          glow.handlers.onMouseLeave();
-        },
-        onMouseEnter: glow.handlers.onMouseEnter,
+  const cardHandlers = {
+    onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+      e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
+      if (featured) {
+        tilt.handlers.onMouseMove(e);
+        glow.handlers.onMouseMove(e);
       }
-    : undefined;
+    },
+    onMouseLeave: () => {
+      if (featured) {
+        tilt.handlers.onMouseLeave();
+        glow.handlers.onMouseLeave();
+      }
+    },
+    onMouseEnter: featured ? glow.handlers.onMouseEnter : undefined,
+  };
 
   return (
     <div
@@ -140,7 +145,7 @@ function ProjectCard({
       style={featured ? tilt.style : undefined}
       {...cardHandlers}
       className={cn(
-        "group relative border rounded-lg h-full overflow-hidden transition-colors duration-300",
+        "group relative border rounded-lg h-full overflow-hidden transition-colors duration-300 cursor-glow",
         featured
           ? "glass-card hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
           : "bg-card border-border hover:border-accent/30 hover-glow",
