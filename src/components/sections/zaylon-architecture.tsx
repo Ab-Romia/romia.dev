@@ -24,19 +24,32 @@ function Box({
     <div
       onClick={onClick}
       className={cn(
-        "rounded-lg border bg-card p-3 transition-all duration-200",
-        active ? "border-accent/40 scale-[1.02] shadow-[0_0_12px_rgba(var(--accent-raw,0,212,255),0.1)]" : "border-border",
-        !active && "hover:border-accent/30",
-        pulse && "hover-glow",
+        "rounded-lg p-3 transition-all duration-300",
+        active
+          ? "scale-[1.02]"
+          : "",
         onClick && "cursor-pointer",
         className
       )}
+      style={{
+        background: "rgba(20, 26, 26, 0.4)",
+        backdropFilter: "blur(8px)",
+        border: active
+          ? "1px solid rgba(45, 106, 94, 0.5)"
+          : "1px solid rgba(27, 58, 53, 0.3)",
+        boxShadow: active
+          ? "0 0 12px rgba(45, 106, 94, 0.2)"
+          : "none",
+      }}
     >
-      <p className={cn("text-xs font-semibold", accent ? "text-accent" : "text-foreground")}>
+      <p
+        className="text-xs font-semibold"
+        style={{ color: accent ? "var(--z-tertiary)" : "var(--z-text)" }}
+      >
         {label}
       </p>
       {sub && (
-        <p className="text-[10px] mt-0.5 leading-snug text-muted-foreground">
+        <p className="text-[10px] mt-0.5 leading-snug" style={{ color: "var(--z-text-muted)" }}>
           {sub}
         </p>
       )}
@@ -49,8 +62,8 @@ function Arrow() {
     <div className="flex justify-center py-1">
       <svg width="6" height="20" className="overflow-visible">
         <line x1="3" y1="0" x2="3" y2="20"
-          className="stroke-accent" strokeWidth="1" strokeDasharray="4 3" opacity={0.2} />
-        <circle r="2" cx="3" className="fill-accent" opacity={0.7}>
+          stroke="var(--z-secondary, #2D6A5E)" strokeWidth="1" strokeDasharray="4 3" opacity={0.3} />
+        <circle r="2" cx="3" fill="var(--z-tertiary, #3A8A7A)" opacity={0.7}>
           <animateMotion dur="1.5s" repeatCount="indefinite" path="M 0 0 L 0 20" />
         </circle>
       </svg>

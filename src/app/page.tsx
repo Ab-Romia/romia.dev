@@ -5,7 +5,6 @@ import { Projects } from "@/components/sections/projects";
 import { Experience } from "@/components/sections/experience";
 import { Skills } from "@/components/sections/skills";
 import { About } from "@/components/sections/about";
-import { Blog } from "@/components/sections/blog";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -96,7 +95,6 @@ export default function Home() {
         <Skills />
         <SectionDivider />
         <About />
-        <Blog />
         <Contact />
       </main>
       <Footer />
