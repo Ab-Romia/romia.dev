@@ -59,9 +59,21 @@ export function Navbar() {
         <nav className="max-w-5xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
           <a
             href="#hero"
-            className="text-lg font-bold tracking-tight text-foreground hover:text-accent transition-colors"
+            className="group flex items-center gap-2.5 transition-colors"
           >
-            {PERSONAL.displayName}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="size-7 shrink-0 group-hover:drop-shadow-[0_0_6px_rgba(0,212,255,0.4)] transition-[filter] duration-300">
+              <defs>
+                <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#00D4FF"/>
+                  <stop offset="100%" stopColor="#0EA5E9"/>
+                </linearGradient>
+              </defs>
+              <rect width="32" height="32" rx="8" fill="currentColor" className="text-[#111113] dark:text-[#111113]" />
+              <path d="M9 8h8.5a5 5 0 0 1 0 10H15l6.5 6H17l-5-5v5H9V8zm3 3v4h5a2 2 0 0 0 0-4h-5z" fill="url(#logo-g)"/>
+            </svg>
+            <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground group-hover:text-accent transition-colors">
+              romia<span className="text-accent">.</span>dev
+            </span>
           </a>
 
           {/* Desktop navigation */}
@@ -130,8 +142,8 @@ export function Navbar() {
             className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md md:hidden"
           >
             <div className="flex items-center justify-between h-16 px-6">
-              <span className="text-lg font-bold tracking-tight text-foreground">
-                {PERSONAL.displayName}
+              <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground">
+                romia<span className="text-accent">.</span>dev
               </span>
               <button
                 onClick={() => setMobileOpen(false)}
