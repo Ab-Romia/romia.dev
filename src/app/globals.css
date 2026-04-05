@@ -210,23 +210,6 @@
   50% { transform: translateY(-8px); }
 }
 
-:not(.dark) .zaylon-section {
-  --z-bg: rgb(238, 243, 241);
-  --z-card: rgb(255, 255, 255);
-  --z-text: #1A2E2A;
-  --z-text-muted: #4A5C58;
-  background: var(--z-bg);
-}
-
-:not(.dark) .zaylon-section .z-glass {
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(45, 106, 94, 0.15);
-}
-
-:not(.dark) .zaylon-section .z-card {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(45, 106, 94, 0.15);
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
