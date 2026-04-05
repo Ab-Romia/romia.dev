@@ -14,7 +14,7 @@ export const PERSONAL = {
 
 export const HERO_SIGNALS = [
   { label: "Co-Founder", detail: "Zaylon AI" },
-  { label: "Scale AI", detail: "AI Coding Expert" },
+  { label: "Freelance", detail: "AI Coding Expert" },
   { label: "Alexandria Univ", detail: "3.73 GPA, CCE" },
 ] as const;
 
