@@ -3,18 +3,6 @@
 import { EXPERIENCE } from "@/data/resume";
 import { FadeUp, BlurIn } from "@/components/motion-wrapper";
 
-function highlightNumbers(text: string) {
-  const parts = text.split(/(\d+[\w+]*)/g);
-  return parts.map((part, i) =>
-    /^\d/.test(part) ? (
-      <span key={i} className="text-foreground font-medium">
-        {part}
-      </span>
-    ) : (
-      <span key={i}>{part}</span>
-    )
-  );
-}
 
 export function Experience() {
   return (
@@ -97,7 +85,7 @@ export function Experience() {
                         className="text-sm text-muted-foreground leading-relaxed flex gap-2.5"
                       >
                         <span className="text-accent mt-1 shrink-0 text-xs">&#9656;</span>
-                        <span>{highlightNumbers(highlight)}</span>
+                        <span>{highlight}</span>
                       </li>
                     ))}
                   </ul>
