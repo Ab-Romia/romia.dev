@@ -15,8 +15,10 @@ import { Magnetic } from "@/components/magnetic";
 
 function StatCard({
   highlight,
+  index,
 }: {
   highlight: (typeof ZAYLON_SHOWCASE.highlights)[number];
+  index: number;
 }) {
   const { ref, style, handlers } = useTilt(3);
 
@@ -25,16 +27,19 @@ function StatCard({
       <div
         ref={ref}
         {...handlers}
-        style={style}
-        className="bg-card border border-border rounded-lg p-5 hover:border-accent/30 transition-colors hover-glow"
+        style={{
+          ...style,
+          animation: `z-float 3s ease-in-out ${index * 0.5}s infinite`,
+        }}
+        className="z-card p-5"
       >
-        <p className="text-3xl font-bold text-accent">
+        <p className="text-3xl font-bold z-gradient-text">
           <CountUp value={highlight.value as number} />
         </p>
-        <p className="text-sm font-medium text-foreground mt-1">
+        <p className="text-sm font-medium mt-1" style={{ color: "var(--z-text)" }}>
           {highlight.label}
         </p>
-        <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
+        <p className="text-xs mt-0.5 leading-snug" style={{ color: "var(--z-text-muted)" }}>
           {highlight.detail}
         </p>
       </div>
@@ -44,58 +49,88 @@ function StatCard({
 
 export function ZaylonShowcase() {
   return (
-    <section className="relative py-20 md:py-28 border-t border-b border-accent/10 overflow-hidden">
+    <section className="zaylon-section relative py-20 md:py-28 overflow-hidden">
+      {/* Gradient transition: portfolio bg -> emerald bg */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+
+      {/* Emerald blur orbs for depth */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(45, 106, 94, 0.08)" }} />
+      <div className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(27, 58, 53, 0.1)" }} />
+
+      {/* Subtle grid overlay */}
       <div
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 pointer-events-none opacity-20"
         style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(0, 212, 255, 0.12) 0%, transparent 70%)",
+          backgroundImage: `linear-gradient(rgba(45, 106, 94, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(45, 106, 94, 0.1) 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
         }}
       />
 
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative max-w-5xl mx-auto px-6 lg:px-8 z-20">
         <BlurIn>
-          <span className="inline-flex items-center gap-2 text-accent font-mono text-sm uppercase tracking-wider">
-            <span className="size-2 rounded-full bg-accent animate-pulse" />
+          <span className="inline-flex items-center gap-2 z-glass rounded-full px-4 py-2 text-sm font-mono uppercase tracking-wider" style={{ color: "var(--z-tertiary)" }}>
+            <span className="size-2 rounded-full animate-pulse" style={{ background: "var(--z-secondary)" }} />
             {ZAYLON_SHOWCASE.role}
           </span>
         </BlurIn>
 
         <FadeUp delay={0.1}>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mt-4">
-            {ZAYLON_SHOWCASE.heading}
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mt-4" style={{ color: "var(--z-text)" }}>
+            Building{" "}
+            <span className="z-gradient-text">Zaylon AI</span>
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground mt-2">
+          <p className="text-lg md:text-xl mt-2" style={{ color: "var(--z-text-muted)" }}>
             {ZAYLON_SHOWCASE.subtitle}
           </p>
         </FadeUp>
 
         <FadeUp delay={0.2}>
-          <p className="text-muted-foreground leading-relaxed mt-8 max-w-3xl">
+          <p className="leading-relaxed mt-8 max-w-3xl" style={{ color: "var(--z-text-muted)" }}>
             {ZAYLON_SHOWCASE.description}
           </p>
         </FadeUp>
 
+        {/* Code Stats Banner */}
+        <FadeUp delay={0.25}>
+          <div className="z-glass rounded-xl px-6 py-4 mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-center">
+            <div>
+              <p className="text-2xl font-bold z-gradient-text">{ZAYLON_SHOWCASE.codeStats.pythonLines}</p>
+              <p className="text-xs font-mono" style={{ color: "var(--z-text-muted)" }}>Lines of Python</p>
+            </div>
+            <div className="w-px h-8 hidden sm:block" style={{ background: "rgba(45, 106, 94, 0.3)" }} />
+            <div>
+              <p className="text-2xl font-bold z-gradient-text">{ZAYLON_SHOWCASE.codeStats.typescriptLines}</p>
+              <p className="text-xs font-mono" style={{ color: "var(--z-text-muted)" }}>Lines of TypeScript</p>
+            </div>
+            <div className="w-px h-8 hidden sm:block" style={{ background: "rgba(45, 106, 94, 0.3)" }} />
+            <div>
+              <p className="text-2xl font-bold z-gradient-text">6</p>
+              <p className="text-xs font-mono" style={{ color: "var(--z-text-muted)" }}>E-Commerce Platforms</p>
+            </div>
+          </div>
+        </FadeUp>
+
         <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-          {ZAYLON_SHOWCASE.highlights.map((h) => (
-            <StatCard key={h.label} highlight={h} />
+          {ZAYLON_SHOWCASE.highlights.map((h, i) => (
+            <StatCard key={h.label} highlight={h} index={i} />
           ))}
         </StaggerContainer>
 
         <FadeUp delay={0.3}>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
             {ZAYLON_SHOWCASE.features.map((feature) => (
-              <li key={feature} className="text-sm text-muted-foreground flex gap-2">
-                <span className="text-accent mt-0.5 shrink-0">&#9656;</span>
-                <span>{feature}</span>
-              </li>
+              <div key={feature} className="z-card p-4 flex gap-3">
+                <span className="shrink-0 mt-0.5" style={{ color: "var(--z-tertiary)" }}>&#9656;</span>
+                <span className="text-sm" style={{ color: "var(--z-text-muted)" }}>{feature}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </FadeUp>
 
         <FadeUp delay={0.35}>
           <div className="mt-12">
-            <h3 className="text-lg font-semibold mb-6">System Architecture</h3>
+            <h3 className="text-lg font-semibold mb-6" style={{ color: "var(--z-text)" }}>System Architecture</h3>
             <ZaylonArchitecture />
           </div>
         </FadeUp>
@@ -105,7 +140,12 @@ export function ZaylonShowcase() {
             {ZAYLON_SHOWCASE.techStack.map((tech) => (
               <span
                 key={tech}
-                className="text-xs font-mono bg-accent/10 text-accent border border-accent/20 px-2.5 py-1 rounded-full"
+                className="text-xs font-mono px-2.5 py-1 rounded-full"
+                style={{
+                  background: "rgba(27, 58, 53, 0.3)",
+                  color: "var(--z-tertiary)",
+                  border: "1px solid rgba(45, 106, 94, 0.3)",
+                }}
               >
                 {tech}
               </span>
@@ -119,7 +159,11 @@ export function ZaylonShowcase() {
               href={ZAYLON_SHOWCASE.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-lg text-white transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
+                boxShadow: "0 4px 20px rgba(27, 58, 53, 0.4)",
+              }}
             >
               Visit zaylon.ai
               <ArrowUpRight className="size-4" />

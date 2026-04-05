@@ -63,8 +63,9 @@ export function Contact() {
             Let&apos;s Connect
           </h2>
           <p className="text-muted-foreground font-light mt-4 max-w-lg mx-auto leading-relaxed">
-            Open to AI/ML Engineer and Software Engineer opportunities at
-            innovative companies.
+            Available for AI/ML Engineer and Backend Engineer roles. I bring
+            production multi-agent systems, RAG pipelines, and scalable backend
+            experience.
           </p>
         </BlurIn>
 

@@ -3,11 +3,10 @@
 import { useRef, useState, useCallback } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { TextReveal, BlurIn, FadeUp, m, MotionProvider } from "@/components/motion-wrapper";
-import { PERSONAL } from "@/data/resume";
+import { PERSONAL, HERO_SIGNALS } from "@/data/resume";
 import { Download, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useScroll, useTransform } from "motion/react";
-import { TypingEffect } from "@/components/typing-effect";
 import { Magnetic } from "@/components/magnetic";
 
 const particles = [
@@ -100,37 +99,52 @@ export function Hero() {
           />
         </FadeUp>
 
-        <FadeUp delay={0.4}>
+        <FadeUp delay={0.3}>
           <p className="text-xl font-light text-muted-foreground mt-6 max-w-xl leading-relaxed">
-            <TypingEffect text={PERSONAL.tagline} speed={40} />
+            {PERSONAL.tagline}
           </p>
+        </FadeUp>
+
+        <FadeUp delay={0.45}>
+          <div className="flex flex-wrap gap-2 mt-5">
+            {HERO_SIGNALS.map((signal) => (
+              <span
+                key={signal.label}
+                className="inline-flex items-center gap-1.5 text-xs font-mono bg-muted/60 text-muted-foreground border border-border px-3 py-1.5 rounded-full"
+              >
+                <span className="text-foreground font-medium">{signal.label}</span>
+                <span className="text-muted-foreground/70">|</span>
+                {signal.detail}
+              </span>
+            ))}
+          </div>
         </FadeUp>
 
         <FadeUp delay={0.6}>
           <div className="flex flex-wrap gap-4 mt-8">
             <Magnetic>
               <a
-                href="/resume.pdf"
-                download
+                href="#projects"
                 className={cn(
                   buttonVariants({ variant: "default", size: "lg" }),
                   "gap-2"
                 )}
               >
-                <Download className="size-4" />
-                Download Resume
+                View My Work
+                <ArrowRight className="size-4" />
               </a>
             </Magnetic>
             <Magnetic>
               <a
-                href="#projects"
+                href="/resume.pdf"
+                download
                 className={cn(
                   buttonVariants({ variant: "ghost", size: "lg" }),
                   "gap-2"
                 )}
               >
-                View Projects
-                <ArrowRight className="size-4" />
+                <Download className="size-4" />
+                Resume
               </a>
             </Magnetic>
           </div>

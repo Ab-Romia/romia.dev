@@ -1,10 +1,10 @@
 export const PERSONAL = {
   name: "Abdelrahman Abouroumia",
   displayName: "Romia",
-  title: "AI Engineer",
+  title: "AI Engineer & Co-Founder",
   email: "aabouroumia@gmail.com",
   tagline:
-    "Building intelligent systems and scalable backends. From multi-agent architectures to production-grade APIs.",
+    "I co-founded Zaylon AI, where I built a multi-agent system that turns WhatsApp conversations into completed purchases across 6 e-commerce platforms and 3 languages.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -12,22 +12,31 @@ export const PERSONAL = {
   },
 } as const;
 
+export const HERO_SIGNALS = [
+  { label: "Co-Founder", detail: "Zaylon AI" },
+  { label: "Scale AI", detail: "AI Coding Expert" },
+  { label: "Alexandria Univ", detail: "3.73 GPA, CCE" },
+] as const;
+
 export const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
   { label: "About", href: "#about" },
-  { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
 export const ZAYLON_SHOWCASE = {
   title: "Zaylon AI",
   role: "Co-Founder & AI Engineer",
-  heading: "Co-Founding Zaylon AI",
+  heading: "Building Zaylon AI",
   subtitle: "Production Multi-Tenant Conversational Commerce for MENA",
   description:
     "Zaylon turns WhatsApp and Instagram into full sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and complete purchases without ever leaving the chat. Behind the scenes, a supervisor agent routes each conversation to specialized Sales, Support, or Checkout agents with scoped tool access.",
   url: "https://zaylon.ai",
+  codeStats: {
+    pythonLines: "40K+",
+    typescriptLines: "31K+",
+  },
   highlights: [
     { label: "AI Tools", detail: "Search, Cart, Orders, CRM & more", value: 10 },
     { label: "Platforms", detail: "Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho", value: 6 },
@@ -35,13 +44,13 @@ export const ZAYLON_SHOWCASE = {
     { label: "Languages", detail: "English, Egyptian Arabic, Franco-Arabic", value: 3 },
   ],
   features: [
-    "Multi-agent supervisor routes conversations to specialized Sales, Support, and Checkout agents",
-    "Tri-lingual NLP serves customers in English, Egyptian Arabic, and Franco-Arabic automatically",
-    "Customers send product photos and get instant catalog matches via Vision AI",
-    "Integrates with Shopify, Salla, WooCommerce, Odoo, YouCan, and Zoho for real-time catalog sync",
-    "Proactive engagement detects cart abandonment, negative sentiment, and re-engages customers",
-    "Processes payments through Stripe, Paymob, and Fawry with webhook-verified security",
-    "Merchant dashboard with real-time inbox, analytics, RFM segmentation, and A/B testing",
+    "Supervisor agent routes each conversation to Sales, Support, or Checkout agents with scoped tool access, preventing hallucinated actions",
+    "DialectBridge NLP pipeline detects and responds in English, Egyptian Arabic, and Franco-Arabic automatically",
+    "Vision AI matches customer product photos to catalog items for instant discovery",
+    "Real-time catalog sync across Shopify, Salla, WooCommerce, Odoo, YouCan, and Zoho",
+    "Proactive re-engagement on cart abandonment and negative sentiment detection",
+    "Multi-provider payment processing (Stripe, Paymob, Fawry) with webhook-verified security",
+    "Merchant dashboard: real-time inbox, analytics, RFM segmentation, and A/B testing",
     "Multi-tenant architecture with per-merchant encryption and row-level data isolation",
   ],
   techStack: [
@@ -80,6 +89,7 @@ export interface Project {
   status: ProjectStatus;
   badge?: string;
   featured?: boolean;
+  impact?: string;
   url?: string;
   github?: string;
   demo?: string;
@@ -98,6 +108,7 @@ export const PROJECTS: Project[] = [
     status: "Production",
     badge: "Co-Founded",
     featured: true,
+    impact: "Production system: 40K+ lines Python, 31K+ lines TypeScript, 6 platforms, 3 languages",
     caseStudy: {
       problem:
         "MENA merchants lose sales because customers abandon messaging channels when they can't get instant, dialect-aware product assistance. Traditional chatbots fail with Arabic dialects and can't handle complex multi-step purchases.",
@@ -118,7 +129,7 @@ export const PROJECTS: Project[] = [
         },
       ],
       results:
-        "Production system serving merchants across 6 e-commerce platforms, handling tri-lingual conversations with automated sales, support, and checkout flows.",
+        "Production system serving merchants across 6 e-commerce platforms. 40K+ lines of Python backend with supervisor multi-agent architecture, 31K+ lines of TypeScript dashboard.",
     },
   },
   {
@@ -129,7 +140,7 @@ export const PROJECTS: Project[] = [
       "Full-stack graduation project with a context-aware AI assistant and multi-source RAG pipeline for organizational collaboration.",
     tags: ["FastAPI", "RAG", "pgvector", "React", "PostgreSQL"],
     status: "Ongoing",
-    featured: true,
+    featured: false,
     caseStudy: {
       problem:
         "Organizations need AI assistants that understand their specific context, not generic chatbots. Knowledge is scattered across documents, databases, and team communications.",
@@ -159,6 +170,7 @@ export const PROJECTS: Project[] = [
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
     status: "Demo",
     featured: true,
+    impact: "11+ file formats with hybrid retrieval (keyword + vector + RRF scoring)",
     caseStudy: {
       problem:
         "Most RAG demos handle PDFs only. Real organizations have knowledge spread across 11+ file formats, and retrieval quality degrades without hybrid search strategies.",
@@ -188,6 +200,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
     status: "Demo",
     featured: true,
+    impact: "Event-driven microservices with Kafka async messaging and independent scaling",
     caseStudy: {
       problem:
         "Monolithic banking backends can't scale individual services independently. A spike in transaction processing shouldn't affect account lookups or user authentication.",
@@ -216,6 +229,8 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Ab-Romia/RAVDESS-emotion-recognition",
     demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
     status: "Demo",
+    featured: true,
+    impact: "8-class multimodal classification fusing audio (HuBERT) and visual (EfficientNet) encoders",
     caseStudy: {
       problem:
         "Single-modality emotion detection misses context. Audio tone and facial expressions together reveal more than either alone.",
@@ -303,9 +318,9 @@ export const EXPERIENCE = [
     url: "https://zaylon.ai",
     period: "May 2025 – Present",
     highlights: [
-      "Built a multi-agent LangGraph system with supervisor/orchestrator pattern and 10 AI tools (search, cart, orders, CRM)",
-      "Developed hybrid product search (keyword + semantic with RRF) and visual search via GPT-4o on WhatsApp/Instagram",
-      "Engineered DialectBridge for Egyptian Arabic, Franco-Arabic, and English with auto-detection and response matching",
+      "Architected multi-agent LangGraph system with supervisor routing to 3 specialized agents, each with scoped access to a subset of 10 AI tools",
+      "Built hybrid product search combining keyword, semantic, and Reciprocal Rank Fusion scoring, deployed across WhatsApp and Instagram channels",
+      "Engineered DialectBridge NLP pipeline handling English, Egyptian Arabic, and Franco-Arabic with automatic dialect detection and response matching",
     ],
   },
   {
@@ -324,8 +339,8 @@ export const EXPERIENCE = [
     type: "Freelance",
     period: "Sep 2024 – Feb 2026",
     highlights: [
-      "Contribute to RLHF data pipelines evaluating and improving LLM-generated coding solutions",
-      "Develop quality rubrics and prompting strategies for Python and backend logic",
+      "Evaluated and improved LLM-generated coding solutions across Python and backend systems for RLHF data pipelines",
+      "Developed quality rubrics and prompting strategies for code generation, correctness, and style",
     ],
   },
   {
@@ -382,7 +397,7 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I'm Romia, an AI/ML Engineer and Co-Founder of Zaylon AI. I build intelligent systems ranging from multi-agent architectures to production RAG pipelines, and I design scalable backend systems that power them. Currently finishing my B.Sc. in Computer & Communications Engineering with an AI concentration at Alexandria University (3.73 GPA). I'm passionate about conversational AI, multilingual NLP, and building products that scale globally. Outside of engineering, I play guitar and learn Spanish and German.",
+  bio: "I'm Romia, an AI Engineer and Co-Founder of Zaylon AI, where I built a multi-agent system that handles real commerce conversations across 3 languages and 6 e-commerce platforms. I specialize in LangGraph multi-agent architectures, production RAG pipelines, and the backend systems that power them. Currently finishing my B.Sc. in Computer & Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
 } as const;
 
 export const BLOG_POSTS = [

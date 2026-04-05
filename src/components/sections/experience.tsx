@@ -48,7 +48,10 @@ export function Experience() {
                   )}
 
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                    <div>
+                    <div className="flex items-center gap-3">
+                      <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0">
+                        <span className="text-accent text-xs font-bold">{entry.company.charAt(0)}</span>
+                      </div>
                       <h3 className="text-base font-semibold">
                         {entry.role}
                         <span className="text-muted-foreground font-normal">

@@ -29,10 +29,16 @@ function SkillCard({
           isFirst ? "glass-card border-border" : "bg-card hover-glow"
         )}
       >
-        <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+        <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-1 flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-accent" />
           {category}
         </h3>
+        <p className="text-xs text-muted-foreground mb-4">
+          {category === "AI / ML" && "Powers Zaylon AI, ContextIQ RAG, Emotion Recognition"}
+          {category === "Backend" && "Powers Zaylon AI, Virtual Banking, ContextIQ RAG"}
+          {category === "DevOps & Cloud" && "CI/CD and deployment across all projects"}
+          {category === "Languages" && "Primary: Python, Java. Growing: Go, TypeScript"}
+        </p>
         <div className="flex flex-wrap gap-2">
           <MotionProvider>
             {skills.map((skill) => (
