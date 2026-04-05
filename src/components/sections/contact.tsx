@@ -70,7 +70,14 @@ export function Contact() {
         </BlurIn>
 
         <FadeUp delay={0.1}>
-          <div className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-all">
+          <div
+            className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-all cursor-glow"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+              e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
+            }}
+          >
             <Mail className="size-4 text-accent" />
             <span className="text-sm font-mono">{PERSONAL.email}</span>
             <button

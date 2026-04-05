@@ -24,7 +24,7 @@ export function Experience() {
           Experience
         </h2>
 
-        <div className="mt-8 space-y-0">
+        <div className="mt-8">
           {EXPERIENCE.map((entry, i) => {
             const isCurrent = entry.period.includes("Present");
             const Wrapper = i < 2 ? SlideFromLeft : FadeUp;
@@ -32,7 +32,7 @@ export function Experience() {
             return (
               <Wrapper key={entry.company} delay={i * 0.1}>
                 <div
-                  className={`group relative pl-8 pb-10 last:pb-0 border-l transition-colors duration-300 ${
+                  className={`group relative pl-8 pb-8 last:pb-0 border-l transition-colors duration-300 ${
                     isCurrent
                       ? "border-accent/40 hover:border-accent/60"
                       : "border-border hover:border-accent/20"
@@ -47,54 +47,58 @@ export function Experience() {
                     <div className="absolute -left-[5px] top-1.5 size-2.5 rounded-full bg-muted-foreground/50 border-2 border-background group-hover:bg-accent/50 group-hover:shadow-[0_0_6px_rgba(0,212,255,0.3)] transition-all" />
                   )}
 
-                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                    <div className="flex items-center gap-3">
-                      <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0">
-                        <span className="text-accent text-xs font-bold">{entry.company.charAt(0)}</span>
-                      </div>
-                      <h3 className="text-base font-semibold">
-                        {entry.role}
-                        <span className="text-muted-foreground font-normal">
-                          {" at "}
-                          {"url" in entry && entry.url ? (
-                            <a
-                              href={entry.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-accent transition-colors link-underline"
-                            >
-                              {entry.company}
-                            </a>
-                          ) : (
-                            entry.company
-                          )}
-                        </span>
-                        {"type" in entry && entry.type && (
-                          <span className="text-xs text-muted-foreground font-normal ml-2">
-                            ({entry.type})
-                          </span>
-                        )}
-                      </h3>
+                  {/* Header: role, company, period */}
+                  <div className="flex items-start gap-3">
+                    <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-accent text-xs font-bold">{entry.company.charAt(0)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground font-mono shrink-0">
-                        {entry.period}
-                      </span>
-                      {isCurrent && (
-                        <span className="text-[10px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/20">
-                          Current
-                        </span>
-                      )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <h3 className="text-base font-semibold leading-snug">
+                          {entry.role}
+                          <span className="text-muted-foreground font-normal">
+                            {" at "}
+                            {"url" in entry && entry.url ? (
+                              <a
+                                href={entry.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-accent transition-colors link-underline"
+                              >
+                                {entry.company}
+                              </a>
+                            ) : (
+                              entry.company
+                            )}
+                          </span>
+                          {"type" in entry && entry.type && (
+                            <span className="text-xs text-muted-foreground font-normal ml-1.5">
+                              ({entry.type})
+                            </span>
+                          )}
+                        </h3>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-xs text-muted-foreground font-mono">
+                            {entry.period}
+                          </span>
+                          {isCurrent && (
+                            <span className="text-[10px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/20">
+                              Current
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <ul className="mt-3 space-y-2">
+                  {/* Highlights */}
+                  <ul className="mt-3 ml-11 space-y-1.5">
                     {entry.highlights.map((highlight) => (
                       <li
                         key={highlight}
                         className="text-sm text-muted-foreground leading-relaxed flex gap-2"
                       >
-                        <span className="text-accent mt-1.5 shrink-0">&#8226;</span>
+                        <span className="text-accent mt-1 shrink-0">&#8226;</span>
                         <span>{highlightNumbers(highlight)}</span>
                       </li>
                     ))}
