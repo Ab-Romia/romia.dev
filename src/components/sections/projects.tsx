@@ -90,30 +90,6 @@ export function Projects() {
           <p className="text-muted-foreground text-sm mt-8">No projects in this category.</p>
         )}
 
-        {/* Interactive demos callout */}
-        {filter !== "Games/Puzzles" && (
-          <FadeUp>
-            <div className="mt-10 p-5 border border-border rounded-lg bg-card/50 text-center">
-              <p className="text-sm text-muted-foreground">Want to test my AI implementations live?</p>
-              <div className="flex items-center justify-center gap-4 mt-3">
-                <button
-                  onClick={() => setFilter("Games/Puzzles")}
-                  className="text-sm font-mono text-accent hover:text-accent-muted transition-colors"
-                >
-                  Play Connect4 vs AI
-                </button>
-                <span className="text-border">|</span>
-                <button
-                  onClick={() => setFilter("Games/Puzzles")}
-                  className="text-sm font-mono text-accent hover:text-accent-muted transition-colors"
-                >
-                  Watch CSP Sudoku Solver
-                </button>
-              </div>
-            </div>
-          </FadeUp>
-        )}
-
         {/* Inline demos for Games/Puzzles */}
         {filter === "Games/Puzzles" && (
           <div key="demos" className="mt-12 space-y-12">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useCallback, useState } from "react";
 import {
   FadeUp,
   BlurIn,
@@ -212,8 +213,26 @@ function DashboardMockup() {
 }
 
 export function ZaylonShowcase() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!sectionRef.current || !glowRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    glowRef.current.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(45, 106, 94, 0.07), transparent 60%)`;
+  }, []);
+
   return (
-    <section className="zaylon-section relative py-24 md:py-32 overflow-hidden">
+    <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      className="zaylon-section relative py-24 md:py-32 overflow-hidden"
+    >
+      {/* Emerald mouse-following glow */}
+      <div ref={glowRef} className="absolute inset-0 pointer-events-none z-[1] transition-none" />
+
       {/* Gradient transition: portfolio bg -> emerald bg */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />

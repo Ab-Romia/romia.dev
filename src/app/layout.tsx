@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SpotlightBg } from "@/components/spotlight-bg";
+import { CursorTrail } from "@/components/cursor-trail";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -89,6 +90,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <SpotlightBg />
+        <CursorTrail />
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
         <SpeedInsights />
