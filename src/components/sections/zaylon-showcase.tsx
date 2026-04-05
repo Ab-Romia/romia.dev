@@ -279,23 +279,20 @@ export function ZaylonShowcase() {
           </p>
         </FadeUp>
 
-        {/* Code Stats Banner */}
+        {/* Architecture Highlights Banner */}
         <FadeUp delay={0.25}>
-          <div className="z-glass rounded-2xl px-6 py-5 mt-8 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-center">
-            <div>
-              <p className="text-3xl font-bold z-gradient-text">{ZAYLON_SHOWCASE.codeStats.pythonLines}</p>
-              <p className="text-xs font-mono mt-1" style={{ color: "var(--z-text-muted)" }}>Lines of Python</p>
-            </div>
-            <div className="w-px h-10 hidden sm:block" style={{ background: "rgba(45, 106, 94, 0.3)" }} />
-            <div>
-              <p className="text-3xl font-bold z-gradient-text">{ZAYLON_SHOWCASE.codeStats.typescriptLines}</p>
-              <p className="text-xs font-mono mt-1" style={{ color: "var(--z-text-muted)" }}>Lines of TypeScript</p>
-            </div>
-            <div className="w-px h-10 hidden sm:block" style={{ background: "rgba(45, 106, 94, 0.3)" }} />
-            <div>
-              <p className="text-3xl font-bold z-gradient-text">6</p>
-              <p className="text-xs font-mono mt-1" style={{ color: "var(--z-text-muted)" }}>E-Commerce Platforms</p>
-            </div>
+          <div className="z-glass rounded-2xl px-6 py-5 mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              { icon: "&#9670;", label: "Multi-Agent Supervisor", detail: "LangGraph state machine" },
+              { icon: "&#9670;", label: "Tri-Lingual NLP", detail: "DialectBridge pipeline" },
+              { icon: "&#9670;", label: "Real-Time Payments", detail: "3 providers, webhooks" },
+              { icon: "&#9670;", label: "Multi-Tenant Isolation", detail: "Row-level encryption" },
+            ].map((item) => (
+              <div key={item.label} className="text-center sm:text-left">
+                <p className="text-sm font-semibold z-gradient-text">{item.label}</p>
+                <p className="text-xs font-mono mt-0.5" style={{ color: "var(--z-text-muted)" }}>{item.detail}</p>
+              </div>
+            ))}
           </div>
         </FadeUp>
 

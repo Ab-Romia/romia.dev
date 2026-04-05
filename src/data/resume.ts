@@ -34,10 +34,6 @@ export const ZAYLON_SHOWCASE = {
   description:
     "Zaylon turns WhatsApp and Instagram into full sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and complete purchases without ever leaving the chat. Behind the scenes, a supervisor agent routes each conversation to specialized Sales, Support, or Checkout agents with scoped tool access.",
   url: "https://zaylon.ai",
-  codeStats: {
-    pythonLines: "40K+",
-    typescriptLines: "31K+",
-  },
   highlights: [
     { label: "AI Tools", detail: "Search, Cart, Orders, CRM & more", value: 10 },
     { label: "Platforms", detail: "Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho", value: 6 },
@@ -109,7 +105,7 @@ export const PROJECTS: Project[] = [
     status: "Production",
     badge: "Co-Founded",
     featured: true,
-    impact: "Production system: 40K+ lines Python, 31K+ lines TypeScript, 6 platforms, 3 languages",
+    impact: "Production multi-agent system: 6 platforms, 3 languages, 10 scoped AI tools",
     caseStudy: {
       problem:
         "MENA merchants lose sales because customers abandon messaging channels when they can't get instant, dialect-aware product assistance. Traditional chatbots fail with Arabic dialects and can't handle complex multi-step purchases.",
@@ -130,7 +126,7 @@ export const PROJECTS: Project[] = [
         },
       ],
       results:
-        "Production system serving merchants across 6 e-commerce platforms. 40K+ lines of Python backend with supervisor multi-agent architecture, 31K+ lines of TypeScript dashboard.",
+        "Production system serving merchants across 6 e-commerce platforms with supervisor multi-agent architecture, tri-lingual NLP, and multi-provider payment processing.",
     },
   },
   {
