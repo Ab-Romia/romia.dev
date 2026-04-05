@@ -167,6 +167,31 @@
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
+/* Cards that react to nearby cursor with a border glow */
+.cursor-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.cursor-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    400px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(0, 212, 255, 0.08),
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cursor-glow:hover::before {
+  opacity: 1;
+}
+
 /* Zaylon section emerald theme */
 .zaylon-section {
   --z-bg: rgb(10, 10, 10);

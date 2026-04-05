@@ -24,8 +24,15 @@ function SkillCard({
         ref={ref}
         style={style}
         {...handlers}
+        onMouseMove={(e: React.MouseEvent<HTMLDivElement>) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+          e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
+          handlers.onMouseMove(e);
+        }}
+        onMouseLeave={handlers.onMouseLeave}
         className={cn(
-          "border border-border rounded-lg p-6 h-full",
+          "border border-border rounded-lg p-6 h-full cursor-glow",
           isFirst ? "glass-card border-border" : "bg-card hover-glow"
         )}
       >
