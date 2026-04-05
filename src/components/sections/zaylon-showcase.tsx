@@ -158,16 +158,22 @@ function DashboardMockup() {
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
           </div>
-          <span className="text-[10px] font-mono ml-2" style={{ color: "var(--z-text-muted)" }}>
-            zaylon.ai/dashboard
-          </span>
+          <a
+            href="https://dashboard.zaylon.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] font-mono ml-2 hover:underline"
+            style={{ color: "var(--z-text-muted)" }}
+          >
+            dashboard.zaylon.ai
+          </a>
         </div>
 
         {/* Dashboard content */}
         <div className="p-4 sm:p-6 grid grid-cols-3 gap-3">
           {[
-            { label: "Active Merchants", value: "50+", trend: "+12%" },
-            { label: "Conversations", value: "24/7", trend: "Live" },
+            { label: "AI Agents", value: "3", trend: "Supervised" },
+            { label: "AI Tools", value: "10", trend: "Scoped" },
             { label: "Platforms", value: "6", trend: "Connected" },
           ].map((stat) => (
             <div
