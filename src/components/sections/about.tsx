@@ -20,7 +20,18 @@ function TiltCard({
 }) {
   const { ref, style, handlers } = useTilt(3);
   return (
-    <div ref={ref} style={style} {...handlers} className={className}>
+    <div
+      ref={ref}
+      style={style}
+      onMouseMove={(e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+        e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
+        handlers.onMouseMove(e);
+      }}
+      onMouseLeave={handlers.onMouseLeave}
+      className={className}
+    >
       {children}
     </div>
   );
@@ -59,7 +70,7 @@ export function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
           <ScaleUp delay={0.1}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow">
+            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Education
@@ -76,7 +87,7 @@ export function About() {
           </ScaleUp>
 
           <ScaleUp delay={0.15}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow">
+            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Languages
@@ -95,7 +106,7 @@ export function About() {
           </ScaleUp>
 
           <ScaleUp delay={0.2}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow">
+            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Certifications
@@ -120,7 +131,7 @@ export function About() {
           </ScaleUp>
 
           <ScaleUp delay={0.25}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow">
+            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Competitions & Hackathons

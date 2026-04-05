@@ -23,7 +23,6 @@ function SkillCard({
       <div
         ref={ref}
         style={style}
-        {...handlers}
         onMouseMove={(e: React.MouseEvent<HTMLDivElement>) => {
           const rect = e.currentTarget.getBoundingClientRect();
           e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);

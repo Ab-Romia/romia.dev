@@ -226,6 +226,7 @@ export function ZaylonShowcase() {
 
   return (
     <section
+      id="zaylon"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="zaylon-section relative py-24 md:py-32 overflow-hidden"
