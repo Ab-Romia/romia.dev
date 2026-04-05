@@ -31,31 +31,26 @@ export function Experience() {
                   {/* Header */}
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      {entry.company === "Zaylon AI" ? (
-                        <div className="size-10 rounded-lg overflow-hidden shrink-0 bg-[#1B3A35] flex items-center justify-center">
-                          <img src="/logos/zaylon.png" alt="Zaylon AI" width={28} height={28} className="object-contain" />
-                        </div>
-                      ) : (
-                        <div
-                          className="size-10 rounded-lg flex items-center justify-center shrink-0 group-hover:opacity-90 transition-opacity"
-                          style={{
-                            background: entry.company === "Ejada" ? "#0F4C81"
-                              : entry.company === "Swift-ACT" ? "#1A1A2E"
-                              : "rgba(var(--accent-raw, 0,212,255), 0.1)",
-                          }}
-                        >
-                          <span
-                            className="text-sm font-bold"
-                            style={{
-                              color: entry.company === "Ejada" ? "#fff"
-                                : entry.company === "Swift-ACT" ? "#E94560"
-                                : "var(--accent)",
-                            }}
-                          >
-                            {entry.company === "Freelance" ? ">" : entry.company.charAt(0)}
-                          </span>
-                        </div>
-                      )}
+                      {(() => {
+                        const logoMap: Record<string, { src: string; bg: string }> = {
+                          "Zaylon AI": { src: "/logos/zaylon.png", bg: "#1B3A35" },
+                          "Ejada": { src: "/logos/ejada.jpg", bg: "#fff" },
+                          "Swift-ACT": { src: "/logos/swiftact.jpg", bg: "#fff" },
+                        };
+                        const logo = logoMap[entry.company];
+                        if (logo) {
+                          return (
+                            <div className="size-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center" style={{ background: logo.bg }}>
+                              <img src={logo.src} alt={entry.company} width={28} height={28} className="object-contain" />
+                            </div>
+                          );
+                        }
+                        return (
+                          <div className="size-10 rounded-lg flex items-center justify-center shrink-0 bg-accent/10">
+                            <span className="text-accent text-sm font-bold">&gt;</span>
+                          </div>
+                        );
+                      })()}
                       <div>
                         <h3 className="text-lg font-semibold leading-snug">
                           {entry.role}
