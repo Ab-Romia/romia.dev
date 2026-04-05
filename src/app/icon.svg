@@ -2,10 +2,11 @@
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="50%" stop-color="#0EA5E9"/>
       <stop offset="100%" stop-color="#0891B2"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" rx="7" fill="#09090B"/>
-  <path d="M9 8h8.5a5 5 0 0 1 0 10H15l6.5 6H17l-5-5v5H9V8zm3 3v4h5a2 2 0 0 0 0-4h-5z" fill="url(#g)"/>
+  <!-- Terminal prompt > with cursor _ -->
+  <path d="M7 11l6 5-6 5" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="16" y1="21" x2="25" y2="21" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round"/>
 </svg>

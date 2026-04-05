@@ -65,11 +65,12 @@ export function Navbar() {
               <defs>
                 <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#00D4FF"/>
-                  <stop offset="100%" stopColor="#0EA5E9"/>
+                  <stop offset="100%" stopColor="#0891B2"/>
                 </linearGradient>
               </defs>
-              <rect width="32" height="32" rx="8" fill="currentColor" className="text-[#111113] dark:text-[#111113]" />
-              <path d="M9 8h8.5a5 5 0 0 1 0 10H15l6.5 6H17l-5-5v5H9V8zm3 3v4h5a2 2 0 0 0 0-4h-5z" fill="url(#logo-g)"/>
+              <rect width="32" height="32" rx="7" fill="#111113" />
+              <path d="M7 11l6 5-6 5" fill="none" stroke="url(#logo-g)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <line x1="16" y1="21" x2="25" y2="21" stroke="url(#logo-g)" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
             <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground group-hover:text-accent transition-colors">
               romia<span className="text-accent">.</span>dev
