@@ -134,25 +134,9 @@ function FeatureCard({
 function DashboardMockup() {
   return (
     <div className="relative mt-10">
-      {/* Glow halo behind dashboard */}
-      <div
-        className="absolute -inset-4 rounded-3xl blur-xl"
-        style={{ background: "linear-gradient(135deg, rgba(27,58,53,0.2), rgba(45,106,94,0.3), rgba(58,138,122,0.2))" }}
-      />
-
-      <div
-        className="relative rounded-2xl overflow-hidden"
-        style={{
-          background: "rgba(20,26,26,0.8)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid rgba(45,106,94,0.3)",
-        }}
-      >
+      <div className="z-card relative rounded-2xl overflow-hidden">
         {/* Window chrome */}
-        <div
-          className="flex items-center gap-2 px-4 py-3"
-          style={{ borderBottom: "1px solid rgba(45,106,94,0.15)" }}
-        >
+        <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid var(--z-primary)" }}>
           <div className="flex gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
@@ -180,8 +164,9 @@ function DashboardMockup() {
               key={stat.label}
               className="rounded-xl p-3"
               style={{
-                background: "rgba(27,58,53,0.2)",
-                border: "1px solid rgba(45,106,94,0.15)",
+                background: "var(--z-primary)",
+                border: "1px solid var(--z-secondary)",
+                borderColor: "rgba(45,106,94,0.2)",
               }}
             >
               <p className="text-lg sm:text-xl font-bold z-gradient-text">{stat.value}</p>
@@ -202,7 +187,7 @@ function DashboardMockup() {
                 key={platform}
                 className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-1 rounded-full"
                 style={{
-                  background: "rgba(27,58,53,0.3)",
+                  background: "var(--z-primary)",
                   border: "1px solid rgba(45,106,94,0.2)",
                   color: "var(--z-text-muted)",
                 }}
