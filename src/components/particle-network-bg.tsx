@@ -9,13 +9,13 @@ interface Particle {
   vy: number;
 }
 
-const PARTICLE_COUNT = 70;
-const CONNECTION_DIST = 160;
+const PARTICLE_COUNT = 100;
+const CONNECTION_DIST = 180;
 const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST;
-const REPULSION_RADIUS = 170;
+const REPULSION_RADIUS = 180;
 const REPULSION_RADIUS_SQ = REPULSION_RADIUS * REPULSION_RADIUS;
-const REPULSION_STRENGTH = 3.5;
-const NODE_RADIUS = 1.8;
+const REPULSION_STRENGTH = 4;
+const NODE_RADIUS = 2;
 
 // Theme colors: [dark, light]
 const CYAN_DARK = { r: 0, g: 212, b: 255 };
@@ -89,9 +89,9 @@ export function ParticleNetworkBg() {
       const cb = Math.round(baseColor.b + (EMERALD.b - baseColor.b) * blend);
 
       // Opacities: darker values for light mode so they're visible
-      const nodeOpacity = dark ? 0.55 : 0.4;
-      const lineOpacityMax = dark ? 0.18 : 0.12;
-      const lineWidth = dark ? 0.6 : 0.8;
+      const nodeOpacity = dark ? 0.65 : 0.45;
+      const lineOpacityMax = dark ? 0.25 : 0.18;
+      const lineWidth = dark ? 0.8 : 1;
 
       // Update particles
       for (let i = 0; i < particles.length; i++) {
