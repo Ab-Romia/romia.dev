@@ -24,23 +24,11 @@ function Box({
     <div
       onClick={onClick}
       className={cn(
-        "rounded-lg p-3 transition-all duration-300",
-        active
-          ? "scale-[1.02]"
-          : "",
+        "z-card rounded-lg p-3 transition-all duration-300",
+        active && "scale-[1.02] !border-[rgba(45,106,94,0.5)] shadow-[0_0_12px_rgba(45,106,94,0.2)]",
         onClick && "cursor-pointer",
         className
       )}
-      style={{
-        background: "rgba(20, 26, 26, 0.4)",
-        backdropFilter: "blur(8px)",
-        border: active
-          ? "1px solid rgba(45, 106, 94, 0.5)"
-          : "1px solid rgba(27, 58, 53, 0.3)",
-        boxShadow: active
-          ? "0 0 12px rgba(45, 106, 94, 0.2)"
-          : "none",
-      }}
     >
       <p
         className="text-xs font-semibold"
