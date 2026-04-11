@@ -16,10 +16,10 @@ const personSchema = {
   "@id": "https://romia.dev/#person",
   name: "Abdelrahman Abouroumia",
   alternateName: ["Romia", "Ab-Romia", "Abouroumia"],
-  jobTitle: "AI Engineer",
+  jobTitle: "Software Engineer",
   url: "https://romia.dev",
   description:
-    "AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend infrastructure.",
+    "Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
   sameAs: [
     "https://linkedin.com/in/abdelrahman-abouroumia",
     "https://github.com/Ab-Romia",
@@ -27,17 +27,19 @@ const personSchema = {
     "https://zaylon.ai",
   ],
   knowsAbout: [
-    "Artificial Intelligence",
+    "Software Engineering",
+    "Backend Engineering",
+    "Full-Stack Development",
+    "Microservices",
+    "Event-Driven Architecture",
     "Multi-Agent Systems",
     "LangGraph",
     "Retrieval-Augmented Generation",
-    "Natural Language Processing",
-    "Backend Engineering",
     "FastAPI",
     "Spring Boot",
     "Python",
     "TypeScript",
-    "Conversational AI",
+    "Docker",
     "Machine Learning",
   ],
   alumniOf: {
@@ -51,7 +53,7 @@ const personSchema = {
   },
   hasOccupation: {
     "@type": "Occupation",
-    name: "AI Engineer",
+    name: "Software Engineer",
     occupationalCategory: "15-1251.00",
   },
 };
