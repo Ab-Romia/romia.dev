@@ -2,7 +2,7 @@
 
 % PACKAGES
 \usepackage[utf8]{inputenc}
-\usepackage[top=0.4in, bottom=0.35in, left=0.4in, right=0.4in]{geometry}
+\usepackage[top=0.4in, bottom=0.3in, left=0.4in, right=0.4in]{geometry}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{xcolor}
@@ -16,12 +16,7 @@
 \definecolor{rulecolor}{RGB}{160, 170, 190}
 
 % HYPERLINK SETUP
-\hypersetup{
-    colorlinks=true,
-    linkcolor=secondarycolor,
-    urlcolor=secondarycolor,
-    citecolor=secondarycolor
-}
+\hypersetup{colorlinks=true, linkcolor=secondarycolor, urlcolor=secondarycolor, citecolor=secondarycolor}
 
 % PAGE STYLE
 \pagestyle{empty}
@@ -32,129 +27,122 @@
   {\normalsize\bfseries\color{primarycolor}}
   {}
   {0em}
-  {}[\vspace{-2pt}{\color{rulecolor}\titlerule}]
-\titlespacing{\section}{0pt}{6pt}{4pt}
+  {}[\vspace{1pt}{\color{rulecolor}\titlerule[0.6pt]}]
+\titlespacing{\section}{0pt}{6pt}{3pt}
 
-% COMPACT LIST SPACING
-\setlist[itemize]{leftmargin=12pt, noitemsep, topsep=2pt, parsep=0pt, partopsep=0pt}
+% LIST SPACING
+\setlist[itemize]{leftmargin=13pt, itemsep=1pt, topsep=2pt, parsep=0pt, partopsep=0pt}
 
 \begin{document}
 
 % -------------------- HEADER --------------------
 \begin{center}
     {\LARGE\bfseries\color{primarycolor} Abdelrahman Abouroumia}
-    \vspace{4pt}
+    \vspace{3pt}
 
     \small
     \faEnvelope\ \href{mailto:aabouroumia@gmail.com}{aabouroumia@gmail.com} \quad
     \faPhone\ +20 110 047 1572 \\[2pt]
     \faLinkedin\ \href{https://linkedin.com/in/abdelrahman-abouroumia}{linkedin.com/in/abdelrahman-abouroumia} \quad
     \faGithub\ \href{https://github.com/Ab-Romia}{github.com/Ab-Romia} \quad
-    \faCode\ \href{https://huggingface.co/Ab-Romia}{huggingface.co/Ab-Romia} \\[4pt]
-    {\normalsize \faGlobe\ \href{https://romia.dev}{\textbf{\color{secondarycolor}romia.dev}} --- \textit{Portfolio \& Projects}}
+    \faCode\ \href{https://huggingface.co/Ab-Romia}{huggingface.co/Ab-Romia} \\[3pt]
+    {\normalsize \faGlobe\ \href{https://romia.dev}{\textbf{\color{secondarycolor}romia.dev}} \ $\cdot$ \ \textit{Portfolio with case studies, architecture breakdowns, and interactive demos}}
 \end{center}
 
-\vspace{-2pt}
+% -------------------- SUMMARY --------------------
+\section{Summary}
+Software engineer with production experience across the full stack: multi-agent AI systems, FastAPI and Spring Boot backends, event-driven microservices with Kafka, and React/Next.js frontends. Co-founded Zaylon AI and shipped a multi-tenant commerce platform integrating 6 e-commerce platforms with tri-lingual NLP serving real users.
 
 % -------------------- EXPERIENCE --------------------
 \section{Experience}
 
-\textbf{AI Engineer \& Co-Founder} \hfill \textbf{May 2025 -- Present} \\
-\textit{\href{https://zaylon.ai}{Zaylon AI}} \hfill \href{https://zaylon.ai}{\faGlobe\ zaylon.ai}
+\textbf{Software Engineer \& Co-Founder} \hfill \textbf{May 2025 -- Present} \\
+\textit{\href{https://zaylon.ai}{Zaylon AI}}
 \begin{itemize}
-\item Built multi-agent \textbf{LangGraph} supervisor routing to Sales, Support, Checkout agents with 10 AI tools.
-\item Integrated \textbf{6 platforms} (Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho) for catalog sync and orders.
-\item Developed hybrid search (\textbf{RRF}) and visual search via \textbf{GPT-4o} on WhatsApp, Instagram, Messenger.
-\item Engineered \textbf{DialectBridge} tri-lingual NLP for English, Egyptian Arabic, and Franco-Arabic.
-\item Built merchant dashboard: real-time inbox, analytics, \textbf{RFM segmentation}, A/B testing (\textbf{Next.js}).
+\item Built full-stack platform: \textbf{Next.js}/React merchant dashboard, \textbf{FastAPI} Python backend, \textbf{Docker} containerized deploy.
+\item Designed multi-agent \textbf{LangGraph} orchestration routing conversations to 3 specialized agents with 10 scoped AI tools.
+\item Integrated \textbf{6 e-commerce platforms} via \textbf{REST APIs} with webhook-driven sync, idempotent operations, and retry logic.
+\item Engineered \textbf{DialectBridge}: tri-lingual NLP with auto dialect detection for English, Egyptian Arabic, and Franco-Arabic.
+\item Developed hybrid search (keyword + semantic + \textbf{RRF}) and visual product matching via \textbf{GPT-4o} across 3 channels.
+\item Built \textbf{PostgreSQL}/\textbf{Redis} data layer with multi-tenant isolation, row-level security, and RFM segmentation analytics.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{4pt}
 \textbf{Software Integration Engineering Intern} \hfill \textbf{Jul 2025} \\
 \textit{Ejada}
 \begin{itemize}
-\item Built RESTful API endpoints for core banking using \textbf{Spring Boot} with query optimization and \textbf{Redis} caching.
-\item Configured \textbf{Apache Kafka} producers/consumers for async transaction processing, decoupling services.
-\item Implemented API security (OAuth2, rate limiting) with \textbf{WSO2 API Manager} in a BFF architecture.
+\item Built \textbf{Spring Boot} RESTful APIs for core banking integration with query optimization and \textbf{Redis} caching.
+\item Configured \textbf{Apache Kafka} producers and consumers for async event-driven messaging and service decoupling.
+\item Implemented API gateway security (OAuth2, rate limiting, request validation) using \textbf{WSO2 API Manager}.
 \end{itemize}
 
-\vspace{2pt}
-\textbf{AI Coding Expert (Freelance)} \hfill \textbf{Sep 2024 -- Feb 2026} \\
-\textit{Scale AI \& Turing}
+\vspace{4pt}
+\textbf{AI Coding Expert} \hfill \textbf{Sep 2024 -- Feb 2026} \\
+\textit{Freelance}
 \begin{itemize}
-\item Contribute to \textbf{RLHF data pipelines}, evaluating and improving LLM-generated coding solutions in Python.
-\item Develop quality rubrics and prompting strategies for backend logic evaluation workflows.
+\item Reviewed and ranked thousands of Python code samples for \textbf{RLHF pipelines}; built quality rubrics for frontier AI models.
+\item Developed prompting strategies and evaluation criteria measuring correctness, efficiency, and edge case handling.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{4pt}
 \textbf{Automotive Cybersecurity Intern} \hfill \textbf{Aug 2024 -- Oct 2024} \\
 \textit{Swift-ACT}
 \begin{itemize}
-\item Created a threat analysis catalog documenting attack vectors on CAN bus and ECU systems for a security knowledge base.
-\item Conducted fuzz testing on Automotive Emergency Braking (AEB) components; documented vulnerabilities with test cases.
+\item Built security scenario catalogs with threat models and mitigations for \textbf{CAN bus} and \textbf{ECU} communication systems.
+\item Ran attack simulations (spoofing, replay, DoS) in \textbf{Dyna4} and \textbf{CARLA} against in-vehicle network architectures.
+\item Used \textbf{Vector CANoe} for CAN simulation, fault injection, and ECU validation; fuzz-tested \textbf{AEB} braking components.
 \end{itemize}
 
 % -------------------- SELECTED PROJECTS --------------------
-\section{Selected Projects}
+\section{Selected Projects \hfill \normalfont\small\color{secondarycolor}\faGlobe\ \href{https://romia.dev}{\textbf{Case studies and live demos at romia.dev}}}
 
-\textbf{AI-Powered Collaborative Workspace} (Graduation Project) \hfill \textbf{Ongoing}
+\textbf{AI-Powered Collaborative Workspace} \hfill \textit{Graduation Project, Ongoing}
 \begin{itemize}
-\item Building a \textbf{FastAPI} microservices backend with a context-aware AI assistant for an organizational collaboration platform.
-\item Implementing a multi-source \textbf{RAG pipeline} with \textbf{PostgreSQL/pgvector} for grounded answers from organizational data.
+\item Building a \textbf{FastAPI} microservices backend with a context-aware AI assistant for organizational collaboration.
+\item Implementing multi-source \textbf{RAG pipeline} with \textbf{PostgreSQL/pgvector} hybrid search and automated document processing.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{3pt}
 \textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{\faGithub\ GitHub}
 \begin{itemize}
 \item Architected event-driven microservices with \textbf{Spring Boot} and \textbf{Kafka} for banking operations with OAuth2 security.
-\item Integrated an AI agent microservice combining Spring Boot with \textbf{LangChain}-powered conversational AI for assistance.
+\item Integrated a \textbf{LangChain}-powered AI agent as an independently scalable microservice for conversational banking.
 \end{itemize}
 
-\vspace{2pt}
-\textbf{ContextIQ: Production RAG System} \hfill \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{\faCode\ Demo} \quad \href{https://github.com/Ab-Romia/ContextIQ-RAG}{\faGithub\ GitHub} \\
-RAG API with \textbf{FastAPI} supporting 11+ file formats, TF-IDF embeddings with \textbf{ChromaDB} vector search and smart caching.
+\vspace{3pt}
+\textbf{ContextIQ: Production RAG System} \hfill \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{\faCode\ Demo} \ \ \href{https://github.com/Ab-Romia/ContextIQ-RAG}{\faGithub\ GitHub} \\
+\textbf{FastAPI} RAG API supporting 11+ file formats with hybrid retrieval (TF-IDF + vector) and \textbf{ChromaDB} vector search.
 
-\vspace{2pt}
-\textbf{Multimodal Emotion Recognition} \hfill \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{\faCode\ Demo} \quad \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{\faGithub\ GitHub} \\
-Cross-modal attention model using \textbf{HuBERT} audio and \textbf{EfficientNet} visual encoders with bidirectional fusion (8 classes).
+\vspace{3pt}
+\textbf{Multimodal Emotion Recognition} \hfill \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{\faCode\ Demo} \ \ \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{\faGithub\ GitHub} \\
+Cross-modal attention model fusing \textbf{HuBERT} audio and \textbf{EfficientNet} visual encoders with bidirectional fusion (8 classes).
 
-\vspace{2pt}
-\textbf{VoicePrint: AI Text Humanizer} \hfill \href{https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer}{\faCode\ Demo} \quad \href{https://github.com/Ab-Romia/Style-Echo-AI-Humanizer}{\faGithub\ GitHub} \\
-NLP system learning writing style from text samples using \textbf{Sentence-BERT} embeddings and stylometric analysis.
-
-\vspace{2pt}
-\textbf{Other Deployed:}
-\href{https://huggingface.co/spaces/Ab-Romia/connect4-ai}{Connect4 AI Agent} (minimax, alpha-beta pruning) $\cdot$
-\href{https://huggingface.co/spaces/Ab-Romia/sudoku-ai}{CSP Sudoku Solver} (backtracking, AC-3, MRV)
+\vspace{3pt}
+\textbf{Other:}
+\href{https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer}{VoicePrint} (Sentence-BERT style transfer) $\cdot$
+\href{https://huggingface.co/spaces/Ab-Romia/connect4-ai}{Connect4 AI} (minimax, alpha-beta) $\cdot$
+\href{https://huggingface.co/spaces/Ab-Romia/sudoku-ai}{CSP Sudoku Solver} (AC-3, MRV)
 
 % -------------------- EDUCATION --------------------
 \section{Education}
-\textbf{Alexandria University, Faculty of Engineering} \\
-B.Sc. in Computer \& Communications Engineering (AI Concentration) \hfill \textbf{Expected Jul 2026} \\
-Cumulative GPA: \textbf{3.73 / 4.0}
+\textbf{Alexandria University, Faculty of Engineering} \hfill \textbf{Expected Jul 2026} \\
+B.Sc. in Computer \& Communications Engineering (AI Concentration) \quad $\cdot$ \quad Cumulative GPA: \textbf{3.73 / 4.0} \\
+\textit{Coursework:} Data Structures, OOP, Software Engineering, Networks, Databases, OS, Computer Vision, Deep Learning
 
 % -------------------- TECHNICAL SKILLS --------------------
 \section{Technical Skills}
-\textbf{AI/ML:} PyTorch, LangChain, LangGraph, Transformers, RAG, Vector DBs (ChromaDB, pgvector), Prompt Engineering, NLP \\[2pt]
-\textbf{Backend:} Spring Boot (Java), FastAPI (Python), Microservices, Event-Driven Systems (Kafka), REST APIs, PostgreSQL, Redis \\[2pt]
-\textbf{DevOps \& Tools:} Docker, Git, GitHub Actions, AWS, Google Cloud, Linux, Bash, Hugging Face, Postman \\[2pt]
-\textbf{Programming:} Python, Java, SQL, JavaScript/TypeScript, C/C++
+\begin{tabular}{@{}p{0.12\textwidth}p{0.87\textwidth}@{}}
+\textbf{Languages} & Python, Java, JavaScript/TypeScript, SQL, C/C++ \\
+\textbf{Backend} & Spring Boot, FastAPI, Microservices, Kafka, REST APIs, OOP, Design Patterns, Webhooks, PostgreSQL, Redis \\
+\textbf{Frontend} & React, Next.js, HTML5, CSS3, Tailwind CSS, Responsive Design \\
+\textbf{AI / ML} & LangGraph, LangChain, PyTorch, RAG, Vector DBs (ChromaDB, pgvector), Computer Vision, NLP \\
+\textbf{DevOps} & Docker, Git, GitHub Actions, CI/CD, Google Cloud, AWS, Linux, Bash \\
+\end{tabular}
 
-% -------------------- CERTIFICATIONS --------------------
-\section{Certifications}
-\begin{itemize}
-\item \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{\textbf{Google AI Agents Intensive Capstone}} -- Kaggle, 2025
-\item \textbf{Meta Back-end Developer Specialization} -- Coursera \quad $\cdot$ \quad \textbf{AWS Cloud \& ML Foundations} -- AWS Academy
-\end{itemize}
-
-% -------------------- COMPETITIONS --------------------
-\section{Competitions \& Hackathons}
-\begin{itemize}
-\item \textbf{MTC-AIC3 BCI Challenge} -- Egypt National AI Competition \quad $\cdot$ \quad \textbf{ECPC} -- 3x participant
-\item \textbf{Hepsiburada Address Resolution Hackathon} -- TEKNOFEST 2025: NLP-based address parsing
-\end{itemize}
-
+% -------------------- BOTTOM --------------------
 \vspace{2pt}
-\noindent\textbf{Spoken Languages:}\quad English (Fluent) \quad \textbullet \quad Arabic (Native) \quad \textbullet \quad German (A2) \quad \textbullet \quad Spanish (Conversational)
+\noindent\textbf{Certifications:} \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{Google AI Agents Capstone} (Kaggle) \ $\cdot$ \ Meta Back-end Developer (Coursera) \ $\cdot$ \ AWS Cloud \& ML Foundations \\[1pt]
+\textbf{Competitions:} MTC-AIC3 BCI (Egypt National AI) \ $\cdot$ \ ECPC (3x) \ $\cdot$ \ Hepsiburada NLP Hackathon (TEKNOFEST) \\[1pt]
+\textbf{Languages:} English (Fluent) $\cdot$ Arabic (Native) $\cdot$ German (A2) $\cdot$ Spanish (Conversational)
 
 \end{document}
