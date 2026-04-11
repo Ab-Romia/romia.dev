@@ -21,7 +21,7 @@ export function Experience() {
             return (
               <FadeUp key={entry.company} delay={i * 0.1}>
                 <div
-                  className="group relative border border-border rounded-xl p-6 sm:p-8 hover:border-accent/30 transition-all duration-300 cursor-glow bg-card/30"
+                  className="group relative border border-border rounded-xl p-6 sm:p-8 hover:border-accent/30 transition-all duration-300 cursor-glow bg-card/50"
                   onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
