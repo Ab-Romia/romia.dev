@@ -240,9 +240,9 @@ export function ZaylonShowcase() {
       {/* Emerald mouse-following glow */}
       <div ref={glowRef} className="absolute inset-0 pointer-events-none z-[1] transition-none" />
 
-      {/* Gradient transition: portfolio bg -> emerald bg */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+      {/* Smooth gradient transitions into/out of emerald */}
+      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-background via-background/50 to-transparent z-[2] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/50 to-transparent z-[2] pointer-events-none" />
 
       {/* Emerald blur orbs for depth */}
       <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(45, 106, 94, 0.06)" }} />
