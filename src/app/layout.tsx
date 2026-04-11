@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SpotlightBg } from "@/components/spotlight-bg";
+import { ParticleNetworkBg } from "@/components/particle-network-bg";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -91,7 +91,7 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-foreground focus:rounded-lg focus:text-sm focus:font-medium">
           Skip to content
         </a>
-        <SpotlightBg />
+        <ParticleNetworkBg />
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
         <SpeedInsights />
