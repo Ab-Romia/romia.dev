@@ -1,10 +1,10 @@
 export const PERSONAL = {
   name: "Abdelrahman Abouroumia",
   displayName: "Romia",
-  title: "AI Engineer & Co-Founder",
+  title: "Software Engineer & Co-Founder",
   email: "aabouroumia@gmail.com",
   tagline:
-    "I co-founded Zaylon AI, where I built a multi-agent system that turns WhatsApp conversations into completed purchases across 6 e-commerce platforms and 3 languages.",
+    "I co-founded Zaylon AI, where I built a full-stack platform and multi-agent system integrating 6 e-commerce platforms with event-driven backends and tri-lingual NLP.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -311,15 +311,17 @@ export function getAdjacentProjects(slug: string) {
 export const EXPERIENCE = [
   {
     company: "Zaylon AI",
-    role: "AI Engineer & Co-Founder",
+    role: "Software Engineer & Co-Founder",
     url: "https://zaylon.ai",
     period: "May 2025 – Present",
-    description: "Co-founded and built the entire AI backend for a conversational commerce platform serving MENA merchants across WhatsApp, Instagram, and web.",
+    description: "Co-founded and built the full-stack platform: Next.js merchant dashboard, FastAPI backend with PostgreSQL/Redis, Docker deployment, and multi-agent AI system serving MENA merchants across WhatsApp, Instagram, and web.",
     highlights: [
-      "Architected a multi-agent LangGraph system with a supervisor that routes conversations to 3 specialized agents (Sales, Support, Checkout), each with scoped access to a subset of 10 AI tools, preventing hallucinated cross-domain actions",
-      "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring. Deployed across WhatsApp and Instagram with real-time catalog sync from 6 e-commerce platforms",
-      "Engineered DialectBridge, a tri-lingual NLP pipeline that auto-detects whether a customer is writing in English, Egyptian Arabic, or Franco-Arabic and matches the response language and dialect accordingly",
-      "Designed Redis message accumulation to batch rapid-fire WhatsApp messages (users send 3-5 messages instead of one coherent prompt) into a single coherent turn before invoking the agent, reducing token waste and fragmented responses",
+      "Built full-stack platform: Next.js/React merchant dashboard with real-time inbox, analytics, and A/B testing on top of a FastAPI Python backend with Docker containerized deployment",
+      "Integrated 6 e-commerce platforms (Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho) via REST APIs with webhook-driven sync, idempotent operations, and retry logic",
+      "Architected a multi-agent LangGraph system with a supervisor routing conversations to 3 specialized agents (Sales, Support, Checkout), each with scoped access to a subset of 10 AI tools",
+      "Engineered DialectBridge, a tri-lingual NLP pipeline that auto-detects whether a customer is writing in English, Egyptian Arabic, or Franco-Arabic and matches the response dialect accordingly",
+      "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring, deployed across WhatsApp and Instagram channels",
+      "Designed Redis message accumulation to batch rapid-fire WhatsApp messages into a single coherent turn before invoking the agent, reducing token waste and fragmented responses",
       "Built multi-tenant architecture with per-merchant encryption, row-level data isolation, and webhook-verified payment processing through Stripe, Paymob, and Fawry",
     ],
   },
@@ -361,13 +363,13 @@ export const EXPERIENCE = [
 ] as const;
 
 export const SKILLS = {
-  "AI / ML": [
-    "PyTorch", "LangChain", "LangGraph", "Transformers", "RAG",
-    "ChromaDB", "pgvector", "NLP", "Prompt Engineering",
-  ],
   Backend: [
     "Spring Boot", "FastAPI", "Microservices", "Kafka",
-    "REST APIs", "PostgreSQL", "Redis",
+    "REST APIs", "PostgreSQL", "Redis", "Webhooks",
+  ],
+  "AI / ML": [
+    "LangGraph", "LangChain", "PyTorch", "RAG",
+    "ChromaDB", "pgvector", "NLP", "Computer Vision",
   ],
   "DevOps & Cloud": [
     "Docker", "Git", "GitHub Actions", "AWS",
@@ -403,7 +405,7 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I'm Romia, an AI Engineer and Co-Founder of Zaylon AI, where I built a multi-agent system that handles real commerce conversations across 3 languages and 6 e-commerce platforms. I specialize in LangGraph multi-agent architectures, production RAG pipelines, and the backend systems that power them. Currently finishing my B.Sc. in Computer & Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
+  bio: "I'm Romia, a Software Engineer and Co-Founder of Zaylon AI, where I built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work across the full stack: React/Next.js frontends, FastAPI and Spring Boot backends, and multi-agent LangGraph architectures. Currently finishing my B.Sc. in Computer & Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
 } as const;
 
 export const BLOG_POSTS = [

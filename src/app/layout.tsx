@@ -19,30 +19,33 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://romia.dev"),
   title: {
-    default: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    default: "Abdelrahman Abouroumia (Romia) | Software Engineer",
     template: "%s | Abdelrahman Abouroumia",
   },
   description:
-    "Abdelrahman Abouroumia (Romia) - AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend APIs.",
+    "Abdelrahman Abouroumia (Romia) - Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
   keywords: [
     "Abdelrahman Abouroumia",
     "Romia",
     "Abouroumia",
     "Ab-Romia",
+    "Software Engineer",
+    "Backend Engineer",
+    "Full-Stack Engineer",
     "AI Engineer",
     "Co-Founder Zaylon AI",
     "LangGraph",
     "Multi-Agent Systems",
-    "RAG",
     "FastAPI",
-    "Backend Engineer",
+    "Spring Boot",
+    "Microservices",
   ],
   authors: [{ name: "Abdelrahman Abouroumia", url: "https://romia.dev" }],
   creator: "Abdelrahman Abouroumia",
   openGraph: {
-    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | Software Engineer",
     description:
-      "AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend APIs.",
+      "Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
     url: "https://romia.dev",
     siteName: "Abdelrahman Abouroumia - Portfolio",
     locale: "en_US",
@@ -50,9 +53,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | Software Engineer",
     description:
-      "AI Engineer and Co-Founder of Zaylon AI. Building multi-agent systems, production RAG pipelines, and scalable backend APIs.",
+      "Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
   },
   alternates: {
     canonical: "/",
