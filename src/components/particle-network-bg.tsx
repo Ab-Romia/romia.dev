@@ -9,15 +9,17 @@ interface Particle {
   vy: number;
 }
 
-const PARTICLE_COUNT = 60;
-const CONNECTION_DIST = 150;
+const PARTICLE_COUNT = 70;
+const CONNECTION_DIST = 160;
 const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST;
-const REPULSION_RADIUS = 160;
+const REPULSION_RADIUS = 170;
 const REPULSION_RADIUS_SQ = REPULSION_RADIUS * REPULSION_RADIUS;
-const REPULSION_STRENGTH = 3;
-const NODE_RADIUS = 1.5;
+const REPULSION_STRENGTH = 3.5;
+const NODE_RADIUS = 1.8;
 
-const CYAN = { r: 0, g: 212, b: 255 };
+// Theme colors: [dark, light]
+const CYAN_DARK = { r: 0, g: 212, b: 255 };
+const CYAN_LIGHT = { r: 14, g: 116, b: 144 }; // teal-700, visible on white
 const EMERALD = { r: 45, g: 106, b: 94 };
 
 export function ParticleNetworkBg() {
@@ -62,6 +64,8 @@ export function ParticleNetworkBg() {
       mouse.y = e.clientY;
     };
 
+    const isDark = () => document.documentElement.classList.contains("dark");
+
     const getZaylonBlend = (): number => {
       const zaylon = document.getElementById("zaylon");
       if (!zaylon) return 0;
@@ -77,10 +81,17 @@ export function ParticleNetworkBg() {
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
 
+      const dark = isDark();
+      const baseColor = dark ? CYAN_DARK : CYAN_LIGHT;
       const blend = getZaylonBlend();
-      const cr = Math.round(CYAN.r + (EMERALD.r - CYAN.r) * blend);
-      const cg = Math.round(CYAN.g + (EMERALD.g - CYAN.g) * blend);
-      const cb = Math.round(CYAN.b + (EMERALD.b - CYAN.b) * blend);
+      const cr = Math.round(baseColor.r + (EMERALD.r - baseColor.r) * blend);
+      const cg = Math.round(baseColor.g + (EMERALD.g - baseColor.g) * blend);
+      const cb = Math.round(baseColor.b + (EMERALD.b - baseColor.b) * blend);
+
+      // Opacities: darker values for light mode so they're visible
+      const nodeOpacity = dark ? 0.55 : 0.4;
+      const lineOpacityMax = dark ? 0.18 : 0.12;
+      const lineWidth = dark ? 0.6 : 0.8;
 
       // Update particles
       for (let i = 0; i < particles.length; i++) {
@@ -105,8 +116,8 @@ export function ParticleNetworkBg() {
         if (p.y > h + 30) p.y = -30;
       }
 
-      // Connections: crisp thin lines, no blur
-      ctx.lineWidth = 0.5;
+      // Connections
+      ctx.lineWidth = lineWidth;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -114,7 +125,7 @@ export function ParticleNetworkBg() {
           const distSq = dx * dx + dy * dy;
 
           if (distSq < CONNECTION_DIST_SQ) {
-            const opacity = 0.15 * (1 - distSq / CONNECTION_DIST_SQ);
+            const opacity = lineOpacityMax * (1 - distSq / CONNECTION_DIST_SQ);
             ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${opacity})`;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -124,12 +135,12 @@ export function ParticleNetworkBg() {
         }
       }
 
-      // Nodes: small crisp dots, no shadowBlur
+      // Nodes
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         ctx.beginPath();
         ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, 0.5)`;
+        ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${nodeOpacity})`;
         ctx.fill();
       }
 

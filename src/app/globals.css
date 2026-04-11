@@ -125,13 +125,23 @@
     var(--accent) 80%,
     transparent
   );
-  opacity: 0.15;
+  opacity: 0.25;
 }
 
+/* Light mode default */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.02);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Dark mode override */
+:is(.dark *) .glass-card,
+.dark .glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
 }
 
 @keyframes float {
@@ -159,12 +169,18 @@
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 rgba(0,212,255,0); }
-  50% { box-shadow: 0 0 15px rgba(0,212,255,0.15); }
+  0%, 100% { box-shadow: 0 0 0 var(--glow-color, rgba(0,212,255,0)); }
+  50% { box-shadow: 0 0 15px var(--glow-color, rgba(0,212,255,0.15)); }
 }
 
 .hover-glow:hover {
+  --glow-color: rgba(0, 212, 255, 0.15);
   animation: glow-pulse 2s ease-in-out infinite;
+}
+
+:is(.dark *) .hover-glow:hover,
+.dark .hover-glow:hover {
+  --glow-color: rgba(0, 212, 255, 0.15);
 }
 
 /* Cards that react to nearby cursor with a border glow */
@@ -192,8 +208,9 @@
   opacity: 1;
 }
 
-/* Zaylon section emerald theme */
-.zaylon-section {
+/* Zaylon section emerald theme - dark mode */
+:is(.dark *) .zaylon-section,
+.dark .zaylon-section {
   --z-bg: rgb(10, 10, 10);
   --z-card: rgb(20, 26, 26);
   --z-primary: #1B3A35;
@@ -201,13 +218,32 @@
   --z-tertiary: #3A8A7A;
   --z-text: #F0F2F1;
   --z-text-muted: #9CA3AF;
+}
+
+/* Zaylon section emerald theme - light mode */
+.zaylon-section {
+  --z-bg: #F0F7F5;
+  --z-card: #FFFFFF;
+  --z-primary: #D1E7E2;
+  --z-secondary: #2D6A5E;
+  --z-tertiary: #1B5E50;
+  --z-text: #1A2E2A;
+  --z-text-muted: #4A6660;
   background: var(--z-bg);
 }
 
 .zaylon-section .z-glass {
-  background: rgba(20, 26, 26, 0.4);
   backdrop-filter: blur(12px);
+}
+
+:is(.dark *) .zaylon-section .z-glass {
+  background: rgba(20, 26, 26, 0.4);
   border: 1px solid rgba(45, 106, 94, 0.2);
+}
+
+.zaylon-section .z-glass {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(45, 106, 94, 0.15);
 }
 
 .zaylon-section .z-gradient-text {
@@ -217,16 +253,26 @@
   background-clip: text;
 }
 
-.zaylon-section .z-card {
+:is(.dark *) .zaylon-section .z-card {
   background: rgba(20, 26, 26, 0.4);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(45, 106, 94, 0.2);
+}
+
+.zaylon-section .z-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(45, 106, 94, 0.15);
   border-radius: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .zaylon-section .z-card:hover {
-  border-color: rgba(58, 138, 122, 0.4);
+  border-color: rgba(45, 106, 94, 0.35);
+  box-shadow: 0 4px 16px rgba(27, 58, 53, 0.12);
+}
+
+:is(.dark *) .zaylon-section .z-card:hover {
   box-shadow: 0 4px 20px rgba(27, 58, 53, 0.4);
 }
 
