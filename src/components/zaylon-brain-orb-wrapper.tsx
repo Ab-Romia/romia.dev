@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { ZaylonCoreLogo } from "./zaylon-brain-orb";
 
 const ZaylonBrainOrb = dynamic(() => import("./zaylon-brain-orb"), {
   ssr: false,
@@ -47,9 +48,29 @@ export function ZaylonBrainOrbLazy() {
     return () => io.disconnect();
   }, []);
 
+  const edgeMask =
+    "radial-gradient(circle at center, #000 58%, rgba(0,0,0,0.85) 72%, rgba(0,0,0,0.35) 88%, transparent 100%)";
+
   return (
     <div ref={ref} className="relative w-full h-full">
-      {shouldMount ? <ZaylonBrainOrb /> : <OrbPlaceholder />}
+      <div
+        className="absolute inset-0"
+        style={{
+          WebkitMaskImage: edgeMask,
+          maskImage: edgeMask,
+        }}
+      >
+        {shouldMount ? <ZaylonBrainOrb /> : <OrbPlaceholder />}
+      </div>
+      {/* Z logo overlay, always on top of the 3D scene, breathes via CSS */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      >
+        <div className="zaylon-core-logo">
+          <ZaylonCoreLogo size={96} />
+        </div>
+      </div>
     </div>
   );
 }
