@@ -19,7 +19,8 @@ const statusColors: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  return PROJECTS.map((p) => ({ slug: p.slug }));
+  // zaylon-ai has its own dedicated case study page at /projects/zaylon-ai/page.tsx
+  return PROJECTS.filter((p) => p.slug !== "zaylon-ai").map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
