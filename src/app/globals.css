@@ -177,6 +177,29 @@
   50% { filter: drop-shadow(0 0 12px rgba(58,138,122,0.6)); }
 }
 
+@keyframes zaylon-core-breathe {
+  0%, 100% {
+    transform: scale(1);
+    filter:
+      drop-shadow(0 0 10px rgba(52, 211, 153, 0.55))
+      drop-shadow(0 0 22px rgba(110, 231, 183, 0.35));
+  }
+  50% {
+    transform: scale(1.05);
+    filter:
+      drop-shadow(0 0 18px rgba(52, 211, 153, 0.85))
+      drop-shadow(0 0 36px rgba(110, 231, 183, 0.55));
+  }
+}
+
+.zaylon-core-logo {
+  will-change: transform, filter;
+  animation: zaylon-core-breathe 3.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .zaylon-core-logo { animation: none; }
+}
+
 @keyframes glow-pulse {
   0%, 100% { box-shadow: 0 0 0 var(--glow-color, rgba(0,212,255,0)); }
   50% { box-shadow: 0 0 15px var(--glow-color, rgba(0,212,255,0.15)); }
