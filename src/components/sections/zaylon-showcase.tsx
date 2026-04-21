@@ -153,7 +153,7 @@ export function ZaylonShowcase() {
 
             <FadeUp delay={0.1}>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mt-4" style={{ color: "var(--z-text)" }}>
-                Building <span className="z-gradient-text">Zaylon AI</span>
+                <span className="z-gradient-text">Zaylon AI</span>
               </h2>
               <p className="text-lg md:text-xl mt-3" style={{ color: "var(--z-text-muted)" }}>
                 {ZAYLON_SHOWCASE.subtitle}
