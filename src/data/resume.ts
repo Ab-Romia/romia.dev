@@ -30,7 +30,7 @@ export const NAV_LINKS = [
 export const ZAYLON_SHOWCASE = {
   title: "Zaylon AI",
   role: "Software Engineer & Co-Founder",
-  heading: "Building Zaylon AI",
+  heading: "Zaylon AI",
   subtitle: "Production Multi-Tenant Conversational Commerce for MENA",
   description:
     "Zaylon turns WhatsApp and Instagram into full sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and complete purchases without ever leaving the chat. Behind the scenes, a supervisor agent routes each conversation to specialized Sales, Support, or Checkout agents with scoped tool access.",
