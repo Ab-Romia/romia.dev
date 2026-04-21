@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { ZaylonCoreLogo } from "./zaylon-brain-orb";
 
 const ZaylonBrainOrb = dynamic(() => import("./zaylon-brain-orb"), {
   ssr: false,
@@ -50,33 +49,7 @@ export function ZaylonBrainOrbLazy() {
 
   return (
     <div ref={ref} className="relative w-full h-full">
-      {/* 3D scene fills the container */}
-      <div className="absolute inset-0">
-        {shouldMount ? <ZaylonBrainOrb /> : <OrbPlaceholder />}
-      </div>
-
-      {/* Z logo, dead-centered on the canvas and always on top of the scene.
-          The inner backdrop disc sits behind the logo to visually anchor it
-          inside the wireframe core. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-      >
-        <div className="relative flex items-center justify-center" style={{ width: 140, height: 140 }}>
-          {/* Soft disc backdrop that reads as the core's interior */}
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(16, 120, 92, 0.55) 0%, rgba(52, 211, 153, 0.25) 35%, rgba(52, 211, 153, 0.08) 60%, transparent 75%)",
-              filter: "blur(6px)",
-            }}
-          />
-          <div className="zaylon-core-logo relative">
-            <ZaylonCoreLogo size={96} />
-          </div>
-        </div>
-      </div>
+      {shouldMount ? <ZaylonBrainOrb /> : <OrbPlaceholder />}
     </div>
   );
 }
