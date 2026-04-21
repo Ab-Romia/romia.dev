@@ -268,7 +268,7 @@ function OrbitingNode({ def, variant, cfg }: OrbitingNodeProps) {
         <lineBasicMaterial
           color={isConv ? def.color : "#34D399"}
           transparent
-          opacity={isConv ? 0.3 : 0.2}
+          opacity={isConv ? 0.55 : 0.4}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
@@ -394,7 +394,7 @@ function Filaments() {
       <lineBasicMaterial
         color="#34D399"
         transparent
-        opacity={0.15}
+        opacity={0.28}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
@@ -487,7 +487,7 @@ export default function ZaylonBrainOrb({ className = "" }: ZaylonBrainOrbProps) 
       }}
     >
       <Canvas
-        camera={{ position: [0, 0, 7.6], fov: 48 }}
+        camera={{ position: [0, 0, 7.2], fov: 48 }}
         dpr={[1, isMobile ? 1.5 : 1.75]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={reducedMotion ? "demand" : "always"}
