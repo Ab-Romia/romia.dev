@@ -20,20 +20,29 @@ function Box({
   onClick?: () => void;
   className?: string;
 }) {
-  return (
-    <div
-      onClick={onClick}
-      className={cn(
-        "z-card rounded-lg p-3 transition-all duration-300",
-        active && "scale-[1.02] !border-[rgba(45,106,94,0.5)] shadow-[0_0_12px_rgba(45,106,94,0.2)]",
-        onClick && "cursor-pointer",
-        className
-      )}
-    >
+  const interactive = Boolean(onClick);
+  const commonClass = cn(
+    "z-card rounded-lg p-3 transition-all duration-300 w-full text-left",
+    accent && "border-[rgba(58,138,122,0.35)]",
+    pulse && "shadow-[0_0_18px_rgba(45,106,94,0.35)]",
+    active && "scale-[1.02] !border-[rgba(45,106,94,0.5)] shadow-[0_0_12px_rgba(45,106,94,0.2)]",
+    interactive && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--z-tertiary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+    className,
+  );
+
+  const content = (
+    <>
       <p
-        className="text-xs font-semibold"
+        className="text-xs font-semibold flex items-center gap-1.5"
         style={{ color: accent ? "var(--z-tertiary)" : "var(--z-text)" }}
       >
+        {pulse && (
+          <span
+            aria-hidden="true"
+            className="size-1.5 rounded-full animate-pulse"
+            style={{ background: "var(--z-tertiary)" }}
+          />
+        )}
         {label}
       </p>
       {sub && (
@@ -41,8 +50,18 @@ function Box({
           {sub}
         </p>
       )}
-    </div>
+    </>
   );
+
+  if (interactive) {
+    return (
+      <button type="button" onClick={onClick} className={commonClass} aria-pressed={active}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className={commonClass}>{content}</div>;
 }
 
 function Arrow() {

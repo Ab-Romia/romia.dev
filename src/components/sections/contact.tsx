@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PERSONAL } from "@/data/resume";
 import { BlurIn, FadeUp } from "@/components/motion-wrapper";
-import { Mail, Check, Copy } from "lucide-react";
+import { Mail, Check, Copy, Download } from "lucide-react";
 import { Magnetic } from "@/components/magnetic";
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -47,16 +47,6 @@ export function Contact() {
 
   return (
     <section id="contact" className="relative py-20 md:py-28 overflow-hidden">
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background: `
-            radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 20% 50%, rgba(187, 154, 247, 0.06) 0%, transparent 50%)
-          `,
-        }}
-      />
-
       <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
         <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">
@@ -70,25 +60,48 @@ export function Contact() {
         </BlurIn>
 
         <FadeUp delay={0.1}>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Magnetic>
+              <a
+                href={`mailto:${PERSONAL.email}`}
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
+              >
+                <Mail className="size-4" />
+                Email Me
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href="/resume.pdf"
+                download
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-lg border border-border text-foreground hover:border-accent/40 hover:text-accent transition-colors"
+              >
+                <Download className="size-4" />
+                Download Resume
+              </a>
+            </Magnetic>
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.15}>
           <div
-            className="mt-8 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-all cursor-glow"
+            className="mt-6 inline-flex items-center gap-2 bg-card/60 border border-border rounded-lg px-4 py-2.5 hover:border-accent/30 transition-colors cursor-glow"
             onMouseMove={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
               e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
             }}
           >
-            <Mail className="size-4 text-accent" />
-            <span className="text-sm font-mono">{PERSONAL.email}</span>
+            <span className="text-xs font-mono text-muted-foreground">{PERSONAL.email}</span>
             <button
               onClick={copyEmail}
-              className="ml-2 p-1 rounded hover:bg-muted transition-colors active:scale-90"
-              aria-label="Copy email"
+              className="ml-1 p-1 rounded hover:bg-muted transition-colors active:scale-90"
+              aria-label={copied ? "Email copied" : "Copy email"}
             >
               {copied ? (
-                <Check className="size-4 text-green-400" />
+                <Check className="size-3.5 text-green-600 dark:text-green-400" />
               ) : (
-                <Copy className="size-4 text-muted-foreground" />
+                <Copy className="size-3.5 text-muted-foreground" />
               )}
             </button>
           </div>
@@ -105,7 +118,7 @@ export function Contact() {
                   aria-label={link.label}
                   className="p-3 text-muted-foreground hover:text-accent transition-colors"
                 >
-                  <link.Icon className="size-5" />
+                  <link.Icon className="size-5" aria-hidden="true" />
                 </a>
               </Magnetic>
             ))}

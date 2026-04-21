@@ -1,21 +1,16 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback } from "react";
 import {
   FadeUp,
   BlurIn,
   CountUp,
-  StaggerContainer,
-  StaggerItemScale,
-  m,
-  MotionProvider,
 } from "@/components/motion-wrapper";
 import { ZaylonArchitecture } from "@/components/sections/zaylon-architecture";
 import { ZAYLON_SHOWCASE } from "@/data/resume";
 import {
   ArrowUpRight,
   Bot,
-  Globe,
   Languages,
   ShoppingCart,
   Eye,
@@ -24,8 +19,8 @@ import {
   LayoutDashboard,
   Shield,
 } from "lucide-react";
-import { useTilt } from "@/hooks/use-tilt";
 import { Magnetic } from "@/components/magnetic";
+import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
 
 const featureIcons = [
   Bot,
@@ -38,43 +33,20 @@ const featureIcons = [
   Shield,
 ];
 
-function StatCard({
+function StatInline({
   highlight,
-  index,
 }: {
   highlight: (typeof ZAYLON_SHOWCASE.highlights)[number];
-  index: number;
 }) {
-  const { ref, style, handlers } = useTilt(3);
-
   return (
-    <StaggerItemScale>
-      <MotionProvider>
-        <m.div
-          ref={ref}
-          {...handlers}
-          style={style}
-          animate={{ y: [0, -8, 0] }}
-          transition={{
-            duration: 3 + index * 0.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: index * 0.3,
-          }}
-          className="z-card p-5"
-        >
-          <p className="text-3xl font-bold z-gradient-text">
-            <CountUp value={highlight.value as number} />
-          </p>
-          <p className="text-sm font-medium mt-1" style={{ color: "var(--z-text)" }}>
-            {highlight.label}
-          </p>
-          <p className="text-xs mt-0.5 leading-snug" style={{ color: "var(--z-text-muted)" }}>
-            {highlight.detail}
-          </p>
-        </m.div>
-      </MotionProvider>
-    </StaggerItemScale>
+    <div className="flex flex-col">
+      <p className="text-2xl sm:text-3xl font-bold z-gradient-text leading-none">
+        <CountUp value={highlight.value as number} />
+      </p>
+      <p className="text-xs font-mono uppercase tracking-wider mt-2" style={{ color: "var(--z-text-muted)" }}>
+        {highlight.label}
+      </p>
+    </div>
   );
 }
 
@@ -229,10 +201,9 @@ export function ZaylonShowcase() {
       <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-background via-background/60 to-transparent z-[2] pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background via-background/60 to-transparent z-[2] pointer-events-none" />
 
-      {/* Emerald blur orbs for depth */}
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(45, 106, 94, 0.06)" }} />
-      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(27, 58, 53, 0.08)" }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-3xl pointer-events-none" style={{ background: "rgba(45, 106, 94, 0.04)" }} />
+      {/* Emerald blur orbs for depth, kept sparse since the orb scene adds its own halo */}
+      <div className="absolute top-1/4 -left-32 w-[450px] h-[450px] rounded-full blur-2xl pointer-events-none" style={{ background: "rgba(45, 106, 94, 0.05)" }} />
+      <div className="absolute bottom-1/4 -right-32 w-[380px] h-[380px] rounded-full blur-2xl pointer-events-none" style={{ background: "rgba(27, 58, 53, 0.06)" }} />
 
       {/* Subtle grid overlay */}
       <div
@@ -243,41 +214,92 @@ export function ZaylonShowcase() {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto px-6 lg:px-8 z-20">
-        <BlurIn>
-          <span
-            className="inline-flex items-center gap-2 z-glass rounded-full px-4 py-2 text-sm font-mono uppercase tracking-wider"
-            style={{ color: "var(--z-tertiary)" }}
-          >
-            <span className="size-2 rounded-full animate-pulse" style={{ background: "var(--z-secondary)" }} />
-            {ZAYLON_SHOWCASE.role}
-          </span>
-        </BlurIn>
+      <div className="relative max-w-6xl mx-auto px-6 lg:px-8 z-20">
+        {/* Split hero: copy on the left, orb on the right */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-14 items-center">
+          <div>
+            <BlurIn>
+              <span
+                className="inline-flex items-center gap-2 z-glass rounded-full px-4 py-2 text-sm font-mono uppercase tracking-wider"
+                style={{ color: "var(--z-tertiary)" }}
+              >
+                <span className="size-2 rounded-full animate-pulse" style={{ background: "var(--z-secondary)" }} />
+                {ZAYLON_SHOWCASE.role}
+              </span>
+            </BlurIn>
 
-        <FadeUp delay={0.1}>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mt-4" style={{ color: "var(--z-text)" }}>
-            Building{" "}
-            <span className="z-gradient-text">Zaylon AI</span>
-          </h2>
-          <p className="text-lg md:text-xl mt-3" style={{ color: "var(--z-text-muted)" }}>
-            {ZAYLON_SHOWCASE.subtitle}
-          </p>
-        </FadeUp>
+            <FadeUp delay={0.1}>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mt-4" style={{ color: "var(--z-text)" }}>
+                Building <span className="z-gradient-text">Zaylon AI</span>
+              </h2>
+              <p className="text-lg md:text-xl mt-3" style={{ color: "var(--z-text-muted)" }}>
+                {ZAYLON_SHOWCASE.subtitle}
+              </p>
+            </FadeUp>
 
+            <FadeUp delay={0.2}>
+              <p className="leading-relaxed mt-6 text-base" style={{ color: "var(--z-text-muted)" }}>
+                {ZAYLON_SHOWCASE.description}
+              </p>
+            </FadeUp>
+
+            {/* Inline stat strip: denser, less visually heavy than 4 cards */}
+            <FadeUp delay={0.3}>
+              <div
+                className="grid grid-cols-4 gap-4 mt-8 pt-6"
+                style={{ borderTop: "1px solid rgba(45, 106, 94, 0.25)" }}
+              >
+                {ZAYLON_SHOWCASE.highlights.map((h) => (
+                  <StatInline key={h.label} highlight={h} />
+                ))}
+              </div>
+            </FadeUp>
+
+            <FadeUp delay={0.4}>
+              <Magnetic className="inline-block mt-8">
+                <a
+                  href={ZAYLON_SHOWCASE.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-xl text-white transition-all duration-300 hover:scale-[1.02]"
+                  style={{
+                    background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
+                    boxShadow: "0 4px 20px rgba(27, 58, 53, 0.5), 0 8px 30px rgba(45, 106, 94, 0.2)",
+                  }}
+                >
+                  Visit zaylon.ai
+                  <ArrowUpRight className="size-4" />
+                </a>
+              </Magnetic>
+            </FadeUp>
+          </div>
+
+          {/* Orb column */}
+          <FadeUp delay={0.15}>
+            <div className="relative aspect-square w-full max-w-[520px] mx-auto">
+              {/* Ambient emerald halo behind the orb */}
+              <div
+                className="absolute inset-[-10%] rounded-full pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(circle at center, rgba(52, 211, 153, 0.18) 0%, rgba(45, 106, 94, 0.08) 35%, transparent 70%)",
+                  filter: "blur(24px)",
+                }}
+                aria-hidden="true"
+              />
+              <ZaylonBrainOrbLazy />
+            </div>
+          </FadeUp>
+        </div>
+
+        {/* Feature highlights banner */}
         <FadeUp delay={0.2}>
-          <p className="leading-relaxed mt-6 max-w-3xl text-base" style={{ color: "var(--z-text-muted)" }}>
-            {ZAYLON_SHOWCASE.description}
-          </p>
-        </FadeUp>
-
-        {/* Architecture Highlights Banner */}
-        <FadeUp delay={0.25}>
-          <div className="z-glass rounded-2xl px-6 py-5 mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+          <div className="z-glass rounded-2xl px-6 py-5 mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
             {[
-              { icon: "&#9670;", label: "Multi-Agent Supervisor", detail: "LangGraph state machine" },
-              { icon: "&#9670;", label: "Tri-Lingual NLP", detail: "DialectBridge pipeline" },
-              { icon: "&#9670;", label: "Real-Time Payments", detail: "3 providers, webhooks" },
-              { icon: "&#9670;", label: "Multi-Tenant Isolation", detail: "Row-level encryption" },
+              { label: "Multi-Agent Supervisor", detail: "LangGraph state machine" },
+              { label: "Tri-Lingual NLP", detail: "DialectBridge pipeline" },
+              { label: "Real-Time Payments", detail: "3 providers, webhooks" },
+              { label: "Multi-Tenant Isolation", detail: "Row-level encryption" },
             ].map((item) => (
               <div key={item.label} className="text-center sm:text-left">
                 <p className="text-sm font-semibold z-gradient-text">{item.label}</p>
@@ -287,20 +309,13 @@ export function ZaylonShowcase() {
           </div>
         </FadeUp>
 
-        {/* Stat cards */}
-        <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-          {ZAYLON_SHOWCASE.highlights.map((h, i) => (
-            <StatCard key={h.label} highlight={h} index={i} />
-          ))}
-        </StaggerContainer>
-
         {/* Dashboard Mockup */}
-        <FadeUp delay={0.3}>
+        <FadeUp delay={0.25}>
           <DashboardMockup />
         </FadeUp>
 
         {/* Features grid */}
-        <FadeUp delay={0.35}>
+        <FadeUp delay={0.3}>
           <h3 className="text-xl font-semibold mt-14 mb-6" style={{ color: "var(--z-text)" }}>
             Core Capabilities
           </h3>
@@ -312,7 +327,7 @@ export function ZaylonShowcase() {
         </FadeUp>
 
         {/* Architecture */}
-        <FadeUp delay={0.4}>
+        <FadeUp delay={0.35}>
           <div className="mt-14">
             <h3 className="text-xl font-semibold mb-6" style={{ color: "var(--z-text)" }}>System Architecture</h3>
             <ZaylonArchitecture />
@@ -320,7 +335,7 @@ export function ZaylonShowcase() {
         </FadeUp>
 
         {/* Tech stack */}
-        <FadeUp delay={0.5}>
+        <FadeUp delay={0.4}>
           <div className="flex flex-wrap gap-2 mt-10">
             {ZAYLON_SHOWCASE.techStack.map((tech) => (
               <span
@@ -336,25 +351,6 @@ export function ZaylonShowcase() {
               </span>
             ))}
           </div>
-        </FadeUp>
-
-        {/* CTA */}
-        <FadeUp delay={0.6}>
-          <Magnetic className="inline-block mt-8">
-            <a
-              href={ZAYLON_SHOWCASE.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold rounded-xl text-white transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
-                boxShadow: "0 4px 20px rgba(27, 58, 53, 0.5), 0 8px 30px rgba(45, 106, 94, 0.2)",
-              }}
-            >
-              Visit zaylon.ai
-              <ArrowUpRight className="size-4" />
-            </a>
-          </Magnetic>
         </FadeUp>
       </div>
     </section>

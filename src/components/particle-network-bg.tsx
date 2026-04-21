@@ -41,7 +41,7 @@ export function ParticleNetworkBg() {
 
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
-    let mouse = { x: -9999, y: -9999 };
+    const mouse = { x: -9999, y: -9999 };
     let raf = 0;
 
     const particles: Particle[] = [];
@@ -147,13 +147,24 @@ export function ParticleNetworkBg() {
       raf = requestAnimationFrame(draw);
     };
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      } else if (raf === 0) {
+        raf = requestAnimationFrame(draw);
+      }
+    };
+
     window.addEventListener("mousemove", handleMove);
     window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibility);
     raf = requestAnimationFrame(draw);
 
     return () => {
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(raf);
     };
   }, []);

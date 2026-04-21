@@ -11,7 +11,7 @@ import {
 } from "motion/react";
 import { Menu, X, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS, PERSONAL } from "@/data/resume";
+import { NAV_LINKS } from "@/data/resume";
 import { useScrollDirection } from "@/hooks/use-scroll-direction";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -59,9 +59,10 @@ export function Navbar() {
         <nav className="max-w-5xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
           <a
             href="#hero"
+            aria-label="Romia home"
             className="group flex items-center gap-2.5 transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="size-7 shrink-0 group-hover:drop-shadow-[0_0_6px_rgba(0,212,255,0.4)] transition-[filter] duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" className="size-7 shrink-0 group-hover:drop-shadow-[0_0_6px_rgba(0,212,255,0.4)] transition-[filter] duration-300">
               <defs>
                 <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#00D4FF"/>

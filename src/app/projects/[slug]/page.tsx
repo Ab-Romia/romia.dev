@@ -12,10 +12,10 @@ import { Footer } from "@/components/sections/footer";
 import { cn } from "@/lib/utils";
 
 const statusColors: Record<string, string> = {
-  Production: "bg-green-500/10 text-green-400 border-green-500/20",
-  Demo: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  Ongoing: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  Deployed: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  Production: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30",
+  Demo: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30",
+  Ongoing: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30",
+  Deployed: "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30",
 };
 
 export async function generateStaticParams() {
@@ -65,7 +65,7 @@ export default async function ProjectPage({
   return (
     <>
     <Navbar />
-    <div className="min-h-screen pt-24 pb-16">
+    <main id="main-content" className="min-h-screen pt-24 pb-16">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         {/* Back link */}
         <FadeUp>
@@ -238,7 +238,7 @@ export default async function ProjectPage({
           )}
         </div>
       </div>
-    </div>
+    </main>
     <Footer />
     </>
   );

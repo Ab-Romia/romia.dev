@@ -1,7 +1,7 @@
 "use client";
 
 import { SKILLS } from "@/data/resume";
-import { BlurIn, StaggerContainer, StaggerItemScale, m, MotionProvider } from "@/components/motion-wrapper";
+import { BlurIn, StaggerContainer, StaggerItemScale, m } from "@/components/motion-wrapper";
 import { cn } from "@/lib/utils";
 import { useTilt } from "@/hooks/use-tilt";
 
@@ -46,18 +46,16 @@ function SkillCard({
           {category === "Languages" && "Primary: Python, Java. Growing: Go, TypeScript"}
         </p>
         <div className="flex flex-wrap gap-2">
-          <MotionProvider>
-            {skills.map((skill) => (
-              <m.span
-                key={skill}
-                whileHover={{ scale: 1.08 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full hover:text-foreground hover:bg-muted/80 transition-colors cursor-default"
-              >
-                {skill}
-              </m.span>
-            ))}
-          </MotionProvider>
+          {skills.map((skill) => (
+            <m.span
+              key={skill}
+              whileHover={{ scale: 1.08 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full hover:text-foreground hover:bg-muted/80 transition-colors cursor-default"
+            >
+              {skill}
+            </m.span>
+          ))}
         </div>
       </div>
     </StaggerItemScale>
@@ -66,7 +64,7 @@ function SkillCard({
 
 export function Skills() {
   return (
-    <section id="skills" className="py-16 md:py-24">
+    <section id="skills" className="py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">

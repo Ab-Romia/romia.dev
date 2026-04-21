@@ -15,20 +15,21 @@ export const PERSONAL = {
 export const HERO_SIGNALS = [
   { label: "Co-Founder", detail: "Zaylon AI" },
   { label: "Freelance", detail: "AI Coding Expert" },
-  { label: "Alexandria Univ", detail: "3.73 GPA, CCE" },
+  { label: "Alexandria University", detail: "CCE, 3.73 GPA" },
 ] as const;
 
 export const NAV_LINKS = [
   { label: "Zaylon", href: "#zaylon" },
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
+  { label: "Skills", href: "#skills" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
 export const ZAYLON_SHOWCASE = {
   title: "Zaylon AI",
-  role: "Co-Founder & AI Engineer",
+  role: "Software Engineer & Co-Founder",
   heading: "Building Zaylon AI",
   subtitle: "Production Multi-Tenant Conversational Commerce for MENA",
   description:
@@ -405,7 +406,7 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I'm Romia, a Software Engineer and Co-Founder of Zaylon AI, where I built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work across the full stack: React/Next.js frontends, FastAPI and Spring Boot backends, and multi-agent LangGraph architectures. Currently finishing my B.Sc. in Computer & Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
+  bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. Currently finishing my B.Sc. in Computer and Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
 } as const;
 
 export const BLOG_POSTS = [

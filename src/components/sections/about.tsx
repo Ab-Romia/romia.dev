@@ -43,7 +43,7 @@ export function About() {
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">
-            About
+            About Romia
           </h2>
         </BlurIn>
 
@@ -58,7 +58,7 @@ export function About() {
             <div className="relative size-32 md:size-40 rounded-full overflow-hidden border-2 border-accent/30 shadow-[0_0_20px_rgba(0,212,255,0.15)] shrink-0 mx-auto md:mx-0">
               <Image
                 src="/photo.jpeg"
-                alt="Abdelrahman Abouroumia"
+                alt="Abdelrahman Abouroumia (Romia)"
                 width={160}
                 height={160}
                 className="w-full h-full object-cover"

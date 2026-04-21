@@ -1,4 +1,17 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # romia.dev
+
+## Commands
+- `npm run dev` : start Turbopack dev server on http://localhost:3000
+- `npm run build` : production build (Turbopack)
+- `npm run start` : serve the production build
+- `npm run lint` : ESLint (flat config in `eslint.config.mjs`, extends `next/core-web-vitals` + `next/typescript`)
+- No test framework is configured in this repo; do not invent test commands
+- React Compiler is enabled (`reactCompiler: true` in `next.config.ts` + `babel-plugin-react-compiler`). Avoid manual `useMemo`/`useCallback` unless profiling shows a need; the compiler handles memoization.
+- LaTeX CV: `pdflatex -interaction=nonstopmode abdelrahman_abouroumia_cv.tex && cp abdelrahman_abouroumia_cv.pdf public/resume.pdf`
 
 ## Owner
 - **Full name:** Abdelrahman Abouroumia

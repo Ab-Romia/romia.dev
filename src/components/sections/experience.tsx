@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import { EXPERIENCE } from "@/data/resume";
 import { FadeUp, BlurIn } from "@/components/motion-wrapper";
 
 
 export function Experience() {
   return (
-    <section id="experience" className="py-16 md:py-20">
+    <section id="experience" className="py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <BlurIn>
           <h2 className="text-3xl font-bold tracking-tight leading-tight">
@@ -41,7 +42,7 @@ export function Experience() {
                         if (logo) {
                           return (
                             <div className="size-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center" style={{ background: logo.bg }}>
-                              <img src={logo.src} alt={entry.company} width={28} height={28} className="object-contain" />
+                              <Image src={logo.src} alt={entry.company} width={28} height={28} className="object-contain" />
                             </div>
                           );
                         }
@@ -79,8 +80,8 @@ export function Experience() {
                         {entry.period}
                       </span>
                       {isCurrent && (
-                        <span className="text-[10px] font-mono text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/20 flex items-center gap-1">
-                          <span className="size-1.5 rounded-full bg-green-400 animate-pulse" />
+                        <span className="text-[10px] font-mono text-green-700 dark:text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/30 flex items-center gap-1">
+                          <span className="size-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
                           Current
                         </span>
                       )}
