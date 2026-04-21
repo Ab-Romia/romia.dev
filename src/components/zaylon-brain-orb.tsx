@@ -103,6 +103,7 @@ function Core() {
   const coreRef = useRef<THREE.Mesh>(null!);
   const shellRef = useRef<THREE.Mesh>(null!);
   const glowRef = useRef<THREE.Mesh>(null!);
+  const logoRef = useRef<HTMLDivElement>(null!);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -122,6 +123,14 @@ function Core() {
       const pulse = 0.3 + Math.sin(t * 1.8) * 0.1;
       (glowRef.current.material as THREE.MeshBasicMaterial).opacity = pulse;
       glowRef.current.scale.setScalar(breathe);
+    }
+    if (logoRef.current) {
+      const pulse = 0.55 + Math.sin(t * 2.3) * 0.35;
+      const s = 1 + Math.sin(t * 2.5) * 0.04;
+      logoRef.current.style.filter =
+        `drop-shadow(0 0 ${6 + pulse * 10}px rgba(52, 211, 153, ${pulse})) ` +
+        `drop-shadow(0 0 ${14 + pulse * 24}px rgba(110, 231, 183, ${pulse * 0.55}))`;
+      logoRef.current.style.transform = `scale(${s})`;
     }
   });
 
@@ -145,6 +154,25 @@ function Core() {
           blending={THREE.AdditiveBlending}
         />
       </mesh>
+      {/* Logo at world origin. No zIndexRange so drei depth-sorts it against
+          orbiting nodes by distance to camera: nodes in front of the core
+          occlude the logo, nodes behind render under it. */}
+      <Html center distanceFactor={8} style={{ pointerEvents: "none" }}>
+        <div
+          ref={logoRef}
+          style={{
+            transformOrigin: "center center",
+            willChange: "filter, transform",
+            width: 96,
+            height: 96,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ZaylonCoreLogo size={96} />
+        </div>
+      </Html>
     </group>
   );
 }
@@ -284,7 +312,7 @@ function OrbitingNode({ def, variant, cfg }: OrbitingNodeProps) {
             depthWrite={false}
           />
         </mesh>
-        <Html center distanceFactor={10} zIndexRange={[0, 0]} style={{ pointerEvents: "none" }}>
+        <Html center distanceFactor={10} style={{ pointerEvents: "none" }}>
           {isConv ? (
             <div
               style={{
