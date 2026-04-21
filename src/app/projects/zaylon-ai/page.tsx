@@ -953,32 +953,69 @@ export default function ZaylonCaseStudyPage() {
               <SectionEyebrow>My role</SectionEyebrow>
               <SectionTitle>
                 Co-founder and{" "}
-                <span className="z-gradient-text">engineering lead</span>
+                <span className="z-gradient-text">backend engineering lead</span>
               </SectionTitle>
               <SectionLead>
-                I co-founded Zaylon and built the product end to end. I designed the
+                I co-founded Zaylon and built the entire backend end to end. I designed the
                 conversational architecture, shipped the multi-agent AI system, wrote the
-                backend, and delivered the merchant dashboard. I also own the integrations with
-                the six e-commerce platforms, the three payment providers, the messaging
-                channels, and the shipping partners.
+                FastAPI application and its database layer, and own every integration: the six
+                e-commerce platforms, the three payment providers, the five messaging channels,
+                and the shipping partners.
               </SectionLead>
             </FadeUp>
 
             <FadeUp delay={0.1}>
-              <div className="mt-10 flex flex-wrap gap-2">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  "Conversational AI architecture and the multi-agent system",
+                  "FastAPI application, services, and API surface",
+                  "Database schema, migrations, and multi-tenant isolation",
+                  "Every e-commerce, payments, messaging, and shipping integration",
+                  "Tri-lingual NLP pipeline for English, Arabic, and Franco",
+                  "Proactive engine that detects sales opportunities in chat",
+                  "Auth, permissions, plan entitlements, and billing logic",
+                  "Deployment, CI, and observability for the backend",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-2.5 rounded-lg px-3 py-2.5"
+                    style={{
+                      background: "rgba(27, 58, 53, 0.22)",
+                      border: "1px solid rgba(45, 106, 94, 0.22)",
+                    }}
+                  >
+                    <Check
+                      className="size-4 shrink-0 mt-0.5 text-emerald-500 dark:text-emerald-400"
+                      aria-hidden="true"
+                    />
+                    <span className="text-sm leading-relaxed" style={{ color: "var(--z-text)" }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </FadeUp>
+
+            <FadeUp delay={0.15}>
+              <p
+                className="text-xs font-mono uppercase tracking-wider mt-8 mb-3"
+                style={{ color: "var(--z-text-muted)" }}
+              >
+                Backend stack
+              </p>
+              <div className="flex flex-wrap gap-2">
                 {[
                   "Python",
                   "FastAPI",
                   "LangGraph",
+                  "LangChain",
                   "PostgreSQL",
                   "pgvector",
                   "Redis",
-                  "TypeScript",
-                  "Next.js",
-                  "React",
-                  "Tailwind",
-                  "Docker",
                   "Supabase",
+                  "Docker",
+                  "Alembic",
+                  "Pytest",
                 ].map((tech) => (
                   <span
                     key={tech}
