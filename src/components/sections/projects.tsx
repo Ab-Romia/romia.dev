@@ -23,10 +23,10 @@ function GitHubIcon({ className }: { className?: string }) {
 }
 
 export const statusColors: Record<string, string> = {
-  Production: "bg-green-500/10 text-green-400 border-green-500/20",
-  Demo: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  Ongoing: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  Deployed: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  Production: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30",
+  Demo: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30",
+  Ongoing: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30",
+  Deployed: "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30",
 };
 
 const categories = ["All", "AI/ML", "Backend", "Full-Stack", "Games/Puzzles"] as const;
@@ -179,7 +179,7 @@ function ProjectCard({
             )}
           >
             {project.status === "Production" && (
-              <span className="size-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="size-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
             )}
             {project.status}
           </span>

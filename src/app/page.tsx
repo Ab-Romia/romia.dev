@@ -15,6 +15,8 @@ const personSchema = {
   "@type": "Person",
   "@id": "https://romia.dev/#person",
   name: "Abdelrahman Abouroumia",
+  givenName: "Abdelrahman",
+  familyName: "Abouroumia",
   alternateName: ["Romia", "Ab-Romia", "Abouroumia"],
   jobTitle: "Software Engineer",
   url: "https://romia.dev",
@@ -97,6 +99,7 @@ export default function Home() {
         <Skills />
         <SectionDivider />
         <About />
+        <SectionDivider />
         <Contact />
       </main>
       <Footer />

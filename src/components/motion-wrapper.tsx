@@ -13,11 +13,10 @@ import {
   LayoutGroup,
 } from "motion/react";
 
+// Wraps the whole tree once so subsequent `m.*` usages do not re-register features.
 function MotionProvider({ children }: { children: ReactNode }) {
   return <LazyMotion features={domAnimation}>{children}</LazyMotion>;
 }
-
-// --- Existing animations (kept for backward compat) ---
 
 function FadeUp({
   children,
@@ -30,18 +29,16 @@ function FadeUp({
   className?: string;
 } & Omit<HTMLMotionProps<"div">, "children">) {
   return (
-    <MotionProvider>
-      <m.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.5, delay, ease: "easeOut" }}
-        className={className}
-        {...props}
-      >
-        {children}
-      </m.div>
-    </MotionProvider>
+    <m.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className={className}
+      {...props}
+    >
+      {children}
+    </m.div>
   );
 }
 
@@ -53,20 +50,18 @@ function StaggerContainer({
   className?: string;
 }) {
   return (
-    <MotionProvider>
-      <m.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: 0.1 } },
-        }}
-        className={className}
-      >
-        {children}
-      </m.div>
-    </MotionProvider>
+    <m.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.1 } },
+      }}
+      className={className}
+    >
+      {children}
+    </m.div>
   );
 }
 
@@ -90,8 +85,6 @@ function StaggerItem({
   );
 }
 
-// --- New animation variants ---
-
 function BlurIn({
   children,
   delay = 0,
@@ -102,17 +95,15 @@ function BlurIn({
   className?: string;
 }) {
   return (
-    <MotionProvider>
-      <m.div
-        initial={{ opacity: 0, filter: "blur(8px)" }}
-        whileInView={{ opacity: 1, filter: "blur(0px)" }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, delay, ease: "easeOut" }}
-        className={className}
-      >
-        {children}
-      </m.div>
-    </MotionProvider>
+    <m.div
+      initial={{ opacity: 0, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </m.div>
   );
 }
 
@@ -126,23 +117,21 @@ function SlideFromLeft({
   className?: string;
 }) {
   return (
-    <MotionProvider>
-      <m.div
-        initial={{ opacity: 0, x: -30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{
-          duration: 0.5,
-          delay,
-          type: "spring",
-          stiffness: 100,
-          damping: 20,
-        }}
-        className={className}
-      >
-        {children}
-      </m.div>
-    </MotionProvider>
+    <m.div
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 0.5,
+        delay,
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+      }}
+      className={className}
+    >
+      {children}
+    </m.div>
   );
 }
 
@@ -156,23 +145,21 @@ function ScaleUp({
   className?: string;
 }) {
   return (
-    <MotionProvider>
-      <m.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{
-          duration: 0.4,
-          delay,
-          type: "spring",
-          stiffness: 150,
-          damping: 20,
-        }}
-        className={className}
-      >
-        {children}
-      </m.div>
-    </MotionProvider>
+    <m.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 0.4,
+        delay,
+        type: "spring",
+        stiffness: 150,
+        damping: 20,
+      }}
+      className={className}
+    >
+      {children}
+    </m.div>
   );
 }
 
@@ -186,40 +173,38 @@ function TextReveal({
   delay?: number;
 }) {
   return (
-    <MotionProvider>
-      <m.span
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={{
-          hidden: {},
-          visible: {
-            transition: { staggerChildren: 0.03, delayChildren: delay },
-          },
-        }}
-        className={className}
-        aria-label={text}
-      >
-        {text.split("").map((char, i) => (
-          <m.span
-            key={`${char}-${i}`}
-            variants={{
-              hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
-              visible: {
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { duration: 0.4 },
-              },
-            }}
-            className="inline-block"
-            aria-hidden
-          >
-            {char === " " ? "\u00A0" : char}
-          </m.span>
-        ))}
-      </m.span>
-    </MotionProvider>
+    <m.span
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: { staggerChildren: 0.03, delayChildren: delay },
+        },
+      }}
+      className={className}
+      aria-label={text}
+    >
+      {text.split("").map((char, i) => (
+        <m.span
+          key={`${char}-${i}`}
+          variants={{
+            hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
+            visible: {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              transition: { duration: 0.4 },
+            },
+          }}
+          className="inline-block"
+          aria-hidden
+        >
+          {char === " " ? " " : char}
+        </m.span>
+      ))}
+    </m.span>
   );
 }
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { MotionProvider } from "@/components/motion-wrapper";
 import { ParticleNetworkBg } from "@/components/particle-network-bg";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -23,10 +24,15 @@ export const metadata: Metadata = {
     template: "%s | Abdelrahman Abouroumia",
   },
   description:
-    "Abdelrahman Abouroumia (Romia) - Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
+    "Abdelrahman Abouroumia (Romia) is a Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
   keywords: [
-    "Abdelrahman Abouroumia",
     "Romia",
+    "Romia developer",
+    "Romia engineer",
+    "Romia AI",
+    "Romia portfolio",
+    "Romia software engineer",
+    "Abdelrahman Abouroumia",
     "Abouroumia",
     "Ab-Romia",
     "Software Engineer",
@@ -45,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Abdelrahman Abouroumia (Romia) | Software Engineer",
     description:
-      "Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
+      "Abdelrahman Abouroumia (Romia). Software Engineer and Co-Founder of Zaylon AI. Full-stack platforms, multi-agent AI, scalable backends.",
     url: "https://romia.dev",
     siteName: "Abdelrahman Abouroumia - Portfolio",
     locale: "en_US",
@@ -55,7 +61,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Abdelrahman Abouroumia (Romia) | Software Engineer",
     description:
-      "Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
+      "Abdelrahman Abouroumia (Romia). Software Engineer and Co-Founder of Zaylon AI. Full-stack platforms, multi-agent AI, scalable backends.",
   },
   alternates: {
     canonical: "/",
@@ -92,7 +98,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <ParticleNetworkBg />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

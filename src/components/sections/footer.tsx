@@ -69,7 +69,7 @@ export function Footer() {
 
         <div className="pt-6 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} {PERSONAL.displayName}. All rights reserved.
+            &copy; {new Date().getFullYear()} Abdelrahman Abouroumia. All rights reserved.
           </p>
         </div>
       </div>
