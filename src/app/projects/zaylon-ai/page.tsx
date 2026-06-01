@@ -32,7 +32,7 @@ import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
 import { getAdjacentProjects } from "@/data/resume";
 
 export const metadata: Metadata = {
-  title: "Zaylon AI — Conversational commerce for MENA merchants",
+  title: "Zaylon AI: Conversational commerce for MENA merchants",
   description:
     "Case study of Zaylon AI, a conversational commerce platform I co-founded that turns WhatsApp, Instagram, and Messenger into full sales channels for MENA merchants.",
   openGraph: {
@@ -696,8 +696,8 @@ export default function ZaylonCaseStudyPage() {
 
                   {[
                     {
-                      before: "Customers wait hours for a reply, or don&apos;t get one after midnight",
-                      after: "Every message answered in seconds, 24/7, in the customer&apos;s dialect",
+                      before: "Customers wait hours for a reply, or don’t get one after midnight",
+                      after: "Every message answered in seconds, 24/7, in the customer’s dialect",
                     },
                     {
                       before: "Team juggles WhatsApp, Instagram, Messenger, and web chat in separate apps",
@@ -713,7 +713,7 @@ export default function ZaylonCaseStudyPage() {
                     },
                   ].map((row, idx, arr) => (
                     <div
-                      key={idx}
+                      key={row.before}
                       className="grid grid-cols-2"
                       style={{
                         borderBottom:
@@ -725,7 +725,7 @@ export default function ZaylonCaseStudyPage() {
                         style={{ color: "var(--z-text-muted)" }}
                       >
                         <X className="size-4 shrink-0 mt-0.5 text-red-500/70" aria-hidden="true" />
-                        <span dangerouslySetInnerHTML={{ __html: row.before }} />
+                        <span>{row.before}</span>
                       </div>
                       <div
                         className="p-4 md:p-5 text-sm leading-relaxed flex items-start gap-2"
@@ -738,7 +738,7 @@ export default function ZaylonCaseStudyPage() {
                           className="size-4 shrink-0 mt-0.5 text-emerald-500 dark:text-emerald-400"
                           aria-hidden="true"
                         />
-                        <span dangerouslySetInnerHTML={{ __html: row.after }} />
+                        <span>{row.after}</span>
                       </div>
                     </div>
                   ))}
