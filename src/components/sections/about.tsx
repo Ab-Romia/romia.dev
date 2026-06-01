@@ -113,17 +113,30 @@ export function About() {
               </h3>
               <div className="space-y-3">
                 {CERTIFICATIONS.map((cert) => (
-                  <div key={cert.name} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors group/cert">
-                    <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0 group-hover/cert:bg-accent/20 transition-colors">
-                      <span className="text-accent text-sm font-bold">{cert.issuer.charAt(0)}</span>
+                  <div key={cert.name}>
+                    <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors group/cert">
+                      {"image" in cert && cert.image ? (
+                        <div className="size-8 rounded-md overflow-hidden shrink-0">
+                          <Image src={cert.image} alt={cert.issuer} width={32} height={32} className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0 group-hover/cert:bg-accent/20 transition-colors">
+                          <span className="text-accent text-sm font-bold">{cert.issuer.charAt(0)}</span>
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-medium leading-tight">{cert.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {cert.issuer}
+                          {"year" in cert && cert.year && ` · ${cert.year}`}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium leading-tight">{cert.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {cert.issuer}
-                        {"year" in cert && cert.year && ` · ${cert.year}`}
-                      </p>
-                    </div>
+                    {"image" in cert && cert.image && (
+                      <div className="mt-2 rounded-lg overflow-hidden border border-border">
+                        <Image src={cert.image} alt={`${cert.name} certificate`} width={600} height={424} className="w-full h-auto" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

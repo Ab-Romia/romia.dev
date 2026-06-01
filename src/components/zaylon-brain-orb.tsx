@@ -47,12 +47,18 @@ const CONVERSATION_POOL: ConversationDef[] = [
   { color: "#25D366", Icon: SiWhatsapp, snippet: "Is it available?" },
   { color: "#25D366", Icon: SiWhatsapp, snippet: "كام سعرها؟" },
   { color: "#25D366", Icon: SiWhatsapp, snippet: "Delivery to Giza?" },
+  { color: "#25D366", Icon: SiWhatsapp, snippet: "Can I order 2?" },
   { color: "#25D366", Icon: SiWhatsapp, snippet: "متوفر لسه؟" },
   { color: "#E1306C", Icon: SiInstagram, snippet: "عندكم مقاس M؟" },
+  { color: "#E1306C", Icon: SiInstagram, snippet: "Lovely 😍 price?" },
   { color: "#E1306C", Icon: SiInstagram, snippet: "Ship to UAE?" },
+  { color: "#E1306C", Icon: SiInstagram, snippet: "Matching set?" },
   { color: "#0084FF", Icon: SiMessenger, snippet: "Order #1248" },
-  { color: "#0084FF", Icon: SiMessenger, snippet: "Payment confirmed" },
-  { color: "#10B981", Icon: HiChatBubbleOvalLeftEllipsis, snippet: "Web: size guide?" },
+  { color: "#0084FF", Icon: SiMessenger, snippet: "Track my order" },
+  { color: "#0084FF", Icon: SiMessenger, snippet: "Payment confirmed ✓" },
+  { color: "#0084FF", Icon: SiMessenger, snippet: "Where is my package?" },
+  { color: "#10B981", Icon: HiChatBubbleOvalLeftEllipsis, snippet: "Web chat: size guide?" },
+  { color: "#10B981", Icon: HiChatBubbleOvalLeftEllipsis, snippet: "Web chat: عايز أطلب" },
 ];
 
 const INTEGRATION_POOL: IntegrationDef[] = [
@@ -66,6 +72,7 @@ const INTEGRATION_POOL: IntegrationDef[] = [
   { color: "#FFC107", Icon: HiBanknotes, label: "Fawry" },
   { color: "#635BFF", Icon: SiStripe, label: "Stripe" },
   { color: "#F97316", Icon: HiTruck, label: "Bosta" },
+  { color: "#E2231A", Icon: HiTruck, label: "Aramex" },
 ];
 
 function shuffle<T>(arr: readonly T[]): T[] {
@@ -157,7 +164,7 @@ function Core() {
       {/* Logo at world origin. No zIndexRange so drei depth-sorts it against
           orbiting nodes by distance to camera: nodes in front of the core
           occlude the logo, nodes behind render under it. */}
-      <Html center distanceFactor={8} style={{ pointerEvents: "none" }}>
+      <Html center distanceFactor={8} zIndexRange={[100, 100]} style={{ pointerEvents: "none" }}>
         <div
           ref={logoRef}
           style={{
@@ -283,8 +290,8 @@ function OrbitingNode({ def, variant, cfg }: OrbitingNodeProps) {
   const Icon = def.Icon;
   const isConv = variant === "conversation";
 
-  const labelBg = "rgba(15, 25, 23, 0.92)";
-  const labelBorder = "rgba(45, 106, 94, 0.4)";
+  const labelBg = "rgba(15, 25, 23, 0.90)";
+  const labelBorder = "rgba(45, 106, 94, 0.3)";
   const labelText = "#E5E7EB";
 
   return (
@@ -296,7 +303,7 @@ function OrbitingNode({ def, variant, cfg }: OrbitingNodeProps) {
         <lineBasicMaterial
           color={isConv ? def.color : "#34D399"}
           transparent
-          opacity={isConv ? 0.55 : 0.4}
+          opacity={isConv ? 0.3 : 0.2}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
@@ -312,7 +319,7 @@ function OrbitingNode({ def, variant, cfg }: OrbitingNodeProps) {
             depthWrite={false}
           />
         </mesh>
-        <Html center distanceFactor={10} style={{ pointerEvents: "none" }}>
+        <Html center distanceFactor={10} zIndexRange={[0, 0]} style={{ pointerEvents: "none" }}>
           {isConv ? (
             <div
               style={{
@@ -422,7 +429,7 @@ function Filaments() {
       <lineBasicMaterial
         color="#34D399"
         transparent
-        opacity={0.28}
+        opacity={0.15}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
@@ -515,7 +522,7 @@ export default function ZaylonBrainOrb({ className = "" }: ZaylonBrainOrbProps) 
       }}
     >
       <Canvas
-        camera={{ position: [0, 0, 7.2], fov: 48 }}
+        camera={{ position: [0, 0, 6.8], fov: 48 }}
         dpr={[1, isMobile ? 1.5 : 1.75]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={reducedMotion ? "demand" : "always"}
@@ -538,7 +545,7 @@ export default function ZaylonBrainOrb({ className = "" }: ZaylonBrainOrbProps) 
             cfg={intOrbits[i]}
           />
         ))}
-        <ParticleCloud count={isMobile ? 250 : 400} />
+        <ParticleCloud count={isMobile ? 300 : 500} />
       </Canvas>
     </div>
   );

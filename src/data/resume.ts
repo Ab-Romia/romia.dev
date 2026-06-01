@@ -355,7 +355,7 @@ export const EXPERIENCE = [
     period: "Aug 2024 – Oct 2024",
     description: "Contributed to automotive cybersecurity research, building security scenario catalogs and running attack simulations in vehicle simulation environments.",
     highlights: [
-      "Built comprehensive security scenario catalogs documenting threat models, attack vectors, and mitigation strategies for CAN bus and ECU communication systems following automotive cybersecurity standards",
+      "Built security scenario catalogs with threat models, attack vectors, and mitigations for CAN bus and ECU communication systems following automotive cybersecurity standards",
       "Designed and executed cybersecurity test scenarios in Dyna4 and CARLA simulation environments, simulating real-world attack conditions on vehicle systems including spoofing, replay attacks, and denial-of-service on CAN networks",
       "Used Vector CANoe for CAN bus simulation and analysis, monitoring message traffic, injecting fault conditions, and validating ECU response behavior under adversarial inputs",
       "Conducted fuzz testing on Automotive Emergency Braking (AEB) components, identifying edge cases in sensor fusion timing and brake actuation logic under corrupted input data",
@@ -387,6 +387,7 @@ export const EDUCATION = {
 } as const;
 
 export const CERTIFICATIONS = [
+  { name: "micro1 Certified Software Engineer", issuer: "micro1", year: "2026", image: "/certs/micro1.jpg" },
   { name: "Google AI Agents Intensive Capstone", issuer: "Kaggle", year: "2025" },
   { name: "Meta Back-end Developer Specialization", issuer: "Coursera" },
   { name: "AWS Cloud & ML Foundations", issuer: "AWS Academy" },
@@ -409,23 +410,3 @@ export const ABOUT = {
   bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. Currently finishing my B.Sc. in Computer and Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
 } as const;
 
-export const BLOG_POSTS = [
-  {
-    title: "Building Production RAG Systems: Lessons from Zaylon AI",
-    slug: "building-production-rag-systems",
-    comingSoon: true,
-    eta: "Q3 2026",
-  },
-  {
-    title: "Multi-Agent Architecture Patterns with LangGraph",
-    slug: "multi-agent-architecture-patterns",
-    comingSoon: true,
-    eta: "Q3 2026",
-  },
-  {
-    title: "Arabic NLP in Conversational Commerce",
-    slug: "arabic-nlp-conversational-commerce",
-    comingSoon: true,
-    eta: "Q4 2026",
-  },
-] as const;

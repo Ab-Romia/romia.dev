@@ -1,15 +1,13 @@
 "use client";
 
-import { useCallback, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useState, type MouseEvent } from "react";
 
 export function useMouseGlow() {
-  const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   }, []);
 
@@ -23,7 +21,6 @@ export function useMouseGlow() {
     : undefined;
 
   return {
-    ref,
     glowStyle,
     handlers: { onMouseMove, onMouseEnter, onMouseLeave },
   };

@@ -61,7 +61,7 @@ export function Footer() {
                 aria-label={link.label}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <link.Icon className="size-5" />
+                <link.Icon className="size-5" aria-hidden="true" />
               </a>
             </Magnetic>
           ))}
