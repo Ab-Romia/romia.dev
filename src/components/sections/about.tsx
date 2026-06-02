@@ -79,9 +79,6 @@ export function About() {
               <p className="text-sm text-muted-foreground mt-1">
                 {EDUCATION.university}
               </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                {EDUCATION.expected}
-              </p>
             </TiltCard>
           </ScaleUp>
 
