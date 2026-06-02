@@ -11,6 +11,24 @@ import { ZAYLON_SHOWCASE } from "@/data/resume";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Magnetic } from "@/components/magnetic";
 import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
+import {
+  SiWhatsapp,
+  SiInstagram,
+  SiMessenger,
+  SiShopify,
+  SiWoocommerce,
+  SiOdoo,
+  SiSalla,
+  SiZoho,
+  SiStripe,
+} from "react-icons/si";
+import {
+  HiShoppingBag,
+  HiCreditCard,
+  HiBanknotes,
+  HiTruck,
+  HiChatBubbleOvalLeftEllipsis,
+} from "react-icons/hi2";
 
 function StatInline({
   highlight,
@@ -29,71 +47,73 @@ function StatInline({
   );
 }
 
-function DashboardMockup() {
+const INTEGRATION_GROUPS = [
+  {
+    label: "Messaging",
+    items: [
+      { name: "WhatsApp", Icon: SiWhatsapp, color: "text-[#25D366]" },
+      { name: "Instagram", Icon: SiInstagram, color: "text-[#E1306C]" },
+      { name: "Messenger", Icon: SiMessenger, color: "text-[#0084FF]" },
+      { name: "Web Chat", Icon: HiChatBubbleOvalLeftEllipsis, color: "text-emerald-400" },
+    ],
+  },
+  {
+    label: "E-Commerce",
+    items: [
+      { name: "Shopify", Icon: SiShopify, color: "text-[#95BF47]" },
+      { name: "WooCommerce", Icon: SiWoocommerce, color: "text-[#7F54B3]" },
+      { name: "Odoo", Icon: SiOdoo, color: "text-[#714B67]" },
+      { name: "Salla", Icon: SiSalla, color: "text-[#BAF3DB]" },
+      { name: "Zoho", Icon: SiZoho, color: "text-[#E42527]" },
+      { name: "YouCan", Icon: HiShoppingBag, color: "text-[#2BB673]" },
+    ],
+  },
+  {
+    label: "Payments",
+    items: [
+      { name: "Paymob", Icon: HiCreditCard, color: "text-[#F15A22]" },
+      { name: "Fawry", Icon: HiBanknotes, color: "text-[#FFC107]" },
+      { name: "Stripe", Icon: SiStripe, color: "text-[#635BFF]" },
+    ],
+  },
+  {
+    label: "Shipping",
+    items: [
+      { name: "Bosta", Icon: HiTruck, color: "text-[#F97316]" },
+      { name: "Aramex", Icon: HiTruck, color: "text-[#E2231A]" },
+    ],
+  },
+] as const;
+
+function IntegrationGrid() {
   return (
-    <div className="z-card relative rounded-2xl overflow-hidden">
-      {/* Window chrome */}
-      <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid var(--z-primary)" }}>
-        <div className="flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-        </div>
-        <a
-          href="https://dashboard.zaylon.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[10px] font-mono ml-2 hover:underline"
-          style={{ color: "var(--z-text-muted)" }}
-        >
-          dashboard.zaylon.ai
-        </a>
-      </div>
-
-      {/* Dashboard content */}
-      <div className="p-4 sm:p-6 grid grid-cols-3 gap-3">
-        {[
-          { label: "AI Agents", value: "3", trend: "Supervised" },
-          { label: "AI Tools", value: "10", trend: "Scoped" },
-          { label: "Platforms", value: "6", trend: "Connected" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-xl p-3"
-            style={{
-              background: "var(--z-primary)",
-              border: "1px solid rgba(45,106,94,0.2)",
-            }}
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {INTEGRATION_GROUPS.map((group) => (
+        <div key={group.label} className="z-card rounded-2xl p-5">
+          <p
+            className="text-xs font-semibold uppercase tracking-[0.15em] mb-4"
+            style={{ color: "var(--z-tertiary)" }}
           >
-            <p className="text-lg sm:text-xl font-bold z-gradient-text">{stat.value}</p>
-            <p className="text-[10px] mt-1" style={{ color: "var(--z-text-muted)" }}>{stat.label}</p>
-            <p className="text-[9px] mt-0.5 font-mono" style={{ color: "var(--z-tertiary)" }}>{stat.trend}</p>
+            {group.label}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {group.items.map((item) => (
+              <span
+                key={item.name}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
+                style={{
+                  background: "rgba(27, 58, 53, 0.35)",
+                  border: "1px solid rgba(45, 106, 94, 0.2)",
+                  color: "var(--z-text)",
+                }}
+              >
+                <item.Icon className={`w-3.5 h-3.5 ${item.color}`} />
+                {item.name}
+              </span>
+            ))}
           </div>
-        ))}
-      </div>
-
-      {/* Connected platforms row */}
-      <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-        <p className="text-[10px] font-mono uppercase tracking-wider mb-2" style={{ color: "var(--z-text-muted)" }}>
-          Connected Platforms
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {["Shopify", "Salla", "WooCommerce", "Odoo", "YouCan", "Zoho"].map((platform) => (
-            <span
-              key={platform}
-              className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-1 rounded-full"
-              style={{
-                background: "var(--z-primary)",
-                border: "1px solid rgba(45,106,94,0.2)",
-                color: "var(--z-text-muted)",
-              }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
-              {platform}
-            </span>
-          ))}
         </div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -224,10 +244,28 @@ export function ZaylonShowcase() {
           </FadeUp>
         </div>
 
-        {/* One compact proof-of-product visual */}
+        {/* Integration grid */}
         <FadeUp delay={0.2}>
-          <div className="mt-16">
-            <DashboardMockup />
+          <div className="mt-16 text-center">
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.18em] mb-3"
+              style={{ color: "var(--z-tertiary)" }}
+            >
+              Integrations I built
+            </p>
+            <h3
+              className="text-2xl md:text-3xl font-bold tracking-tight"
+              style={{ color: "var(--z-text)" }}
+            >
+              Connected to the platforms{" "}
+              <span className="z-gradient-text">MENA merchants already use</span>
+            </h3>
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.25}>
+          <div className="mt-8">
+            <IntegrationGrid />
           </div>
         </FadeUp>
 
