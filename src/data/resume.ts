@@ -15,7 +15,7 @@ export const PERSONAL = {
 export const HERO_SIGNALS = [
   { label: "Co-Founder", detail: "Zaylon AI" },
   { label: "Freelance", detail: "AI Coding Expert" },
-  { label: "Alexandria University", detail: "CCE, 3.73 GPA" },
+  { label: "Alexandria University", detail: "Computer & Communications Engineering" },
 ] as const;
 
 export const NAV_LINKS = [
@@ -382,13 +382,12 @@ export const SKILLS = {
 export const EDUCATION = {
   university: "Alexandria University, Faculty of Engineering",
   degree: "B.Sc. in Computer & Communications Engineering (AI Concentration)",
-  gpa: "3.73 / 4.0",
   expected: "Expected Jul 2026",
 } as const;
 
 export const CERTIFICATIONS = [
   { name: "micro1 Certified Software Engineer", issuer: "micro1", year: "2026", image: "/certs/micro1.jpg" },
-  { name: "Google AI Agents Intensive Capstone", issuer: "Kaggle", year: "2025" },
+  { name: "Google AI Agents Intensive", issuer: "Google / Kaggle", year: "2025" },
   { name: "Meta Back-end Developer Specialization", issuer: "Coursera" },
   { name: "AWS Cloud & ML Foundations", issuer: "AWS Academy" },
 ] as const;
@@ -407,6 +406,6 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. Currently finishing my B.Sc. in Computer and Communications Engineering at Alexandria University (3.73 GPA, AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
+  bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. Currently finishing my B.Sc. in Computer and Communications Engineering at Alexandria University (AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
 } as const;
 

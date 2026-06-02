@@ -79,10 +79,9 @@ export function About() {
               <p className="text-sm text-muted-foreground mt-1">
                 {EDUCATION.university}
               </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-sm text-muted-foreground">
-                <span>GPA: {EDUCATION.gpa}</span>
-                <span>{EDUCATION.expected}</span>
-              </div>
+              <p className="text-sm text-muted-foreground mt-2">
+                {EDUCATION.expected}
+              </p>
             </TiltCard>
           </ScaleUp>
 
