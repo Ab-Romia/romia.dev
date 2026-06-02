@@ -15,7 +15,7 @@ export const PERSONAL = {
 export const HERO_SIGNALS = [
   { label: "Co-Founder", detail: "Zaylon AI" },
   { label: "Freelance", detail: "AI Coding Expert" },
-  { label: "B.Sc. Graduate", detail: "Alexandria University" },
+  { label: "B.Sc. Computer Engineering", detail: "AI Minor, 3.73 GPA" },
 ] as const;
 
 export const NAV_LINKS = [
@@ -381,7 +381,8 @@ export const SKILLS = {
 
 export const EDUCATION = {
   university: "Alexandria University, Faculty of Engineering",
-  degree: "B.Sc. in Computer & Communications Engineering (AI Concentration)",
+  degree: "B.Sc. in Computer Engineering, AI Minor",
+  gpa: "3.73 / 4.0",
 } as const;
 
 export const CERTIFICATIONS = [
@@ -405,6 +406,6 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. B.Sc. in Computer and Communications Engineering from Alexandria University (AI Concentration). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
+  bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. B.Sc. in Computer Engineering with an AI Minor from Alexandria University (3.73 GPA). I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
 } as const;
 
