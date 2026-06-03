@@ -33,12 +33,12 @@ export default async function Image() {
               width: "12px",
               height: "12px",
               borderRadius: "50%",
-              background: "#00D4FF",
+              background: "#34D399",
             }}
           />
           <span
             style={{
-              color: "#00D4FF",
+              color: "#34D399",
               fontSize: "20px",
               fontFamily: "monospace",
               textTransform: "uppercase",
@@ -62,12 +62,12 @@ export default async function Image() {
           <br />
           Abouroumia
         </h1>
-        <p style={{ color: "#A1A1AA", fontSize: "20px", marginTop: "16px" }}>
+        <p style={{ color: "#34D399", fontSize: "20px", marginTop: "16px" }}>
           aka Romia
         </p>
         <p
           style={{
-            color: "#A1A1AA",
+            color: "#34D399",
             fontSize: "22px",
             marginTop: "24px",
             maxWidth: "600px",
@@ -86,7 +86,7 @@ export default async function Image() {
           }}
         >
           <span
-            style={{ color: "#00D4FF", fontSize: "24px", fontWeight: 600 }}
+            style={{ color: "#34D399", fontSize: "24px", fontWeight: 600 }}
           >
             romia.dev
           </span>
