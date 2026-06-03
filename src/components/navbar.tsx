@@ -3,8 +3,6 @@
 import { useState, useEffect, useMemo } from "react";
 import {
   AnimatePresence,
-  LazyMotion,
-  domAnimation,
   m,
   LayoutGroup,
   useScroll,
@@ -38,7 +36,7 @@ export function Navbar() {
   }, [mobileOpen]);
 
   return (
-    <LazyMotion features={domAnimation}>
+    <>
       {/* Scroll progress bar */}
       <m.div
         className="fixed top-0 left-0 right-0 h-0.5 bg-accent z-[60] origin-left"
@@ -189,6 +187,6 @@ export function Navbar() {
           </m.div>
         )}
       </AnimatePresence>
-    </LazyMotion>
+    </>
   );
 }

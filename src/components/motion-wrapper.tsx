@@ -8,10 +8,28 @@ import {
   useMotionValue,
   useTransform,
   useInView,
+  useReducedMotion,
   animate,
   type HTMLMotionProps,
   LayoutGroup,
 } from "motion/react";
+
+// ---------------------------------------------------------------------------
+// Motion tokens. One source of truth so every reveal shares a coherent rhythm
+// and timing/easing can be tuned in a single place.
+// ---------------------------------------------------------------------------
+type Cubic = [number, number, number, number];
+
+// Expressive entrance: fast start, long soft settle. Reads as intentional.
+const EASE_OUT_EXPO: Cubic = [0.16, 1, 0.3, 1];
+// Snappy entrance for smaller, supporting elements.
+const EASE_OUT_SOFT: Cubic = [0.22, 1, 0.36, 1];
+
+const SPRING_GENTLE = { type: "spring", stiffness: 120, damping: 18 } as const;
+
+// Fire as the element enters from the bottom rather than after it is already
+// well inside the viewport (which reads as pop-in on fast scroll).
+const VIEWPORT = { once: true, amount: 0.2 } as const;
 
 // Wraps the whole tree once so subsequent `m.*` usages do not re-register features.
 function MotionProvider({ children }: { children: ReactNode }) {
@@ -21,19 +39,29 @@ function MotionProvider({ children }: { children: ReactNode }) {
 function FadeUp({
   children,
   delay = 0,
+  y = 16,
+  duration = 0.5,
   className,
   ...props
 }: {
   children: ReactNode;
   delay?: number;
+  /** Travel distance. Headings travel further than supporting text. */
+  y?: number;
+  duration?: number;
   className?: string;
 } & Omit<HTMLMotionProps<"div">, "children">) {
+  const reduce = useReducedMotion();
   return (
     <m.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      viewport={VIEWPORT}
+      transition={
+        reduce
+          ? { duration: 0.2, delay: 0 }
+          : { duration, delay, ease: EASE_OUT_EXPO }
+      }
       className={className}
       {...props}
     >
@@ -45,18 +73,22 @@ function FadeUp({
 function StaggerContainer({
   children,
   className,
+  stagger = 0.06,
+  delayChildren = 0,
 }: {
   children: ReactNode;
   className?: string;
+  stagger?: number;
+  delayChildren?: number;
 }) {
   return (
     <m.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={VIEWPORT}
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: 0.1 } },
+        visible: { transition: { staggerChildren: stagger, delayChildren } },
       }}
       className={className}
     >
@@ -72,11 +104,16 @@ function StaggerItem({
   children: ReactNode;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <m.div
       variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+        hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 14 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.45, ease: EASE_OUT_EXPO },
+        },
       }}
       className={className}
     >
@@ -94,12 +131,26 @@ function BlurIn({
   delay?: number;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
+  if (reduce) {
+    return (
+      <m.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={VIEWPORT}
+        transition={{ duration: 0.2 }}
+        className={className}
+      >
+        {children}
+      </m.div>
+    );
+  }
   return (
     <m.div
-      initial={{ opacity: 0, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      initial={{ opacity: 0, filter: "blur(6px)", y: 8 }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+      viewport={VIEWPORT}
+      transition={{ duration: 0.55, delay, ease: EASE_OUT_EXPO }}
       className={className}
     >
       {children}
@@ -116,18 +167,13 @@ function SlideFromLeft({
   delay?: number;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <m.div
-      initial={{ opacity: 0, x: -30 }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, x: -24 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.5,
-        delay,
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-      }}
+      viewport={VIEWPORT}
+      transition={reduce ? { duration: 0.2 } : { delay, ...SPRING_GENTLE }}
       className={className}
     >
       {children}
@@ -144,18 +190,13 @@ function ScaleUp({
   delay?: number;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <m.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.4,
-        delay,
-        type: "spring",
-        stiffness: 150,
-        damping: 20,
-      }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 8 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={VIEWPORT}
+      transition={reduce ? { duration: 0.2 } : { delay, ...SPRING_GENTLE }}
       className={className}
     >
       {children}
@@ -172,15 +213,21 @@ function TextReveal({
   className?: string;
   delay?: number;
 }) {
+  const reduce = useReducedMotion();
+
+  // Reduced motion: show the text immediately, no per-character animation.
+  if (reduce) {
+    return <span className={className}>{text}</span>;
+  }
+
   return (
     <m.span
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
+      animate="visible"
       variants={{
         hidden: {},
         visible: {
-          transition: { staggerChildren: 0.03, delayChildren: delay },
+          transition: { staggerChildren: 0.025, delayChildren: delay },
         },
       }}
       className={className}
@@ -190,12 +237,12 @@ function TextReveal({
         <m.span
           key={`${char}-${i}`}
           variants={{
-            hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
+            hidden: { opacity: 0, y: 18, filter: "blur(4px)" },
             visible: {
               opacity: 1,
               y: 0,
               filter: "blur(0px)",
-              transition: { duration: 0.4 },
+              transition: { duration: 0.45, ease: EASE_OUT_EXPO },
             },
           }}
           className="inline-block"
@@ -220,13 +267,21 @@ function CountUp({
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(0);
   const rounded = useTransform(motionValue, (v) => Math.round(v));
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (isInView) {
-      animate(motionValue, value, { duration: 1.5, ease: "easeOut" });
+    if (!isInView) return;
+    if (reduce) {
+      motionValue.set(value);
+      return;
     }
-  }, [isInView, motionValue, value]);
+    const controls = animate(motionValue, value, {
+      duration: 1.1,
+      ease: EASE_OUT_SOFT,
+    });
+    return () => controls.stop();
+  }, [isInView, motionValue, value, reduce]);
 
   useEffect(() => {
     const unsubscribe = rounded.on("change", (v) => {
@@ -251,18 +306,16 @@ function StaggerItemScale({
   children: ReactNode;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <m.div
       variants={{
-        hidden: { opacity: 0, scale: 0.9 },
+        hidden: reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 8 },
         visible: {
           opacity: 1,
           scale: 1,
-          transition: {
-            duration: 0.4,
-            type: "spring",
-            stiffness: 150,
-          },
+          y: 0,
+          transition: SPRING_GENTLE,
         },
       }}
       className={className}
@@ -285,4 +338,7 @@ export {
   MotionProvider,
   LayoutGroup,
   m,
+  EASE_OUT_EXPO,
+  EASE_OUT_SOFT,
+  SPRING_GENTLE,
 };
