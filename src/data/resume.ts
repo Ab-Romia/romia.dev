@@ -1,10 +1,10 @@
 export const PERSONAL = {
   name: "Abdelrahman Abouroumia",
   displayName: "Romia",
-  title: "Software Engineer & Co-Founder",
+  title: "AI Engineer",
   email: "aabouroumia@gmail.com",
   tagline:
-    "I co-founded Zaylon AI, where I built a full-stack platform and multi-agent system integrating 6 e-commerce platforms with event-driven backends and tri-lingual NLP.",
+    "I build production multi-agent LLM systems. At Zaylon AI, the company I co-founded, customers shop and check out by chatting in their own Arabic dialect over WhatsApp and Instagram.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -31,9 +31,9 @@ export const ZAYLON_SHOWCASE = {
   title: "Zaylon AI",
   role: "Software Engineer & Co-Founder",
   heading: "Zaylon AI",
-  subtitle: "Production Multi-Tenant Conversational Commerce for MENA",
+  subtitle: "Conversational commerce for MENA merchants, on WhatsApp and Instagram",
   description:
-    "Zaylon turns WhatsApp and Instagram into full sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and complete purchases without ever leaving the chat. Behind the scenes, a supervisor agent routes each conversation to specialized Sales, Support, or Checkout agents with scoped tool access.",
+    "Zaylon turns WhatsApp and Instagram into sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and check out inside the chat. A supervisor agent reads each message and hands it to a Sales, Support, or Checkout agent, and each one can only touch the tools its job needs.",
   url: "https://zaylon.ai",
   highlights: [
     { label: "AI Tools", detail: "Search, Cart, Orders, CRM & more", value: 10 },
@@ -42,14 +42,14 @@ export const ZAYLON_SHOWCASE = {
     { label: "Languages", detail: "English, Egyptian Arabic, Franco-Arabic", value: 3 },
   ],
   features: [
-    "Supervisor agent routes each conversation to Sales, Support, or Checkout agents with scoped tool access, preventing hallucinated actions",
-    "DialectBridge NLP pipeline detects and responds in English, Egyptian Arabic, and Franco-Arabic automatically",
-    "Vision AI matches customer product photos to catalog items for instant discovery",
-    "Real-time catalog sync across Shopify, Salla, WooCommerce, Odoo, YouCan, and Zoho",
-    "Proactive re-engagement on cart abandonment and negative sentiment detection",
-    "Multi-provider payment processing (Stripe, Paymob, Fawry) with webhook-verified security",
-    "Merchant dashboard: real-time inbox, analytics, RFM segmentation, and A/B testing",
-    "Multi-tenant architecture with per-merchant encryption and row-level data isolation",
+    "A supervisor agent routes each conversation to a Sales, Support, or Checkout agent. Each one can only reach the tools its job needs, so a sales agent never touches a payment.",
+    "DialectBridge detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers back in the same dialect.",
+    "Customers can send a photo of a product, and Zaylon matches it against the merchant's catalog.",
+    "Catalog and orders stay in sync across Shopify, Salla, WooCommerce, Odoo, YouCan, and Zoho.",
+    "Follows up on abandoned carts and steps in when a conversation starts to turn negative.",
+    "Takes payments through Stripe, Paymob, and Fawry, with every charge confirmed by a verified webhook.",
+    "A merchant dashboard with a live inbox, analytics, RFM segmentation, and A/B testing.",
+    "Each merchant's data is encrypted on its own and isolated at the row level, so tenants never see each other.",
   ],
   techStack: [
     "LangGraph", "FastAPI", "Supabase", "Next.js", "PostgreSQL",
@@ -100,34 +100,34 @@ export const PROJECTS: Project[] = [
     slug: "zaylon-ai",
     categories: ["AI/ML", "Backend", "Full-Stack"],
     description:
-      "Multi-agent conversational commerce system built with LangGraph, serving real users across MENA markets via WhatsApp and Instagram.",
+      "A multi-agent system on LangGraph that sells over WhatsApp and Instagram for MENA merchants, carrying a customer from product search to a confirmed payment.",
     tags: ["LangGraph", "Python", "Multi-Agent", "Shopify", "Next.js"],
     url: "https://zaylon.ai",
     status: "Production",
     badge: "Co-Founded",
     featured: true,
-    impact: "Production multi-agent system: 6 platforms, 3 languages, 10 scoped AI tools",
+    impact: "Supervisor multi-agent system across 6 commerce platforms, 3 dialects, and 3 payment providers",
     caseStudy: {
       problem:
-        "MENA merchants lose sales because customers abandon messaging channels when they can't get instant, dialect-aware product assistance. Traditional chatbots fail with Arabic dialects and can't handle complex multi-step purchases.",
+        "MENA shoppers do a lot of their buying over WhatsApp and Instagram, but merchants can't sit in those chats around the clock. Off-the-shelf chatbots fall apart on Egyptian Arabic and Franco-Arabic, and they can't carry someone from a question all the way to a paid order.",
       approach:
-        "Built a multi-agent supervisor architecture with LangGraph that routes conversations to specialized agents, each with scoped tool access and dialect-aware NLP. The system handles the full purchase lifecycle from product discovery to payment processing across multiple messaging channels.",
+        "I built a supervisor architecture in LangGraph. One router reads each incoming message and hands it to the agent that should own it, Sales, Support, or Checkout, and each agent only holds the tools for its own job. Dialect detection runs first, so the customer is answered in the language they wrote in, and the same flow carries a conversation from the first product question to a confirmed payment.",
       decisions: [
         {
           title: "LangGraph over plain LangChain",
-          reasoning: "State machine routing gives deterministic conversation flow control that chain-based approaches can't guarantee. Each conversation phase (browsing, carting, checkout) has well-defined transitions.",
+          reasoning: "A state machine lets me pin down exactly which transitions are legal between browsing, carting, and checkout. Plain chains drift, and in a flow that ends in a payment I can't afford drift.",
         },
         {
           title: "Supervisor pattern over flat multi-agent",
-          reasoning: "Scoped tool access per agent prevents hallucinated actions and reduces the attack surface. A sales agent should never be able to process payments.",
+          reasoning: "Giving each agent only its own tools means a sales agent can never reach the payment tools, which also rules out a whole class of wrong actions. One flat agent holding every tool is a single bad generation away from doing real damage.",
         },
         {
           title: "Redis message accumulation",
-          reasoning: "WhatsApp users send 3-5 rapid messages instead of one coherent prompt. Without batching, each triggers a separate agent invocation, wasting tokens and producing fragmented responses.",
+          reasoning: "People on WhatsApp send three or four quick messages instead of one. I batch them in Redis for a short window so the agent reads the whole thought at once, instead of firing on each fragment and answering three times.",
         },
       ],
       results:
-        "Production system serving merchants across 6 e-commerce platforms with supervisor multi-agent architecture, tri-lingual NLP, and multi-provider payment processing.",
+        "Live with merchants across 6 commerce platforms, handling product discovery, support, and checkout in three dialects.",
     },
   },
   {
@@ -135,56 +135,56 @@ export const PROJECTS: Project[] = [
     slug: "ai-collaborative-workspace",
     categories: ["AI/ML", "Backend", "Full-Stack"],
     description:
-      "Full-stack graduation project with a context-aware AI assistant and multi-source RAG pipeline for organizational collaboration.",
+      "Graduation project: a team workspace with an assistant that answers from the org's own documents, files, and databases instead of general knowledge, and cites where each answer came from.",
     tags: ["FastAPI", "RAG", "pgvector", "React", "PostgreSQL"],
     status: "Ongoing",
     featured: false,
     caseStudy: {
       problem:
-        "Organizations need AI assistants that understand their specific context, not generic chatbots. Knowledge is scattered across documents, databases, and team communications.",
+        "A team's real knowledge is spread across documents, databases, and chat history, so a general chatbot is useless for it. People need answers that come from their own material, with a pointer to the source.",
       approach:
-        "Building a multi-source RAG pipeline with PostgreSQL/pgvector for grounded answers from organizational documents, files, and databases. FastAPI microservices architecture allows each service to scale independently.",
+        "A RAG pipeline over PostgreSQL/pgvector pulls answers straight from the org's documents, files, and databases and cites the source. The backend is split into FastAPI services so each piece scales on its own.",
       decisions: [
         {
-          title: "pgvector over dedicated vector DB",
-          reasoning: "Keeps everything in one database, simplifies deployment and operations. PostgreSQL is battle-tested for production workloads.",
+          title: "pgvector over a dedicated vector DB",
+          reasoning: "Keeping the vectors in the same Postgres I already run means one database to deploy, back up, and reason about, instead of operating a separate vector store alongside it.",
         },
         {
-          title: "FastAPI microservices architecture",
-          reasoning: "Each service (auth, documents, AI, collaboration) scales independently. A spike in AI queries doesn't affect document uploads.",
+          title: "FastAPI microservices",
+          reasoning: "Auth, documents, AI, and collaboration are separate services, so a flood of AI queries doesn't slow down document uploads.",
         },
       ],
-      results: "Ongoing graduation project with context-aware AI assistance for organizational collaboration.",
+      results: "In progress: an assistant that answers from a team's own knowledge base and shows its sources.",
     },
   },
   {
-    title: "ContextIQ: Production RAG System",
+    title: "ContextIQ: RAG API",
     slug: "contextiq-rag",
     categories: ["AI/ML"],
     description:
-      "Production RAG API supporting 11+ file formats with TF-IDF embeddings, ChromaDB vector search, and smart caching.",
+      "A RAG API that ingests 11+ file formats and answers questions over them, combining keyword and vector search with a caching layer.",
     tags: ["FastAPI", "ChromaDB", "LangChain", "Python"],
     github: "https://github.com/Ab-Romia/ContextIQ-RAG",
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
     status: "Demo",
     featured: true,
-    impact: "11+ file formats with hybrid retrieval (keyword + vector + RRF scoring)",
+    impact: "Hybrid retrieval over 11+ file formats: keyword + vector, fused with RRF",
     caseStudy: {
       problem:
-        "Most RAG demos handle PDFs only. Real organizations have knowledge spread across 11+ file formats, and retrieval quality degrades without hybrid search strategies.",
+        "Most RAG demos only ingest PDFs. The documents I needed to search were spread across 11+ formats, and pure vector search kept missing the exact-keyword matches people actually expect, like an error code or a name.",
       approach:
-        "Production RAG API with hybrid retrieval combining TF-IDF keyword search and vector similarity search, smart caching for repeated queries, and multi-format document processing.",
+        "The API parses each format into clean text, then retrieves with both TF-IDF keyword search and vector similarity and fuses the two rankings. Repeated queries hit a cache instead of re-embedding.",
       decisions: [
         {
           title: "Hybrid retrieval with Reciprocal Rank Fusion",
-          reasoning: "Pure semantic search misses exact keyword matches that users expect. Combining keyword and vector search with RRF scoring gives the best of both worlds.",
+          reasoning: "Pure semantic search misses exact terms like error codes or product names. RRF blends the keyword ranking and the vector ranking, so exact hits and semantic matches both surface.",
         },
         {
-          title: "Smart caching layer",
-          reasoning: "Repeated queries to the same document corpus shouldn't re-embed or re-retrieve. Caching dramatically reduces latency and API costs for common queries.",
+          title: "A caching layer",
+          reasoning: "Repeated questions against the same corpus shouldn't re-embed anything. Caching them skips the work and the token spend on the queries that come up most.",
         },
       ],
-      results: "API supporting 11+ file formats with deployed demo on HuggingFace.",
+      results: "Live API plus a HuggingFace Space where you can query it against your own files.",
       embedDemo: { type: "iframe", src: "https://ab-romia-context-aware-ai.hf.space" },
     },
   },
@@ -193,28 +193,28 @@ export const PROJECTS: Project[] = [
     slug: "virtual-banking",
     categories: ["Backend", "Full-Stack"],
     description:
-      "Event-driven banking platform with microservices architecture, async Kafka messaging, and AI-powered conversational assistant.",
+      "An event-driven banking backend: independent services that talk over Kafka, plus a conversational assistant for account questions.",
     tags: ["Spring Boot", "Kafka", "Java", "LangChain", "Docker"],
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
     status: "Demo",
     featured: true,
-    impact: "Event-driven microservices with Kafka async messaging and independent scaling",
+    impact: "Kafka-decoupled microservices that scale independently",
     caseStudy: {
       problem:
-        "Monolithic banking backends can't scale individual services independently. A spike in transaction processing shouldn't affect account lookups or user authentication.",
+        "In a monolithic banking backend, a surge in transaction processing drags down account lookups and login too, because everything shares one process. I wanted each part to scale on its own.",
       approach:
-        "Event-driven microservices with Spring Boot and Kafka for decoupled, independently scalable banking operations with OAuth2 security and an embedded AI assistant.",
+        "Spring Boot services communicate through Kafka topics instead of calling each other directly, so they stay decoupled. OAuth2 guards the gateway, and an assistant that answers account questions runs as its own service.",
       decisions: [
         {
-          title: "Kafka over synchronous REST for inter-service communication",
-          reasoning: "Eventual consistency is acceptable for banking ledgers, and decoupling prevents cascade failures. If the notification service goes down, transactions still process.",
+          title: "Kafka over synchronous REST between services",
+          reasoning: "A ledger can tolerate eventual consistency, and decoupling stops one failure from cascading. If notifications go down, transactions still post.",
         },
         {
-          title: "AI agent as a separate microservice",
-          reasoning: "Allows independent scaling and model updates without redeploying core banking logic. The AI service can be versioned, A/B tested, and rolled back independently.",
+          title: "The assistant as a separate service",
+          reasoning: "Keeping it out of the core banking code means I can update the model, A/B test it, or roll it back without redeploying the ledger.",
         },
       ],
-      results: "Complete banking platform with transaction processing, account management, and AI assistant.",
+      results: "A working banking backend: transfers, account management, and an assistant, each as its own service.",
     },
   },
   {
@@ -231,10 +231,10 @@ export const PROJECTS: Project[] = [
     impact: "8-class multimodal classification fusing audio (HuBERT) and visual (EfficientNet) encoders",
     caseStudy: {
       problem:
-        "Single-modality emotion detection misses context. Audio tone and facial expressions together reveal more than either alone.",
+        "Audio-only or face-only models miss a lot. Tone of voice and facial expression disagree often enough that using both does better than either on its own.",
       approach:
         "Cross-modal attention model fusing HuBERT audio and EfficientNet visual encoders with bidirectional attention and learnable modality weights.",
-      results: "8-class emotion classification with deployed demo on HuggingFace.",
+      results: "Upload a clip on the HuggingFace Space and it returns the predicted emotion across 8 classes.",
       embedDemo: { type: "iframe", src: "https://ab-romia-ravdess-emotion-recognition.hf.space" },
     },
   },
@@ -250,10 +250,10 @@ export const PROJECTS: Project[] = [
     status: "Demo",
     caseStudy: {
       problem:
-        "AI-generated text is detectable because it lacks individual writing fingerprints. Each person has measurable stylistic patterns.",
+        "Generic AI text reads flat because it has no personal fingerprint. Everyone's writing has measurable habits: sentence length, punctuation, the words they reach for.",
       approach:
         "Style learning system using Sentence-BERT embeddings and 20+ stylometric features to build and apply personal writing profiles.",
-      results: "Style transfer system with deployed demo on HuggingFace.",
+      results: "Paste a few samples on the HuggingFace Space and it rewrites new text in that style.",
       embedDemo: { type: "iframe", src: "https://ab-romia-voiceprint-humanizer.hf.space" },
     },
   },
@@ -262,17 +262,17 @@ export const PROJECTS: Project[] = [
     slug: "connect4-ai",
     categories: ["Games/Puzzles"],
     description:
-      "Intelligent game-playing agent using Minimax search with alpha-beta pruning for optimal move selection.",
+      "A Connect 4 agent that searches the game tree with minimax and alpha-beta pruning.",
     tags: ["AI", "Python", "Game Theory"],
     github: "https://github.com/Ab-Romia/AI_Connect4_Agent",
     demo: "https://huggingface.co/spaces/Ab-Romia/connect4-ai",
     status: "Deployed",
     caseStudy: {
       problem:
-        "Building an AI that plays optimally requires efficient search through massive game trees. Connect4 has over 4 trillion possible positions.",
+        "Connect 4 has over 4 trillion positions, so you can't search all of them. The agent has to look far enough ahead to play well inside a move-time budget.",
       approach:
-        "Minimax algorithm with alpha-beta pruning for optimal move selection, cutting the search space dramatically while maintaining perfect play at reasonable depths.",
-      results: "Playable AI opponent with interactive browser demo.",
+        "Minimax with alpha-beta pruning skips the branches that can't change the outcome, so it searches several moves deeper for the same cost and plays a strong game within the time budget.",
+      results: "Play it in the browser; the agent runs entirely client-side.",
       embedDemo: { type: "component", component: "connect4" },
     },
   },
@@ -288,10 +288,10 @@ export const PROJECTS: Project[] = [
     status: "Deployed",
     caseStudy: {
       problem:
-        "Brute-force Sudoku solving is computationally expensive for complex puzzles. Intelligent constraint propagation can solve most puzzles without any backtracking.",
+        "Brute-forcing a hard Sudoku is slow. With the right constraint propagation, most puzzles collapse to a solution with little or no backtracking.",
       approach:
         "Constraint satisfaction with backtracking, AC-3 arc consistency preprocessing, and MRV heuristic for intelligent variable ordering.",
-      results: "Efficient solver with interactive browser demo. The AI Solve button demonstrates the CSP algorithm solving any puzzle instantly.",
+      results: "Solve any grid in the browser. The Solve button runs the CSP solver and fills a valid solution in well under a second.",
       embedDemo: { type: "component", component: "sudoku" },
     },
   },
@@ -319,10 +319,10 @@ export const EXPERIENCE = [
     highlights: [
       "Built full-stack platform: Next.js/React merchant dashboard with real-time inbox, analytics, and A/B testing on top of a FastAPI Python backend with Docker containerized deployment",
       "Integrated 6 e-commerce platforms (Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho) via REST APIs with webhook-driven sync, idempotent operations, and retry logic",
-      "Architected a multi-agent LangGraph system with a supervisor routing conversations to 3 specialized agents (Sales, Support, Checkout), each with scoped access to a subset of 10 AI tools",
-      "Engineered DialectBridge, a tri-lingual NLP pipeline that auto-detects whether a customer is writing in English, Egyptian Arabic, or Franco-Arabic and matches the response dialect accordingly",
-      "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring, deployed across WhatsApp and Instagram channels",
-      "Designed Redis message accumulation to batch rapid-fire WhatsApp messages into a single coherent turn before invoking the agent, reducing token waste and fragmented responses",
+      "Built a multi-agent LangGraph system where a supervisor routes each conversation to one of 3 agents (Sales, Support, Checkout), each scoped to only the AI tools its job needs",
+      "Built DialectBridge, an NLP pipeline that detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers in the same dialect",
+      "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring, running across WhatsApp and Instagram",
+      "Batched rapid-fire WhatsApp messages in Redis into a single turn before invoking the agent, so it reads the whole thought at once instead of replying to each fragment",
       "Built multi-tenant architecture with per-merchant encryption, row-level data isolation, and webhook-verified payment processing through Stripe, Paymob, and Fawry",
     ],
   },
@@ -356,7 +356,7 @@ export const EXPERIENCE = [
     description: "Contributed to automotive cybersecurity research, building security scenario catalogs and running attack simulations in vehicle simulation environments.",
     highlights: [
       "Built security scenario catalogs with threat models, attack vectors, and mitigations for CAN bus and ECU communication systems following automotive cybersecurity standards",
-      "Designed and executed cybersecurity test scenarios in Dyna4 and CARLA simulation environments, simulating real-world attack conditions on vehicle systems including spoofing, replay attacks, and denial-of-service on CAN networks",
+      "Designed and ran cybersecurity test scenarios in Dyna4 and CARLA, covering spoofing, replay, and denial-of-service attacks on vehicle CAN networks",
       "Used Vector CANoe for CAN bus simulation and analysis, monitoring message traffic, injecting fault conditions, and validating ECU response behavior under adversarial inputs",
       "Conducted fuzz testing on Automotive Emergency Braking (AEB) components, identifying edge cases in sensor fusion timing and brake actuation logic under corrupted input data",
     ],
@@ -406,6 +406,6 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I co-founded Zaylon AI and built a full-stack platform with multi-agent AI, event-driven backends, and REST API integrations across 6 e-commerce platforms and 3 languages. I work the full stack: React and Next.js on the frontend, FastAPI and Spring Boot on the backend, and multi-agent LangGraph architectures for the AI layer. B.Sc. in Computer Engineering with an AI Minor from Alexandria University. I speak English, Arabic, German, and Spanish. Outside engineering, I play guitar.",
+  bio: "I co-founded Zaylon AI and wrote most of it: the Next.js dashboard, the FastAPI backend, and the LangGraph agents that sell over WhatsApp and Instagram. I'm comfortable across the stack and lean toward backend and AI. B.Sc. in Computer Engineering with an AI minor from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
 } as const;
 

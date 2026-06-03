@@ -18,10 +18,10 @@ const personSchema = {
   givenName: "Abdelrahman",
   familyName: "Abouroumia",
   alternateName: ["Romia", "Ab-Romia", "Abouroumia"],
-  jobTitle: "Software Engineer",
+  jobTitle: "AI Engineer",
   url: "https://romia.dev",
   description:
-    "Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
+    "AI Engineer and Co-Founder of Zaylon AI. Builds production multi-agent LLM systems and the full-stack platforms and backends around them.",
   sameAs: [
     "https://linkedin.com/in/abdelrahman-abouroumia",
     "https://github.com/Ab-Romia",
@@ -55,7 +55,7 @@ const personSchema = {
   },
   hasOccupation: {
     "@type": "Occupation",
-    name: "Software Engineer",
+    name: "AI Engineer",
     occupationalCategory: "15-1251.00",
   },
 };
