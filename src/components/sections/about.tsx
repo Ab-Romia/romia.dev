@@ -9,32 +9,15 @@ import {
 } from "@/data/resume";
 import Image from "next/image";
 import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
-import { useTilt } from "@/hooks/use-tilt";
 
-function TiltCard({
+function InfoCard({
   children,
   className,
 }: {
   children: React.ReactNode;
   className?: string;
 }) {
-  const { ref, style, handlers } = useTilt(3);
-  return (
-    <div
-      ref={ref}
-      style={style}
-      onMouseMove={(e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
-        e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
-        handlers.onMouseMove(e);
-      }}
-      onMouseLeave={handlers.onMouseLeave}
-      className={className}
-    >
-      {children}
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 }
 
 export function About() {
@@ -70,7 +53,7 @@ export function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
           <ScaleUp delay={0.1}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
+            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Education
@@ -82,11 +65,11 @@ export function About() {
               <p className="text-sm text-muted-foreground mt-1">
                 GPA: {EDUCATION.gpa}
               </p>
-            </TiltCard>
+            </InfoCard>
           </ScaleUp>
 
           <ScaleUp delay={0.15}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
+            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Languages
@@ -101,11 +84,11 @@ export function About() {
                   </div>
                 ))}
               </div>
-            </TiltCard>
+            </InfoCard>
           </ScaleUp>
 
           <ScaleUp delay={0.2}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
+            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Certifications
@@ -139,11 +122,11 @@ export function About() {
                   </div>
                 ))}
               </div>
-            </TiltCard>
+            </InfoCard>
           </ScaleUp>
 
           <ScaleUp delay={0.25}>
-            <TiltCard className="bg-card border border-border rounded-lg p-6 h-full hover-glow cursor-glow">
+            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 Competitions & Hackathons
@@ -159,7 +142,7 @@ export function About() {
                   </div>
                 ))}
               </div>
-            </TiltCard>
+            </InfoCard>
           </ScaleUp>
         </div>
       </div>

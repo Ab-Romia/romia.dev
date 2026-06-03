@@ -1,50 +1,22 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
 import { buttonVariants } from "@/components/ui/button";
-import { TextReveal, BlurIn, FadeUp, m } from "@/components/motion-wrapper";
+import { TextReveal, BlurIn, FadeUp } from "@/components/motion-wrapper";
 import { PERSONAL, HERO_SIGNALS } from "@/data/resume";
 import { Download, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useScroll, useTransform } from "motion/react";
-import { Magnetic } from "@/components/magnetic";
 
 export function Hero() {
-  const { scrollY } = useScroll();
-  const dotY = useTransform(scrollY, [0, 500], [0, 150]);
-  const sectionRef = useRef<HTMLElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      id="hero"
-      className="relative py-28 md:py-40 overflow-hidden"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Mouse-reactive gradient */}
+    <section id="hero" className="relative py-28 md:py-40 overflow-hidden">
+      {/* Single static accent glow, top-left */}
       <div
-        className="absolute inset-0 -z-10 transition-none"
+        aria-hidden="true"
+        className="absolute inset-0 -z-10"
         style={{
-          background: `
-            radial-gradient(ellipse at ${mousePos.x}% ${mousePos.y}%, rgba(0, 212, 255, 0.14) 0%, transparent 50%),
-            radial-gradient(ellipse at ${100 - mousePos.x}% ${100 - mousePos.y}%, rgba(187, 154, 247, 0.12) 0%, transparent 50%)
-          `,
+          background:
+            "radial-gradient(ellipse 80% 50% at 20% 0%, rgba(0, 212, 255, 0.08), transparent 60%)",
         }}
-      />
-
-      {/* Parallax dot grid, theme-aware */}
-      <m.div
-        className="absolute inset-0 -z-10 opacity-40 dot-grid-bg"
-        style={{ y: dotY }}
       />
 
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
@@ -87,18 +59,16 @@ export function Hero() {
 
         <FadeUp delay={0.36} y={12} duration={0.45}>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Magnetic>
-              <a
-                href="#zaylon"
-                className={cn(
-                  buttonVariants({ variant: "default", size: "lg" }),
-                  "gap-2 transition-transform active:scale-[0.97]"
-                )}
-              >
-                Explore Zaylon
-                <ArrowRight className="size-4" />
-              </a>
-            </Magnetic>
+            <a
+              href="#zaylon"
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" }),
+                "gap-2 transition-transform active:scale-[0.97]"
+              )}
+            >
+              Explore Zaylon
+              <ArrowRight className="size-4" />
+            </a>
             <a
               href="/resume.pdf"
               download

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { PERSONAL } from "@/data/resume";
 import { BlurIn, FadeUp } from "@/components/motion-wrapper";
 import { Mail, Check, Copy, Download } from "lucide-react";
-import { Magnetic } from "@/components/magnetic";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -61,37 +60,26 @@ export function Contact() {
 
         <FadeUp delay={0.1}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Magnetic>
-              <a
-                href={`mailto:${PERSONAL.email}`}
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
-              >
-                <Mail className="size-4" />
-                Email Me
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href="/resume.pdf"
-                download
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-lg border border-border text-foreground hover:border-accent/40 hover:text-accent transition-colors"
-              >
-                <Download className="size-4" />
-                Download Resume
-              </a>
-            </Magnetic>
+            <a
+              href={`mailto:${PERSONAL.email}`}
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
+            >
+              <Mail className="size-4" />
+              Email Me
+            </a>
+            <a
+              href="/resume.pdf"
+              download
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-lg border border-border text-foreground hover:border-accent/40 hover:text-accent transition-[transform,border-color,color] active:scale-[0.97]"
+            >
+              <Download className="size-4" />
+              Download Resume
+            </a>
           </div>
         </FadeUp>
 
         <FadeUp delay={0.15}>
-          <div
-            className="mt-6 inline-flex items-center gap-2 bg-card/60 border border-border rounded-lg px-4 py-2.5 hover:border-accent/30 transition-colors cursor-glow"
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
-              e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
-            }}
-          >
+          <div className="mt-6 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-2.5 hover:border-accent/40 transition-colors">
             <span className="text-xs font-mono text-muted-foreground">{PERSONAL.email}</span>
             <button
               onClick={copyEmail}
@@ -108,19 +96,18 @@ export function Contact() {
         </FadeUp>
 
         <FadeUp delay={0.2}>
-          <div className="flex items-center justify-center gap-4 mt-8">
+          <div className="flex items-center justify-center gap-2 mt-8">
             {socialLinks.map((link) => (
-              <Magnetic key={link.label} strength={0.3}>
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={link.label}
-                  className="p-3 text-muted-foreground hover:text-accent transition-colors"
-                >
-                  <link.Icon className="size-5" aria-hidden="true" />
-                </a>
-              </Magnetic>
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                className="p-3 text-muted-foreground hover:text-accent transition-colors"
+              >
+                <link.Icon className="size-5" aria-hidden="true" />
+              </a>
             ))}
           </div>
         </FadeUp>

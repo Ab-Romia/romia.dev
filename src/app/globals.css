@@ -140,23 +140,6 @@
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 
-/* Light mode default */
-.glass-card {
-  background: rgba(0, 0, 0, 0.02);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-/* Dark mode override */
-:is(.dark *) .glass-card,
-.dark .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: none;
-}
-
-
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -164,38 +147,6 @@
 
 .cursor-blink {
   animation: blink 0.8s step-end infinite;
-}
-
-.hover-glow {
-  transition: box-shadow 0.25s ease-out;
-}
-.hover-glow:hover {
-  box-shadow: 0 0 16px rgba(0, 212, 255, 0.12);
-}
-
-/* Cards that react to nearby cursor with a border glow */
-.cursor-glow {
-  position: relative;
-  overflow: hidden;
-}
-
-.cursor-glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.25s ease-out;
-  background: radial-gradient(
-    400px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-    rgba(0, 212, 255, 0.08),
-    transparent 60%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-.cursor-glow:hover::before {
-  opacity: 1;
 }
 
 /* Zaylon section emerald theme - dark mode */
