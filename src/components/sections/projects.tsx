@@ -54,6 +54,7 @@ export function Projects() {
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
+                aria-pressed={filter === cat}
                 className={cn(
                   "text-xs font-mono px-3 py-1.5 rounded-full border transition-all duration-200",
                   filter === cat
@@ -65,10 +66,13 @@ export function Projects() {
               </button>
             ))}
           </div>
+          <p aria-live="polite" className="sr-only">
+            {filtered.length} {filtered.length === 1 ? "project" : "projects"}
+          </p>
         </FadeUp>
 
-        {/* Projects grid - key forces remount on filter change */}
-        <div key={filter} className="mt-8 space-y-6">
+        {/* Projects grid */}
+        <div className="mt-6 space-y-6">
           {featured.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {featured.map((project) => (
@@ -90,15 +94,15 @@ export function Projects() {
           <p className="text-muted-foreground text-sm mt-8">No projects in this category.</p>
         )}
 
-        {/* Inline demos for Games/Puzzles */}
+        {/* Playable demos appear only when the Games/Puzzles filter is chosen */}
         {filter === "Games/Puzzles" && (
-          <div key="demos" className="mt-12 space-y-12">
+          <div className="mt-12 space-y-12">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Play Connect4 vs AI</h3>
+              <h3 className="text-lg font-semibold mb-4">Connect 4 vs the AI</h3>
               <Connect4Wrapper />
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Solve a Sudoku Puzzle</h3>
+              <h3 className="text-lg font-semibold mb-4">Sudoku solver</h3>
               <SudokuWrapper />
             </div>
           </div>
