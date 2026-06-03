@@ -21,14 +21,7 @@ export function Experience() {
 
             return (
               <SlideFromLeft key={entry.company} delay={i * 0.08}>
-                <div
-                  className="group relative border border-border rounded-xl p-6 sm:p-8 hover:border-accent/30 transition-all duration-300 cursor-glow bg-card/50"
-                  onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
-                    e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
-                  }}
-                >
+                <div className="group relative border border-border rounded-xl p-6 sm:p-8 bg-card transition-colors duration-200 hover:border-accent/40">
                   {/* Header */}
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="flex items-start gap-3">

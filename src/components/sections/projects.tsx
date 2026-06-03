@@ -9,8 +9,6 @@ import {
 } from "@/components/motion-wrapper";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTilt } from "@/hooks/use-tilt";
-import { useMouseGlow } from "@/hooks/use-mouse-glow";
 import { Connect4Wrapper } from "@/components/connect4-wrapper";
 import { SudokuWrapper } from "@/components/sudoku-wrapper";
 
@@ -121,45 +119,13 @@ function ProjectCard({
   compact?: boolean;
   featured?: boolean;
 }) {
-  const tilt = useTilt(featured ? 4 : 0);
-  const glow = useMouseGlow();
-
-  const cardHandlers = {
-    onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
-      e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
-      if (featured) {
-        tilt.handlers.onMouseMove(e);
-        glow.handlers.onMouseMove(e);
-      }
-    },
-    onMouseLeave: () => {
-      if (featured) {
-        tilt.handlers.onMouseLeave();
-        glow.handlers.onMouseLeave();
-      }
-    },
-    onMouseEnter: featured ? glow.handlers.onMouseEnter : undefined,
-  };
-
   return (
     <div
-      ref={featured ? tilt.ref : undefined}
-      style={featured ? tilt.style : undefined}
-      {...cardHandlers}
       className={cn(
-        "group relative border rounded-lg h-full overflow-hidden transition-colors duration-300 cursor-glow",
-        featured
-          ? "glass-card hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
-          : "bg-card border-border hover:border-accent/30 hover-glow",
+        "group relative border rounded-lg h-full overflow-hidden bg-card border-border transition-colors duration-200 hover:border-accent/40",
         compact ? "p-4" : "p-6"
       )}
     >
-      {featured && glow.glowStyle && (
-        <div className="absolute inset-0 -z-10 pointer-events-none" style={glow.glowStyle} />
-      )}
-
       <div className="flex items-start justify-between gap-2">
         <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
           <Link

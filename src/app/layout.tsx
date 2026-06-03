@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MotionProvider } from "@/components/motion-wrapper";
-import { ParticleNetworkBg } from "@/components/particle-network-bg";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -97,7 +96,11 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-foreground focus:rounded-lg focus:text-sm focus:font-medium">
           Skip to content
         </a>
-        <ParticleNetworkBg />
+        {/* Static dot-grid texture, no animation */}
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 -z-10 dot-grid-bg opacity-60 pointer-events-none"
+        />
         <ThemeProvider>
           <MotionProvider>{children}</MotionProvider>
         </ThemeProvider>

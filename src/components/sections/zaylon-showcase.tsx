@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -14,7 +13,6 @@ import {
   ZAYLON_DASHBOARD_IMAGE,
 } from "@/data/resume";
 import { ArrowUpRight, ArrowRight, Check } from "lucide-react";
-import { Magnetic } from "@/components/magnetic";
 import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
 import {
   SiWhatsapp,
@@ -42,7 +40,7 @@ function StatInline({
 }) {
   return (
     <div className="flex flex-col">
-      <p className="text-2xl sm:text-3xl font-bold z-gradient-text leading-none">
+      <p className="text-2xl sm:text-3xl font-bold leading-none" style={{ color: "var(--z-text)" }}>
         <CountUp value={highlight.value as number} />
       </p>
       <p className="text-xs font-mono uppercase tracking-wider mt-2" style={{ color: "var(--z-text-muted)" }}>
@@ -119,43 +117,14 @@ function IntegrationGrid() {
 }
 
 export function ZaylonShowcase() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!sectionRef.current || !glowRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    glowRef.current.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(45, 106, 94, 0.07), transparent 60%)`;
-  }, []);
-
   return (
     <section
       id="zaylon"
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
       className="zaylon-section relative py-24 md:py-32 overflow-hidden"
     >
-      {/* Emerald mouse-following glow */}
-      <div ref={glowRef} className="absolute inset-0 pointer-events-none z-[1] transition-none" />
-
-      {/* Smooth gradient transitions into/out of emerald */}
+      {/* Soft edges blending the section into the page above and below */}
       <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-background via-background/60 to-transparent z-[2] pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background via-background/60 to-transparent z-[2] pointer-events-none" />
-
-      {/* Emerald blur orbs for depth, kept sparse since the orb scene adds its own halo */}
-      <div className="absolute top-1/4 -left-32 w-[450px] h-[450px] rounded-full blur-2xl pointer-events-none" style={{ background: "rgba(45, 106, 94, 0.05)" }} />
-      <div className="absolute bottom-1/4 -right-32 w-[380px] h-[380px] rounded-full blur-2xl pointer-events-none" style={{ background: "rgba(27, 58, 53, 0.06)" }} />
-
-      {/* Subtle grid overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(rgba(45, 106, 94, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(45, 106, 94, 0.08) 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
-        }}
-      />
 
       <div className="relative max-w-6xl mx-auto px-6 lg:px-8 z-20">
         {/* Split hero: copy on the left, orb on the right */}
@@ -166,7 +135,7 @@ export function ZaylonShowcase() {
                 className="inline-flex items-center gap-2 z-glass rounded-full px-4 py-2 text-sm font-mono uppercase tracking-wider"
                 style={{ color: "var(--z-tertiary)" }}
               >
-                <span className="size-2 rounded-full animate-pulse" style={{ background: "var(--z-secondary)" }} />
+                <span className="size-2 rounded-full" style={{ background: "var(--z-secondary)" }} />
                 {ZAYLON_SHOWCASE.role}
               </span>
             </BlurIn>
@@ -199,7 +168,7 @@ export function ZaylonShowcase() {
                 <div
                   className="z-chip inline-flex items-baseline gap-2 rounded-xl px-4 py-2.5 mt-5"
                 >
-                  <span className="text-xl font-bold z-gradient-text leading-none">
+                  <span className="text-xl font-bold leading-none" style={{ color: "var(--z-text)" }}>
                     {ZAYLON_LIVE_METRIC.value}
                   </span>
                   <span
@@ -214,21 +183,18 @@ export function ZaylonShowcase() {
 
             <FadeUp delay={0.4}>
               <div className="flex flex-wrap items-center gap-3 mt-8">
-                <Magnetic>
-                  <a
-                    href={ZAYLON_SHOWCASE.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-xl text-white transition-all duration-300 hover:scale-[1.02]"
-                    style={{
-                      background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
-                      boxShadow: "0 4px 20px rgba(27, 58, 53, 0.5), 0 8px 30px rgba(45, 106, 94, 0.2)",
-                    }}
-                  >
-                    Visit zaylon.ai
-                    <ArrowUpRight className="size-4" />
-                  </a>
-                </Magnetic>
+                <a
+                  href={ZAYLON_SHOWCASE.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-xl text-white transition-transform active:scale-[0.97]"
+                  style={{
+                    background: "linear-gradient(135deg, #1B3A35, #2D6A5E)",
+                  }}
+                >
+                  Visit zaylon.ai
+                  <ArrowUpRight className="size-4" />
+                </a>
                 <Link
                   href="/projects/zaylon-ai"
                   className="inline-flex items-center gap-1.5 text-sm font-mono group"
@@ -325,7 +291,7 @@ export function ZaylonShowcase() {
               style={{ color: "var(--z-text)" }}
             >
               Connected to the platforms{" "}
-              <span className="z-gradient-text">MENA merchants already use</span>
+              <span style={{ color: "var(--z-tertiary)" }}>MENA merchants already use</span>
             </h3>
           </div>
         </FadeUp>

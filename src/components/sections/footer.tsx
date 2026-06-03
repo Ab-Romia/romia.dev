@@ -2,7 +2,6 @@
 
 import { PERSONAL, NAV_LINKS } from "@/data/resume";
 import { Mail } from "lucide-react";
-import { Magnetic } from "@/components/magnetic";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -51,19 +50,18 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex items-center justify-center gap-4 mb-6">
+        <div className="flex items-center justify-center gap-2 mb-6">
           {socialLinks.map((link) => (
-            <Magnetic key={link.label} strength={0.3}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <link.Icon className="size-5" aria-hidden="true" />
-              </a>
-            </Magnetic>
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.label}
+              className="p-2.5 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <link.Icon className="size-5" aria-hidden="true" />
+            </a>
           ))}
         </div>
 

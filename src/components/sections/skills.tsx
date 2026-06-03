@@ -1,40 +1,20 @@
 "use client";
 
 import { SKILLS } from "@/data/resume";
-import { BlurIn, StaggerContainer, StaggerItemScale, m } from "@/components/motion-wrapper";
-import { cn } from "@/lib/utils";
-import { useTilt } from "@/hooks/use-tilt";
+import { BlurIn, StaggerContainer, StaggerItemScale } from "@/components/motion-wrapper";
 
 const categories = Object.entries(SKILLS);
 
 function SkillCard({
   category,
   skills,
-  isFirst,
 }: {
   category: string;
   skills: readonly string[];
-  isFirst: boolean;
 }) {
-  const { ref, style, handlers } = useTilt(3);
-
   return (
     <StaggerItemScale>
-      <div
-        ref={ref}
-        style={style}
-        onMouseMove={(e: React.MouseEvent<HTMLDivElement>) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
-          e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
-          handlers.onMouseMove(e);
-        }}
-        onMouseLeave={handlers.onMouseLeave}
-        className={cn(
-          "border border-border rounded-lg p-6 h-full cursor-glow",
-          isFirst ? "glass-card border-border" : "bg-card hover-glow"
-        )}
-      >
+      <div className="border border-border rounded-lg p-6 h-full bg-card transition-colors duration-200 hover:border-accent/40">
         <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-1 flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-accent" />
           {category}
@@ -47,14 +27,12 @@ function SkillCard({
         </p>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (
-            <m.span
+            <span
               key={skill}
-              whileHover={{ scale: 1.08 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full hover:text-foreground hover:bg-muted/80 transition-colors cursor-default"
+              className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full"
             >
               {skill}
-            </m.span>
+            </span>
           ))}
         </div>
       </div>
@@ -75,7 +53,7 @@ export function Skills() {
         <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-8">
           {categories.map(([category, skills], i) => (
             <div key={category} className={i === 0 ? "sm:col-span-2" : ""}>
-              <SkillCard category={category} skills={skills} isFirst={i === 0} />
+              <SkillCard category={category} skills={skills} />
             </div>
           ))}
         </StaggerContainer>
