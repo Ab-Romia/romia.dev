@@ -44,14 +44,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 src/
   app/
-    layout.tsx             Root layout, metadata, ThemeProvider, SpotlightBg, Analytics
+    layout.tsx             Root layout, metadata, viewport theme-color, ThemeProvider, static dot-grid bg, Analytics
     page.tsx               Homepage (all sections assembled), JSON-LD schemas
     globals.css            Theme tokens (@theme inline), keyframes, utilities
     not-found.tsx          Custom 404 page
     sitemap.ts             Dynamic sitemap including /projects/[slug]
     robots.ts              Robots.txt
     manifest.ts            PWA manifest
-    icon.svg               Favicon (geometric R monogram, cyan gradient)
+    icon.svg               Favicon (terminal-prompt monogram, emerald gradient)
     opengraph-image.tsx    Dynamic OG image (1200x630, edge runtime)
     twitter-image.tsx      Dynamic Twitter card image (1200x675)
     projects/[slug]/
@@ -62,8 +62,7 @@ src/
     navbar.tsx             Sticky nav with scroll hide/show, active section, scroll progress bar
     theme-provider.tsx     next-themes wrapper
     theme-toggle.tsx       Sun/moon toggle
-    spotlight-bg.tsx       Global mouse-following spotlight (disabled on touch)
-    magnetic.tsx           Magnetic pull effect for buttons
+    social-icons.tsx       Shared GitHub/LinkedIn/Hugging Face icons + SOCIAL_LINKS
     typing-effect.tsx      Typewriter text with blinking cursor
     scroll-to-top.tsx      Floating scroll-to-top button
     demo-embed.tsx         HuggingFace iframe embed with loading skeleton
@@ -77,8 +76,6 @@ src/
   hooks/
     use-scroll-direction.ts  Scroll up/down detection for navbar
     use-active-section.ts    IntersectionObserver for nav highlighting
-    use-mouse-glow.ts        Mouse-following radial gradient on cards
-    use-tilt.ts              3D perspective tilt on hover
   lib/
     utils.ts               cn() helper (clsx + tailwind-merge)
 ```
@@ -114,8 +111,9 @@ The Games/Puzzles filter shows playable demos (Connect4 + Sudoku) inline below t
 ### Colors (dark mode primary)
 - `--background: #09090B` | `--foreground: #FAFAFA`
 - `--card: #111113` | `--muted: #18181B`
-- `--accent: #00D4FF` (cyan) | `--accent-muted: #0EA5E9`
+- `--accent: #34D399` (emerald; light mode `#047857`) | `--accent-muted: #10B981`
 - `--border: #27272A` | `--ring: #3F3F46`
+- Single emerald accent site-wide; the Zaylon section keeps its own deeper `--z-*` emerald world. No second accent hue.
 
 ### Typography
 - Hero: `text-5xl md:text-7xl font-bold tracking-[-0.02em]`
@@ -129,31 +127,32 @@ The Games/Puzzles filter shows playable demos (Connect4 + Sudoku) inline below t
 - Section spacing varies: hero py-32, zaylon py-20, projects py-20, etc.
 
 ### Animation Primitives (motion-wrapper.tsx)
-- `FadeUp` : opacity 0 to 1, y 20 to 0 (most common)
-- `BlurIn` : blur 8px to 0 + opacity (section headings)
-- `SlideFromLeft` : x -30 to 0 with spring (experience entries)
-- `ScaleUp` : scale 0.95 to 1 with spring (about cards)
-- `TextReveal` : character-by-character blur+y stagger (hero name)
+- Shared motion tokens: `EASE_OUT_EXPO`/`EASE_OUT_SOFT` cubic-beziers, `SPRING_GENTLE`. One viewport config (`{ once: true, amount: 0.2 }`).
+- `FadeUp` : opacity + y (configurable `y`/`duration`), expo-out ease (most common)
+- `BlurIn` : blur 6px to 0 + opacity + small y (section headings)
+- `SlideFromLeft` : x -24 to 0 with gentle spring (experience timeline)
+- `ScaleUp` : scale 0.96 to 1 + y with gentle spring (about cards)
+- `TextReveal` : per-character y + blur (NO opacity, so the hero name is paint-on-first-byte / LCP-safe); plays on mount
 - `CountUp` : animated number counter (Zaylon stats)
 - `StaggerContainer/StaggerItem/StaggerItemScale` : staggered grid reveals
+- Every primitive has a `useReducedMotion()` fallback that lands on the final visible state.
 
-Performance rule: only animate `transform` and `opacity`. Use `will-change` sparingly.
+Performance rule: only animate `transform` and `opacity` (blur allowed sparingly for one-time entrances).
 
-### Interactive Effects
-- `SpotlightBg` : global mouse-following cyan glow (disabled on touch via `(hover: hover)`)
-- `useTilt` : 3D card perspective on hover (max 4deg)
-- `useMouseGlow` : radial gradient follows cursor on featured cards
-- `Magnetic` : buttons/icons pull toward cursor
-- `TypingEffect` : typewriter text with blinking cursor (hero tagline)
+### Interactive Effects (deliberately minimal)
+- Decorative cursor/3D effects were removed (no particle bg, magnetic, tilt, mouse-glow, pulsing glow) because stacked they read as AI-generated/try-hard.
+- Background is a single static `.dot-grid-bg` layer (no animation).
+- Buttons: quiet hover (border/bg shift) + `active:scale-[0.97]` press feedback.
+- `:focus-visible` ring (emerald, with offset) on all interactive elements.
+- `TypingEffect` : typewriter text with blinking cursor (used sparingly, not on the hero name/role).
 
 ### CSS Utilities (globals.css)
-- `.link-underline` : animated underline width 0 to 100% on hover
+- `.link-underline` : transform-based underline (scaleX), triggers on hover AND focus-visible
 - `.section-divider` : gradient accent line between sections
-- `.glass-card` : subtle glassmorphism (handles dark/light)
-- `.hover-glow` : pulsing glow animation on hover
+- `.glass-card` : glassmorphism (kept only where deliberate; most cards are solid `--card` + border)
+- `.dot-grid-bg` : static dot-grid texture (global background)
 - `.cursor-blink` : blinking cursor for typing effect
-- `@keyframes dash-flow` : animated SVG dashed lines
-- `@media (prefers-reduced-motion: reduce)` : disables all animations
+- `@media (prefers-reduced-motion: reduce)` : neutralizes CSS animations (JS motion handled via useReducedMotion)
 
 ## SEO
 - Title: "Abdelrahman Abouroumia (Romia) | AI Engineer"
@@ -195,5 +194,6 @@ Performance rule: only animate `transform` and `opacity`. Use `will-change` spar
 - Connect4 and Sudoku games run entirely client-side (zero API cost)
 - HuggingFace demos embedded via iframe with loading skeleton
 - `as const` removed from PROJECTS array to support Project interface with caseStudy
-- Spotlight background disabled on touch devices via `(hover: hover)` media query
+- Restraint over decoration: a single emerald accent, generous whitespace, motion only on first reveal. Stacked cursor/particle effects were intentionally removed to avoid the "AI-generated" look. When in doubt, cut an effect rather than add one.
+- Playable games (Connect4/Sudoku) are secondary craft demos behind the Games/Puzzles filter, not promoted on the landing view
 - Security headers (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy) in next.config.ts
