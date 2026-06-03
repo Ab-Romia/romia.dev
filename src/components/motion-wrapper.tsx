@@ -236,10 +236,11 @@ function TextReveal({
       {text.split("").map((char, i) => (
         <m.span
           key={`${char}-${i}`}
+          // Animate transform + blur only (no opacity) so the name, the LCP
+          // element, is painted at first byte instead of starting invisible.
           variants={{
-            hidden: { opacity: 0, y: 18, filter: "blur(4px)" },
+            hidden: { y: 18, filter: "blur(4px)" },
             visible: {
-              opacity: 1,
               y: 0,
               filter: "blur(0px)",
               transition: { duration: 0.45, ease: EASE_OUT_EXPO },
