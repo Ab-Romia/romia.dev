@@ -81,8 +81,8 @@ export default async function Image() {
             lineHeight: 1.5,
           }}
         >
-          I build production multi-agent LLM systems. Customers shop and check
-          out by chatting in their own dialect over WhatsApp and Instagram.
+          I build multi-agent LLM systems. At Zaylon AI, the agents I built let
+          customers shop and check out by chatting on WhatsApp and Instagram.
         </p>
         <div
           style={{
