@@ -20,11 +20,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://romia.dev"),
   title: {
-    default: "Abdelrahman Abouroumia (Romia) | Software Engineer",
+    default: "Abdelrahman Abouroumia (Romia) | AI Engineer",
     template: "%s | Abdelrahman Abouroumia",
   },
   description:
-    "Abdelrahman Abouroumia (Romia) is a Software Engineer and Co-Founder of Zaylon AI. Building full-stack platforms, multi-agent AI systems, and scalable backend infrastructure.",
+    "Abdelrahman Abouroumia (Romia) is an AI Engineer and Co-Founder of Zaylon AI. Builds production multi-agent LLM systems and the full-stack platforms and backends around them.",
   keywords: [
     "Romia",
     "Romia developer",
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Abdelrahman Abouroumia", url: "https://romia.dev" }],
   creator: "Abdelrahman Abouroumia",
   openGraph: {
-    title: "Abdelrahman Abouroumia (Romia) | Software Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
     description:
-      "Abdelrahman Abouroumia (Romia). Software Engineer and Co-Founder of Zaylon AI. Full-stack platforms, multi-agent AI, scalable backends.",
+      "Abdelrahman Abouroumia (Romia). AI Engineer and Co-Founder of Zaylon AI. Multi-agent LLM systems, full-stack platforms, and the backends behind them.",
     url: "https://romia.dev",
     siteName: "Abdelrahman Abouroumia - Portfolio",
     locale: "en_US",
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdelrahman Abouroumia (Romia) | Software Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
     description:
-      "Abdelrahman Abouroumia (Romia). Software Engineer and Co-Founder of Zaylon AI. Full-stack platforms, multi-agent AI, scalable backends.",
+      "Abdelrahman Abouroumia (Romia). AI Engineer and Co-Founder of Zaylon AI. Multi-agent LLM systems, full-stack platforms, and the backends behind them.",
   },
   alternates: {
     canonical: "/",

@@ -81,8 +81,8 @@ export default async function Image() {
             lineHeight: 1.5,
           }}
         >
-          Building intelligent systems and scalable backends. From multi-agent
-          architectures to production-grade APIs.
+          I build production multi-agent LLM systems. Customers shop and check
+          out by chatting in their own dialect over WhatsApp and Instagram.
         </p>
         <div
           style={{

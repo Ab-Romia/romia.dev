@@ -53,9 +53,9 @@ export function Contact() {
             Let&apos;s Connect
           </h2>
           <p className="text-muted-foreground font-light mt-4 max-w-lg mx-auto leading-relaxed">
-            Available for Software Engineer, Backend, and AI/ML roles. I bring
-            production full-stack systems, multi-agent AI, and scalable backend
-            experience.
+            I like building systems that actually ship. If you&apos;re working on
+            agents, backend infrastructure, or AI products, or hiring for one,
+            say hi.
           </p>
         </BlurIn>
 
