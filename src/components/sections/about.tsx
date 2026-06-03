@@ -72,7 +72,7 @@ export function About() {
             <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
               <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
-                Languages
+                Spoken Languages
               </h3>
               <div className="flex flex-wrap gap-3">
                 {LANGUAGES_SPOKEN.map((lang) => (
