@@ -4,7 +4,7 @@ export const PERSONAL = {
   title: "AI Engineer",
   email: "aabouroumia@gmail.com",
   tagline:
-    "I build production multi-agent LLM systems. At Zaylon AI, the company I co-founded, customers shop and check out by chatting in their own Arabic dialect over WhatsApp and Instagram.",
+    "I build multi-agent LLM systems. At Zaylon AI, the company I co-founded, the agents I built let customers shop and check out by chatting on WhatsApp and Instagram in their own dialect.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
