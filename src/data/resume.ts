@@ -57,6 +57,15 @@ export const ZAYLON_SHOWCASE = {
   ],
 } as const;
 
+// Real production traction. Drop in a true usage number and it renders as a
+// highlighted metric in the Zaylon showcase. Leave null to hide.
+// Example: { value: "12K+", label: "conversations handled" }
+export const ZAYLON_LIVE_METRIC: { value: string; label: string } | null = null;
+
+// Path to a real merchant-dashboard screenshot under /public. When set, the
+// showcase renders it in a framed figure. Example: "/zaylon-dashboard.png"
+export const ZAYLON_DASHBOARD_IMAGE: string | null = null;
+
 export type ProjectStatus = "Production" | "Demo" | "Ongoing" | "Deployed";
 
 interface TechnicalDecision {
