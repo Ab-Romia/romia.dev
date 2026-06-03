@@ -14,7 +14,6 @@ export const PERSONAL = {
 
 export const HERO_SIGNALS = [
   { label: "Co-Founder", detail: "Zaylon AI" },
-  { label: "AI Coding Expert", detail: "RLHF for frontier models" },
   { label: "B.Sc. Computer Engineering", detail: "AI Minor" },
 ] as const;
 
@@ -243,6 +242,16 @@ export const PROJECTS: Project[] = [
         "Audio-only or face-only models miss a lot. Tone of voice and facial expression disagree often enough that using both does better than either on its own.",
       approach:
         "Cross-modal attention model fusing HuBERT audio and EfficientNet visual encoders with bidirectional attention and learnable modality weights.",
+      decisions: [
+        {
+          title: "Cross-modal attention instead of late fusion",
+          reasoning: "Concatenating audio and video features at the very end lets each stream stay in its own silo. Bidirectional attention lets the audio attend to the video and the other way around, so a flat tone paired with a smiling face gets reconciled rather than averaged.",
+        },
+        {
+          title: "Learnable modality weights",
+          reasoning: "Audio and video aren't equally reliable for every emotion. The model learns how much to trust each stream per sample instead of weighting them equally up front.",
+        },
+      ],
       results: "Upload a clip on the HuggingFace Space and it returns the predicted emotion across 8 classes.",
       embedDemo: { type: "iframe", src: "https://ab-romia-ravdess-emotion-recognition.hf.space" },
     },
@@ -262,6 +271,16 @@ export const PROJECTS: Project[] = [
         "Generic AI text reads flat because it has no personal fingerprint. Everyone's writing has measurable habits: sentence length, punctuation, the words they reach for.",
       approach:
         "Style learning system using Sentence-BERT embeddings and 20+ stylometric features to build and apply personal writing profiles.",
+      decisions: [
+        {
+          title: "Embeddings plus explicit stylometrics",
+          reasoning: "Sentence-BERT captures semantic voice but misses concrete habits like average sentence length or how often someone uses commas. Pairing the embeddings with 20+ measured features gives the profile something interpretable to anchor on.",
+        },
+        {
+          title: "A per-person profile, not one global model",
+          reasoning: "Style is individual. Building a profile from each person's own samples means the system rewrites toward that specific fingerprint instead of a generic average of 'human' writing.",
+        },
+      ],
       results: "Paste a few samples on the HuggingFace Space and it rewrites new text in that style.",
       embedDemo: { type: "iframe", src: "https://ab-romia-voiceprint-humanizer.hf.space" },
     },
@@ -281,6 +300,16 @@ export const PROJECTS: Project[] = [
         "Connect 4 has over 4 trillion positions, so you can't search all of them. The agent has to look far enough ahead to play well inside a move-time budget.",
       approach:
         "Minimax with alpha-beta pruning skips the branches that can't change the outcome, so it searches several moves deeper for the same cost and plays a strong game within the time budget.",
+      decisions: [
+        {
+          title: "Alpha-beta pruning over plain minimax",
+          reasoning: "Plain minimax explores the whole tree to a given depth. Alpha-beta skips branches that can't beat what's already been found, which roughly doubles the depth reachable in the same time: the difference between a weak opponent and a strong one.",
+        },
+        {
+          title: "Move ordering to make the pruning pay off",
+          reasoning: "Alpha-beta only prunes well if strong moves are tried first. Searching center columns before edges (they win more often in Connect 4) cuts far more branches than going left to right.",
+        },
+      ],
       results: "Play it in the browser; the agent runs entirely client-side.",
       embedDemo: { type: "component", component: "connect4" },
     },
@@ -300,6 +329,16 @@ export const PROJECTS: Project[] = [
         "Brute-forcing a hard Sudoku is slow. With the right constraint propagation, most puzzles collapse to a solution with little or no backtracking.",
       approach:
         "Constraint satisfaction with backtracking, AC-3 arc consistency preprocessing, and MRV heuristic for intelligent variable ordering.",
+      decisions: [
+        {
+          title: "AC-3 arc consistency before any search",
+          reasoning: "Propagating constraints first strips impossible values from every cell up front. Many puzzles fall out from propagation alone, and the rest start from a much smaller search space.",
+        },
+        {
+          title: "MRV heuristic for variable ordering",
+          reasoning: "When search is still needed, filling the cell with the fewest remaining candidates first fails fast on dead ends and keeps the branching factor low, instead of marching through the grid in row order.",
+        },
+      ],
       results: "Solve any grid in the browser. The Solve button runs the CSP solver and fills a valid solution in well under a second.",
       embedDemo: { type: "component", component: "sudoku" },
     },

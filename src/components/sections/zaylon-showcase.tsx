@@ -318,7 +318,7 @@ export function ZaylonShowcase() {
               className="text-xs font-semibold uppercase tracking-[0.18em] mb-3"
               style={{ color: "var(--z-tertiary)" }}
             >
-              Integrations I built
+              Integrations built
             </p>
             <h3
               className="text-2xl md:text-3xl font-bold tracking-tight"

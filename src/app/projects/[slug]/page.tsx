@@ -108,6 +108,12 @@ export default async function ProjectPage({
           <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
             {project.description}
           </p>
+          {project.impact && (
+            <p className="text-sm text-accent font-mono mt-4 flex items-start gap-2">
+              <span className="size-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
+              {project.impact}
+            </p>
+          )}
         </FadeUp>
 
         {/* Tags + Links */}
