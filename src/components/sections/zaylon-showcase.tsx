@@ -2,13 +2,18 @@
 
 import { useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   FadeUp,
   BlurIn,
   CountUp,
 } from "@/components/motion-wrapper";
-import { ZAYLON_SHOWCASE } from "@/data/resume";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import {
+  ZAYLON_SHOWCASE,
+  ZAYLON_LIVE_METRIC,
+  ZAYLON_DASHBOARD_IMAGE,
+} from "@/data/resume";
+import { ArrowUpRight, ArrowRight, Check } from "lucide-react";
 import { Magnetic } from "@/components/magnetic";
 import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
 import {
@@ -100,12 +105,7 @@ function IntegrationGrid() {
             {group.items.map((item) => (
               <span
                 key={item.name}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
-                style={{
-                  background: "rgba(27, 58, 53, 0.35)",
-                  border: "1px solid rgba(45, 106, 94, 0.2)",
-                  color: "var(--z-text)",
-                }}
+                className="z-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
               >
                 <item.Icon className={`w-3.5 h-3.5 ${item.color}`} />
                 {item.name}
@@ -188,13 +188,28 @@ export function ZaylonShowcase() {
 
             <FadeUp delay={0.3}>
               <div
-                className="grid grid-cols-4 gap-4 mt-8 pt-6"
-                style={{ borderTop: "1px solid rgba(45, 106, 94, 0.25)" }}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6"
+                style={{ borderTop: "1px solid var(--z-chip-border)" }}
               >
                 {ZAYLON_SHOWCASE.highlights.map((h) => (
                   <StatInline key={h.label} highlight={h} />
                 ))}
               </div>
+              {ZAYLON_LIVE_METRIC && (
+                <div
+                  className="z-chip inline-flex items-baseline gap-2 rounded-xl px-4 py-2.5 mt-5"
+                >
+                  <span className="text-xl font-bold z-gradient-text leading-none">
+                    {ZAYLON_LIVE_METRIC.value}
+                  </span>
+                  <span
+                    className="text-xs font-mono uppercase tracking-wider"
+                    style={{ color: "var(--z-text-muted)" }}
+                  >
+                    {ZAYLON_LIVE_METRIC.label}
+                  </span>
+                </div>
+              )}
             </FadeUp>
 
             <FadeUp delay={0.4}>
@@ -244,6 +259,58 @@ export function ZaylonShowcase() {
           </FadeUp>
         </div>
 
+        {/* What it does: the capability list that proves real depth */}
+        <FadeUp delay={0.15}>
+          <div className="mt-16">
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.18em] mb-5"
+              style={{ color: "var(--z-tertiary)" }}
+            >
+              What it does
+            </p>
+            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+              {ZAYLON_SHOWCASE.features.map((feature) => (
+                <div key={feature} className="flex gap-3">
+                  <Check
+                    className="size-4 mt-0.5 shrink-0"
+                    style={{ color: "var(--z-tertiary)" }}
+                    aria-hidden="true"
+                  />
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "var(--z-text-muted)" }}
+                  >
+                    {feature}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </FadeUp>
+
+        {/* Real merchant-dashboard screenshot, when provided */}
+        {ZAYLON_DASHBOARD_IMAGE && (
+          <FadeUp delay={0.15}>
+            <figure className="mt-14">
+              <div className="z-card rounded-2xl overflow-hidden p-2">
+                <Image
+                  src={ZAYLON_DASHBOARD_IMAGE}
+                  alt="Zaylon merchant dashboard"
+                  width={2400}
+                  height={1400}
+                  className="w-full h-auto rounded-xl"
+                />
+              </div>
+              <figcaption
+                className="text-xs font-mono mt-3 text-center"
+                style={{ color: "var(--z-text-muted)" }}
+              >
+                The merchant dashboard: live inbox, analytics, and segmentation.
+              </figcaption>
+            </figure>
+          </FadeUp>
+        )}
+
         {/* Integration grid */}
         <FadeUp delay={0.2}>
           <div className="mt-16 text-center">
@@ -279,12 +346,7 @@ export function ZaylonShowcase() {
               {ZAYLON_SHOWCASE.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="text-xs font-mono px-3 py-1.5 rounded-full transition-colors duration-300 hover:border-[rgba(58,138,122,0.5)]"
-                  style={{
-                    background: "rgba(27, 58, 53, 0.3)",
-                    color: "var(--z-tertiary)",
-                    border: "1px solid rgba(45, 106, 94, 0.25)",
-                  }}
+                  className="z-chip-tech text-xs font-mono px-3 py-1.5 rounded-full"
                 >
                   {tech}
                 </span>
