@@ -38,7 +38,7 @@ export function About() {
           </BlurIn>
 
           <ScaleUp delay={0.15}>
-            <div className="relative size-32 md:size-40 rounded-full overflow-hidden border-2 border-accent/30 shadow-[0_0_20px_rgba(0,212,255,0.15)] shrink-0 mx-auto md:mx-0">
+            <div className="relative size-32 md:size-40 rounded-full overflow-hidden border-2 border-accent/30 shrink-0 mx-auto md:mx-0">
               <Image
                 src="/photo.jpeg"
                 alt="Abdelrahman Abouroumia (Romia)"

@@ -15,7 +15,7 @@ export function Hero() {
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(ellipse 80% 50% at 20% 0%, rgba(0, 212, 255, 0.08), transparent 60%)",
+            "radial-gradient(ellipse 80% 50% at 20% 0%, rgba(52, 211, 153, 0.07), transparent 60%)",
         }}
       />
 
