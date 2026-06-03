@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { EXPERIENCE } from "@/data/resume";
-import { FadeUp, BlurIn } from "@/components/motion-wrapper";
+import { SlideFromLeft, BlurIn } from "@/components/motion-wrapper";
 
 
 export function Experience() {
@@ -20,7 +20,7 @@ export function Experience() {
             const isCurrent = entry.period.includes("Present");
 
             return (
-              <FadeUp key={entry.company} delay={i * 0.1}>
+              <SlideFromLeft key={entry.company} delay={i * 0.08}>
                 <div
                   className="group relative border border-border rounded-xl p-6 sm:p-8 hover:border-accent/30 transition-all duration-300 cursor-glow bg-card/50"
                   onMouseMove={(e) => {
@@ -108,7 +108,7 @@ export function Experience() {
                     ))}
                   </ul>
                 </div>
-              </FadeUp>
+              </SlideFromLeft>
             );
           })}
         </div>
