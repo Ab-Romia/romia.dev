@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
 import {
   AnimatePresence,
   m,
@@ -55,7 +56,7 @@ export function Navbar() {
         )}
       >
         <nav className="max-w-5xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
-          <a
+          <Link
             href="/#hero"
             aria-label="Romia home"
             className="group flex items-center gap-2.5 transition-colors"
@@ -74,7 +75,7 @@ export function Navbar() {
             <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground group-hover:text-accent transition-colors">
               romia<span className="text-accent">.</span>dev
             </span>
-          </a>
+          </Link>
 
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center gap-1">

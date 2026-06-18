@@ -7,7 +7,7 @@ import {
   BlurIn,
   FadeUp,
 } from "@/components/motion-wrapper";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GitHubIcon } from "@/components/social-icons";
 import { Connect4Wrapper } from "@/components/connect4-wrapper";
@@ -169,6 +169,14 @@ function ProjectCard({
           ))}
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-2">
+          {project.blog && (
+            <Link href={project.blog}
+              aria-label={`Read the write-up for ${project.title}`}
+              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1">
+              <BookOpen className="size-3.5" />
+              Blog
+            </Link>
+          )}
           {project.demo && (
             <a href={project.demo} target="_blank" rel="noopener noreferrer"
               className="text-xs font-mono text-accent hover:text-accent-muted transition-colors">
