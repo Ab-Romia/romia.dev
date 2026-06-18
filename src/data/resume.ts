@@ -246,29 +246,33 @@ export const PROJECTS: Project[] = [
     slug: "emotion-recognition",
     categories: ["AI/ML"],
     description:
-      "Cross-modal attention model combining HuBERT audio and EfficientNet visual encoders with bidirectional fusion across 8 emotion classes.",
-    tags: ["PyTorch", "HuBERT", "EfficientNet", "Multimodal AI"],
+      "Speaker-independent speech emotion recognition on RAVDESS, rebuilt to remove a speaker-leakage flaw that inflates most published results. WavLM-large audio with learnable layer-weighting, fused with a facial-expression model.",
+    tags: ["PyTorch", "WavLM", "Speech", "Evaluation"],
     github: "https://github.com/Ab-Romia/RAVDESS-emotion-recognition",
     demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
     status: "Demo",
     featured: true,
-    impact: "8-class multimodal classification fusing audio (HuBERT) and visual (EfficientNet) encoders",
+    impact: "Honest speaker-independent: 78.8% audio-visual (calibrated late fusion) on a 70.3% audio base, all leak-free, where the common random split would fake the audio up to ~78% by memorizing speakers",
     caseStudy: {
       problem:
-        "Audio-only or face-only models miss a lot. Tone of voice and facial expression disagree often enough that using both does better than either on its own.",
+        "RAVDESS has 24 actors speaking the same two sentences. The usual random train/test split puts the same voices on both sides, so the model gets rewarded for recognizing the actor, not the emotion. That is why so many reported numbers sit in the 90s, and why my own earlier version looked better than it was.",
       approach:
-        "Cross-modal attention model fusing HuBERT audio and EfficientNet visual encoders with bidirectional attention and learnable modality weights.",
+        "Rebuilt around actor-disjoint cross-validation so no speaker is ever in both train and test. WavLM-large with a learnable weighted sum over its layers and attentive statistics pooling for audio, fused with a face model trained on expressions (not identities) through a small gated layer.",
       decisions: [
         {
-          title: "Cross-modal attention instead of late fusion",
-          reasoning: "Concatenating audio and video features at the very end lets each stream stay in its own silo. Bidirectional attention lets the audio attend to the video and the other way around, so a flat tone paired with a smiling face gets reconciled rather than averaged.",
+          title: "Split by actor, and prove it with a test",
+          reasoning: "The whole result hinges on no speaker leaking across the split, so a unit test fails if any actor appears in both the train and test side of any fold. The guarantee is mechanical, not a claim. The same model scores ~78% on a random split and 64.9% speaker-independent: the gap is pure leakage.",
         },
         {
-          title: "Learnable modality weights",
-          reasoning: "Audio and video aren't equally reliable for every emotion. The model learns how much to trust each stream per sample instead of weighting them equally up front.",
+          title: "Freeze the encoder instead of fine-tuning it",
+          reasoning: "On 1440 clips, fine-tuning a 300M-parameter encoder overfit the training speakers and scored below a frozen-feature baseline. Freezing it and training only the pooling head generalized better to unseen actors, reaching 70.3%.",
+        },
+        {
+          title: "Use expression features for the face, not identity features",
+          reasoning: "ImageNet face features scored 89% when faces leaked but 35% on new faces: they were memorizing identity. Swapping to a facial-expression model lifted video-alone accuracy on unseen faces to 58%, so fusing it actually helps.",
         },
       ],
-      results: "Upload a clip on the HuggingFace Space and it returns the predicted emotion across 8 classes.",
+      results: "70.3% audio-only (in line with the peer-reviewed EmoBox speaker-independent range) and 78.8% audio-visual, speaker-independent. Naive joint fusion scored below audio alone; calibrated late fusion (train each modality separately, then weight their probabilities on validation) added a real 8.6 points from the face with no leak. Full write-up and methodology on the blog.",
       embedDemo: { type: "iframe", src: "https://ab-romia-ravdess-emotion-recognition.hf.space" },
     },
   },
