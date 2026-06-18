@@ -148,13 +148,26 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "The fix was to use a face model trained to read expressions instead of identities. With those features, video-alone accuracy on unseen faces jumped from 35% to 62.5%, and the leak gap shrank from 54 points to 27. Now the face carries real, transferable emotion. Fusing it with the audio under the same speaker-independent test takes the model from 70.3% to {{MM_ACC}}. There is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) if you want to try it."
+        "md": "The first fix was the face model. I swapped the ImageNet network for one trained to read expressions instead of identities. Video-alone accuracy on unseen faces jumped from 35% to 58%, and the leak gap shrank by half. Now the face carried real, transferable emotion. So I fused it with the audio the obvious way, one network trained on both streams, and it got worse anyway: well below audio alone."
+      },
+      {
+        "type": "p",
+        "md": "That failure has a name. When you train a single network on two streams, the optimizer leans on whichever is easier to fit on the training data, and here that was still the face, with its little bit of leftover identity. It looked great in training and fell apart on new speakers. The fix is almost embarrassingly simple, and it is the one the older audio-video competitions settled on years ago: keep the two models separate, let each be its best, and just average their predictions. Weight the average so the model leans on whichever it trusts more, pick that weight on held-out validation, and calibrate each model first so a confident wrong guess cannot shout down a quiet right one."
+      },
+      {
+        "type": "callout",
+        "title": "The result",
+        "md": "Audio alone: 70.3%. Face alone: 58%. Calibrated late fusion of the two: 78.8%, speaker-independent.\n\nA real 8.6-point gain from the face, with no leak. The weighted average can never do worse than the better model, because \"trust audio completely\" is always one of the options it can pick."
+      },
+      {
+        "type": "p",
+        "md": "There is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) if you want to try it."
       },
       {
         "type": "figure",
         "src": "/blog/ravdess-emotion/confusion-matrix.png",
-        "alt": "Row-normalized confusion matrix for the speaker-independent model across the eight emotions.",
-        "caption": "Where it is confident and where it hesitates, on speakers it never trained on."
+        "alt": "Row-normalized confusion matrix for the speaker-independent fused model across the eight emotions.",
+        "caption": "Where the fused model is confident and where it hesitates, on speakers it never trained on."
       },
       {
         "type": "h2",
