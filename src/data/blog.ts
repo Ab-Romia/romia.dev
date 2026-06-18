@@ -22,10 +22,155 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    "title": "The data leak hiding behind my 87% emotion model",
+    "slug": "speaker-leakage-ravdess",
+    "description": "I rebuilt my speech emotion model and found its headline accuracy was mostly the model recognizing the actors, not their emotions. Here is the leak, the honest speaker-independent numbers, and what it took to raise them the right way, including the same trap hiding in the video.",
+    "date": "2025-11-01",
+    "tags": [
+      "Speech",
+      "Emotion Recognition",
+      "Evaluation",
+      "WavLM"
+    ],
+    "readingMinutes": 10,
+    "body": [
+      {
+        "type": "h2",
+        "text": "A number that was lying to me"
+      },
+      {
+        "type": "p",
+        "md": "My old RAVDESS emotion model reported about 87% accuracy. I was proud of it. Then I tried to reproduce that result carefully and realized most of the number was not emotion recognition at all. It was the model recognizing the actors."
+      },
+      {
+        "type": "p",
+        "md": "This is the honest rebuild. It is the story of one subtle mistake in how the data was split, why it quietly inflates almost every RAVDESS result you will find online, and what the real numbers look like once you take it seriously. The [code and full methodology](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) are on GitHub."
+      },
+      {
+        "type": "h2",
+        "text": "RAVDESS is a trap if you are not careful"
+      },
+      {
+        "type": "p",
+        "md": "RAVDESS is a standard benchmark for emotion from speech. 24 actors each speak the same two sentences, \"Kids are talking by the door\" and \"Dogs are sitting by the door\", in eight emotions: neutral, calm, happy, sad, angry, fearful, disgust, surprised. 1440 clips in total."
+      },
+      {
+        "type": "p",
+        "md": "Read that again. Twenty-four people, two sentences. That is what makes it a trap. If you shuffle all 1440 clips and take a random fifth as your test set, the same actor saying the same sentence in the same emotion lands in both training and testing, separated only by which of the two takes it was. The model never has to learn what anger sounds like in general. It only has to remember what actor 14 sounds like when angry, because it already met actor 14 being angry in training."
+      },
+      {
+        "type": "callout",
+        "title": "The leak in one line",
+        "md": "A random split lets the model memorize voices, then grades it on those same voices. The score goes up, but it measures speaker recognition, not emotion that transfers to someone it has never heard."
+      },
+      {
+        "type": "h2",
+        "text": "I measured the leak directly"
+      },
+      {
+        "type": "p",
+        "md": "It is easy to argue about this in the abstract, so I ran a controlled experiment. Same model, same training code, same everything. The only thing I changed was the split."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Random split, where speakers leak across train and test: about 78% accuracy",
+          "Speaker-independent split, where no actor is on both sides: 64.9% accuracy"
+        ]
+      },
+      {
+        "type": "p",
+        "md": "Thirteen points from nothing but the partition. The numbers in the 90s you see quoted for RAVDESS are not better models. They are this same leak, usually with an even looser split."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/ravdess-emotion/leak-vs-honest.png",
+        "alt": "Bar chart: the same model scores about 78% on a random split where speakers leak, and 64.9% on a speaker-independent split.",
+        "caption": "Same model, same code. Only the split changes. The gap is the speaker leak."
+      },
+      {
+        "type": "h2",
+        "text": "Doing it right, and proving it"
+      },
+      {
+        "type": "p",
+        "md": "The fix is to split by actor, not by clip. I use six-fold cross-validation where each fold tests on four actors the model never trained on, balanced by gender, and I hold out four more actors from each training set for validation. No actor is ever on two sides of the line."
+      },
+      {
+        "type": "p",
+        "md": "Because this is the whole point, I did not want to trust myself to get it right by hand. I wrote a test that fails if any actor appears in both the train and test side of any fold. The guarantee is mechanical, not a promise I am asking you to take."
+      },
+      {
+        "type": "code",
+        "code": "def test_no_actor_leaks_across_splits():\n    for f in make_speaker_independent_folds(Config()):\n        assert not (set(f.train_actors) & set(f.test_actors))\n        assert not (set(f.val_actors) & set(f.test_actors))"
+      },
+      {
+        "type": "h2",
+        "text": "Is 64.9% just a bad model?"
+      },
+      {
+        "type": "p",
+        "md": "That was my first worry. A number that drops from 87 to 65 feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model."
+      },
+      {
+        "type": "h2",
+        "text": "Now raise it the honest way"
+      },
+      {
+        "type": "p",
+        "md": "A floor is not a ceiling. I wanted the highest number I could get that was still genuinely speaker-independent, so I changed the model and left the rules alone: a larger speech encoder (WavLM-large), a learnable weighted sum over all of its layers instead of just the last one (emotion lives in the middle layers, the final layer drifts toward the words), and attentive statistics pooling, which keeps the variation in tone that a plain average throws away."
+      },
+      {
+        "type": "p",
+        "md": "Then a surprise that became my favorite result. Fine-tuning WavLM-large scored 67.6%, which is below a simple frozen-feature baseline. A 300-million-parameter model fine-tuned on 1440 clips overfits, and the speaker-independent folds are exactly where that shows. So I froze the encoder entirely and put all of the learning into the small pooling head. That gave 70.3%. On data this small, restraint won."
+      },
+      {
+        "type": "callout",
+        "title": "The lesson",
+        "md": "The bigger model helped, but only once I stopped fine-tuning it. Frozen features plus a head that knows where to look beat a fully fine-tuned encoder, and it overfits the handful of training speakers far less."
+      },
+      {
+        "type": "h2",
+        "text": "The face has the exact same trap"
+      },
+      {
+        "type": "p",
+        "md": "RAVDESS is audio-visual, so the obvious next step is to add the speaker's face. My first attempt made things worse: fusing the face dropped accuracy well below the audio-only model. The reason turned out to be the same lesson in a new costume."
+      },
+      {
+        "type": "p",
+        "md": "I had encoded each face with a standard image network trained on ImageNet. Those features describe who the person is, not what they are feeling. I tested it directly, the same way I tested the audio:"
+      },
+      {
+        "type": "callout",
+        "title": "The face identity leak",
+        "md": "Face features from ImageNet, predicting emotion from the video alone:\n\nWhen the same faces leak across the split: 89% accuracy.\n\nOn faces the model has never seen: 35%.\n\nA 54-point gap. The features were memorizing faces, not reading expressions."
+      },
+      {
+        "type": "p",
+        "md": "The fix was to use a face model trained to read expressions instead of identities. With those features, video-alone accuracy on unseen faces jumped from 35% to 62.5%, and the leak gap shrank from 54 points to 27. Now the face carries real, transferable emotion. Fusing it with the audio under the same speaker-independent test takes the model from 70.3% to {{MM_ACC}}. There is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) if you want to try it."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/ravdess-emotion/confusion-matrix.png",
+        "alt": "Row-normalized confusion matrix for the speaker-independent model across the eight emotions.",
+        "caption": "Where it is confident and where it hesitates, on speakers it never trained on."
+      },
+      {
+        "type": "h2",
+        "text": "What I actually learned"
+      },
+      {
+        "type": "p",
+        "md": "The rebuild taught me less about emotion and more about measurement. The first version was not dishonest on purpose. It just answered an easier question than the one I thought I was asking. \"Can it recognize emotion in voices and faces it already knows\" is a very different, much easier question than \"can it recognize emotion in a person it has never met.\" The second one is the one that matters, and it is the one worth reporting even when the number is smaller. Measuring the harder question honestly is the part I would want a reviewer to see."
+      }
+    ]
+  },
+  {
     "title": "Measuring your own writing voice, one function word at a time",
     "slug": "measuring-a-writing-voice",
     "description": "How I built a tool that turns a few of your writing samples into a measurable fingerprint, scores how far a draft has drifted from it, and nudges it back, with honest numbers about what the signal can and cannot do.",
-    "date": "2026-06-18",
+    "date": "2025-11-11",
     "tags": [
       "NLP",
       "Stylometry",
@@ -285,7 +430,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "contextiq-hybrid-rag-retrieval",
     description:
       "A plain-language walkthrough of ContextIQ: dense plus BM25 retrieval, reciprocal rank fusion, cross-encoder reranking, and grounded generation, all on a free CPU, with an honest four-way evaluation where no single arm sweeps every metric.",
-    date: "2026-06-18",
+    date: "2025-07-24",
     tags: ["RAG", "Retrieval", "Embeddings", "BM25", "Reranking", "Evaluation"],
     readingMinutes: 14,
     body: [
