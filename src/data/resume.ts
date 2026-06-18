@@ -250,6 +250,7 @@ export const PROJECTS: Project[] = [
     tags: ["PyTorch", "WavLM", "Speech", "Evaluation"],
     github: "https://github.com/Ab-Romia/RAVDESS-emotion-recognition",
     demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
+    blog: "/blog/speaker-leakage-ravdess",
     status: "Demo",
     featured: true,
     impact: "Honest speaker-independent: 78.8% audio-visual (calibrated late fusion) on a 70.3% audio base, all leak-free, where the common random split would fake the audio up to ~78% by memorizing speakers",

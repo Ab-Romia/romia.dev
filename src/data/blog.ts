@@ -22,163 +22,257 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    "title": "The data leak hiding behind my 87% emotion model",
-    "slug": "speaker-leakage-ravdess",
-    "description": "I rebuilt my speech emotion model and found its headline accuracy was mostly the model recognizing the actors, not their emotions. Here is the leak, the honest speaker-independent numbers, and what it took to raise them the right way, including the same trap hiding in the video.",
-    "date": "2025-11-01",
-    "tags": [
-      "Speech",
-      "Emotion Recognition",
-      "Evaluation",
-      "WavLM"
-    ],
-    "readingMinutes": 10,
-    "body": [
-      {
-        "type": "h2",
-        "text": "A number that was lying to me"
-      },
-      {
-        "type": "p",
-        "md": "My old RAVDESS emotion model reported about 87% accuracy. I was proud of it. Then I tried to reproduce that result carefully and realized most of the number was not emotion recognition at all. It was the model recognizing the actors."
-      },
-      {
-        "type": "p",
-        "md": "This is the honest rebuild. It is the story of one subtle mistake in how the data was split, why it quietly inflates almost every RAVDESS result you will find online, and what the real numbers look like once you take it seriously. The [code and full methodology](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) are on GitHub."
-      },
-      {
-        "type": "h2",
-        "text": "RAVDESS is a trap if you are not careful"
-      },
-      {
-        "type": "p",
-        "md": "RAVDESS is a standard benchmark for emotion from speech. 24 actors each speak the same two sentences, \"Kids are talking by the door\" and \"Dogs are sitting by the door\", in eight emotions: neutral, calm, happy, sad, angry, fearful, disgust, surprised. 1440 clips in total."
-      },
-      {
-        "type": "p",
-        "md": "Read that again. Twenty-four people, two sentences. That is what makes it a trap. If you shuffle all 1440 clips and take a random fifth as your test set, the same actor saying the same sentence in the same emotion lands in both training and testing, separated only by which of the two takes it was. The model never has to learn what anger sounds like in general. It only has to remember what actor 14 sounds like when angry, because it already met actor 14 being angry in training."
-      },
-      {
-        "type": "callout",
-        "title": "The leak in one line",
-        "md": "A random split lets the model memorize voices, then grades it on those same voices. The score goes up, but it measures speaker recognition, not emotion that transfers to someone it has never heard."
-      },
-      {
-        "type": "h2",
-        "text": "I measured the leak directly"
-      },
-      {
-        "type": "p",
-        "md": "It is easy to argue about this in the abstract, so I ran a controlled experiment. Same model, same training code, same everything. The only thing I changed was the split."
-      },
-      {
-        "type": "ul",
-        "items": [
-          "Random split, where speakers leak across train and test: about 78% accuracy",
-          "Speaker-independent split, where no actor is on both sides: 64.9% accuracy"
-        ]
-      },
-      {
-        "type": "p",
-        "md": "Thirteen points from nothing but the partition. The numbers in the 90s you see quoted for RAVDESS are not better models. They are this same leak, usually with an even looser split."
-      },
-      {
-        "type": "figure",
-        "src": "/blog/ravdess-emotion/leak-vs-honest.png",
-        "alt": "Bar chart: the same model scores about 78% on a random split where speakers leak, and 64.9% on a speaker-independent split.",
-        "caption": "Same model, same code. Only the split changes. The gap is the speaker leak."
-      },
-      {
-        "type": "h2",
-        "text": "Doing it right, and proving it"
-      },
-      {
-        "type": "p",
-        "md": "The fix is to split by actor, not by clip. I use six-fold cross-validation where each fold tests on four actors the model never trained on, balanced by gender, and I hold out four more actors from each training set for validation. No actor is ever on two sides of the line."
-      },
-      {
-        "type": "p",
-        "md": "Because this is the whole point, I did not want to trust myself to get it right by hand. I wrote a test that fails if any actor appears in both the train and test side of any fold. The guarantee is mechanical, not a promise I am asking you to take."
-      },
-      {
-        "type": "code",
-        "code": "def test_no_actor_leaks_across_splits():\n    for f in make_speaker_independent_folds(Config()):\n        assert not (set(f.train_actors) & set(f.test_actors))\n        assert not (set(f.val_actors) & set(f.test_actors))"
-      },
-      {
-        "type": "h2",
-        "text": "Is 64.9% just a bad model?"
-      },
-      {
-        "type": "p",
-        "md": "That was my first worry. A number that drops from 87 to 65 feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model."
-      },
-      {
-        "type": "h2",
-        "text": "Now raise it the honest way"
-      },
-      {
-        "type": "p",
-        "md": "A floor is not a ceiling. I wanted the highest number I could get that was still genuinely speaker-independent, so I changed the model and left the rules alone: a larger speech encoder (WavLM-large), a learnable weighted sum over all of its layers instead of just the last one (emotion lives in the middle layers, the final layer drifts toward the words), and attentive statistics pooling, which keeps the variation in tone that a plain average throws away."
-      },
-      {
-        "type": "p",
-        "md": "Then a surprise that became my favorite result. Fine-tuning WavLM-large scored 67.6%, which is below a simple frozen-feature baseline. A 300-million-parameter model fine-tuned on 1440 clips overfits, and the speaker-independent folds are exactly where that shows. So I froze the encoder entirely and put all of the learning into the small pooling head. That gave 70.3%. On data this small, restraint won."
-      },
-      {
-        "type": "callout",
-        "title": "The lesson",
-        "md": "The bigger model helped, but only once I stopped fine-tuning it. Frozen features plus a head that knows where to look beat a fully fine-tuned encoder, and it overfits the handful of training speakers far less."
-      },
-      {
-        "type": "h2",
-        "text": "The face has the exact same trap"
-      },
-      {
-        "type": "p",
-        "md": "RAVDESS is audio-visual, so the obvious next step is to add the speaker's face. My first attempt made things worse: fusing the face dropped accuracy well below the audio-only model. The reason turned out to be the same lesson in a new costume."
-      },
-      {
-        "type": "p",
-        "md": "I had encoded each face with a standard image network trained on ImageNet. Those features describe who the person is, not what they are feeling. I tested it directly, the same way I tested the audio:"
-      },
-      {
-        "type": "callout",
-        "title": "The face identity leak",
-        "md": "Face features from ImageNet, predicting emotion from the video alone:\n\nWhen the same faces leak across the split: 89% accuracy.\n\nOn faces the model has never seen: 35%.\n\nA 54-point gap. The features were memorizing faces, not reading expressions."
-      },
-      {
-        "type": "p",
-        "md": "The first fix was the face model. I swapped the ImageNet network for one trained to read expressions instead of identities. Video-alone accuracy on unseen faces jumped from 35% to 58%, and the leak gap shrank by half. Now the face carried real, transferable emotion. So I fused it with the audio the obvious way, one network trained on both streams, and it got worse anyway: well below audio alone."
-      },
-      {
-        "type": "p",
-        "md": "That failure has a name. When you train a single network on two streams, the optimizer leans on whichever is easier to fit on the training data, and here that was still the face, with its little bit of leftover identity. It looked great in training and fell apart on new speakers. The fix is almost embarrassingly simple, and it is the one the older audio-video competitions settled on years ago: keep the two models separate, let each be its best, and just average their predictions. Weight the average so the model leans on whichever it trusts more, pick that weight on held-out validation, and calibrate each model first so a confident wrong guess cannot shout down a quiet right one."
-      },
-      {
-        "type": "callout",
-        "title": "The result",
-        "md": "Audio alone: 70.3%. Face alone: 58%. Calibrated late fusion of the two: 78.8%, speaker-independent.\n\nA real 8.6-point gain from the face, with no leak. The weighted average can never do worse than the better model, because \"trust audio completely\" is always one of the options it can pick."
-      },
-      {
-        "type": "p",
-        "md": "There is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) if you want to try it."
-      },
-      {
-        "type": "figure",
-        "src": "/blog/ravdess-emotion/confusion-matrix.png",
-        "alt": "Row-normalized confusion matrix for the speaker-independent fused model across the eight emotions.",
-        "caption": "Where the fused model is confident and where it hesitates, on speakers it never trained on."
-      },
-      {
-        "type": "h2",
-        "text": "What I actually learned"
-      },
-      {
-        "type": "p",
-        "md": "The rebuild taught me less about emotion and more about measurement. The first version was not dishonest on purpose. It just answered an easier question than the one I thought I was asking. \"Can it recognize emotion in voices and faces it already knows\" is a very different, much easier question than \"can it recognize emotion in a person it has never met.\" The second one is the one that matters, and it is the one worth reporting even when the number is smaller. Measuring the harder question honestly is the part I would want a reviewer to see."
-      }
-    ]
-  },
+      "title": "The 87% that was recognizing actors, not emotions",
+      "slug": "speaker-leakage-ravdess",
+      "description": "A speech-emotion model that scored 87% was mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the one number I will stand behind: 78.8%.",
+      "date": "2025-11-01",
+      "tags": [
+        "Speech",
+        "Emotion Recognition",
+        "Evaluation",
+        "WavLM",
+        "Multimodal"
+      ],
+      "readingMinutes": 14,
+      "body": [
+        {
+          "type": "h2",
+          "text": "An 87% that was answering an easier question"
+        },
+        {
+          "type": "p",
+          "md": "My old emotion-recognition model reported about 87% accuracy on RAVDESS, and I was proud of it. Then I tried to reproduce that number carefully and realized it was grading the model on the same 24 actors it had trained on. It was not reading emotion. It was recognizing the actors."
+        },
+        {
+          "type": "p",
+          "md": "This is the honest rebuild: a speaker-independent pipeline that fuses voice and face, with every number measured on people the model has never heard or seen. The [code is on GitHub](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) and there is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) you can talk to. The one number I will defend by the end of this post is 78.8%, and I will show you exactly why it is worth more than the 87% was."
+        },
+        {
+          "type": "h2",
+          "text": "The whole system in one picture"
+        },
+        {
+          "type": "p",
+          "md": "Before any of the details, here is the entire system. Two models, trained separately, that only meet at the very end when their probabilities are combined. Keep this picture in mind; every section below zooms into one piece of it."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/system-pipeline-overview.svg",
+          "alt": "Two lanes that merge: an emerald audio path (waveform, frozen WavLM-large, layer weighting, attentive pooling, MLP head) and a gray face path (frames, expression features, classifier), both producing class probabilities that feed a temperature-scaled weighted average into eight final emotion probabilities.",
+          "caption": "The full pipeline. The audio branch carries most of the signal; the face is a separate, weaker model that is added only at the probabilities."
+        },
+        {
+          "type": "p",
+          "md": "The reason it is built as two separate models, rather than one network that swallows both, is the most interesting engineering decision in the project, and I will get to why the obvious alternative fails."
+        },
+        {
+          "type": "h2",
+          "text": "Why RAVDESS is a trap: 24 actors, two sentences"
+        },
+        {
+          "type": "p",
+          "md": "RAVDESS is a standard benchmark for emotion from speech. 24 professional actors each speak the same two sentences, \"Kids are talking by the door\" and \"Dogs are sitting by the door\", in eight emotions: neutral, calm, happy, sad, angry, fearful, disgust, surprised. That is 1440 short clips in total."
+        },
+        {
+          "type": "p",
+          "md": "Read that again. Twenty-four people, two sentences. That tiny, repetitive structure is what makes it a trap. There is so little variety that a model can do well by memorizing voices instead of learning emotion, and the standard way people split the data lets it do exactly that."
+        },
+        {
+          "type": "h2",
+          "text": "Split by clip and you measure the wrong thing"
+        },
+        {
+          "type": "p",
+          "md": "If you shuffle all 1440 clips and take a random fifth as your test set, the same actor saying the same sentence in the same emotion ends up on both sides, separated only by which of the two takes it was. The model never has to learn what anger sounds like in general. It only has to remember what actor 14 sounds like angry, because it already met actor 14 being angry in training."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/speaker-leakage-split.svg",
+          "alt": "Top panel, a random split where actor 14 appears in both the train and test boxes, connected by a red arrow labeled same voice both sides, scoring ~78% inflated. Bottom panel, an actor-disjoint split with actors 1-20 in train and 21-24 in test, no actor crossing the divider, scoring 64.9% honest.",
+          "caption": "The same actor on both sides of a random split is the leak. Splitting by actor closes it, and the score drops 13 points."
+        },
+        {
+          "type": "p",
+          "md": "I did not want to argue about this in the abstract, so I ran a controlled experiment: the same model, the same training code, the same everything, changing only the split."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/leak-vs-honest.png",
+          "alt": "A bar chart comparing the same audio model: about 78% on a random split versus 64.9% on a speaker-independent split.",
+          "caption": "Thirteen points from nothing but the partition. The high number is not a better model, only an easier test."
+        },
+        {
+          "type": "callout",
+          "title": "The leak in one line",
+          "md": "A random split lets the model memorize voices, then grades it on those same voices. The score goes up, but it is measuring speaker recognition, not emotion that transfers to a person it has never heard. The 90%-plus numbers you see quoted for RAVDESS are almost all this."
+        },
+        {
+          "type": "h2",
+          "text": "Proving the split is clean, mechanically"
+        },
+        {
+          "type": "p",
+          "md": "The fix is to split by actor. I use six-fold cross-validation where each fold tests on four actors who appear in no training or validation data, balanced by gender, and four more actors are held out of each training set for early stopping. No actor is ever on two sides of a fold."
+        },
+        {
+          "type": "p",
+          "md": "Because the entire result rests on this, I did not want to trust myself to get it right by hand. A unit test fails the build if any actor leaks across any fold:"
+        },
+        {
+          "type": "code",
+          "code": "def test_no_actor_leaks_across_splits():\n    for f in make_speaker_independent_folds(Config()):\n        assert not (set(f.train_actors) & set(f.test_actors))\n        assert not (set(f.val_actors) & set(f.test_actors))\n        assert set(f.train_actors | f.val_actors | f.test_actors) == set(range(1, 25))"
+        },
+        {
+          "type": "h2",
+          "text": "Is 64.9% just a bad model?"
+        },
+        {
+          "type": "p",
+          "md": "That was my first worry. A number that falls from 87 to 65 feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% with the same encoder sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model. Now the job is to raise that floor without cheating."
+        },
+        {
+          "type": "h2",
+          "text": "The audio model: where emotion actually lives"
+        },
+        {
+          "type": "p",
+          "md": "The audio branch is a self-supervised speech encoder (WavLM-large) with a small head on top. Two choices in that head matter specifically for emotion, and they are worth understanding because they are where most of the honest gain comes from."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/audio-encoder-architecture.svg",
+          "alt": "A frozen WavLM-large encoder shown as 25 stacked layer bars with the middle bars highlighted and labeled emotion lives here while the top is labeled the last layer drifts toward the words. All 25 outputs feed a learnable softmax layer-weighting box, then attentive statistics pooling that keeps a weighted mean and a weighted std, then an MLP head. A legend marks only the layer weights, pooling, and head as trainable; the encoder is frozen.",
+          "caption": "The encoder stays frozen. All the learning happens in a small head that decides which layers to listen to and how to pool them."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Learnable layer weighting. Instead of using only the encoder's final layer, the head learns a softmax-weighted sum over all 25 layers. Emotion is carried in the middle layers; the final layer has drifted toward the actual words being spoken, which is what the encoder was pretrained to predict.",
+            "Attentive statistics pooling. The head pools both the attention-weighted mean and the standard deviation over time. Affect lives in how much the tone varies, and a plain average throws that variation away."
+          ]
+        },
+        {
+          "type": "p",
+          "md": "The weighted-layer sum is a handful of lines, and the learned weights end up favoring the middle of the network, exactly as the intuition predicts:"
+        },
+        {
+          "type": "code",
+          "code": "stack = torch.stack(out.hidden_states, dim=0)   # (25, B, T, H)\nw = torch.softmax(self.layer_weights, dim=0)    # one learnable weight per layer\nhidden = (w.view(-1, 1, 1, 1) * stack).sum(0)   # weighted blend of all layers"
+        },
+        {
+          "type": "h2",
+          "text": "When fine-tuning loses: frozen features win on small data"
+        },
+        {
+          "type": "p",
+          "md": "Here is the result that surprised me most. The obvious move is to fine-tune the big encoder on the task. I tried it, and WavLM-large fine-tuned scored 67.6%, which is below a simple frozen-feature baseline. A 300-million-parameter model fine-tuned on 1440 clips overfits, and the speaker-independent folds are exactly where that overfitting shows. So I froze the encoder entirely and put all of the learning into the small head described above. That gave 70.3%."
+        },
+        {
+          "type": "callout",
+          "title": "The lesson",
+          "md": "The bigger model helped, but only once I stopped fine-tuning it. On data this small, freezing the encoder and training a head that knows where to look beats a fully fine-tuned model, and it overfits the handful of training speakers far less. Restraint won."
+        },
+        {
+          "type": "h2",
+          "text": "The face has the same trap, in a new costume"
+        },
+        {
+          "type": "p",
+          "md": "RAVDESS is audio-visual, so the natural next step is to add the speaker's face. My first attempt made things worse, and the reason was the same lesson wearing a different costume. I had encoded each face with a standard image network trained on ImageNet, and I tested it the same way I tested the audio."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/face-identity-vs-expression-leak.svg",
+          "alt": "Two grouped bars on an accuracy axis. ImageNet features score 89% when faces leak across the split but only 35% on new faces, a 54-point drop labeled it memorized identities, with a small face icon labeled encodes WHO. Facial-expression ViT features score 90% leaky and 58% on new faces, half the leak, with a face icon labeled encodes WHAT.",
+          "caption": "Same test as the audio. ImageNet face features memorize who the person is and collapse on new faces; expression features transfer."
+        },
+        {
+          "type": "p",
+          "md": "The ImageNet features scored 89% when the same faces leaked across the split but only 35% on faces the model had never seen. They were memorizing identity, not reading expressions, which is the visual version of the speaker leak. Swapping to a model trained on facial expressions cut the gap in half: 58% on new faces. Now the face carried something real and transferable, worth fusing."
+        },
+        {
+          "type": "h2",
+          "text": "Why the obvious fusion fails, and the one that works"
+        },
+        {
+          "type": "p",
+          "md": "With a 70% audio model and a 58% face model, fusing them should be easy. It is not. The obvious approach, one network trained on both streams at once, scored 43 to 47%, below either model alone. That is a known failure mode called modality competition: with so few clips and identities, the optimizer leans on whichever stream is easier to fit on the training data, which here was the face with its leftover identity signal, and the joint model transfers worse than just trusting the audio."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/joint-vs-late-fusion.svg",
+          "alt": "Left, naive joint fusion: audio and face features flow into one learned fusion head, the optimizer leans on the easier stream, and it collapses to 43-47% from modality competition. Right, calibrated late fusion: separate audio and face models each produce probabilities, each temperature-scaled on validation, then a weighted average, reaching 78.8%, with a w slider noting that w=1 keeps audio-only in the grid so the blend can never do worse than audio.",
+          "caption": "Training the two streams together lets the weaker one drag the model down. Combining only their probabilities, with a validation-tuned weight, cannot."
+        },
+        {
+          "type": "p",
+          "md": "The fix is decision-level fusion, the rule that won the older audio-video emotion challenges for exactly this reason. Keep the two models separate, let each be its best, and combine only their class probabilities. Two details make the average safe instead of harmful: calibrate each model with temperature scaling so a confidently-wrong face cannot shout down a quiet-but-right voice, and choose the mixing weight on held-out validation, where audio-only (weight one) is always one of the options."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/calibrated-late-fusion-detail.svg",
+          "alt": "Audio logits and face logits each divided by a temperature fit on validation and floored at 1.0 so it can only soften, shown as an overconfident bar distribution softening. The two are combined as w times audio plus (1 minus w) times face, with the weight swept on validation only and w=1 marked as the audio floor. A note states temperatures and weight never see the test actors.",
+          "caption": "The temperatures and the weight are fit per fold on the training and validation actors only, never on the test actors, so the gain cannot smuggle the leak back in."
+        },
+        {
+          "type": "p",
+          "md": "Choosing that weight on validation, never on the test set, is what separates a real gain from a fake one. Because weight one means audio only, the floor is guaranteed: late fusion can never score below the better single model."
+        },
+        {
+          "type": "h2",
+          "text": "The result, per emotion"
+        },
+        {
+          "type": "p",
+          "md": "Put the whole arc on one axis. Every number here is speaker-independent, the mean across six actor-disjoint folds."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/model-comparison.svg",
+          "alt": "A horizontal bar chart of speaker-independent accuracy: calibrated late fusion 78.8%, WavLM-large audio 70.3%, facial-expression visual 58.1%, HuBERT-base audio 64.9%, and a separate red bar for the leaky random split at about 78% marked as memorizing speakers.",
+          "caption": "The honest progression in emerald, with the leaky random-split number kept in red and off to the side so it is never mistaken for progress."
+        },
+        {
+          "type": "p",
+          "md": "Calibrated late fusion reaches 78.8%, a real 8.6 points over the 70.3% audio model, with no leak. The face is not magic; it is a modest, honest lift that the simple combination rule is able to keep. Per emotion, the model is confident where the voice is unambiguous and hesitant where people hesitate too."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/confusion-matrix.png",
+          "alt": "A row-normalized confusion matrix for the fused speaker-independent model across the eight emotions, brightest on the diagonal, with the most confusion between calm and neutral and between sad and fearful.",
+          "caption": "Happy, angry and calm lead (F1 around .87, .84, .84). Sad is the hardest at .63, mostly confused with fearful, and calm leaks into neutral. These are the pairs people also mix up from audio alone."
+        },
+        {
+          "type": "h2",
+          "text": "What it does not do"
+        },
+        {
+          "type": "p",
+          "md": "A model is only as honest as its limitations, so here they are plainly:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "1440 clips and only 24 actors. The speaker-independent numbers carry real error bars (around plus or minus 4 to 6 points across folds), and no amount of cleverness changes that the dataset is small.",
+            "Acted, frontal, clean. RAVDESS emotions are performed in a studio. These numbers do not transfer directly to spontaneous, in-the-wild speech and faces.",
+            "One corpus. Cross-dataset generalization is a separate, harder question I did not test here.",
+            "The hosted demo runs the audio branch only. The face and fusion pipeline needs video frames and more compute than a free CPU Space, so the live demo predicts from voice alone at 70.3%."
+          ]
+        },
+        {
+          "type": "h2",
+          "text": "What the rebuild was really about"
+        },
+        {
+          "type": "p",
+          "md": "In the end this taught me less about emotion and more about measurement. The first version was not dishonest on purpose; it just answered an easier question than the one I thought I was asking. \"Can it read emotion in actors it already knows\" is a very different, much easier question than \"a person it has never met.\" The second one is the one that matters, and it is the one worth reporting even when the number is smaller."
+        },
+        {
+          "type": "p",
+          "md": "So the number I stand behind is 78.8%, speaker-independent, with everything above to back it up. You can try the audio model yourself just below: record or upload a few seconds of speech and watch it predict, on a voice it has never heard."
+        }
+      ]
+    },
   {
     "title": "Measuring your own writing voice, one function word at a time",
     "slug": "measuring-a-writing-voice",
