@@ -4,6 +4,7 @@ import { ZaylonShowcase } from "@/components/sections/zaylon-showcase";
 import { Projects } from "@/components/sections/projects";
 import { Experience } from "@/components/sections/experience";
 import { Skills } from "@/components/sections/skills";
+import { Writing } from "@/components/sections/writing";
 import { About } from "@/components/sections/about";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
@@ -112,6 +113,8 @@ export default function Home() {
         <Experience />
         <SectionDivider />
         <Skills />
+        <SectionDivider />
+        <Writing />
         <SectionDivider />
         <About />
         <SectionDivider />

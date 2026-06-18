@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import {
-  BLOG_POSTS,
-  getPostBySlug,
-  type ContentBlock,
-  type InlineNode,
-} from "@/data/blog";
+import { BLOG_POSTS, getPostBySlug, type ContentBlock } from "@/data/blog";
 import { FadeUp, BlurIn } from "@/components/motion-wrapper";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
@@ -46,35 +42,48 @@ function formatDate(iso: string): string {
   });
 }
 
-function renderInline(nodes: InlineNode[]) {
-  return nodes.map((node, i) => {
-    if (typeof node === "string") {
-      return <span key={i}>{node}</span>;
+// Render a small markdown subset: [text](url) links and `inline code`.
+function renderMd(md: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  const re = /\[([^\]]+)\]\(([^)]+)\)|`([^`]+)`/g;
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(md)) !== null) {
+    if (m.index > last) {
+      nodes.push(<span key={key++}>{md.slice(last, m.index)}</span>);
     }
-    if ("href" in node) {
-      const external = node.href.startsWith("http");
-      return (
+    if (m[1] !== undefined) {
+      const href = m[2];
+      const external = href.startsWith("http");
+      nodes.push(
         <a
-          key={i}
-          href={node.href}
+          key={key++}
+          href={href}
           className="link-underline text-accent hover:text-accent-muted transition-colors"
           {...(external
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
         >
-          {node.text}
+          {m[1]}
         </a>
       );
+    } else {
+      nodes.push(
+        <code
+          key={key++}
+          className="font-mono text-sm bg-muted text-foreground px-1.5 py-0.5 rounded"
+        >
+          {m[3]}
+        </code>
+      );
     }
-    return (
-      <code
-        key={i}
-        className="font-mono text-sm bg-muted text-foreground px-1.5 py-0.5 rounded"
-      >
-        {node.code}
-      </code>
-    );
-  });
+    last = re.lastIndex;
+  }
+  if (last < md.length) {
+    nodes.push(<span key={key++}>{md.slice(last)}</span>);
+  }
+  return nodes;
 }
 
 function Block({ block }: { block: ContentBlock }) {
@@ -86,7 +95,7 @@ function Block({ block }: { block: ContentBlock }) {
     case "p":
       return (
         <p className="text-muted-foreground leading-relaxed mt-5">
-          {renderInline(block.content)}
+          {renderMd(block.md)}
         </p>
       );
     case "code":
@@ -106,10 +115,39 @@ function Block({ block }: { block: ContentBlock }) {
               className="flex items-start gap-2.5 text-muted-foreground leading-relaxed"
             >
               <span className="size-1.5 rounded-full bg-accent shrink-0 mt-2.5" />
-              <span>{renderInline(item)}</span>
+              <span>{renderMd(item)}</span>
             </li>
           ))}
         </ul>
+      );
+    case "figure":
+      return (
+        <figure className="mt-8">
+          {/* Diagrams are self-contained SVGs in /public; a plain img keeps
+              them portable and avoids the loader for vector art. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={block.src}
+            alt={block.alt}
+            className="w-full rounded-lg border border-border bg-card p-4 md:p-6"
+          />
+          {block.caption ? (
+            <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
+              {block.caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
+    case "callout":
+      return (
+        <aside className="mt-6 rounded-lg border border-accent/30 bg-accent/5 p-5">
+          {block.title ? (
+            <p className="text-sm font-semibold text-accent">{block.title}</p>
+          ) : null}
+          <p className="text-sm text-muted-foreground leading-relaxed mt-1.5">
+            {renderMd(block.md)}
+          </p>
+        </aside>
       );
   }
 }
