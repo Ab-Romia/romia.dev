@@ -51,7 +51,7 @@
 
 % -------------------- SUMMARY --------------------
 \section{Summary}
-Software engineer with production experience across the full stack: multi-agent AI systems, FastAPI and Spring Boot backends, event-driven microservices with Kafka, and React/Next.js frontends. Co-founded Zaylon AI and shipped a multi-tenant commerce platform integrating 6 e-commerce platforms with tri-lingual NLP serving real users.
+AI Engineer building production multi-agent and RAG systems, with full-stack breadth behind them: FastAPI and Spring Boot backends, event-driven microservices with Kafka, and React/Next.js frontends. Co-founded Zaylon AI and built its conversational commerce platform on a LangGraph tool-calling agent, integrating 6 e-commerce platforms with tri-lingual NLP.
 
 % -------------------- EXPERIENCE --------------------
 \section{Experience}
@@ -61,10 +61,10 @@ Software engineer with production experience across the full stack: multi-agent 
 \begin{itemize}
 \item Led the engineering team at Zaylon AI; own architecture, code reviews, technical roadmap, and DevOps.
 \item Built full-stack platform: \textbf{Next.js}/React dashboard, \textbf{FastAPI} Python backend, \textbf{Docker}, \textbf{GitHub Actions} CI/CD.
-\item Designed multi-agent \textbf{LangGraph} orchestration routing conversations to 3 specialized agents with 10 scoped AI tools.
+\item Built the conversational AI in \textbf{LangGraph} as a single tool-calling agent with $\sim$30 scoped tools (consolidated from an earlier multi-agent supervisor for reliability).
 \item Integrated \textbf{6 e-commerce platforms} via \textbf{REST APIs} with webhook-driven sync, idempotent operations, and retry logic.
 \item Engineered \textbf{DialectBridge}: tri-lingual NLP with auto dialect detection for English, Egyptian Arabic, and Franco-Arabic.
-\item Built \textbf{PostgreSQL}/\textbf{Redis} data layer with multi-tenant isolation, row-level security, and RFM segmentation analytics.
+\item Hardened the backend: \textbf{argon2id} API-key auth, row-level multi-tenant isolation across $\sim$80 tables, and a Postgres saga engine with compensation for checkout.
 \end{itemize}
 
 \vspace{4pt}
@@ -96,11 +96,11 @@ Software engineer with production experience across the full stack: multi-agent 
 % -------------------- SELECTED PROJECTS --------------------
 \section{Selected Projects \hfill \normalfont\small\color{secondarycolor}\faGlobe\ \href{https://romia.dev}{\textbf{Case studies and live demos at romia.dev}}}
 
-\textbf{Talos: AI-Augmented Team Workspace} \hfill \textit{Graduation Project, Ongoing}
+\textbf{Talos: Multi-User RAG Document Platform} \hfill \textit{Graduation Project (Team), Ongoing}
 \begin{itemize}
-\item Leading the team and architecture on Talos: AI agent for team onboarding and meeting call summarization.
-\item Built \textbf{MCP} integrations and advanced \textbf{RAG} with \textbf{PostgreSQL/pgvector} hybrid search over org docs and call transcripts.
-\item Containerized \textbf{FastAPI} microservices with \textbf{Docker}; \textbf{GitHub Actions} CI/CD for automated testing and deployment.
+\item Owned the ingestion and retrieval core of a \textbf{FastAPI} platform for chatting with your own documents, with cited answers streamed over \textbf{SSE}.
+\item Built async ingestion (\textbf{ARQ} worker, \textbf{MinIO}, \textbf{Milvus}) with a race-safe processing state machine and \textbf{Google Drive} import.
+\item Two-stage retrieval: dense + \textbf{BM25} hybrid with reciprocal rank fusion, then cross-encoder reranking; built a statistical evaluation harness.
 \end{itemize}
 
 \vspace{3pt}
@@ -132,11 +132,11 @@ B.Sc. in Computer \& Communications Engineering (AI Concentration) \quad $\cdot$
 % -------------------- TECHNICAL SKILLS --------------------
 \section{Technical Skills}
 \begin{tabular}{@{}p{0.12\textwidth}p{0.87\textwidth}@{}}
-\textbf{Languages} & Python, Java, Go, JavaScript/TypeScript, SQL, C/C++ \\
+\textbf{Languages} & Python, Java, JavaScript/TypeScript, SQL, C/C++ \\
 \textbf{Backend} & Spring Boot, FastAPI, Microservices, Kafka, REST APIs, OOP, Design Patterns, Webhooks, PostgreSQL, Redis \\
 \textbf{Frontend} & React, Next.js, HTML5, CSS3, Tailwind CSS, Responsive Design \\
 \textbf{AI / ML} & LangGraph, LangChain, PyTorch, RAG, Vector DBs (ChromaDB, pgvector), Computer Vision, NLP \\
-\textbf{DevOps} & Docker, Git, GitHub Actions, CI/CD, Google Cloud, AWS, Linux, Bash \\
+\textbf{DevOps} & Docker, Git, GitHub Actions, CI/CD, Railway, Linux, Bash \\
 \end{tabular}
 
 % -------------------- BOTTOM --------------------

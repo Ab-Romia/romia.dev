@@ -14,7 +14,7 @@ export const PERSONAL = {
 
 export const HERO_SIGNALS = [
   { label: "Co-Founder", detail: "Zaylon AI" },
-  { label: "B.Sc. Computer Engineering", detail: "AI Minor" },
+  { label: "B.Sc. Computer & Communications Engineering", detail: "AI concentration" },
 ] as const;
 
 export const NAV_LINKS = [
@@ -32,16 +32,16 @@ export const ZAYLON_SHOWCASE = {
   heading: "Zaylon AI",
   subtitle: "Conversational commerce for MENA merchants, on WhatsApp and Instagram",
   description:
-    "Zaylon turns WhatsApp and Instagram into sales channels for MENA merchants. Customers browse products, ask questions in their own dialect, and check out inside the chat. A supervisor agent reads each message and hands it to a Sales, Support, or Checkout agent, and each one can only touch the tools its job needs.",
+    "Zaylon turns WhatsApp and Instagram into full sales channels for MENA merchants. Customers browse, ask in their own dialect, and check out without ever leaving the chat. It reads Egyptian Arabic and Franco-Arabic the way a local would, matches a product from a photo, recovers carts on its own, and carries someone from the first question to a paid order. We built the dialect engine and the conversational commerce layer in-house.",
   url: "https://zaylon.ai",
   highlights: [
-    { label: "AI Tools", detail: "Search, Cart, Orders, CRM & more", value: 10 },
     { label: "Platforms", detail: "Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho", value: 6 },
-    { label: "Channels", detail: "WhatsApp, Instagram, Messenger", value: 3 },
-    { label: "Languages", detail: "English, Egyptian Arabic, Franco-Arabic", value: 3 },
+    { label: "Channels", detail: "WhatsApp, Instagram, Messenger, Telegram, TikTok", value: 5 },
+    { label: "Payments", detail: "Stripe, Paymob, Fawry", value: 3 },
+    { label: "Dialects", detail: "English, Egyptian Arabic, Franco-Arabic", value: 3 },
   ],
   features: [
-    "A supervisor agent routes each conversation to a Sales, Support, or Checkout agent. Each one can only reach the tools its job needs, so a sales agent never touches a payment.",
+    "Handles the whole conversation end to end: answers product questions, builds the cart, and closes the order, all inside the same chat and without a human stepping in.",
     "DialectBridge detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers back in the same dialect.",
     "Customers can send a photo of a product, and Zaylon matches it against the merchant's catalog.",
     "Catalog and orders stay in sync across Shopify, Salla, WooCommerce, Odoo, YouCan, and Zoho.",
@@ -108,26 +108,26 @@ export const PROJECTS: Project[] = [
     slug: "zaylon-ai",
     categories: ["AI/ML", "Backend", "Full-Stack"],
     description:
-      "A multi-agent system on LangGraph that sells over WhatsApp and Instagram for MENA merchants, carrying a customer from product search to a confirmed payment.",
-    tags: ["LangGraph", "Python", "Multi-Agent", "Shopify", "Next.js"],
+      "An AI that sells over WhatsApp and Instagram for MENA merchants, carrying a customer from the first product question to a confirmed payment, all inside the chat.",
+    tags: ["LangGraph", "Python", "FastAPI", "Shopify", "Next.js"],
     url: "https://zaylon.ai",
     status: "Production",
     badge: "Co-Founded",
     featured: true,
-    impact: "Supervisor multi-agent system across 6 commerce platforms, 3 dialects, and 3 payment providers",
+    impact: "LangGraph tool-calling agent across 6 commerce platforms, 3 dialects, and 3 payment providers",
     caseStudy: {
       problem:
         "MENA shoppers do a lot of their buying over WhatsApp and Instagram, but merchants can't sit in those chats around the clock. Off-the-shelf chatbots fall apart on Egyptian Arabic and Franco-Arabic, and they can't carry someone from a question all the way to a paid order.",
       approach:
-        "I built a supervisor architecture in LangGraph. One router reads each incoming message and hands it to the agent that should own it, Sales, Support, or Checkout, and each agent only holds the tools for its own job. Dialect detection runs first, so the customer is answered in the language they wrote in, and the same flow carries a conversation from the first product question to a confirmed payment.",
+        "I built it in LangGraph as one tool-calling agent with about 30 scoped tools spanning sales, support, and checkout. It began as a multi-agent supervisor that routed to separate Sales, Support, and Checkout agents; I consolidated it into a single agent that proved more reliable and easier to reason about. Dialect detection runs first, so the customer is answered in the language they wrote in, and the same flow carries a conversation from the first product question to a confirmed payment.",
       decisions: [
         {
           title: "LangGraph over plain LangChain",
           reasoning: "A state machine lets me pin down exactly which transitions are legal between browsing, carting, and checkout. Plain chains drift, and in a flow that ends in a payment I can't afford drift.",
         },
         {
-          title: "Supervisor pattern over flat multi-agent",
-          reasoning: "Giving each agent only its own tools means a sales agent can never reach the payment tools, which also rules out a whole class of wrong actions. One flat agent holding every tool is a single bad generation away from doing real damage.",
+          title: "Consolidated to a single tool-calling agent",
+          reasoning: "It started as a multi-agent supervisor routing to separate agents. A single agent with scoped tools turned out to be more reliable and far easier to reason about: fewer handoffs to get wrong and one place to trace a conversation, while tool-level scoping still limits what any single step can touch.",
         },
         {
           title: "Redis message accumulation",
@@ -139,30 +139,34 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    title: "AI Collaborative Workspace",
-    slug: "ai-collaborative-workspace",
-    categories: ["AI/ML", "Backend", "Full-Stack"],
+    title: "Talos",
+    slug: "talos",
+    categories: ["AI/ML", "Backend"],
     description:
-      "Graduation project: a team workspace with an assistant that answers from the org's own documents, files, and databases instead of general knowledge, and cites where each answer came from.",
-    tags: ["FastAPI", "RAG", "pgvector", "React", "PostgreSQL"],
+      "Graduation project (team): a multi-user RAG platform for chatting with your own uploaded documents, with answers streamed back and cited inline. I owned the ingestion and retrieval core.",
+    tags: ["FastAPI", "RAG", "Milvus", "MinIO", "Redis/ARQ"],
     status: "Ongoing",
     featured: false,
     caseStudy: {
       problem:
-        "A team's real knowledge is spread across documents, databases, and chat history, so a general chatbot is useless for it. People need answers that come from their own material, with a pointer to the source.",
+        "A team's real knowledge lives in its own documents, so a general chatbot is useless for it. People need answers grounded in their own files, with a pointer to where each answer came from.",
       approach:
-        "A RAG pipeline over PostgreSQL/pgvector pulls answers straight from the org's documents, files, and databases and cites the source. The backend is split into FastAPI services so each piece scales on its own.",
+        "Talos is a team project; I owned the ingestion and retrieval core. Files upload to MinIO, and an async ARQ worker ingests them through a race-safe processing state machine. Retrieval runs in two stages: a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, streamed back over SSE with inline citations. I also built Google Drive import and a statistical evaluation harness to measure retrieval quality.",
       decisions: [
         {
-          title: "pgvector over a dedicated vector DB",
-          reasoning: "Keeping the vectors in the same Postgres I already run means one database to deploy, back up, and reason about, instead of operating a separate vector store alongside it.",
+          title: "Milvus for vector search, MinIO for files",
+          reasoning: "A dedicated vector store handled the hybrid dense and sparse retrieval the project needed at scale, while MinIO held the raw uploads separately so storage and search could each be reasoned about on their own.",
         },
         {
-          title: "FastAPI microservices",
-          reasoning: "Auth, documents, AI, and collaboration are separate services, so a flood of AI queries doesn't slow down document uploads.",
+          title: "Async ingestion with a race-safe state machine",
+          reasoning: "Uploads process in the background through an ARQ worker. A processing state machine keeps concurrent uploads and retries from corrupting a document's state, so a half-ingested file can never be queried as if it were ready.",
+        },
+        {
+          title: "Two-stage retrieval with reranking",
+          reasoning: "Hybrid retrieval with reciprocal rank fusion casts a wide net, then a cross-encoder reranker sharpens the top results before they reach the model. The evaluation harness is what told me the reranker was worth its latency.",
         },
       ],
-      results: "In progress: an assistant that answers from a team's own knowledge base and shows its sources.",
+      results: "In progress: teams chat with their own documents and get answers streamed back with inline citations, with a statistical harness measuring retrieval quality.",
     },
   },
   {
@@ -363,11 +367,11 @@ export const EXPERIENCE = [
     role: "Software Engineer & Co-Founder",
     url: "https://zaylon.ai",
     period: "May 2025 – Present",
-    description: "Co-founded and built the full-stack platform: Next.js merchant dashboard, FastAPI backend with PostgreSQL/Redis, Docker deployment, and multi-agent AI system serving MENA merchants across WhatsApp, Instagram, and web.",
+    description: "Co-founded and built the full-stack platform: Next.js merchant dashboard, FastAPI backend with PostgreSQL/Redis, Docker deployment, and a LangGraph tool-calling agent serving MENA merchants across WhatsApp, Instagram, and web.",
     highlights: [
       "Built full-stack platform: Next.js/React merchant dashboard with real-time inbox, analytics, and A/B testing on top of a FastAPI Python backend with Docker containerized deployment",
       "Integrated 6 e-commerce platforms (Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho) via REST APIs with webhook-driven sync, idempotent operations, and retry logic",
-      "Built a multi-agent LangGraph system where a supervisor routes each conversation to one of 3 agents (Sales, Support, Checkout), each scoped to only the AI tools its job needs",
+      "Built the conversational AI in LangGraph as a single tool-calling agent with about 30 scoped tools across sales, support, and checkout, consolidated from an earlier multi-agent supervisor for reliability and easier reasoning",
       "Built DialectBridge, an NLP pipeline that detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers in the same dialect",
       "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring, running across WhatsApp and Instagram",
       "Batched rapid-fire WhatsApp messages in Redis into a single turn before invoking the agent, so it reads the whole thought at once instead of replying to each fragment",
@@ -421,15 +425,15 @@ export const SKILLS = {
     "ChromaDB", "pgvector", "NLP", "Computer Vision",
   ],
   "DevOps & Cloud": [
-    "Docker", "Git", "GitHub Actions", "AWS",
-    "Google Cloud", "Linux", "Bash",
+    "Docker", "Git", "GitHub Actions", "Railway",
+    "Linux", "Bash",
   ],
-  Languages: ["Python", "Java", "Go", "SQL", "TypeScript", "C/C++"],
+  Languages: ["Python", "Java", "SQL", "TypeScript", "C/C++"],
 } as const;
 
 export const EDUCATION = {
   university: "Alexandria University, Faculty of Engineering",
-  degree: "B.Sc. in Computer Engineering, AI Minor",
+  degree: "B.Sc. in Computer and Communications Engineering, AI concentration",
   gpa: "3.73 / 4.0",
 } as const;
 
@@ -454,6 +458,6 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I co-founded Zaylon AI and wrote most of it: the Next.js dashboard, the FastAPI backend, and the LangGraph agents that sell over WhatsApp and Instagram. I'm comfortable across the stack and lean toward backend and AI. B.Sc. in Computer Engineering with an AI minor from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
+  bio: "I co-founded Zaylon AI and wrote most of it: the Next.js dashboard, the FastAPI backend, and the LangGraph agent that sells over WhatsApp and Instagram. I'm comfortable across the stack and lean toward backend and AI. B.Sc. in Computer and Communications Engineering with an AI concentration from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
 } as const;
 

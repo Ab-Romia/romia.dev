@@ -223,15 +223,12 @@ function DashboardMockup() {
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
         </div>
-        <a
-          href="https://dashboard.zaylon.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[10px] font-mono ml-2 hover:underline"
+        <span
+          className="text-[10px] font-mono ml-2"
           style={{ color: "var(--z-text-muted)" }}
         >
           dashboard.zaylon.ai
-        </a>
+        </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-0">
@@ -365,6 +362,15 @@ function DashboardMockup() {
           </div>
         </div>
       </div>
+      <p
+        className="text-[10px] font-mono px-4 py-2 text-center"
+        style={{
+          color: "var(--z-text-muted)",
+          borderTop: "1px solid rgba(45, 106, 94, 0.25)",
+        }}
+      >
+        Representative illustration, not measured results.
+      </p>
     </div>
   );
 }
@@ -468,19 +474,6 @@ export default function ZaylonCaseStudyPage() {
                     Visit zaylon.ai
                     <ArrowUpRight className="size-4" />
                   </a>
-                  <a
-                    href="https://dashboard.zaylon.ai/demo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-3 text-sm font-medium rounded-xl transition-colors"
-                    style={{
-                      border: "1px solid rgba(58, 138, 122, 0.4)",
-                      color: "var(--z-tertiary)",
-                    }}
-                  >
-                    Try the dashboard demo
-                    <ArrowUpRight className="size-4" />
-                  </a>
                 </div>
               </FadeUp>
             </div>
@@ -533,7 +526,7 @@ export default function ZaylonCaseStudyPage() {
             </FadeUp>
           </section>
 
-          {/* ───── How it works — 4 step flow ───── */}
+          {/* How it works: 4 step flow */}
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>How it works</SectionEyebrow>
@@ -957,7 +950,7 @@ export default function ZaylonCaseStudyPage() {
               </SectionTitle>
               <SectionLead>
                 I co-founded Zaylon and built the entire backend end to end. I designed the
-                conversational architecture, shipped the multi-agent AI system, wrote the
+                conversational architecture, shipped the LangGraph agent that runs it, wrote the
                 FastAPI application and its database layer, and own every integration: the six
                 e-commerce platforms, the three payment providers, the five messaging channels,
                 and the shipping partners.
@@ -967,7 +960,7 @@ export default function ZaylonCaseStudyPage() {
             <FadeUp delay={0.1}>
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
-                  "Conversational AI architecture and the multi-agent system",
+                  "Conversational AI architecture and the LangGraph agent",
                   "FastAPI application, services, and API surface",
                   "Database schema, migrations, and multi-tenant isolation",
                   "Every e-commerce, payments, messaging, and shipping integration",
@@ -1051,7 +1044,7 @@ export default function ZaylonCaseStudyPage() {
                     See it for yourself
                   </h2>
                   <p className="text-sm mt-2" style={{ color: "var(--z-text-muted)" }}>
-                    The demo dashboard is open. No signup, no credit card.
+                    Zaylon is live. Take a look at the site.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -1065,19 +1058,6 @@ export default function ZaylonCaseStudyPage() {
                     }}
                   >
                     Visit zaylon.ai
-                    <ArrowUpRight className="size-4" />
-                  </a>
-                  <a
-                    href="https://dashboard.zaylon.ai/demo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-xl"
-                    style={{
-                      border: "1px solid rgba(58, 138, 122, 0.4)",
-                      color: "var(--z-tertiary)",
-                    }}
-                  >
-                    Dashboard demo
                     <ArrowUpRight className="size-4" />
                   </a>
                 </div>

@@ -43,3 +43,14 @@ next-env.d.ts
 *.log
 *.out
 img.jpeg
+
+# working / prep files (never commit)
+FIX-PROMPT.md
+ALIGNMENT-PROMPT.md
+# root PDFs (the public CV lives at public/resume.pdf)
+/*.pdf
+compass_artifact_*.md
+unnamed.jpg
+
+# editor
+.idea/
