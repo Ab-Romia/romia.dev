@@ -949,11 +949,10 @@ export default function ZaylonCaseStudyPage() {
                 <span className="z-gradient-text">backend engineering lead</span>
               </SectionTitle>
               <SectionLead>
-                I co-founded Zaylon and built the entire backend end to end. I designed the
-                conversational architecture, shipped the LangGraph agent that runs it, wrote the
-                FastAPI application and its database layer, and own every integration: the six
-                e-commerce platforms, the three payment providers, the five messaging channels,
-                and the shipping partners.
+                I co-founded Zaylon and built its AI system and backend. I designed the
+                conversational architecture, shipped the LangGraph agent that runs it, built the
+                tri-lingual NLP, and wrote the FastAPI application, its database layer, and the
+                multi-tenant security around it.
               </SectionLead>
             </FadeUp>
 
@@ -963,10 +962,10 @@ export default function ZaylonCaseStudyPage() {
                   "Conversational AI architecture and the LangGraph agent",
                   "FastAPI application, services, and API surface",
                   "Database schema, migrations, and multi-tenant isolation",
-                  "Every e-commerce, payments, messaging, and shipping integration",
+                  "Hybrid product search: keyword + vector retrieval with rank fusion",
                   "Tri-lingual NLP pipeline for English, Arabic, and Franco",
                   "Proactive engine that detects sales opportunities in chat",
-                  "Auth, permissions, plan entitlements, and billing logic",
+                  "Auth, permissions, plan entitlements, and tenant security",
                   "Deployment, CI, and observability for the backend",
                 ].map((item) => (
                   <div

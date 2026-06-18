@@ -115,7 +115,7 @@ export const PROJECTS: Project[] = [
     status: "Production",
     badge: "Co-Founded",
     featured: true,
-    impact: "LangGraph tool-calling agent across 6 commerce platforms, 3 dialects, and 3 payment providers",
+    impact: "LangGraph tool-calling agent and tri-lingual NLP on a multi-tenant FastAPI backend",
     caseStudy: {
       problem:
         "MENA shoppers do a lot of their buying over WhatsApp and Instagram, but merchants can't sit in those chats around the clock. Off-the-shelf chatbots fall apart on Egyptian Arabic and Franco-Arabic, and they can't carry someone from a question all the way to a paid order.",
@@ -382,15 +382,15 @@ export const EXPERIENCE = [
     role: "Software Engineer & Co-Founder",
     url: "https://zaylon.ai",
     period: "May 2025 – Present",
-    description: "Co-founded and built the full-stack platform: Next.js merchant dashboard, FastAPI backend with PostgreSQL/Redis, Docker deployment, and a LangGraph tool-calling agent serving MENA merchants across WhatsApp, Instagram, and web.",
+    description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on a FastAPI backend with PostgreSQL/Redis, multi-tenant isolation, and Docker deployment, serving MENA merchants across WhatsApp, Instagram, and web.",
     highlights: [
-      "Built full-stack platform: Next.js/React merchant dashboard with real-time inbox, analytics, and A/B testing on top of a FastAPI Python backend with Docker containerized deployment",
-      "Integrated 6 e-commerce platforms (Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho) via REST APIs with webhook-driven sync, idempotent operations, and retry logic",
       "Built the conversational AI in LangGraph as a single tool-calling agent with about 30 scoped tools across sales, support, and checkout, consolidated from an earlier multi-agent supervisor for reliability and easier reasoning",
       "Built DialectBridge, an NLP pipeline that detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers in the same dialect",
-      "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring, running across WhatsApp and Instagram",
+      "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring",
+      "Wrote the FastAPI Python backend and its service architecture, containerized with Docker for deployment",
+      "Built multi-tenant security: argon2id key auth, per-merchant row-level isolation across roughly 80 tables, and semgrep CI gates enforcing tenant scoping",
+      "Built a Postgres-backed saga engine with reverse-order compensation so a failed checkout step rolls back cleanly",
       "Batched rapid-fire WhatsApp messages in Redis into a single turn before invoking the agent, so it reads the whole thought at once instead of replying to each fragment",
-      "Built multi-tenant architecture with per-merchant encryption, row-level data isolation, and webhook-verified payment processing through Stripe, Paymob, and Fawry",
     ],
   },
   {
@@ -473,6 +473,6 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I co-founded Zaylon AI and wrote most of it: the Next.js dashboard, the FastAPI backend, and the LangGraph agent that sells over WhatsApp and Instagram. I'm comfortable across the stack and lean toward backend and AI. B.Sc. in Computer and Communications Engineering with an AI concentration from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
+  bio: "I co-founded Zaylon AI and built its AI system and backend: the LangGraph agent that sells over WhatsApp and Instagram, the tri-lingual NLP, and the FastAPI backend behind them. I work across the stack but lean toward backend and AI. B.Sc. in Computer and Communications Engineering with an AI concentration from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
 } as const;
 

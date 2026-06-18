@@ -1,0 +1,54 @@
+<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, system-ui, sans-serif">
+  <!-- Column headers -->
+  <text x="290" y="60" text-anchor="middle" font-size="12.5" fill="#34D399" font-weight="600">Exact-term query</text>
+  <text x="290" y="76" text-anchor="middle" font-size="10" fill="#A1A1AA">(e.g. 4,000 Pebbles?)</text>
+  <text x="555" y="60" text-anchor="middle" font-size="12.5" fill="#34D399" font-weight="600">Paraphrase query</text>
+  <text x="555" y="76" text-anchor="middle" font-size="10" fill="#A1A1AA">(e.g. devices per site?)</text>
+
+  <!-- Row label: Dense -->
+  <text x="115" y="148" text-anchor="middle" font-size="12.5" fill="#A1A1AA" font-weight="600">Dense</text>
+  <text x="115" y="164" text-anchor="middle" font-size="10" fill="#71717A">(embeddings)</text>
+
+  <!-- Row label: Lexical -->
+  <text x="115" y="278" text-anchor="middle" font-size="12.5" fill="#A1A1AA" font-weight="600">Lexical</text>
+  <text x="115" y="294" text-anchor="middle" font-size="10" fill="#71717A">(BM25)</text>
+
+  <!-- Cell: Dense x Exact-term (miss, red) -->
+  <rect x="175" y="92" width="230" height="120" rx="8" stroke="#ef4444" stroke-width="1.5" fill="#ef4444" fill-opacity="0.07"/>
+  <g stroke="#ef4444" stroke-width="2.5" stroke-linecap="round">
+    <line x1="200" y1="117" x2="214" y2="131"/>
+    <line x1="214" y1="117" x2="200" y2="131"/>
+  </g>
+  <text x="290" y="160" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="600">misses</text>
+  <text x="290" y="180" text-anchor="middle" font-size="10.5" fill="#A1A1AA">blurs the literal token</text>
+
+  <!-- Cell: Dense x Paraphrase (hit, emerald) -->
+  <rect x="440" y="92" width="230" height="120" rx="8" stroke="#10B981" stroke-width="1.5" fill="#10B981" fill-opacity="0.07"/>
+  <g stroke="#34D399" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="466,124 472,131 484,116"/>
+  </g>
+  <text x="555" y="160" text-anchor="middle" font-size="12" fill="#34D399" font-weight="600">finds it</text>
+  <text x="555" y="180" text-anchor="middle" font-size="10.5" fill="#A1A1AA">matches meaning</text>
+
+  <!-- Cell: Lexical x Exact-term (hit, emerald) -->
+  <rect x="175" y="222" width="230" height="120" rx="8" stroke="#10B981" stroke-width="1.5" fill="#10B981" fill-opacity="0.07"/>
+  <g stroke="#34D399" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="201,254 207,261 219,246"/>
+  </g>
+  <text x="290" y="290" text-anchor="middle" font-size="12" fill="#34D399" font-weight="600">finds it</text>
+  <text x="290" y="310" text-anchor="middle" font-size="10.5" fill="#A1A1AA">locks onto the token</text>
+
+  <!-- Cell: Lexical x Paraphrase (miss, red) -->
+  <rect x="440" y="222" width="230" height="120" rx="8" stroke="#ef4444" stroke-width="1.5" fill="#ef4444" fill-opacity="0.07"/>
+  <g stroke="#ef4444" stroke-width="2.5" stroke-linecap="round">
+    <line x1="466" y1="247" x2="480" y2="261"/>
+    <line x1="480" y1="247" x2="466" y2="261"/>
+  </g>
+  <text x="555" y="290" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="600">misses</text>
+  <text x="555" y="310" text-anchor="middle" font-size="10.5" fill="#A1A1AA">no word overlap</text>
+
+  <!-- Hybrid bar -->
+  <rect x="40" y="378" width="680" height="64" rx="8" stroke="#10B981" stroke-width="1.5" fill="#047857" fill-opacity="0.12"/>
+  <text x="380" y="406" text-anchor="middle" font-size="12.5" fill="#34D399" font-weight="700">Hybrid</text>
+  <text x="380" y="426" text-anchor="middle" font-size="11" fill="#A1A1AA">run both, keep whatever either one finds, let agreement rise to the top</text>
+</svg>
