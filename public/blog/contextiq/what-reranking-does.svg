@@ -1,0 +1,59 @@
+<svg viewBox="0 0 820 560" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#10B981"/>
+    </marker>
+  </defs>
+
+  <!-- LEFT column header -->
+  <text x="40" y="40" font-size="12" font-weight="700" fill="#34D399">After fusion (rank order)</text>
+
+  <!-- LEFT rows -->
+  <g>
+    <rect x="40" y="56" width="300" height="44" rx="6" fill="none" stroke="#27272A"/>
+    <text x="56" y="83" font-size="11" fill="#A1A1AA">rank 1: distractor (other handbook)</text>
+
+    <rect x="40" y="108" width="300" height="44" rx="6" fill="none" stroke="#27272A"/>
+    <text x="56" y="135" font-size="11" fill="#A1A1AA">rank 2: distractor</text>
+
+    <rect x="40" y="160" width="300" height="44" rx="6" fill="none" stroke="#27272A"/>
+    <text x="56" y="187" font-size="11" fill="#A1A1AA">rank 3: distractor</text>
+
+    <rect x="40" y="212" width="300" height="44" rx="6" fill="none" stroke="#27272A" stroke-dasharray="4 3"/>
+    <text x="56" y="239" font-size="11" font-style="italic" fill="#71717A">... ranks 4 to 19: lookalikes ...</text>
+
+    <rect x="40" y="264" width="300" height="44" rx="6" fill="#10B981" fill-opacity="0.1" stroke="#10B981"/>
+    <text x="56" y="291" font-size="11" font-weight="700" fill="#34D399">rank 20: CORRECT passage (target handbook)</text>
+  </g>
+
+  <!-- RIGHT column header -->
+  <text x="480" y="40" font-size="12" font-weight="700" fill="#34D399">After cross-encoder rerank</text>
+
+  <!-- RIGHT rows -->
+  <g>
+    <rect x="480" y="56" width="300" height="44" rx="6" fill="#10B981" fill-opacity="0.1" stroke="#10B981"/>
+    <text x="496" y="83" font-size="11" font-weight="700" fill="#34D399">rank 1: CORRECT passage (target handbook)</text>
+
+    <rect x="480" y="108" width="300" height="44" rx="6" fill="none" stroke="#27272A"/>
+    <text x="496" y="135" font-size="11" fill="#A1A1AA">rank 2: distractor</text>
+
+    <rect x="480" y="160" width="300" height="44" rx="6" fill="none" stroke="#27272A"/>
+    <text x="496" y="187" font-size="11" fill="#A1A1AA">rank 3: distractor</text>
+
+    <rect x="480" y="212" width="300" height="44" rx="6" fill="none" stroke="#27272A" stroke-dasharray="4 3"/>
+    <text x="496" y="239" font-size="11" font-style="italic" fill="#71717A">... distractors drop down ...</text>
+
+    <rect x="480" y="264" width="300" height="44" rx="6" fill="none" stroke="#27272A"/>
+    <text x="496" y="291" font-size="11" fill="#A1A1AA">rank 5: distractor</text>
+  </g>
+
+  <!-- Curved emerald arrow from LEFT rank 20 to RIGHT rank 1 -->
+  <path d="M340 286 C 410 286, 410 78, 478 78" fill="none" stroke="#10B981" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- arrow label -->
+  <text x="412" y="190" font-size="10" fill="#34D399" text-anchor="middle">reranker reads query</text>
+  <text x="412" y="204" font-size="10" fill="#34D399" text-anchor="middle">+ passage together</text>
+
+  <!-- Bottom caption -->
+  <text x="410" y="408" font-size="11" fill="#A1A1AA" text-anchor="middle">Reranking the top 3 barely matters; rescuing the right passage from rank 20 is the point.</text>
+</svg>

@@ -54,3 +54,6 @@ unnamed.jpg
 
 # editor
 .idea/
+
+# playwright mcp scratch
+.playwright-mcp/
