@@ -67,7 +67,7 @@ export function Projects() {
           {featured.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {featured.map((project) => (
-                <ProjectCard key={project.slug} project={project} featured />
+                <ProjectCard key={project.slug} project={project} />
               ))}
             </div>
           )}
@@ -106,11 +106,9 @@ export function Projects() {
 function ProjectCard({
   project,
   compact = false,
-  featured = false,
 }: {
   project: (typeof PROJECTS)[number];
   compact?: boolean;
-  featured?: boolean;
 }) {
   return (
     <div
@@ -122,7 +120,7 @@ function ProjectCard({
       <div className="flex items-start justify-between gap-2">
         <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
           <Link
-            href={`/projects/${project.slug}`}
+            href={project.blog ?? `/projects/${project.slug}`}
             className="hover:text-accent transition-colors inline-flex items-center gap-1"
           >
             {project.title}
@@ -153,13 +151,6 @@ function ProjectCard({
         {project.description}
       </p>
 
-      {project.impact && featured && (
-        <p className="text-sm text-accent font-mono mt-3 flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-accent shrink-0" />
-          {project.impact}
-        </p>
-      )}
-
       <div className="flex items-center justify-between mt-4">
         <div className="flex flex-wrap gap-2">
           {project.tags.slice(0, compact ? 3 : undefined).map((tag) => (
@@ -169,14 +160,6 @@ function ProjectCard({
           ))}
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-2">
-          {project.blog && (
-            <Link href={project.blog}
-              aria-label={`Read the write-up for ${project.title}`}
-              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1">
-              <BookOpen className="size-3.5" />
-              Blog
-            </Link>
-          )}
           {project.demo && (
             <a href={project.demo} target="_blank" rel="noopener noreferrer"
               className="text-xs font-mono text-accent hover:text-accent-muted transition-colors">
@@ -200,12 +183,21 @@ function ProjectCard({
         </div>
       </div>
 
-      <Link
-        href={`/projects/${project.slug}`}
-        className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
-      >
-        View Case Study <ArrowUpRight className="size-3" />
-      </Link>
+      {project.blog ? (
+        <Link
+          href={project.blog}
+          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
+        >
+          <BookOpen className="size-3" /> Read the write-up <ArrowUpRight className="size-3" />
+        </Link>
+      ) : (
+        <Link
+          href={`/projects/${project.slug}`}
+          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
+        >
+          View Case Study <ArrowUpRight className="size-3" />
+        </Link>
+      )}
     </div>
   );
 }
