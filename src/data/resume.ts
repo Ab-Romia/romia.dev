@@ -22,6 +22,7 @@ export const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ] as const;
@@ -269,32 +270,38 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    title: "VoicePrint: AI Text Humanizer",
-    slug: "voiceprint-humanizer",
+    title: "VoicePrint: Authorship Stylometry",
+    slug: "voiceprint",
     categories: ["AI/ML"],
     description:
-      "NLP system that learns individual writing style from samples using Sentence-BERT embeddings and stylometric analysis.",
-    tags: ["NLP", "Sentence-BERT", "Python"],
-    github: "https://github.com/Ab-Romia/Style-Echo-AI-Humanizer",
-    demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint-humanizer",
+      "An engine that measures the fingerprint of how you write from your own samples, then adapts your own drafts toward that voice. Interpretable stylometric features paired with a StyleDistance neural style embedding and an in-context rewrite.",
+    tags: ["NLP", "Stylometry", "StyleDistance", "Python"],
+    github: "https://github.com/Ab-Romia/VoicePrint",
+    demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint",
     status: "Demo",
+    featured: true,
+    impact: "With zero content words, a 130-dimensional function-word vector separated five authors at 0.684 macro-F1 and 0.889 accuracy, against a 0.20 five-class baseline",
     caseStudy: {
       problem:
-        "Generic AI text reads flat because it has no personal fingerprint. Everyone's writing has measurable habits: sentence length, punctuation, the words they reach for.",
+        "Your own writing carries a measurable fingerprint: sentence length, punctuation, the function words you reach for without thinking. I wanted to measure that fingerprint from a person's own samples and use it to pull their hurried drafts back toward their real voice, with numbers instead of guesswork.",
       approach:
-        "Style learning system using Sentence-BERT embeddings and 20+ stylometric features to build and apply personal writing profiles.",
+        "Build a profile from your samples that combines interpretable stylometric features (sentence stats, lexical diversity, a fixed function-word vector, character n-grams, readability, punctuation) with a StyleDistance neural style embedding. Score how far a draft sits from your voice by cosine to the author centroid, adapt it with an in-context rewrite conditioned on the measured profile, and report the voice match before and after with a per-sentence diff.",
       decisions: [
         {
-          title: "Embeddings plus explicit stylometrics",
-          reasoning: "Sentence-BERT captures semantic voice but misses concrete habits like average sentence length or how often someone uses commas. Pairing the embeddings with 20+ measured features gives the profile something interpretable to anchor on.",
+          title: "A content-independent neural fingerprint",
+          reasoning: "StyleDistance is a 2024 style embedding trained so two texts in the same voice on different topics land near each other. That is the property a fingerprint needs, so the voice-match score is cosine to the author centroid rather than a generic sentence embedding that tracks topic.",
         },
         {
-          title: "A per-person profile, not one global model",
-          reasoning: "Style is individual. Building a profile from each person's own samples means the system rewrites toward that specific fingerprint instead of a generic average of 'human' writing.",
+          title: "Interpretable features, measured honestly",
+          reasoning: "I ran a real authorship experiment on the Gutenberg corpus, split by work to block topic leakage. Function words alone reached 0.684 macro-F1 with no content words at all, which is the topic-independent signal worth trusting. The near-perfect character n-gram score on that small set is inflated, and I say so in the writeup rather than quoting it as accuracy.",
+        },
+        {
+          title: "An in-context rewrite, not a regex",
+          reasoning: "The first version swapped synonyms and injected noise with regex, which was a dead end. The rewrite now conditions a single model call on your own exemplars and your measured constraints, bring your own key, with a deterministic rule fallback when there is no key.",
         },
       ],
-      results: "Paste a few samples on the HuggingFace Space and it rewrites new text in that style.",
-      embedDemo: { type: "iframe", src: "https://ab-romia-voiceprint-humanizer.hf.space" },
+      results: "A live HuggingFace Space where you build a voice fingerprint from your samples, see it as a radar chart, and adapt a draft with the voice match before and after and a per-sentence diff. The repository ships the engine, a reproducible experiment, and a build guide.",
+      embedDemo: { type: "iframe", src: "https://ab-romia-voiceprint.hf.space" },
     },
   },
   {
