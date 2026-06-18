@@ -170,33 +170,41 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    title: "ContextIQ: RAG API",
+    title: "ContextIQ: Hybrid-Retrieval RAG",
     slug: "contextiq-rag",
     categories: ["AI/ML"],
     description:
-      "A RAG API that ingests 11+ file formats and answers questions over them, combining keyword and vector search with a caching layer.",
-    tags: ["FastAPI", "ChromaDB", "LangChain", "Python"],
+      "A worked example of production RAG that runs on CPU: dense and lexical retrieval fused with reciprocal rank fusion, cross-encoder reranking, grounded citations, and an evaluation harness that measures the difference.",
+    tags: ["FastAPI", "fastembed", "BM25", "ChromaDB", "Python"],
     github: "https://github.com/Ab-Romia/ContextIQ-RAG",
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
     status: "Demo",
     featured: true,
-    impact: "Hybrid retrieval over 11+ file formats: keyword + vector, fused with RRF",
+    impact: "Hybrid retrieval plus reranking measured on a confusable corpus: best precision at the top, hit@3 0.83 and MRR 0.78, against a dense-only baseline at 0.67",
     caseStudy: {
       problem:
-        "Most RAG demos only ingest PDFs. The documents I needed to search were spread across 11+ formats, and pure vector search kept missing the exact-keyword matches people actually expect, like an error code or a name.",
+        "Most RAG tutorials stop at embed, retrieve top-k, paste into a prompt. That falls apart on real questions: pure vector search misses exact terms like an error code or a name, struggles to separate passages that look alike, and nobody measures whether retrieval is any good. I wanted to build the part that comes after the tutorial, and prove it works.",
       approach:
-        "The API parses each format into clean text, then retrieves with both TF-IDF keyword search and vector similarity and fuses the two rankings. Repeated queries hit a cache instead of re-embedding.",
+        "Each query runs dense semantic search and lexical BM25 in parallel, fused with reciprocal rank fusion, then a cross-encoder reranks the top of a deliberately deep candidate pool. The model answers only from the reranked passages, cites each claim, and abstains when the context does not cover the question. An evaluation harness indexes a document plus six distractor handbooks and scores four retrievers over the whole corpus, so the gains are measured rather than asserted.",
       decisions: [
         {
-          title: "Hybrid retrieval with Reciprocal Rank Fusion",
-          reasoning: "Pure semantic search misses exact terms like error codes or product names. RRF blends the keyword ranking and the vector ranking, so exact hits and semantic matches both surface.",
+          title: "Hybrid retrieval fused with Reciprocal Rank Fusion",
+          reasoning: "Dense search captures meaning but smooths over exact terms; BM25 is the opposite. Fusing by rank rather than raw score combines them without trying to reconcile incompatible scales. In the evaluation, hybrid put the right passage in the top five 94% of the time, where dense-only managed 72%.",
         },
         {
-          title: "A caching layer",
-          reasoning: "Repeated questions against the same corpus shouldn't re-embed anything. Caching them skips the work and the token spend on the queries that come up most.",
+          title: "Cross-encoder reranking on a deep candidate pool",
+          reasoning: "A reranker reads the query and a passage together, which is far more accurate than comparing vectors but too slow to run over a whole corpus. Running it on a deep fused pool, not a shallow one, is what lets it pull the right passage up from rank twenty. It gave the best precision at the top, lifting hit@3 to 0.83 and nearly doubling MRR over hybrid alone.",
+        },
+        {
+          title: "Measuring retrieval instead of trusting it",
+          reasoning: "I built a golden set over a corpus seeded with confusable distractor documents and ran an ablation across TF-IDF, dense, hybrid, and hybrid-plus-rerank. The honest result, that naive dense-only retrieval was the weakest configuration, is exactly the kind of thing you only learn by measuring.",
+        },
+        {
+          title: "CPU only, no GPU, no PyTorch",
+          reasoning: "Embeddings and reranking run through ONNX so the whole thing fits on a free 2-vCPU host. The interesting engineering is in the retrieval design, not the hardware, and the constraint keeps it honest.",
         },
       ],
-      results: "Live API plus a HuggingFace Space where you can query it against your own files.",
+      results: "A live HuggingFace Space where you can index your own document and watch the retrieval trace: dense and BM25 ranks, the fused order, rerank scores, and the cited passages that reach the model. The repository is written to be read, with the evaluation numbers and the reasoning behind each stage.",
       embedDemo: { type: "iframe", src: "https://ab-romia-context-aware-ai.hf.space" },
     },
   },
