@@ -90,8 +90,13 @@ Key exports:
 - `PROJECTS: Project[]` : all 8 projects with slug, categories (array), caseStudy, links
 - `EXPERIENCE` : work timeline entries
 - `SKILLS` : tech stack grouped by category
-- `EDUCATION`, `CERTIFICATIONS`, `COMPETITIONS`, `LANGUAGES_SPOKEN`, `ABOUT`, `BLOG_POSTS`
+- `EDUCATION`, `CERTIFICATIONS`, `COMPETITIONS`, `LANGUAGES_SPOKEN`, `ABOUT`
 - `getProjectBySlug()`, `getAdjacentProjects()` : helpers for case study pages
+
+Blog content lives in `src/data/blog.ts` (not resume.ts): a `BlogPost` type, the
+`BLOG_POSTS` array (post bodies are typed content blocks, no markdown dependency), and
+`getPostBySlug()`. Rendered by `src/app/blog/page.tsx` (index) and
+`src/app/blog/[slug]/page.tsx` (post). Add new posts to `BLOG_POSTS`.
 
 ## Projects
 Each project has `categories: string[]` so it can appear in multiple filter tabs:
