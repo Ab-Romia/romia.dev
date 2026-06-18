@@ -100,6 +100,8 @@ export interface Project {
   url?: string;
   github?: string;
   demo?: string;
+  /** Internal path to a related blog write-up, e.g. "/blog/<slug>". */
+  blog?: string;
   caseStudy: CaseStudy;
 }
 
@@ -179,6 +181,7 @@ export const PROJECTS: Project[] = [
     tags: ["FastAPI", "fastembed", "BM25", "ChromaDB", "Python"],
     github: "https://github.com/Ab-Romia/ContextIQ-RAG",
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
+    blog: "/blog/contextiq-hybrid-rag-retrieval",
     status: "Demo",
     featured: true,
     impact: "Hybrid retrieval plus reranking measured on a confusable corpus: best precision at the top, hit@3 0.83 and MRR 0.78, against a dense-only baseline at 0.67",
@@ -278,6 +281,7 @@ export const PROJECTS: Project[] = [
     tags: ["NLP", "Stylometry", "StyleDistance", "Python"],
     github: "https://github.com/Ab-Romia/VoicePrint",
     demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint",
+    blog: "/blog/measuring-a-writing-voice",
     status: "Demo",
     featured: true,
     impact: "With zero content words, a 130-dimensional function-word vector separated five authors at 0.684 macro-F1 and 0.889 accuracy, against a 0.20 five-class baseline",
