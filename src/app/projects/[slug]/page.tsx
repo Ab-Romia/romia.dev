@@ -19,8 +19,10 @@ const statusColors: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  // zaylon-ai has its own dedicated case study page at /projects/zaylon-ai/page.tsx
-  return PROJECTS.filter((p) => p.slug !== "zaylon-ai").map((p) => ({ slug: p.slug }));
+  // zaylon-ai has its own dedicated case study page at /projects/zaylon-ai/page.tsx.
+  // Projects with a blog write-up redirect to the blog (see next.config.ts), so
+  // they get no case-study page here.
+  return PROJECTS.filter((p) => p.slug !== "zaylon-ai" && !p.blog).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -221,7 +223,7 @@ export default async function ProjectPage({
         <div className="flex items-center justify-between">
           {prev ? (
             <Link
-              href={`/projects/${prev.slug}`}
+              href={prev.blog ?? `/projects/${prev.slug}`}
               className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
@@ -233,7 +235,7 @@ export default async function ProjectPage({
           )}
           {next ? (
             <Link
-              href={`/projects/${next.slug}`}
+              href={next.blog ?? `/projects/${next.slug}`}
               className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <span className="hidden sm:inline">{next.title}</span>

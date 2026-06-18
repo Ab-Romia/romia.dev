@@ -4,7 +4,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { BLOG_POSTS, getPostBySlug, type ContentBlock } from "@/data/blog";
+import { PROJECTS } from "@/data/resume";
 import { FadeUp } from "@/components/motion-wrapper";
+import { DemoEmbed } from "@/components/demo-embed";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
 
@@ -161,6 +163,11 @@ export default async function BlogPostPage({
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  // If a project points its write-up at this post, surface that project's
+  // interactive demo at the bottom of the article.
+  const demoProject = PROJECTS.find((p) => p.blog === `/blog/${slug}`);
+  const embed = demoProject?.caseStudy.embedDemo;
+
   return (
     <>
       <Navbar />
@@ -212,6 +219,18 @@ export default async function BlogPostPage({
               <Block key={i} block={block} />
             ))}
           </article>
+
+          {embed?.type === "iframe" && embed.src && (
+            <section>
+              <h2 className="text-2xl font-bold tracking-tight mt-12">Try it</h2>
+              <p className="text-muted-foreground leading-relaxed mt-3">
+                The live demo runs in your browser. It may take a few seconds to wake up.
+              </p>
+              <div className="mt-6">
+                <DemoEmbed src={embed.src} title={`${demoProject!.title} demo`} />
+              </div>
+            </section>
+          )}
 
           <div className="section-divider mt-12 mb-8" />
 

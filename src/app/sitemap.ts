@@ -3,7 +3,9 @@ import { PROJECTS } from "@/data/resume";
 import { BLOG_POSTS } from "@/data/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const projectPages = PROJECTS.map((project) => ({
+  // Projects with a blog write-up redirect to the blog, so they are not listed
+  // as case-study URLs here; the blog post represents them instead.
+  const projectPages = PROJECTS.filter((project) => !project.blog).map((project) => ({
     url: `https://romia.dev/projects/${project.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
