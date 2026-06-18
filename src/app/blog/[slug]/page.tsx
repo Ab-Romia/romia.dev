@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { BLOG_POSTS, getPostBySlug, type ContentBlock } from "@/data/blog";
-import { FadeUp, BlurIn } from "@/components/motion-wrapper";
+import { FadeUp } from "@/components/motion-wrapper";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
 
@@ -204,13 +204,14 @@ export default async function BlogPostPage({
 
           <div className="section-divider mt-10 mb-2" />
 
-          <BlurIn>
-            <article>
-              {post.body.map((block, i) => (
-                <Block key={i} block={block} />
-              ))}
-            </article>
-          </BlurIn>
+          {/* Render the body directly. A single scroll-reveal wrapper around the
+              whole article cannot reliably cross its visibility threshold on a long
+              page, which left the post body invisible. */}
+          <article>
+            {post.body.map((block, i) => (
+              <Block key={i} block={block} />
+            ))}
+          </article>
 
           <div className="section-divider mt-12 mb-8" />
 
