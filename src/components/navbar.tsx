@@ -56,7 +56,7 @@ export function Navbar() {
       >
         <nav className="max-w-5xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
           <a
-            href="#hero"
+            href="/#hero"
             aria-label="Romia home"
             className="group flex items-center gap-2.5 transition-colors"
           >
@@ -85,7 +85,7 @@ export function Navbar() {
                 return (
                   <a
                     key={link.href}
-                    href={link.href}
+                    href={link.href.startsWith("#") ? `/${link.href}` : link.href}
                     className={cn(
                       "relative px-3 py-2 text-sm font-medium rounded-lg transition-colors",
                       isActive
@@ -161,7 +161,7 @@ export function Navbar() {
                 return (
                   <a
                     key={link.href}
-                    href={link.href}
+                    href={link.href.startsWith("#") ? `/${link.href}` : link.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
                       "text-2xl font-medium transition-colors",
