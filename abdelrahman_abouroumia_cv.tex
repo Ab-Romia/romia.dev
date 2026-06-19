@@ -75,41 +75,49 @@ AI Engineer building production multi-agent and Retrieval-Augmented Generation (
 \item Ranked thousands of Python samples and built quality rubrics for RLHF pipelines training frontier AI models.
 \end{itemize}
 
+\vspace{3pt}
+\textbf{Automotive Cybersecurity Intern} \hfill \textbf{Aug 2024 -- Oct 2024} \\
+\textit{Swift-ACT}
+\begin{itemize}
+\item Built threat-model catalogs and mitigations for \textbf{CAN bus} and \textbf{ECU} in-vehicle networks.
+\item Ran attack simulations (spoofing, replay, DoS) in \textbf{Dyna4}/\textbf{CARLA}; fault injection and ECU validation via \textbf{Vector CANoe}.
+\end{itemize}
+
 % -------------------- PROJECTS --------------------
 \section{Projects}
-{\small\color{secondarycolor}\textit{Case studies, architecture breakdowns, and live demos at \href{https://romia.dev}{romia.dev}}}
-\vspace{2pt}
 
-\textbf{Talos: Multi-User RAG Document Platform} \hfill \textit{Graduation Project (Team)}
+\textbf{Talos: Multi-User RAG Document Platform} \hfill \textit{Graduation Project} \ \textbar\ \ \href{https://romia.dev/projects/talos}{Case Study}
 \begin{itemize}
 \item Owned the ingestion and retrieval core of a \textbf{FastAPI} document-chat platform; cited answers streamed over SSE.
-\item Hybrid retrieval (dense + \textbf{BM25}, RRF) with cross-encoder rerank; async \textbf{ARQ}/\textbf{MinIO}/\textbf{Milvus} ingestion, eval harness.
+\item Hybrid retrieval (dense + \textbf{BM25}, RRF) with cross-encoder rerank; async \textbf{ARQ}/\textbf{MinIO}/\textbf{Milvus} ingestion pipeline.
 \end{itemize}
 
 \vspace{2pt}
-\textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{github.com/Ab-Romia/Virtual-Bank-System}
+\textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/virtual-banking}{Case Study}
 \begin{itemize}
 \item Five \textbf{Spring Boot 3} services behind a gateway; \textbf{Kafka} transfer saga: outbox, idempotent consumers, RS256 JWT.
-\item A Testcontainers test fires 20 concurrent transfers and proves no double-spend, never a negative balance.
+\item Atomic transfers via pessimistic locking and a balance constraint, with Testcontainers integration tests.
 \end{itemize}
 
 \vspace{2pt}
-\textbf{ContextIQ: Hybrid-Retrieval RAG} \hfill \href{https://github.com/Ab-Romia/ContextIQ-RAG}{github.com/Ab-Romia/ContextIQ-RAG}
+\textbf{ContextIQ: Hybrid-Retrieval RAG} \hfill \href{https://github.com/Ab-Romia/ContextIQ-RAG}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/contextiq-rag}{Case Study}
 \begin{itemize}
 \item \textbf{FastAPI} RAG on CPU (ONNX): dense + \textbf{BM25} fused with RRF, cross-encoder reranking, grounded citations.
-\item Measured on a confusable corpus: hit@3 0.83 and MRR 0.78 against a dense-only 0.67 baseline.
+\item Evaluation harness over a corpus of confusable distractors; abstains when the context is insufficient.
 \end{itemize}
 
 \vspace{2pt}
-\textbf{Multimodal Emotion Recognition} \hfill \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{github.com/Ab-Romia/RAVDESS-emotion-recognition}
+\textbf{Multimodal Emotion Recognition} \hfill \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/emotion-recognition}{Case Study}
 \begin{itemize}
 \item Speaker-independent (actor-disjoint): frozen \textbf{WavLM-large} + facial-expression model, calibrated late fusion.
-\item 70.3\% audio-only, 78.8\% audio-visual on 8 emotions, leak-free (random splits inflate audio to around 78\%).
+\item Learnable layer-weighting and attentive pooling over WavLM; a unit test guards against speaker leakage.
 \end{itemize}
 
 \vspace{2pt}
-\textbf{VoicePrint: Authorship Stylometry} \hfill \href{https://huggingface.co/spaces/Ab-Romia/voiceprint}{huggingface.co/spaces/Ab-Romia/voiceprint} \\
-\textbf{StyleDistance} embedding plus a function-word vector; 0.889 accuracy across five authors vs a 0.20 baseline.
+\textbf{VoicePrint: Authorship Stylometry} \hfill \href{https://romia.dev/projects/voiceprint}{Case Study}
+\begin{itemize}
+\item \textbf{StyleDistance} embedding plus function-word features; scores voice match and rewrites a draft toward you.
+\end{itemize}
 
 % -------------------- EDUCATION --------------------
 \section{Education}
