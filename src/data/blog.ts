@@ -25,7 +25,7 @@ export const BLOG_POSTS: BlogPost[] = [
     "title": "The Virtual Bank System: event-driven microservices and a correct transfer saga",
     "slug": "event-driven-bank-transfer-saga",
     "description": "A study guide to the Virtual Bank System: five Spring Boot services behind a gateway, synchronous REST at the edge and an event-driven transfer saga over Kafka. It explains the architecture, the transfer step by step, and the three mechanisms that keep the money path correct: the transactional outbox, idempotent consumers, and pessimistic locking.",
-    "date": "2026-06-19",
+    "date": "2025-07-15",
     "tags": [
       "Microservices",
       "Event-Driven",
@@ -77,13 +77,13 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         "type": "figure",
         "src": "/blog/virtual-bank/transfer.png",
-        "alt": "The Transfer money screen. A form moves funds from a CHECKING account ending 4917 ($3,200.00) to a destination account id, with an amount of 750. Below it a card shows a COMPLETED transfer of $750.00 with a HISTORY listing REQUESTED then COMPLETED, both timestamped Jun 19, 2026, 2:46 PM.",
+        "alt": "The Transfer money screen. A form moves funds from a CHECKING account ending 4917 ($3,200.00) to a destination account id, with an amount of 750. Below it a card shows a COMPLETED transfer of $750.00 with a HISTORY listing REQUESTED then COMPLETED, each with a timestamp.",
         "caption": "A $750.00 transfer settled to COMPLETED, with the audit history audit-service recorded from the event streams: REQUESTED, then COMPLETED, each timestamped."
       },
       {
         "type": "figure",
         "src": "/blog/virtual-bank/dashboard-activity.png",
-        "alt": "The dashboard after the transfer. The CHECKING account ending 4917 now shows $2,450.00 and the SAVINGS account ending 7908 shows $750.00. A Recent transfers table lists one row dated Jun 19, 2026, 2:46 PM, from an account ending c35b to one ending 2b0c, amount $750.00, status COMPLETED.",
+        "alt": "The dashboard after the transfer. The CHECKING account ending 4917 now shows $2,450.00 and the SAVINGS account ending 7908 shows $750.00. A Recent transfers table lists one row from an account ending c35b to one ending 2b0c, amount $750.00, status COMPLETED.",
         "caption": "After the transfer: checking dropped from $3,200.00 to $2,450.00, savings rose to $750.00, and the recent-transfers panel shows the completed movement."
       },
       {
