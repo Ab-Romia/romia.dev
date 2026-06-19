@@ -160,12 +160,28 @@ export const BLOG_POSTS: BlogPost[] = [
           "code": "stack = torch.stack(out.hidden_states, dim=0)   # (25, B, T, H)\nw = torch.softmax(self.layer_weights, dim=0)    # one learnable weight per layer\nhidden = (w.view(-1, 1, 1, 1) * stack).sum(0)   # weighted blend of all layers"
         },
         {
+          "type": "p",
+          "md": "And it does not just match the intuition in theory. These are the actual weights the head learned, read straight out of the trained checkpoint:"
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/layer-weighting.png",
+          "alt": "A bar chart of the head's learned softmax weight for each of WavLM's 25 layers. The weights rise from the input layers, peak in the middle of the network around layer 11, then fall below the uniform baseline for the top transformer layers.",
+          "caption": "Not a diagram I drew; these are the weights the head actually learned, pulled from the checkpoint. It leans on the middle layers, where prosody lives, and pushes the top layers, where speaker identity concentrates, below the uniform line."
+        },
+        {
           "type": "h2",
           "text": "When fine-tuning loses: frozen features win on small data"
         },
         {
           "type": "p",
           "md": "Here is the result that surprised me most. The obvious move is to fine-tune the big encoder on the task. I tried it, and WavLM-large fine-tuned scored 67.6%, which is below a simple frozen-feature baseline. A 300-million-parameter model fine-tuned on 1440 clips overfits, and the speaker-independent folds are exactly where that overfitting shows. So I froze the encoder entirely and put all of the learning into the small head described above. That gave 70.3%."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/training-curves.png",
+          "alt": "Two panels of validation macro-F1 against training epoch, each showing six thin per-fold lines and a bold mean line, with the held-out test accuracy boxed in each. The frozen WavLM panel settles at 70.3% test; the full fine-tune panel reaches 67.6%.",
+          "caption": "Validation macro-F1 through training, every fold drawn. The frozen probe climbs steadily and lands at 70.3% on held-out actors; fully fine-tuning the backbone on so few clips tops out lower, at 67.6%. Freezing is not only simpler here, it wins."
         },
         {
           "type": "callout",
@@ -183,7 +199,7 @@ export const BLOG_POSTS: BlogPost[] = [
         {
           "type": "figure",
           "src": "/blog/ravdess-emotion/face-identity-vs-expression-leak.svg",
-          "alt": "Two grouped bars on an accuracy axis. ImageNet features score 89% when faces leak across the split but only 35% on new faces, a 54-point drop labeled it memorized identities, with a small face icon labeled encodes WHO. Facial-expression ViT features score 90% leaky and 58% on new faces, half the leak, with a face icon labeled encodes WHAT.",
+          "alt": "Two grouped bars on an accuracy axis. ImageNet features score 89% when faces leak across the split but only 35% on new faces, a 54-point drop labeled it memorized identities, with a small face icon labeled encodes WHO. Facial-expression ViT features score 90% leaky and 58% on new faces, a much smaller 32-point gap, with a face icon labeled encodes WHAT.",
           "caption": "Same test as the audio. ImageNet face features memorize who the person is and collapse on new faces; expression features transfer."
         },
         {
@@ -219,8 +235,14 @@ export const BLOG_POSTS: BlogPost[] = [
           "md": "Choosing that weight on validation, never on the test set, is what separates a real gain from a fake one. Because weight one means audio only, the floor is guaranteed: late fusion can never score below the better single model."
         },
         {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/fusion-calibration.png",
+          "alt": "Two panels of the real per-fold fusion settings. Left, the audio and visual temperatures for each of the six folds, every bar above the T=1 line, so both streams are softened. Right, the audio versus visual weight per fold, audio between 0.50 and 0.55.",
+          "caption": "What the calibration actually chose, fold by fold. Every temperature lands above one, so both networks were overconfident and got softened; the validation search settles audio at 0.50 to 0.55 of the blend. None of these values ever sees a test actor."
+        },
+        {
           "type": "h2",
-          "text": "The result, per emotion"
+          "text": "The result: fold by fold, emotion by emotion"
         },
         {
           "type": "p",
@@ -228,19 +250,35 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "figure",
-          "src": "/blog/ravdess-emotion/model-comparison.svg",
-          "alt": "A horizontal bar chart of speaker-independent accuracy: calibrated late fusion 78.8%, WavLM-large frozen 70.3%, WavLM-large fine-tuned 67.6% drawn in gray as the overfit attempt, HuBERT-base 64.9%, facial-expression video 58.1%, and a separate red bar for the same audio model on a leaky random split at 78%.",
-          "caption": "Every number in this post on one axis. The honest progression is emerald; the fine-tuned model that overfit is gray; the leaky random-split score is red so it is never mistaken for progress."
+          "src": "/blog/ravdess-emotion/model-comparison.png",
+          "alt": "A horizontal bar chart, every result measured in this post. Audio-visual fusion 78.8% and the same HuBERT on a leaky random split 78.0% (red) sit at the top, then WavLM frozen probe 70.3%, WavLM fine-tuned 67.6% (gray), HuBERT-base 64.9%, and facial expression only 58.1%.",
+          "caption": "Every result in this post on one axis, drawn straight from the saved runs. The honest progression is emerald; the fine-tuned model that overfit is gray; the leaky split is red, and notice it scores as high as the real best system. That is the whole point: leakage can fake a great number."
         },
         {
           "type": "p",
-          "md": "Calibrated late fusion reaches 78.8%, a real 8.6 points over the 70.3% audio model, with no leak. The face is not magic; it is a modest, honest lift that the simple combination rule is able to keep. Per emotion, the model is confident where the voice is unambiguous and hesitant where people hesitate too."
+          "md": "The means above hide nothing, because here is every fold behind them. The spread is real, and reporting it honestly is part of the point."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/per-fold-spread.png",
+          "alt": "A dot plot with one dot per fold for four models. HuBERT-base clusters near 64.9%, WavLM fine-tuned near 67.6%, WavLM frozen near 70.3% with one weak fold near 57%, and audio-visual fusion near 78.8% with one fold reaching 87.5%. A dashed line marks the 1/8 chance level.",
+          "caption": "The same means, with every actor-disjoint fold plotted. Frozen WavLM has one genuinely hard fold near 57%, which is exactly why I quote a standard deviation and not just an average."
+        },
+        {
+          "type": "p",
+          "md": "Calibrated late fusion reaches 78.8%, a real 8.5 points over the 70.3% audio model, with no leak. The face is not magic; it is a modest, honest lift that the simple combination rule is able to keep. Per emotion, the model is confident where the voice is unambiguous and hesitant where people hesitate too."
+        },
+        {
+          "type": "figure",
+          "src": "/blog/ravdess-emotion/per-emotion-f1.png",
+          "alt": "A horizontal bar chart of per-emotion F1 for the fused model, sorted from highest to lowest: happy 0.87, angry 0.84, calm 0.84, disgust 0.81, surprised 0.80, neutral 0.75, fearful 0.74, sad 0.63.",
+          "caption": "Where the fused model is strong and where it struggles. Happy, angry and calm are clean; sad is the hardest at 0.63."
         },
         {
           "type": "figure",
           "src": "/blog/ravdess-emotion/confusion-matrix.png",
-          "alt": "A row-normalized confusion matrix for the fused speaker-independent model across the eight emotions, brightest on the diagonal, with the most confusion between calm and neutral and between sad and fearful.",
-          "caption": "Happy, angry and calm lead (F1 around .87, .84, .84). Sad is the hardest at .63, mostly confused with fearful, and calm leaks into neutral. These are the pairs people also mix up from audio alone."
+          "alt": "A row-normalized confusion matrix for the fused speaker-independent model across the eight emotions, brightest on the diagonal, with sad most often confused with the other low-arousal emotions calm and neutral, and calm leaking into neutral.",
+          "caption": "The same story as a matrix, which shows where it slips, not just how often. Sad is most often mistaken for calm or neutral, and calm itself leaks into neutral. These low-arousal, quiet emotions sound alike, and people mix them up from audio too."
         },
         {
           "type": "h2",
@@ -253,7 +291,7 @@ export const BLOG_POSTS: BlogPost[] = [
         {
           "type": "ul",
           "items": [
-            "1440 clips and only 24 actors. The speaker-independent numbers carry real error bars (around plus or minus 4 to 6 points across folds), and no amount of cleverness changes that the dataset is small.",
+            "1440 clips and only 24 actors. The speaker-independent numbers carry a real standard deviation across folds, from about 2 points for the steadier models to 6 for the noisiest, as the per-fold plot above shows, and no amount of cleverness changes that the dataset is small.",
             "Acted, frontal, clean. RAVDESS emotions are performed in a studio. These numbers do not transfer directly to spontaneous, in-the-wild speech and faces.",
             "One corpus. Cross-dataset generalization is a separate, harder question I did not test here.",
             "The hosted demo runs the audio branch only. The face and fusion pipeline needs video frames and more compute than a free CPU Space, so the live demo predicts from voice alone at 70.3%."
