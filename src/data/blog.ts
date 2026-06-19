@@ -22,9 +22,9 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-      "title": "The 87% that was recognizing actors, not emotions",
+      "title": "When a speech-emotion model is really just recognizing the actors",
       "slug": "speaker-leakage-ravdess",
-      "description": "A speech-emotion model that scored 87% was mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the one number I will stand behind: 78.8%.",
+      "description": "A speech-emotion model I had reported at 87.6% was mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the one number I will stand behind: 78.8%.",
       "date": "2025-11-01",
       "tags": [
         "Speech",
@@ -37,15 +37,15 @@ export const BLOG_POSTS: BlogPost[] = [
       "body": [
         {
           "type": "h2",
-          "text": "An 87% that was answering an easier question"
+          "text": "An accuracy that was answering an easier question"
         },
         {
           "type": "p",
-          "md": "My old emotion-recognition model reported about 87% accuracy on RAVDESS, and I was proud of it. Then I tried to reproduce that number carefully and realized it was grading the model on the same 24 actors it had trained on. It was not reading emotion. It was recognizing the actors."
+          "md": "My old emotion-recognition model reported 87.6% accuracy on RAVDESS, and I was proud of it. Then I tried to reproduce that number carefully and realized it was grading the model on the same 24 actors it had trained on. It was not reading emotion. It was recognizing the actors."
         },
         {
           "type": "p",
-          "md": "This is the honest rebuild: a speaker-independent pipeline that fuses voice and face, with every number measured on people the model has never heard or seen. The [code is on GitHub](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) and there is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) you can talk to. The one number I will defend by the end of this post is 78.8%, and I will show you exactly why it is worth more than the 87% was."
+          "md": "This is the honest rebuild: a speaker-independent pipeline that fuses voice and face, with every number measured on people the model has never heard or seen. The [code is on GitHub](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) and there is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) you can talk to. The one number I will defend by the end of this post is 78.8%, and I will show you exactly why it is worth more than that inflated score was."
         },
         {
           "type": "h2",
@@ -99,7 +99,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "type": "figure",
           "src": "/blog/ravdess-emotion/leak-vs-honest.png",
           "alt": "A bar chart comparing the same audio model: about 78% on a random split versus 64.9% on a speaker-independent split.",
-          "caption": "Thirteen points from nothing but the partition. The high number is not a better model, only an easier test."
+          "caption": "Thirteen points from nothing but the partition. My original 87.6% came from a leakier split still, so the exact inflated figure depends on how you leak; the honest one does not move. The high number is not a better model, only an easier test."
         },
         {
           "type": "callout",
@@ -128,7 +128,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "That was my first worry. A number that falls from 87 to 65 feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% with the same encoder sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model. Now the job is to raise that floor without cheating."
+          "md": "That was my first worry. After the high 80s, a number in the mid-60s feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% with the same encoder sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model. Now the job is to raise that floor without cheating."
         },
         {
           "type": "h2",
@@ -188,7 +188,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "The ImageNet features scored 89% when the same faces leaked across the split but only 35% on faces the model had never seen. They were memorizing identity, not reading expressions, which is the visual version of the speaker leak. Swapping to a model trained on facial expressions cut the gap in half: 58% on new faces. Now the face carried something real and transferable, worth fusing."
+          "md": "The ImageNet features scored 89% when the same faces leaked across the split but only 35% on faces the model had never seen. They were memorizing identity, not reading expressions, which is the visual version of the speaker leak. Swapping to a model trained on facial expressions shrank that gap from 54 points to 32, lifting new-face accuracy to 58%. Now the face carried something real and transferable, worth fusing."
         },
         {
           "type": "h2",
