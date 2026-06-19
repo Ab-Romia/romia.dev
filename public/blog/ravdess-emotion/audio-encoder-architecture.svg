@@ -11,11 +11,7 @@
 <!-- Frozen WavLM box with 25 layer bars -->
 <rect x="50" y="40" width="140" height="270" rx="10" fill="#71717A" fill-opacity="0.06" stroke="#71717A" stroke-width="1.2"/>
 <text x="62" y="32" font-size="12" font-weight="600" fill="#A1A1AA">Frozen WavLM-large</text>
-<!-- lock icon -->
-<g transform="translate(166,22)" stroke="#71717A" stroke-width="1.2" fill="none">
-<rect x="0" y="5" width="14" height="11" rx="2" fill="#71717A" fill-opacity="0.18"/>
-<path d="M3 5 V3 a4 4 0 0 1 8 0 V5"/>
-</g>
+
 
 <!-- 25 layer bars: L0 bottom (y=300) to L24 top (y=48). step = 252/25 ~10.08, bar h=8 -->
 <!-- dim bottom L0-L7, bright middle L8-L16, dim top L17-L24 -->
@@ -85,12 +81,12 @@
 <rect x="618" y="154" width="68" height="30" rx="6" fill="#10B981" fill-opacity="0.16" stroke="#34D399" stroke-width="1.2"/>
 <text x="652" y="173" text-anchor="middle" font-size="9.5" font-weight="600" fill="#34D399">weighted std</text>
 <text x="615" y="206" text-anchor="middle" font-size="8.5" fill="#A1A1AA">std keeps the variation in tone</text>
-<text x="615" y="218" text-anchor="middle" font-size="8.5" fill="#A1A1AA">a plain average throws away</text>
+<text x="615" y="218" text-anchor="middle" font-size="8.5" fill="#A1A1AA">that a plain average erases</text>
 
 <!-- concatenate arrows down to MLP head -->
 <path d="M578 184 C 578 250, 470 250, 470 280" fill="none" stroke="#10B981" stroke-width="1.2"/>
 <path d="M652 184 C 652 250, 470 250, 470 280" fill="none" stroke="#10B981" stroke-width="1.2" marker-end="url(#ag)"/>
-<text x="500" y="262" text-anchor="middle" font-size="8.5" fill="#71717A">concat mean ++ std</text>
+<text x="500" y="262" text-anchor="middle" font-size="8.5" fill="#71717A">concat mean + std</text>
 
 <!-- MLP head -> 8 logits -->
 <rect x="370" y="282" width="200" height="44" rx="9" fill="#10B981" fill-opacity="0.14" stroke="#34D399" stroke-width="1.3"/>
