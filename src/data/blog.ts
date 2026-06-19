@@ -24,7 +24,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
       "title": "When a speech-emotion model is really just recognizing the actors",
       "slug": "speaker-leakage-ravdess",
-      "description": "A speech-emotion model I had reported at 87.6% was mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the one number I will stand behind: 78.8%.",
+      "description": "A speech-emotion model can look impressive and still be mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the one number I will stand behind: 78.8%.",
       "date": "2025-11-01",
       "tags": [
         "Speech",
@@ -41,7 +41,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "My old emotion-recognition model reported 87.6% accuracy on RAVDESS, and I was proud of it. Then I tried to reproduce that number carefully and realized it was grading the model on the same 24 actors it had trained on. It was not reading emotion. It was recognizing the actors."
+          "md": "I had a speech-emotion model I was proud of. The first thing I found when I rebuilt it was that its accuracy was mostly the model recognizing the 24 RAVDESS actors, not reading their emotions. It had been graded on the same people it trained on, and once I stopped letting it do that, most of the score went away."
         },
         {
           "type": "p",
@@ -99,7 +99,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "type": "figure",
           "src": "/blog/ravdess-emotion/leak-vs-honest.png",
           "alt": "A bar chart comparing the same audio model: about 78% on a random split versus 64.9% on a speaker-independent split.",
-          "caption": "Thirteen points from nothing but the partition. My original 87.6% came from a leakier split still, so the exact inflated figure depends on how you leak; the honest one does not move. The high number is not a better model, only an easier test."
+          "caption": "Thirteen points from nothing but the partition. The high number is not a better model, only an easier test, and a random split like this is where almost every inflated RAVDESS score comes from."
         },
         {
           "type": "callout",
@@ -128,7 +128,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "That was my first worry. After the high 80s, a number in the mid-60s feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% with the same encoder sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model. Now the job is to raise that floor without cheating."
+          "md": "That was my first worry. Watching the honest score land at 64.9%, after the leaky split had flattered the same model to 78%, feels like failure. It is not. It lands almost exactly on the peer-reviewed, genuinely speaker-independent baseline: EmoBox (Interspeech 2024) reports 66.2% for a HuBERT-base model on RAVDESS under a comparable protocol. My 64.9% with the same encoder sitting right there is the evidence that the pipeline is honest, not broken. The 90s are the mirage; the 60s are the real floor for a base-size model. Now the job is to raise that floor without cheating."
         },
         {
           "type": "h2",
@@ -229,8 +229,8 @@ export const BLOG_POSTS: BlogPost[] = [
         {
           "type": "figure",
           "src": "/blog/ravdess-emotion/model-comparison.svg",
-          "alt": "A horizontal bar chart of speaker-independent accuracy: calibrated late fusion 78.8%, WavLM-large audio 70.3%, facial-expression visual 58.1%, HuBERT-base audio 64.9%, and a separate red bar for the leaky random split at about 78% marked as memorizing speakers.",
-          "caption": "The honest progression in emerald, with the leaky random-split number kept in red and off to the side so it is never mistaken for progress."
+          "alt": "A horizontal bar chart of speaker-independent accuracy: calibrated late fusion 78.8%, WavLM-large frozen 70.3%, WavLM-large fine-tuned 67.6% drawn in gray as the overfit attempt, HuBERT-base 64.9%, facial-expression video 58.1%, and a separate red bar for the same audio model on a leaky random split at 78%.",
+          "caption": "Every number in this post on one axis. The honest progression is emerald; the fine-tuned model that overfit is gray; the leaky random-split score is red so it is never mistaken for progress."
         },
         {
           "type": "p",
