@@ -22,162 +22,242 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    "title": "The part most bank demos fake: getting a transfer right",
+    "title": "The Virtual Bank System: event-driven microservices and a correct transfer saga",
     "slug": "event-driven-bank-transfer-saga",
-    "description": "My first Virtual Bank claimed event-driven microservices and distributed transactions. Both claims were marketing: Kafka only carried logs and the transfer could double-spend. Here is the honest rebuild, where a transfer is a real saga that cannot lose money, with the outbox, idempotency, and locking that make that true.",
+    "description": "A study guide to the Virtual Bank System: five Spring Boot services behind a gateway, synchronous REST at the edge and an event-driven transfer saga over Kafka. It explains the architecture, the transfer step by step, and the three mechanisms that keep the money path correct: the transactional outbox, idempotent consumers, and pessimistic locking.",
     "date": "2026-06-19",
     "tags": [
       "Microservices",
       "Event-Driven",
-      "Kafka",
       "Spring Boot",
-      "Distributed Systems"
+      "Kafka",
+      "Distributed Systems",
+      "Backend"
     ],
-    "readingMinutes": 13,
+    "readingMinutes": 12,
     "body": [
       {
         "type": "p",
-        "md": "I built a microservices banking system, and for a while I was happy with the README. It said event-driven microservices and distributed transactions. When I went back to it with fresh eyes, both headline claims turned out to be marketing. Kafka was only carrying log messages between services; the actual money transfer was a two-step REST call that could double-spend under load. And every endpoint was wide open: you could move money between accounts you did not own."
-      },
-      {
-        "type": "p",
-        "md": "So I rebuilt it, and I picked one thing to actually get right: the transfer. Most bank demos wave at this and move on. The whole point of this post is the part they skip, a money movement that cannot double-spend, is idempotent under retries, and survives a service or broker restart without losing or inventing a cent. The [code is on GitHub](https://github.com/Ab-Romia/Virtual-Bank-System) and runs with one command."
+        "md": "This is a walkthrough of the Virtual Bank System, a small bank built as event-driven microservices in Spring Boot. The code is small and meant to be read: the goal here is to explain how the parts fit and why the money path is correct. A transfer cannot double-spend, cannot drive a balance negative, is idempotent under retries, and survives a service or broker restart without losing or inventing money. The [code is on GitHub](https://github.com/Ab-Romia/Virtual-Bank-System) and the whole thing comes up with one command. I have organized this around the concepts a learner can carry out of it, each tied to the running system."
       },
       {
         "type": "h2",
-        "text": "The whole system in one picture"
+        "text": "What the app does"
       },
       {
         "type": "p",
-        "md": "Five small Spring Boot services behind a gateway. The trick to reading this picture is the two kinds of arrows: solid lines are synchronous REST at the edge, and dashed lines are the asynchronous event path where the transfer actually happens."
+        "md": "Before the internals, here is the system from the outside. A React single-page app talks to one gateway. You sign in, see your accounts and balances, open accounts, deposit, and transfer money between accounts. Every transfer keeps a history you can read back."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/virtual-bank/dashboard.png",
+        "alt": "The Virtual Bank dashboard. Two account cards: a CHECKING account ending 4917 with a $3,200.00 balance marked ACTIVE, and a SAVINGS account ending 7908 with a $0.00 balance marked ACTIVE. An Open account button sits to the right and a Recent transfers panel below reads No transfers yet.",
+        "caption": "The dashboard after sign-in: account cards with balances and status, aggregated by the gateway into one response."
+      },
+      {
+        "type": "p",
+        "md": "Opening an account is a short dialog that takes a type and a currency, and the new card starts at a zero balance. Depositing is a similar dialog scoped to one account. A deposit is a synchronous credit handled inside account-service, so the new balance is visible the moment the call returns."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/virtual-bank/open-account.png",
+        "alt": "An Open account dialog over the dashboard, with an Account type field set to Checking and a Currency field set to USD, and Cancel and Open account buttons.",
+        "caption": "The open-account dialog: pick a type and a currency. This is a synchronous request to account-service."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/virtual-bank/deposit.png",
+        "alt": "A Deposit dialog over the dashboard, labeled Into CHECKING ending 4917, with an Amount (USD) field and Cancel and Deposit buttons.",
+        "caption": "The deposit dialog, scoped to one account, which funds it so a transfer has something to move."
+      },
+      {
+        "type": "p",
+        "md": "The transfer screen is where the event path becomes visible. You pick a source account and a destination, enter an amount, and send. The app follows the transfer to its outcome and shows the audit history that audit-service built by consuming the event streams. Here a transfer of $750.00 has settled to COMPLETED, with its history listing REQUESTED and then COMPLETED, each with a timestamp. Those two entries come from two different events on the event path, recorded independently. That ordered, two-step history is what the rest of this post explains."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/virtual-bank/transfer.png",
+        "alt": "The Transfer money screen. A form moves funds from a CHECKING account ending 4917 ($3,200.00) to a destination account id, with an amount of 750. Below it a card shows a COMPLETED transfer of $750.00 with a HISTORY listing REQUESTED then COMPLETED, both timestamped Jun 19, 2026, 2:46 PM.",
+        "caption": "A $750.00 transfer settled to COMPLETED, with the audit history audit-service recorded from the event streams: REQUESTED, then COMPLETED, each timestamped."
+      },
+      {
+        "type": "figure",
+        "src": "/blog/virtual-bank/dashboard-activity.png",
+        "alt": "The dashboard after the transfer. The CHECKING account ending 4917 now shows $2,450.00 and the SAVINGS account ending 7908 shows $750.00. A Recent transfers table lists one row dated Jun 19, 2026, 2:46 PM, from an account ending c35b to one ending 2b0c, amount $750.00, status COMPLETED.",
+        "caption": "After the transfer: checking dropped from $3,200.00 to $2,450.00, savings rose to $750.00, and the recent-transfers panel shows the completed movement."
+      },
+      {
+        "type": "h2",
+        "text": "The system at a glance"
+      },
+      {
+        "type": "p",
+        "md": "Five Spring Boot services sit behind a Spring Cloud Gateway. The gateway is the only thing reachable from outside: it validates the request's token, routes `/api/**` to a service, and aggregates the dashboard. Behind it, four services each own a single responsibility, backed by one PostgreSQL server (a database per service) and one KRaft Kafka broker. An optional Spring AI assistant over OpenRouter can be turned on (it uses a local embedding model for retrieval and degrades gracefully without a key), and so can a Tempo, Prometheus, and Grafana stack for observability."
       },
       {
         "type": "figure",
         "src": "/blog/virtual-bank/architecture.svg",
-        "alt": "A client calls a gateway over REST; the gateway validates a JWT and routes to user-service, account-service, transaction-service, and audit-service. Each service has its own PostgreSQL database. A dashed asynchronous path runs from transaction-service to a Kafka transfer.commands topic, into account-service, back out to a transfer.events topic, and into both transaction-service and audit-service.",
-        "caption": "Synchronous at the edge, event-driven in the core. Only the gateway is reachable from outside, and every service validates the same token."
+        "alt": "A client calls a gateway over REST; the gateway validates a JWT and routes to user-service, account-service, transaction-service, and audit-service. Each service has its own PostgreSQL database. A dashed asynchronous path runs from transaction-service to the Kafka transfer.commands topic, into account-service, back out to the transfer.events topic, into transaction-service, and into audit-service from both the transfer.commands and transfer.events topics.",
+        "caption": "Solid arrows are synchronous REST at the edge; dashed arrows are the asynchronous event path over Kafka. Only the gateway is reachable from outside, and every service validates the same token."
       },
       {
         "type": "p",
-        "md": "Being precise about that split matters, because blurring it is how demos overclaim. Everything a client does is a synchronous request: register, log in, open an account, deposit, start a transfer, read a balance. Exactly one thing is event-driven: the transfer itself. Starting a transfer returns `202 Accepted` immediately, and the money moves on the event path. That honesty is the difference between a system that is event-driven and one that just has Kafka installed."
+        "md": "The split between the two arrow styles is the first concept to hold onto. Everything a client does is a synchronous request over HTTP: register, log in, open an account, deposit, read balances, start a transfer, read a transfer's status. Exactly one thing is asynchronous over Kafka: the transfer itself. Starting a transfer returns `202 Accepted` immediately, and the actual money movement happens on the event path while the client polls for the result. So the system is synchronous at the edge and event-driven in its core, where the consistency requirements concentrate."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "gateway (Spring Cloud Gateway): the single entry point. It validates the JWT, routes `/api/**`, and aggregates the dashboard.",
+          "user-service: identity. Registration, login, RS256 JWT issuance, and a JWKS endpoint that publishes its public keys.",
+          "account-service: accounts and balances. It applies a transfer atomically; both the debit and the credit live here.",
+          "transaction-service: the transfer ledger. It records a transfer, orchestrates it on the event path, and marks its outcome.",
+          "audit-service: an event-sourced, queryable history. It is a separate consumer of the transfer streams and records one immutable entry per event."
+        ]
+      },
+      {
+        "type": "p",
+        "md": "The stack is Java 21 with virtual threads, Spring Boot 3.5, Spring Cloud Gateway, Spring Kafka on a single KRaft broker, Spring Security as an OAuth2 resource server (RS256 JWT plus JWKS), Spring Data JPA with Flyway, PostgreSQL, Micrometer Tracing with OpenTelemetry, and Testcontainers. Shared events, the outbox, and the security code live in a `vbank-common` Spring Boot starter so the services cannot drift apart on them."
       },
       {
         "type": "h2",
-        "text": "Why the old transfer could lose money"
+        "text": "Database per service"
       },
       {
         "type": "p",
-        "md": "The original transfer read the source balance, checked it was enough, then wrote the new balances, across two services over REST with no locking and no idempotency key. Two transfers from the same account at the same time would both read the old balance, both pass the check, and both commit. That is a classic lost update, and in a bank it means money created from nothing. A retried request, which an at-least-once network will happily send, would simply move the money twice."
-      },
-      {
-        "type": "callout",
-        "title": "The bug in one line",
-        "md": "Read balance, check it, write it, with two callers racing and no lock, is how you turn one dollar into two. The fix is not more code; it is letting the database serialize the change and making the operation safe to repeat."
+        "md": "Each service owns its own schema in PostgreSQL, and no service reads another service's tables. user-service holds users, account-service holds accounts and balances, transaction-service holds the transfer ledger, and audit-service holds the immutable audit entries. Two extra tables appear only in the services that publish or consume events: an `OUTBOX` table and a `PROCESSED_EVENTS` table, both explained in the sections below. Keeping the data private to each service is what lets them deploy and evolve independently, and it is why they communicate only through the gateway's API or through Kafka, never by sharing a database."
       },
       {
         "type": "h2",
-        "text": "The transfer, rebuilt as a saga"
+        "text": "The transfer saga, step by step"
       },
       {
         "type": "p",
-        "md": "Here is the rebuilt flow. transaction-service owns the transfer and its ledger; account-service owns balances and does the actual money movement. They never call each other directly. They exchange a request and a result over Kafka, and each writes those messages through a transactional outbox."
+        "md": "A transfer is coordinated by transaction-service and executed by account-service. The two services never call each other directly; they exchange a request and a result over Kafka, and each writes those messages through a transactional outbox. Both accounts live in account-service's database, so the debit and the credit are a single local ACID transaction. The transfer still routes through Kafka rather than a direct call, because that gives a durable, replayable, audited record, and it leaves room for the destination to move to another service or bank later."
       },
       {
         "type": "figure",
         "src": "/blog/virtual-bank/transfer-saga.svg",
-        "alt": "Left to right: the client posts a transfer with an Idempotency-Key; transaction-service writes a PENDING transfer and a TransferRequested row to its outbox in one transaction and returns 202; a relay publishes the outbox row to Kafka; account-service consumes it, locks both accounts, applies debit and credit in one atomic idempotent local transaction, and emits the result through its own outbox; transaction-service marks the transfer COMPLETED, or FAILED on insufficient funds.",
-        "caption": "The transfer saga. The three labels on it, the outbox, the idempotent consumer, and the pessimistic lock, are the whole correctness story."
+        "alt": "Swimlanes for client, transaction-service, Kafka, and account-service. The client posts a transfer with an Idempotency-Key; transaction-service writes a PENDING transfer and a TransferRequested row to its outbox in one transaction and returns 202; a relay publishes the outbox row to the transfer.commands topic; account-service consumes it, locks both accounts, applies debit and credit in one atomic idempotent local transaction, and emits the result on transfer.events through its own outbox; transaction-service marks the transfer COMPLETED, or FAILED on insufficient funds. Three labels mark the outbox, the idempotent consumer, and the pessimistic lock.",
+        "caption": "The transfer saga in swimlanes. Three labels mark the mechanisms that keep it correct: the outbox, the idempotent consumer, and the pessimistic lock. The FAILED branch is the insufficient-funds path."
       },
       {
         "type": "p",
-        "md": "Three properties make this correct rather than merely plausible, and each one closes a specific failure in the old version."
+        "md": "Reading the flow in order:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "The client posts the transfer with an `Idempotency-Key` header. The gateway validates the JWT and forwards it to transaction-service.",
+          "transaction-service writes a `PENDING` transfer and a `TransferRequested` event into its outbox in one database transaction, then returns `202 Accepted` with the transfer id and a status URL.",
+          "A relay reads unsent outbox rows and publishes the `TransferRequested` event to the `transfer.commands` topic.",
+          "account-service consumes the event, takes a pessimistic write lock on both accounts, validates, and applies the debit and credit in one atomic, idempotent local transaction, then emits `TransferCompleted` or `TransferFailed` on the `transfer.events` topic through its own outbox.",
+          "transaction-service consumes the result and marks the transfer `COMPLETED`, or `FAILED` on insufficient funds.",
+          "audit-service is a separate consumer reading both `transfer.commands` and `transfer.events`, so it records the REQUESTED entry and the outcome entry independently.",
+          "The client polls the status URL and reads `COMPLETED` or `FAILED`."
+        ]
+      },
+      {
+        "type": "p",
+        "md": "A poison message, anything that keeps failing, is routed to a per-topic dead-letter topic so one bad record does not block the partition or get silently dropped. Three properties make this correct: the transactional outbox, idempotent consumers, and pessimistic locking. Each maps to a label on the saga diagram above, and the next three sections take them one at a time."
       },
       {
         "type": "h2",
-        "text": "1. The transactional outbox: events never lost"
+        "text": "The transactional outbox: events are never lost"
       },
       {
         "type": "p",
-        "md": "The naive way to publish an event is to save your row, then send to Kafka. If the process dies between those two steps, the state changed but nobody heard about it, or the reverse. The outbox pattern removes the gap: you write the business row and a row describing the event into the same database, in the same transaction. A small relay reads unsent outbox rows and publishes them afterwards. The event cannot exist without its state change, and once written it cannot be dropped. It is the unglamorous backbone of every reliable event-driven system, and it is why a crash mid-transfer is safe."
+        "md": "The naive way to publish an event is to save your row, then send to Kafka. If the process dies between those two steps, the state changed but nobody heard about it, or the reverse. The outbox pattern removes that gap. A service writes the business row and a row describing the event into the same database, in the same transaction. A small relay later reads unsent outbox rows and publishes them to Kafka. The event cannot exist without its state change committing, and once written it cannot be dropped. In this system the `OUTBOX` table lives in both account-service and transaction-service, since both publish events. This is why a crash mid-transfer is safe: when the service comes back, the relay picks up where it left off."
       },
       {
         "type": "h2",
-        "text": "2. Idempotent consumers: no double-apply"
+        "text": "Idempotent consumers: money never moves twice"
       },
       {
         "type": "p",
-        "md": "Kafka delivers at least once, so account-service must assume it will see the same transfer request more than once. Before it touches a balance it records the transfer id in a processed-events table, in the same transaction as the money movement. A redelivery finds the id already there and does nothing. The transfer id is the idempotency key all the way through, including the client's `Idempotency-Key` header, so re-posting the same transfer returns the same one instead of creating a second."
+        "md": "Kafka delivers at least once, so account-service assumes it will see the same transfer request more than once. Before it touches a balance, it records the transfer id in its `PROCESSED_EVENTS` table, in the same transaction as the money movement. A redelivery finds the id already there and does nothing. The transfer id is the idempotency key all the way through, including the client's `Idempotency-Key` header, so re-posting the same transfer returns the same one instead of creating a second. The same guard protects transaction-service when it consumes results, and `AUDIT_ENTRIES` is unique on (transfer_id, event_type) so a redelivered event is recorded once."
       },
       {
         "type": "h2",
-        "text": "3. Pessimistic locking: no double-spend"
+        "text": "Pessimistic locking: no double-spend"
       },
       {
         "type": "p",
-        "md": "When account-service applies a transfer it takes a pessimistic write lock on both accounts, in a fixed id order so two opposite-direction transfers cannot deadlock, then moves the money. Concurrent transfers on the same account serialize instead of racing. A `CHECK (balance >= 0)` constraint is the backstop that makes a negative balance impossible even if the logic were wrong. Because both accounts share account-service's database, the debit and the credit are a single ACID transaction."
-      },
-      {
-        "type": "p",
-        "md": "I did not want to take my own word for any of this, so the claim is a test. It opens an account with 100, fires twenty transfers of 10 at it from twenty threads at once, and asserts that exactly ten succeed, ten fail with insufficient funds, the balance lands on exactly zero, and it is never negative."
-      },
-      {
-        "type": "code",
-        "code": "@Test\nvoid concurrentTransfersNeverDoubleSpend() throws Exception {\n    seedAccount(source, new BigDecimal(\"100\"));\n    var pool = Executors.newFixedThreadPool(20);\n    var done = new CountDownLatch(20);\n    for (int i = 0; i < 20; i++) {\n        pool.submit(() -> { transfer(source, dest, new BigDecimal(\"10\")); done.countDown(); });\n    }\n    done.await();\n    assertThat(balanceOf(source)).isEqualByComparingTo(\"0.00\"); // never negative\n    assertThat(completedTransfers()).isEqualTo(10);\n    assertThat(failedTransfers()).isEqualTo(10);\n}"
-      },
-      {
-        "type": "h2",
-        "text": "The decision I am proudest of is one I did not make"
-      },
-      {
-        "type": "p",
-        "md": "The textbook move here is a compensating saga: debit in one step, credit in another, and if the credit fails, run a compensating refund to undo the debit. It is a great pattern, and it would have looked impressive. But both of my accounts live in one database, where the debit and credit are already a single atomic transaction that either fully happens or does not. Adding a multi-step saga with refunds, purely to show I know the pattern, would be machinery the problem does not need. So I left it out, and I say so in the docs. Knowing when not to reach for a pattern is the more senior skill, and a reviewer who has built real systems notices the restraint."
-      },
-      {
-        "type": "h2",
-        "text": "Auth that does not trust the gateway alone"
-      },
-      {
-        "type": "p",
-        "md": "The old version had no authentication at all. The rebuild issues an RS256 JWT from the user service and publishes its public keys, and the gateway plus every service validate that token. The user id always comes from the token, never from a request field, and ownership is checked on every account and transfer. That is what closes the hole where the old version let anyone move money between arbitrary account ids. Defense in depth, so a request that somehow reaches a service directly still cannot read or move another person's money."
-      },
-      {
-        "type": "h2",
-        "text": "It runs with one command"
-      },
-      {
-        "type": "p",
-        "md": "A reference is only useful if you can run it. `git clone` then `docker compose up --build` brings up Postgres, a single KRaft Kafka broker, and the five services, building each from source. The frontend is a small React app over the same gateway API, with real token auth and a transfer screen that follows a transfer to its outcome and shows its audit history."
-      },
-      {
-        "type": "figure",
-        "src": "/blog/virtual-bank/vbank-03-transfer.png",
-        "alt": "The transfer screen of the web app: a form to move money between accounts, and below it a card showing a COMPLETED transfer of $250.00 with an audit history listing REQUESTED then COMPLETED.",
-        "caption": "A transfer in the UI, settled to COMPLETED, with the audit history that the audit service built by tapping the same event streams."
-      },
-      {
-        "type": "p",
-        "md": "The audit service is the other half of taking events seriously. It is a separate consumer group on the same transfer streams, and it records an immutable, queryable history of every transfer. The old logging service silently swallowed any message it failed to handle, which is the worst possible behavior for the one component whose job is the record of what happened. The rebuilt one routes anything it cannot process to a dead-letter topic instead of dropping it."
-      },
-      {
-        "type": "h2",
-        "text": "Observability, and where I will admit it stops"
-      },
-      {
-        "type": "p",
-        "md": "Every service exports traces over OpenTelemetry, and Kafka producer and consumer instrumentation is on, so the trace context rides along on the W3C `traceparent` header and the trace continues on the far side of the broker. An optional override adds Tempo, Prometheus, and Grafana, and you can watch a transfer's command being published and consumed as one trace across the services."
+        "md": "When account-service applies a transfer it takes a pessimistic write lock on both accounts, in a fixed id order so two opposite-direction transfers cannot deadlock, then moves the money. Concurrent transfers on the same account serialize instead of racing. A `CHECK (balance >= 0)` constraint is the backstop that makes a negative balance impossible even if the logic were wrong. Because both accounts share account-service's database, the debit and the credit are a single ACID transaction that either fully happens or does not."
       },
       {
         "type": "callout",
-        "title": "The honest limitation",
-        "md": "The HTTP request that starts a transfer and the Kafka publish that carries it out are linked but separate traces, not one tree. That is a direct consequence of the outbox: the relay publishes on its own schedule, decoupled from the request thread, so the producer span roots at the relay. Joining them means carrying the trace context in the outbox row. It is a real tradeoff, durability over a single tidy trace, and I would rather document it than hide it."
-      },
-      {
-        "type": "h2",
-        "text": "What I will defend"
+        "title": "Why a lock and a constraint",
+        "md": "Two callers both read the balance, both pass the check, and both write, so one dollar becomes two. A pessimistic write lock serializes the change so the second caller reads the balance the first already left, a `CHECK (balance >= 0)` constraint backs it at the database level, and recording the transfer id makes the operation safe to repeat. Together the outbox, idempotency, and locking keep the money path correct under retries and restarts."
       },
       {
         "type": "p",
-        "md": "Not a feature list. The claim I will stand behind is narrow and testable: this transfer cannot double-spend, cannot go negative, is safe to retry, and recovers from a crash, and there is a test for each of those words. The rest of the project, the gateway, the per-service databases, the audit log, the tracing, exists to make that claim legible and to show the same care everywhere. If you are learning event-driven microservices, the lesson I would take from it is that the interesting work is not wiring up Kafka, it is the outbox, the idempotency, and the lock that make the events trustworthy, plus the discipline to not add a pattern you do not need."
+        "md": "A concurrency test verifies this. It seeds an account with 100.00, then fires twenty transfers of 10.00 at it from twenty threads released at the same instant by a `start` latch, and waits on a `done` latch. The source can fund exactly ten of the twenty, so the lock must serialize them: the balance lands on exactly 0.00, the destination on 100.00, and the outbox holds ten `TransferCompleted` results and ten `INSUFFICIENT_FUNDS` failures. The assertions read the outbox directly rather than a broker, so the test needs no Kafka:"
+      },
+      {
+        "type": "code",
+        "code": "@Test\nvoid concurrentTransfersNeverDoubleSpend() throws InterruptedException {\n    Account source = seedAccount(OWNER, new BigDecimal(\"100.00\"));\n    Account destination = seedAccount(OWNER, new BigDecimal(\"0.00\"));\n\n    int transfers = 20;\n    BigDecimal amount = new BigDecimal(\"10.00\");\n    ExecutorService pool = Executors.newFixedThreadPool(transfers);\n    CountDownLatch start = new CountDownLatch(1);\n    CountDownLatch done = new CountDownLatch(transfers);\n\n    for (int i = 0; i < transfers; i++) {\n        pool.submit(() -> {\n            try {\n                start.await();                                       // release all at once\n                transferService.apply(command(source, destination, amount));\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            } finally {\n                done.countDown();\n            }\n        });\n    }\n    start.countDown();\n    assertThat(done.await(60, TimeUnit.SECONDS)).isTrue();\n\n    // the source funds exactly 10 of 20; it lands on 0 and never goes negative\n    assertThat(balanceOf(source)).isEqualByComparingTo(\"0.00\");\n    assertThat(balanceOf(destination)).isEqualByComparingTo(\"100.00\");\n    // 10 TransferCompleted and 10 INSUFFICIENT_FUNDS in the outbox\n}"
+      },
+      {
+        "type": "h2",
+        "text": "Security: every service validates the token"
+      },
+      {
+        "type": "p",
+        "md": "user-service issues an RS256 JWT on login and publishes its public keys at `/.well-known/jwks.json`. The gateway validates that token, and so does every service behind it, against the same JWKS. This is defense in depth: a request that somehow reaches a service without passing through the gateway still cannot read or move another user's money."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "The user id always comes from the token's `sub` claim, never from a request parameter or body.",
+          "Ownership is checked on every account and transfer resource, so one user cannot read or move another user's money.",
+          "Passwords are hashed with BCrypt.",
+          "Secrets come from the environment, never the source tree."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Observability: a trace that crosses Kafka"
+      },
+      {
+        "type": "p",
+        "md": "Each service bridges Micrometer observations to OpenTelemetry and exports spans over OTLP. Kafka producer and consumer observation is turned on, so the W3C `traceparent` header rides along on every record and the trace continues on the far side of the broker: a single trace shows transaction-service publishing a command and account-service plus audit-service consuming it. An opt-in compose override adds Tempo for traces, Prometheus for metrics, and Grafana to view both. Tracing is off in the lean default run and on under the override."
+      },
+      {
+        "type": "callout",
+        "title": "Where the trace stops",
+        "md": "The HTTP request that starts a transfer and the Kafka publish that carries it out are linked but separate traces, not one tree. The outbox relay publishes on its own schedule, decoupled from the request thread, so the producer span roots at the relay rather than the original request. Joining them would mean storing the trace context in the outbox row and restoring it in the relay. This trades a single tidy trace for the durability the outbox provides."
+      },
+      {
+        "type": "h2",
+        "text": "Running it"
+      },
+      {
+        "type": "p",
+        "md": "The only requirement is Docker (or podman) and Docker Compose; the services build from source inside the images. One command brings up PostgreSQL, a single KRaft Kafka broker, and the five services, with the gateway on `http://localhost:8080`:"
+      },
+      {
+        "type": "code",
+        "code": "git clone https://github.com/Ab-Romia/Virtual-Bank-System.git\ncd Virtual-Bank-System\ncp .env.example .env        # adjust the Postgres password for anything real\ndocker compose up --build   # gateway on http://localhost:8080"
+      },
+      {
+        "type": "p",
+        "md": "From there you can walk a transfer end to end with curl: register and log in to get a token, open two accounts and fund one, post a transfer with an `Idempotency-Key`, then read the result and the audit trail."
+      },
+      {
+        "type": "code",
+        "code": "# register and log in\ncurl -s -XPOST localhost:8080/api/auth/register -H 'Content-Type: application/json' \\\n  -d '{\"username\":\"alice\",\"email\":\"a@example.com\",\"password\":\"pw123456\",\"fullName\":\"Alice\"}'\nTOKEN=$(curl -s -XPOST localhost:8080/api/auth/login -H 'Content-Type: application/json' \\\n  -d '{\"username\":\"alice\",\"password\":\"pw123456\"}' | sed 's/.*\"accessToken\":\"\\([^\"]*\\)\".*/\\1/')\nAUTH=\"Authorization: Bearer $TOKEN\"\n\n# open two accounts, fund one\nA=$(curl -s -XPOST localhost:8080/api/accounts -H \"$AUTH\" -H 'Content-Type: application/json' -d '{\"type\":\"CHECKING\",\"currency\":\"USD\"}' | sed 's/.*\"id\":\"\\([^\"]*\\)\".*/\\1/')\nB=$(curl -s -XPOST localhost:8080/api/accounts -H \"$AUTH\" -H 'Content-Type: application/json' -d '{\"type\":\"SAVINGS\",\"currency\":\"USD\"}'  | sed 's/.*\"id\":\"\\([^\"]*\\)\".*/\\1/')\ncurl -s -XPOST localhost:8080/api/accounts/$A/deposit -H \"$AUTH\" -H 'Content-Type: application/json' -d '{\"amount\":100}' >/dev/null\n\n# transfer 30 (returns 202 with a transfer id), then read the result and the audit trail\nTX=$(curl -s -XPOST localhost:8080/api/transfers -H \"$AUTH\" -H 'Content-Type: application/json' -H 'Idempotency-Key: demo-1' \\\n  -d \"{\\\"fromAccountId\\\":\\\"$A\\\",\\\"toAccountId\\\":\\\"$B\\\",\\\"amount\\\":30,\\\"currency\\\":\\\"USD\\\"}\" | sed 's/.*\"transferId\":\"\\([^\"]*\\)\".*/\\1/')\ncurl -s localhost:8080/api/transfers/$TX -H \"$AUTH\"          # COMPLETED or FAILED\ncurl -s localhost:8080/api/audit/transfers/$TX -H \"$AUTH\"   # the REQUESTED + COMPLETED trail"
+      },
+      {
+        "type": "p",
+        "md": "Two optional profiles add to the lean run when you want them: an observability override that brings up Tempo, Prometheus, and Grafana on `http://localhost:3000`, and an AI profile that starts the Spring AI assistant when you supply a free OpenRouter key. Running `./mvnw verify` exercises the unit and Testcontainers integration tests, including the concurrency test above and the saga, idempotency, and audit tests."
+      },
+      {
+        "type": "h2",
+        "text": "What to take away"
+      },
+      {
+        "type": "p",
+        "md": "The core of this project is the three mechanisms that make the events trustworthy: the transactional outbox so events are never lost, idempotent consumers keyed by the transfer id so at-least-once delivery never moves money twice, and pessimistic locking plus a `CHECK (balance >= 0)` constraint so concurrent transfers cannot double-spend. The gateway, the per-service databases, the audit log, and the tracing all exist to make those mechanisms easy to inspect. The full diagrams and reasoning, including where the trace stops, are in the [architecture notes](https://github.com/Ab-Romia/Virtual-Bank-System/blob/main/docs/architecture.md)."
       }
     ]
   },

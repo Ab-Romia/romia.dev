@@ -217,37 +217,43 @@ export const PROJECTS: Project[] = [
     slug: "virtual-banking",
     categories: ["Backend", "Full-Stack"],
     description:
-      "Event-driven microservices where the money path is provably correct: a transfer that cannot double-spend, is idempotent under retries, and survives a service restart. The thing most bank demos fake.",
+      "An event-driven banking system: five Spring Boot services behind a gateway, with a transfer saga over Kafka that is provably correct under concurrency, retries, and restarts.",
     tags: ["Spring Boot 3", "Kafka", "Java 21", "PostgreSQL", "Docker"],
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
     blog: "/blog/event-driven-bank-transfer-saga",
     status: "Demo",
     featured: true,
-    impact: "A transfer saga with a transactional outbox, idempotent consumers, and pessimistic locking; a test fires 20 simultaneous transfers and proves no double-spend",
+    impact:
+      "A transfer saga with a transactional outbox, idempotent consumers, and pessimistic locking; a Testcontainers test fires twenty simultaneous transfers and proves no double-spend.",
     caseStudy: {
       problem:
-        "My first version claimed event-driven microservices and distributed transactions, but the claims were marketing. Kafka was only carrying log messages, the transfer was a racy two-step REST dance that could double-spend, and every endpoint was wide open. I rebuilt it to get the one thing most bank demos skip: a money transfer that is actually correct, and a codebase honest about how.",
+        "Build a small bank where the money path is provably correct under concurrency, retries, and restarts. A transfer must not double-spend, must not drive a balance negative, must not move money twice when a request or event is retried, and must not lose or invent money if a service or the broker restarts. The system also needs authentication so no one can read or move another user's money, and an audit trail that records every step without dropping events.",
       approach:
-        "Five Spring Boot services behind a gateway, synchronous at the edge and event-driven in the core. A transfer is a saga: transaction-service records it and emits a request through a transactional outbox; account-service applies the debit and credit in one atomic, pessimistically-locked, idempotent local transaction and emits the result; an audit service taps the streams into an immutable history. Every service validates the same RS256 JWT, so a request that slips past the gateway still cannot touch another user's money.",
+        "I built it as five Spring Boot services behind a Spring Cloud Gateway: user-service for identity, account-service for balances and the atomic transfer, transaction-service for the transfer ledger and orchestration, audit-service for an event-sourced history, plus an optional Spring AI assistant. The system is synchronous over REST at the edge and event-driven in the core, where the transfer runs as a saga over a single KRaft Kafka broker on the transfer.commands and transfer.events topics. transaction-service writes a PENDING transfer and a TransferRequested event to its outbox in one transaction and returns 202; a relay publishes it to Kafka; account-service locks both accounts, applies the debit and credit atomically, and emits the result through its own outbox; transaction-service marks the outcome; audit-service records every event. Each service owns its own PostgreSQL database, and shared events, the outbox, and security live in a vbank-common Spring Boot starter. The whole stack comes up with one docker compose command.",
       decisions: [
         {
-          title: "The transfer as an outbox-backed saga, not a REST call",
-          reasoning: "Each service writes its state change and the event it wants to publish in the same database transaction, so an event is never lost and never published without its change committing. Consumers are idempotent on the transfer id, so Kafka's at-least-once delivery never moves money twice. This is the real reason to put a transfer on an event bus, not vague decoupling.",
+          title: "Synchronous at the edge, event-driven only in the core",
+          reasoning: "Everything a client does is a synchronous REST request handled by the gateway. Only the transfer is event-driven: it returns 202 and settles on the Kafka path while the client polls. Keeping the split narrow means the asynchronous complexity is confined to the one operation that needs it, the money movement, rather than spread across the whole system.",
         },
         {
-          title: "An atomic local transfer, deliberately not a compensating saga",
-          reasoning: "Both accounts live in one database, so the debit and credit are a single ACID transaction guarded by a pessimistic lock and a CHECK (balance >= 0) constraint. Modelling that as a multi-step saga with compensating refunds, just to show the pattern, would be over-engineering, so I did not. A concurrency test fires twenty simultaneous transfers at one account and proves no double-spend and no negative balance.",
+          title: "Transactional outbox so events are never lost",
+          reasoning: "Saving a row and then publishing to Kafka leaves a gap where a crash loses the event or the state change. Writing the business row and the event into the same database in one transaction, then relaying outbox rows to Kafka afterwards, makes the event durable the moment the transaction commits and impossible to drop. The OUTBOX table lives in account-service and transaction-service, the two services that publish events, so a crash mid-transfer is safe.",
         },
         {
-          title: "Zero-trust auth, not a gateway-only checkpoint",
-          reasoning: "The gateway and every service validate the JWT and take the user id from the token, never from the request. Ownership is enforced on every account and transfer, which closes the IDOR the first version shipped where anyone could move money between arbitrary accounts.",
+          title: "Idempotent consumers keyed by transfer id",
+          reasoning: "Kafka delivers at least once, so account-service records each transfer id it applies in a processed-events table in the same transaction as the money movement. A redelivery finds the id already there and does nothing. The same transfer id is the idempotency key end to end, including the client's Idempotency-Key header, so re-posting a transfer returns the same one rather than creating a second.",
         },
         {
-          title: "One command up, and honest about the limits",
-          reasoning: "git clone then docker compose up builds every service from source and runs the whole stack; an optional override adds tracing across the Kafka hops. The docs state plainly what is event-driven versus synchronous and where a single trace breaks, because a reference is worth more when it does not oversell.",
+          title: "Pessimistic locking plus a CHECK (balance >= 0) constraint instead of a compensating saga",
+          reasoning: "Both accounts live in account-service's database, so the debit and credit are a single ACID transaction protected by a pessimistic write lock taken in a fixed id order to avoid deadlocks, with the CHECK constraint as a database-level backstop. A multi-step compensating saga with refunds would add machinery this single-database transfer does not need, so it was left out and documented. A Testcontainers test fires twenty simultaneous transfers at one account funded with 100 and asserts exactly ten succeed, ten fail with insufficient funds, and the balance lands on exactly zero, never negative.",
+        },
+        {
+          title: "RS256 JWT validated at the gateway and at every service",
+          reasoning: "user-service signs the token and publishes its public keys at a JWKS endpoint. The gateway and every service validate it against that JWKS, the user id always comes from the token's sub claim rather than a request field, and ownership is checked on every resource, so a request that reaches a service directly still cannot touch another user's money.",
         },
       ],
-      results: "A reference you can read and run. Clone it, bring it up with one command, and a transfer flows through Kafka to COMPLETED, an over-balance transfer fails cleanly with the reason, and the audit log shows every step. Distributed tracing follows a transfer across the broker. The repository is written to be read, with the diagrams and the reasoning behind each decision.",
+      results:
+        "A reader gets a runnable, readable reference for event-driven microservices. One command (docker compose up --build) brings up PostgreSQL, a single KRaft Kafka broker, and the five services built from source, with a React frontend for opening accounts, depositing, and following a transfer to its outcome alongside its audit history. The transfer cannot double-spend, cannot go negative, is safe to retry, and recovers from a crash, with Testcontainers tests covering the concurrency, saga, idempotency, and audit behavior. The architecture notes explain each mechanism and state one limitation plainly: because the outbox relay publishes on its own schedule, the HTTP request and the asynchronous publish are linked but separate traces rather than one tree.",
     },
   },
   {
