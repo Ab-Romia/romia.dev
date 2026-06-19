@@ -41,7 +41,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "I had a speech-emotion model I was proud of. The first thing I found when I rebuilt it was that its accuracy was mostly the model recognizing the 24 RAVDESS actors, not reading their emotions. It had been graded on the same people it trained on, and once I stopped letting it do that, most of the score went away."
+          "md": "I had a speech-emotion model I was proud of. The first thing I found when I rebuilt it was that its accuracy was mostly the model recognizing the 24 RAVDESS actors, not reading their emotions. It had been graded on the same people it trained on, and once I stopped letting it do that, a chunk of the accuracy went with it."
         },
         {
           "type": "p",
