@@ -217,28 +217,37 @@ export const PROJECTS: Project[] = [
     slug: "virtual-banking",
     categories: ["Backend", "Full-Stack"],
     description:
-      "An event-driven banking backend: independent services that talk over Kafka, plus a conversational assistant for account questions.",
-    tags: ["Spring Boot", "Kafka", "Java", "LangChain", "Docker"],
+      "Event-driven microservices where the money path is provably correct: a transfer that cannot double-spend, is idempotent under retries, and survives a service restart. The thing most bank demos fake.",
+    tags: ["Spring Boot 3", "Kafka", "Java 21", "PostgreSQL", "Docker"],
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
+    blog: "/blog/event-driven-bank-transfer-saga",
     status: "Demo",
     featured: true,
-    impact: "Kafka-decoupled microservices that scale independently",
+    impact: "A transfer saga with a transactional outbox, idempotent consumers, and pessimistic locking; a test fires 20 simultaneous transfers and proves no double-spend",
     caseStudy: {
       problem:
-        "In a monolithic banking backend, a surge in transaction processing drags down account lookups and login too, because everything shares one process. I wanted each part to scale on its own.",
+        "My first version claimed event-driven microservices and distributed transactions, but the claims were marketing. Kafka was only carrying log messages, the transfer was a racy two-step REST dance that could double-spend, and every endpoint was wide open. I rebuilt it to get the one thing most bank demos skip: a money transfer that is actually correct, and a codebase honest about how.",
       approach:
-        "Spring Boot services communicate through Kafka topics instead of calling each other directly, so they stay decoupled. OAuth2 guards the gateway, and an assistant that answers account questions runs as its own service.",
+        "Five Spring Boot services behind a gateway, synchronous at the edge and event-driven in the core. A transfer is a saga: transaction-service records it and emits a request through a transactional outbox; account-service applies the debit and credit in one atomic, pessimistically-locked, idempotent local transaction and emits the result; an audit service taps the streams into an immutable history. Every service validates the same RS256 JWT, so a request that slips past the gateway still cannot touch another user's money.",
       decisions: [
         {
-          title: "Kafka over synchronous REST between services",
-          reasoning: "A ledger can tolerate eventual consistency, and decoupling stops one failure from cascading. If notifications go down, transactions still post.",
+          title: "The transfer as an outbox-backed saga, not a REST call",
+          reasoning: "Each service writes its state change and the event it wants to publish in the same database transaction, so an event is never lost and never published without its change committing. Consumers are idempotent on the transfer id, so Kafka's at-least-once delivery never moves money twice. This is the real reason to put a transfer on an event bus, not vague decoupling.",
         },
         {
-          title: "The assistant as a separate service",
-          reasoning: "Keeping it out of the core banking code means I can update the model, A/B test it, or roll it back without redeploying the ledger.",
+          title: "An atomic local transfer, deliberately not a compensating saga",
+          reasoning: "Both accounts live in one database, so the debit and credit are a single ACID transaction guarded by a pessimistic lock and a CHECK (balance >= 0) constraint. Modelling that as a multi-step saga with compensating refunds, just to show the pattern, would be over-engineering, so I did not. A concurrency test fires twenty simultaneous transfers at one account and proves no double-spend and no negative balance.",
+        },
+        {
+          title: "Zero-trust auth, not a gateway-only checkpoint",
+          reasoning: "The gateway and every service validate the JWT and take the user id from the token, never from the request. Ownership is enforced on every account and transfer, which closes the IDOR the first version shipped where anyone could move money between arbitrary accounts.",
+        },
+        {
+          title: "One command up, and honest about the limits",
+          reasoning: "git clone then docker compose up builds every service from source and runs the whole stack; an optional override adds tracing across the Kafka hops. The docs state plainly what is event-driven versus synchronous and where a single trace breaks, because a reference is worth more when it does not oversell.",
         },
       ],
-      results: "A working banking backend: transfers, account management, and an assistant, each as its own service.",
+      results: "A reference you can read and run. Clone it, bring it up with one command, and a transfer flows through Kafka to COMPLETED, an over-balance transfer fails cleanly with the reason, and the audit log shows every step. Distributed tracing follows a transfer across the broker. The repository is written to be read, with the diagrams and the reasoning behind each decision.",
     },
   },
   {
