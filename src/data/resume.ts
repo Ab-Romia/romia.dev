@@ -146,30 +146,32 @@ export const PROJECTS: Project[] = [
     slug: "talos",
     categories: ["AI/ML", "Backend"],
     description:
-      "Graduation project (team): a multi-user RAG platform for chatting with your own uploaded documents, with answers streamed back and cited inline. I owned the ingestion and retrieval core.",
-    tags: ["FastAPI", "RAG", "Milvus", "MinIO", "Redis/ARQ"],
-    status: "Ongoing",
-    featured: false,
+      "Graduation project (team): a team chat platform with a workspace-grounded RAG assistant that answers from your own documents, with citations. I owned the AI, retrieval, and evaluation.",
+    tags: ["FastAPI", "RAG", "Milvus", "LangChain", "Evaluation"],
+    status: "Deployed",
+    featured: true,
+    impact:
+      "Found the root cause of weak answers (over-fragmented chunks) and proved the fix with a paired, Holm-corrected eval: judged correctness 0.657 to 0.855 on the workspace's own corpus.",
     caseStudy: {
       problem:
-        "A team's real knowledge lives in its own documents, so a general chatbot is useless for it. People need answers grounded in their own files, with a pointer to where each answer came from.",
+        "A team's real knowledge lives in its own documents, so a general chatbot is useless for it. People need answers grounded in their own files, scoped per workspace, with a pointer to where each answer came from.",
       approach:
-        "Talos is a team project; I owned the ingestion and retrieval core. Files upload to MinIO, and an async ARQ worker ingests them through a race-safe processing state machine. Retrieval runs in two stages: a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, streamed back over SSE with inline citations. I also built Google Drive import and a statistical evaluation harness to measure retrieval quality.",
+        "Talos is a team project; I owned the AI, retrieval, and evaluation track. Files upload to MinIO and a taskiq worker processes them out of band: parse, chunk by title, embed with bge-small, and write into a per-workspace Milvus collection. A question runs a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, and the model answers from the reranked passages only, streamed over SSE with inline citations. When the assistant gave weak answers, I built a statistical harness that runs the exact production pipeline to find and prove the fix.",
       decisions: [
         {
           title: "Milvus for vector search, MinIO for files",
-          reasoning: "A dedicated vector store handled the hybrid dense and sparse retrieval the project needed at scale, while MinIO held the raw uploads separately so storage and search could each be reasoned about on their own.",
+          reasoning: "A dedicated vector store handled the hybrid dense and sparse retrieval, one collection scoped per workspace, while MinIO held the raw uploads separately so storage and search could each be reasoned about on their own.",
         },
         {
-          title: "Async ingestion with a race-safe state machine",
-          reasoning: "Uploads process in the background through an ARQ worker. A processing state machine keeps concurrent uploads and retries from corrupting a document's state, so a half-ingested file can never be queried as if it were ready.",
+          title: "Async ingestion so a half-ingested file is never queried",
+          reasoning: "Uploads process in the background through a taskiq worker, and the API returns 202 immediately. A file only becomes retrievable once it's fully indexed, so a partial ingest can never surface as if it were ready.",
         },
         {
-          title: "Two-stage retrieval with reranking",
-          reasoning: "Hybrid retrieval with reciprocal rank fusion casts a wide net, then a cross-encoder reranker sharpens the top results before they reach the model. The evaluation harness is what told me the reranker was worth its latency.",
+          title: "Measured retrieval instead of trusting it",
+          reasoning: "When answers were weak, I traced it to over-fragmented chunks (1,778 fragments, median 67 characters) and proved the fix with a paired evaluation on the production pipeline. Chunk hygiene alone raised judged correctness by 18.6 points; the reranker earned its latency; the numbers, not a hunch, set the defaults.",
         },
       ],
-      results: "In progress: teams chat with their own documents and get answers streamed back with inline citations, with a statistical harness measuring retrieval quality.",
+      results: "Deployed and demoed live at the defense (A+), then decommissioned. The retrieval fix is proven with a paired, Holm-corrected evaluation on the production pipeline: judged answer correctness rose from 0.657 to 0.855 on the workspace's own corpus. Full write-up in the case study.",
     },
   },
   {

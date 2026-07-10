@@ -19,10 +19,13 @@ const statusColors: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  // zaylon-ai has its own dedicated case study page at /projects/zaylon-ai/page.tsx.
-  // Projects with a blog write-up redirect to the blog (see next.config.ts), so
-  // they get no case-study page here.
-  return PROJECTS.filter((p) => p.slug !== "zaylon-ai" && !p.blog).map((p) => ({ slug: p.slug }));
+  // zaylon-ai and talos each have their own dedicated case-study page
+  // (/projects/zaylon-ai/page.tsx, /projects/talos/page.tsx). Projects with a
+  // blog write-up redirect to the blog (see next.config.ts), so they get no
+  // case-study page here.
+  return PROJECTS.filter((p) => p.slug !== "zaylon-ai" && p.slug !== "talos" && !p.blog).map((p) => ({
+    slug: p.slug,
+  }));
 }
 
 export async function generateMetadata({
