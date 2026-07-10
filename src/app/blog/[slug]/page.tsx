@@ -108,6 +108,53 @@ function Block({ block }: { block: ContentBlock }) {
           </code>
         </pre>
       );
+    case "table":
+      return (
+        <figure className="mt-8">
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <table className="w-full text-sm border-collapse min-w-[640px]">
+              <thead>
+                <tr className="bg-muted/60 text-left">
+                  {block.headers.map((h) => (
+                    <th key={h} className="font-semibold text-foreground px-4 py-3 whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {block.rows.map((row, r) => {
+                  const highlight = block.highlightRow === r;
+                  return (
+                    <tr
+                      key={r}
+                      className={highlight ? "border-t border-border bg-accent/5" : "border-t border-border"}
+                    >
+                      {row.map((cell, c) => (
+                        <td
+                          key={c}
+                          className={
+                            "px-4 py-3 " +
+                            (c === 1 ? "text-muted-foreground font-mono text-xs" : "font-mono ") +
+                            (highlight && c !== 1 ? "text-accent font-semibold" : c === 0 ? "text-foreground" : "text-muted-foreground")
+                          }
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {block.caption ? (
+            <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
+              {block.caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
     case "ul":
       return (
         <ul className="mt-5 space-y-2">

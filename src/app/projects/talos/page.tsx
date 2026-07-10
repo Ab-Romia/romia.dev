@@ -9,6 +9,7 @@ import {
   Layers,
   ListFilter,
   Quote,
+  BookOpen,
 } from "lucide-react";
 import { FadeUp, BlurIn } from "@/components/motion-wrapper";
 import { Navbar } from "@/components/navbar";
@@ -284,6 +285,23 @@ export default function TalosCaseStudyPage() {
               My track: retrieval-augmented assistant, ingestion and retrieval, and the evaluation
               that proved the fix.
             </p>
+
+            <div className="flex flex-wrap gap-4 mt-5">
+              <a
+                href="https://github.com/Ab-Romia/talos"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <GitHubIcon className="size-4" /> Source Code
+              </a>
+              <Link
+                href="/blog/talos-rag-retrieval-evaluation"
+                className="inline-flex items-center gap-1.5 text-sm text-accent hover:text-accent-muted transition-colors"
+              >
+                <BookOpen className="size-4" /> Read the write-up
+              </Link>
+            </div>
           </FadeUp>
 
           {/* Hero shot */}

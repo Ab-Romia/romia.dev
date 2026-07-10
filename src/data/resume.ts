@@ -148,6 +148,7 @@ export const PROJECTS: Project[] = [
     description:
       "Graduation project (team): a team chat platform with a workspace-grounded RAG assistant that answers from your own documents, with citations. I owned the AI, retrieval, and evaluation.",
     tags: ["FastAPI", "RAG", "Milvus", "LangChain", "Evaluation"],
+    github: "https://github.com/Ab-Romia/talos",
     status: "Deployed",
     featured: true,
     impact:

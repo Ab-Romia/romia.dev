@@ -8,7 +8,15 @@ export type ContentBlock =
   | { type: "ul"; items: string[] }
   | { type: "code"; code: string }
   | { type: "figure"; src: string; alt: string; caption: string }
-  | { type: "callout"; title: string; md: string };
+  | { type: "callout"; title: string; md: string }
+  | {
+      type: "table";
+      headers: string[];
+      rows: string[][];
+      caption?: string;
+      /** 0-based index into rows to highlight (e.g. a winning result). */
+      highlightRow?: number;
+    };
 
 export type BlogPost = {
   title: string;
@@ -21,6 +29,149 @@ export type BlogPost = {
 };
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    "title": "Talos: a document-grounded team assistant, and the retrieval evaluation behind it",
+    "slug": "talos-rag-retrieval-evaluation",
+    "description": "A walkthrough of Talos, a team chat platform whose assistant answers from a team's own uploaded documents with citations. It covers the retrieval pipeline (hybrid search, cross-encoder reranking, cited generation) and the paired evaluation that found and fixed the chunking bug behind weak answers, raising judged correctness from 0.657 to 0.855.",
+    "date": "2026-07-05",
+    "tags": [
+      "RAG",
+      "Retrieval",
+      "Evaluation",
+      "FastAPI",
+      "Milvus",
+      "AI/ML"
+    ],
+    "readingMinutes": 9,
+    "body": [
+      {
+        "type": "p",
+        "md": "Talos is a team chat platform, workspaces and channels and direct messages, with an assistant that answers questions from a team's own uploaded documents and cites where each answer came from. It was our graduation project, and I owned the AI, retrieval, and evaluation. This post walks through how the assistant works and how I found and fixed the thing that was making its answers weak. If you want the shorter visual tour instead, the [case study](/projects/talos) tells the same story with more screenshots."
+      },
+      {
+        "type": "h2",
+        "text": "What Talos does"
+      },
+      {
+        "type": "p",
+        "md": "From the outside it looks like any team chat app: workspaces, channels, direct messages, group chats, threads, and mentions that turn into notifications. Sign-in runs over passwords, TOTP, Google and GitHub OAuth, and WebAuthn passkeys, with JWE-encrypted sessions. The part that makes it Talos is the assistant sitting inside the chat. You ask it something in a channel and it answers from the workspace's files, with numbered citations you can check."
+      },
+      {
+        "type": "figure",
+        "src": "/projects/talos/01-chat-ai-answer.png",
+        "alt": "A team channel where a user asks the Talos assistant how it decides which document chunks to use, and it replies with a grounded answer that cites its sources with bracketed numbers.",
+        "caption": "Ask the assistant in any channel; it retrieves, reranks, and answers with citations."
+      },
+      {
+        "type": "p",
+        "md": "It's grounded on purpose. The assistant answers only from the workspace's own documents, scoped so one team's files never show up in another team's answers, and it stays quiet when the corpus doesn't cover the question instead of guessing."
+      },
+      {
+        "type": "figure",
+        "src": "/projects/talos/05-ai-assistant.png",
+        "alt": "The dedicated Talos AI page, grounded in the workspace corpus and answering with citations.",
+        "caption": "A workspace-grounded assistant, not a generic chatbot."
+      },
+      {
+        "type": "h2",
+        "text": "How the assistant answers"
+      },
+      {
+        "type": "p",
+        "md": "A file goes in once and gets processed out of band. A question then runs through two retrieval stages before the model ever sees it. The whole path is five steps:"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "**Upload.** A file lands in MinIO, checked by magic-byte MIME sniffing, size-capped, and SHA-256 deduped. The API returns `202` and hands off to a background worker.",
+          "**Process.** A taskiq worker parses the document, chunks it by title, embeds each chunk with `bge-small`, and writes the vectors into the workspace's Milvus collection.",
+          "**Retrieve.** A question runs dense search and BM25 in parallel, fused with reciprocal rank fusion, fetching around 50 candidates so nothing good gets missed early.",
+          "**Rerank.** A cross-encoder reads the question and each candidate together and keeps the top 10. That second pass is what pulls the right passage up from the pack.",
+          "**Answer.** The model answers from the reranked passages only, streamed back over SSE with inline citations. Ask something out of corpus and it cites nothing."
+        ]
+      },
+      {
+        "type": "p",
+        "md": "Processing is asynchronous on purpose. The upload endpoint returns immediately and the worker does the slow work, so a half-ingested file can never be queried as if it were ready. Storage and search stay separate too: MinIO holds the raw bytes and issues short-lived presigned download URLs, Milvus holds the vectors in one collection per workspace. Soft-deleting a file drops its chunks from Milvus as well, so retrieval never surfaces something a user thought they deleted."
+      },
+      {
+        "type": "figure",
+        "src": "/projects/talos/04-documents.png",
+        "alt": "The Documents page showing drag-and-drop upload, Drive import, and indexed files marked Ready.",
+        "caption": "Upload documents (PDF, DOCX, PPTX, TXT, MD, and images) or import from Drive; they're parsed, chunked, and indexed for retrieval."
+      },
+      {
+        "type": "h2",
+        "text": "The problem: the assistant gave weak answers"
+      },
+      {
+        "type": "p",
+        "md": "Early on, the in-channel assistant kept giving thin, hand-wavy answers on a workspace whose corpus was a single 90-page guide. It wasn't the model and it wasn't the prompt. I went and looked at what retrieval was actually pulling, and the problem was upstream of all of it. That one document had been ingested with a recursive splitter that cut it into 1,778 tiny fragments, median 67 characters each. At that size, whole-page boilerplate outranked the real content, so the assistant was reading headers and footers instead of answers."
+      },
+      {
+        "type": "h2",
+        "text": "Measuring the fix"
+      },
+      {
+        "type": "p",
+        "md": "A hunch isn't a fix, so I ran a real experiment. I wrote 83 questions with page-level gold labels, LLM-authored and then LLM-reviewed, and paraphrase-constrained so a question couldn't win just by sharing words with its source. The harness runs the exact production chunking, retrieval, and prompt. The only thing swapped out is the vector store, replaced with an in-memory one that ranks by the same cosine geometry, so the evaluation measures what actually ships. I swept 48 retrieval configurations, then took 5 arms all the way to a graded answer, scored by a gpt-4o judge against the reference answer, paired per question, with Wilcoxon signed-rank tests, Holm correction, and effect sizes."
+      },
+      {
+        "type": "table",
+        "headers": ["Arm", "Config", "Correctness", "Δ", "Wilcoxon p", "Effect r"],
+        "rows": [
+          ["A0 baseline", "recursive chunks + MiniLM, rerank 20→5", "0.657", "ref", "n/a", "n/a"],
+          ["A1", "by_title chunks + MiniLM, 50→10", "0.843", "+0.186", "8.2e-06", "0.79"],
+          ["A2 (winner)", "by_title + bge-small, 50→10, rewrite on", "0.855", "+0.198", "5.5e-06", "0.81"],
+          ["A3", "A2 without query rewrite", "0.849", "+0.192", "3.3e-05", "0.67"],
+          ["A4", "A2 without reranker", "0.837", "+0.180", "3.8e-05", "0.64"]
+        ],
+        "highlightRow": 2,
+        "caption": "Judged answer correctness across five end-to-end arms, 83 questions, scored by a gpt-4o judge and paired per question."
+      },
+      {
+        "type": "p",
+        "md": "The reading is clean. Chunk hygiene was the whole ballgame: fixing the fragmentation alone lifted correctness by 18.6 points, before touching the embedder or anything else. Swapping MiniLM for `bge-small` added a small, consistent gain on top. The reranker earned its latency, since dropping it cost real accuracy end to end. Query rewrite was marginal on these standalone questions, but I left it on because a separate benchmark showed it worth about +0.41 recall@5 on conversational follow-ups, which is where it matters."
+      },
+      {
+        "type": "callout",
+        "title": "What this does and doesn't prove",
+        "md": "The questions and the judge are both LLMs, so there are no human relevance labels here. And it's one corpus in one domain, so the +19.8-point headline is specific to this document's particular problem, not a general benchmark. What transfers is the direction: chunk hygiene mattered far more than the embedder, which mattered more than the reranker or the rewrite. That ordering is the finding worth carrying to the next corpus."
+      },
+      {
+        "type": "h2",
+        "text": "The same assistant, in Slack"
+      },
+      {
+        "type": "p",
+        "md": "A team doesn't always want a new app, so the assistant meets them where they already are. An MCP server exposes Jira, GitHub, filesystem, chat, and RAG tools, and a Slack bot answers over the same workspace corpus, citing the exact PDF page it drew from."
+      },
+      {
+        "type": "figure",
+        "src": "/projects/talos/08-slack-integration.png",
+        "alt": "The Talos app answering a question in Slack and citing a source PDF page.",
+        "caption": "The same assistant, in Slack: it answers from your documents and cites the source."
+      },
+      {
+        "type": "figure",
+        "src": "/projects/talos/09-slack-compare.png",
+        "alt": "Talos answering in Slack with multi-source citations across several document pages.",
+        "caption": "Grounded, multi-source answers delivered where the team already works."
+      },
+      {
+        "type": "h2",
+        "text": "What shipped"
+      },
+      {
+        "type": "p",
+        "md": "The project got an A+. We deployed it and ran the whole thing live during the defense, then took the hosted app down afterward. The [code is on GitHub](https://github.com/Ab-Romia/talos). It was a team project; my track was the AI, retrieval, evaluation, and deployment, and the full team is credited in the [case study](/projects/talos)."
+      },
+      {
+        "type": "p",
+        "md": "If I kept going, the next moves are clear. The honest gap in the evaluation is the lack of human relevance labels, so real qrels come first. After that, more than one corpus and more than one domain, to see which of these gains hold and which were specific to this document. Then the ordinary work of scaling: the retrieval path is sound, but the indexing and memory would need real load before I'd trust them under a busy team."
+      }
+    ]
+  },
   {
     "title": "The Virtual Bank System: event-driven microservices and a correct transfer saga",
     "slug": "event-driven-bank-transfer-saga",
