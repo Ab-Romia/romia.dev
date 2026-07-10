@@ -134,9 +134,9 @@ const EVAL_ROWS = [
     arm: "A0 baseline",
     config: "recursive chunks + MiniLM, rerank 20→5",
     correctness: "0.657",
-    delta: "—",
-    p: "—",
-    r: "—",
+    delta: "ref",
+    p: "n/a",
+    r: "n/a",
     winner: false,
   },
   {
