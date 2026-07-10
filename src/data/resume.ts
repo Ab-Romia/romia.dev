@@ -475,7 +475,7 @@ export const SKILLS = {
 export const EDUCATION = {
   university: "Alexandria University, Faculty of Engineering",
   degree: "B.Sc. in Computer and Communications Engineering, AI concentration",
-  gpa: "3.73 / 4.0",
+  gpa: "3.75 / 4.0",
 } as const;
 
 export const CERTIFICATIONS = [
