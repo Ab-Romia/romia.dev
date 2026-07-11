@@ -339,7 +339,6 @@ export const PROJECTS: Project[] = [
       "A Connect 4 agent that searches the game tree with minimax and alpha-beta pruning.",
     tags: ["AI", "Python", "Game Theory"],
     github: "https://github.com/Ab-Romia/AI_Connect4_Agent",
-    demo: "https://huggingface.co/spaces/Ab-Romia/connect4-ai",
     status: "Deployed",
     caseStudy: {
       problem:
@@ -421,6 +420,18 @@ export const EXPERIENCE = [
     ],
   },
   {
+    company: "Scale AI",
+    role: "AI Coding Expert",
+    type: "Contract",
+    period: "Sep 2024 – Feb 2026",
+    description: "Reviewed and improved LLM-generated code for RLHF training data used to train frontier AI models.",
+    highlights: [
+      "Reviewed and ranked code repositories across languages for RLHF data pipelines used to train frontier AI models",
+      "Built test suites as quality control, scoring correctness, efficiency, style adherence, and edge case handling",
+      "Reviewed thousands of code samples, providing detailed feedback on reasoning chains, code structure, and technical accuracy",
+    ],
+  },
+  {
     company: "Ejada",
     role: "Software Integration Engineering Intern",
     period: "Jul 2025",
@@ -429,18 +440,6 @@ export const EXPERIENCE = [
       "Built RESTful API endpoints for core banking operations using Spring Boot with query optimization and Redis caching for frequently accessed account data",
       "Configured Apache Kafka producers and consumers for asynchronous transaction processing, decoupling payment events from the main request lifecycle",
       "Implemented API gateway security with OAuth2 authentication, rate limiting, and request validation using WSO2 API Manager",
-    ],
-  },
-  {
-    company: "Freelance",
-    role: "AI Coding Expert",
-    type: "Independent Contractor",
-    period: "Sep 2024 – Feb 2026",
-    description: "Evaluated and improved LLM-generated code across multiple platforms, contributing to RLHF training data for frontier AI models.",
-    highlights: [
-      "Evaluated LLM-generated coding solutions across Python, backend systems, and algorithmic problems for RLHF data pipelines used to train frontier AI models",
-      "Developed quality rubrics and prompting strategies for code generation, measuring correctness, efficiency, style adherence, and edge case handling",
-      "Reviewed and ranked thousands of code samples, providing detailed feedback on reasoning chains, code structure, and technical accuracy",
     ],
   },
   {
