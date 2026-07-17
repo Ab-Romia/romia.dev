@@ -9,7 +9,6 @@ import { About } from "@/components/sections/about";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
-import Script from "next/script";
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -22,7 +21,7 @@ const personSchema = {
   jobTitle: "AI Engineer",
   url: "https://romia.dev",
   description:
-    "AI Engineer and Co-Founder of Zaylon AI. Builds production multi-agent LLM systems and the full-stack platforms and backends around them.",
+    "AI Engineer and Co-Founder of Zaylon AI. Builds production LLM agents, RAG systems, and the full-stack platforms and backends around them.",
   sameAs: [
     "https://linkedin.com/in/abdelrahman-abouroumia",
     "https://github.com/Ab-Romia",
@@ -94,13 +93,13 @@ function SectionDivider() {
 export default function Home() {
   return (
     <>
-      <Script
-        id="person-schema"
+      {/* Plain script tags so the structured data ships in the initial HTML;
+          next/script injects only after hydration, hiding it from non-JS crawlers. */}
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
       />
-      <Script
-        id="website-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />

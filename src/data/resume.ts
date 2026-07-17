@@ -4,7 +4,7 @@ export const PERSONAL = {
   title: "AI Engineer",
   email: "aabouroumia@gmail.com",
   tagline:
-    "I build multi-agent LLM systems. At Zaylon AI, the company I co-founded, the agents I built let customers shop and check out by chatting on WhatsApp and Instagram in their own dialect.",
+    "I build production LLM agents and RAG systems. At Zaylon AI, the company I co-founded, the agent I built lets customers shop and check out by chatting on WhatsApp and Instagram in their own dialect.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -37,7 +37,7 @@ export const ZAYLON_SHOWCASE = {
   url: "https://zaylon.ai",
   highlights: [
     { label: "Platforms", detail: "Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho", value: 6 },
-    { label: "Channels", detail: "WhatsApp, Instagram, Messenger, Telegram, TikTok", value: 5 },
+    { label: "Channels", detail: "WhatsApp, Instagram, Messenger, TikTok, Web chat", value: 5 },
     { label: "Payments", detail: "Stripe, Paymob, Fawry", value: 3 },
     { label: "Dialects", detail: "English, Egyptian Arabic, Franco-Arabic", value: 3 },
   ],
@@ -66,7 +66,7 @@ export const ZAYLON_LIVE_METRIC: { value: string; label: string } | null = null;
 // showcase renders it in a framed figure. Example: "/zaylon-dashboard.png"
 export const ZAYLON_DASHBOARD_IMAGE: string | null = null;
 
-export type ProjectStatus = "Production" | "Demo" | "Ongoing" | "Deployed";
+export type ProjectStatus = "Production" | "Demo" | "Ongoing" | "Deployed" | "Completed";
 
 interface TechnicalDecision {
   title: string;
@@ -149,7 +149,7 @@ export const PROJECTS: Project[] = [
       "Graduation project (team): a team chat platform with a workspace-grounded RAG assistant that answers from your own documents, with citations. I owned the AI, retrieval, and evaluation.",
     tags: ["FastAPI", "RAG", "Milvus", "LangChain", "Evaluation"],
     github: "https://github.com/Ab-Romia/talos",
-    status: "Deployed",
+    status: "Completed",
     featured: true,
     impact:
       "Found the root cause of weak answers (over-fragmented chunks) and proved the fix with a paired, Holm-corrected eval: judged correctness 0.657 to 0.855 on the workspace's own corpus.",
@@ -157,7 +157,7 @@ export const PROJECTS: Project[] = [
       problem:
         "A team's real knowledge lives in its own documents, so a general chatbot is useless for it. People need answers grounded in their own files, scoped per workspace, with a pointer to where each answer came from.",
       approach:
-        "Talos is a team project; I owned the AI, retrieval, and evaluation track. Files upload to MinIO and a taskiq worker processes them out of band: parse, chunk by title, embed with bge-small, and write into a per-workspace Milvus collection. A question runs a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, and the model answers from the reranked passages only, streamed over SSE with inline citations. When the assistant gave weak answers, I built a statistical harness that runs the exact production pipeline to find and prove the fix.",
+        "Talos is a team project; I owned the AI, retrieval, and evaluation track. Files upload to MinIO and a taskiq worker processes them out of band: parse, chunk by title, embed with bge-small, and write into a per-workspace Milvus collection. A question runs a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, and the model answers from the reranked passages only, streamed token by token with inline citations. When the assistant gave weak answers, I built a statistical harness that runs the exact production pipeline to find and prove the fix.",
       decisions: [
         {
           title: "Milvus for vector search, MinIO for files",
@@ -200,7 +200,7 @@ export const PROJECTS: Project[] = [
         },
         {
           title: "Cross-encoder reranking on a deep candidate pool",
-          reasoning: "A reranker reads the query and a passage together, which is far more accurate than comparing vectors but too slow to run over a whole corpus. Running it on a deep fused pool, not a shallow one, is what lets it pull the right passage up from rank twenty. It gave the best precision at the top, lifting hit@3 to 0.83 and nearly doubling MRR over hybrid alone.",
+          reasoning: "A reranker reads the query and a passage together, which is far more accurate than comparing vectors but too slow to run over a whole corpus. Running it on a deep fused pool, not a shallow one, is what lets it pull the right passage up from rank twenty. It gave the best precision at the top, lifting hit@3 to 0.83 and MRR from 0.60 to 0.78 over hybrid alone.",
         },
         {
           title: "Measuring retrieval instead of trusting it",
@@ -220,7 +220,7 @@ export const PROJECTS: Project[] = [
     slug: "virtual-banking",
     categories: ["Backend", "Full-Stack"],
     description:
-      "An event-driven banking system: five Spring Boot services behind a gateway, with a transfer saga over Kafka that is provably correct under concurrency, retries, and restarts.",
+      "An event-driven banking system: a Spring Cloud Gateway fronting four core services, with a transfer saga over Kafka that holds up under concurrency, retries, and restarts, and tests that prove it.",
     tags: ["Spring Boot 3", "Kafka", "Java 21", "PostgreSQL", "Docker"],
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
     blog: "/blog/event-driven-bank-transfer-saga",
@@ -232,7 +232,7 @@ export const PROJECTS: Project[] = [
       problem:
         "Build a small bank where the money path is provably correct under concurrency, retries, and restarts. A transfer must not double-spend, must not drive a balance negative, must not move money twice when a request or event is retried, and must not lose or invent money if a service or the broker restarts. The system also needs authentication so no one can read or move another user's money, and an audit trail that records every step without dropping events.",
       approach:
-        "I built it as five Spring Boot services behind a Spring Cloud Gateway: user-service for identity, account-service for balances and the atomic transfer, transaction-service for the transfer ledger and orchestration, audit-service for an event-sourced history, plus an optional Spring AI assistant. The system is synchronous over REST at the edge and event-driven in the core, where the transfer runs as a saga over a single KRaft Kafka broker on the transfer.commands and transfer.events topics. transaction-service writes a PENDING transfer and a TransferRequested event to its outbox in one transaction and returns 202; a relay publishes it to Kafka; account-service locks both accounts, applies the debit and credit atomically, and emits the result through its own outbox; transaction-service marks the outcome; audit-service records every event. Each service owns its own PostgreSQL database, and shared events, the outbox, and security live in a vbank-common Spring Boot starter. The whole stack comes up with one docker compose command.",
+        "I built it as a Spring Cloud Gateway fronting four core services: user-service for identity, account-service for balances and the atomic transfer, transaction-service for the transfer ledger and orchestration, audit-service for an event-sourced history, plus an optional Spring AI assistant. The system is synchronous over REST at the edge and event-driven in the core, where the transfer runs as a saga over a single KRaft Kafka broker on the transfer.commands and transfer.events topics. transaction-service writes a PENDING transfer and a TransferRequested event to its outbox in one transaction and returns 202; a relay publishes it to Kafka; account-service locks both accounts, applies the debit and credit atomically, and emits the result through its own outbox; transaction-service marks the outcome; audit-service records every event. Each service owns its own PostgreSQL database, and shared events, the outbox, and security live in a vbank-common Spring Boot starter. The whole stack comes up with one docker compose command.",
       decisions: [
         {
           title: "Synchronous at the edge, event-driven only in the core",
@@ -256,7 +256,7 @@ export const PROJECTS: Project[] = [
         },
       ],
       results:
-        "A reader gets a runnable, readable reference for event-driven microservices. One command (docker compose up --build) brings up PostgreSQL, a single KRaft Kafka broker, and the five services built from source, with a React frontend for opening accounts, depositing, and following a transfer to its outcome alongside its audit history. The transfer cannot double-spend, cannot go negative, is safe to retry, and recovers from a crash, with Testcontainers tests covering the concurrency, saga, idempotency, and audit behavior. The architecture notes explain each mechanism and state one limitation plainly: because the outbox relay publishes on its own schedule, the HTTP request and the asynchronous publish are linked but separate traces rather than one tree.",
+        "A reader gets a runnable, readable reference for event-driven microservices. One command (docker compose up --build) brings up PostgreSQL, a single KRaft Kafka broker, and the gateway and services built from source, with a React frontend for opening accounts, depositing, and following a transfer to its outcome alongside its audit history. The transfer cannot double-spend, cannot go negative, is safe to retry, and recovers from a crash, with Testcontainers tests covering the concurrency, saga, idempotency, and audit behavior. The architecture notes explain each mechanism and state one limitation plainly: because the outbox relay publishes on its own schedule, the HTTP request and the asynchronous publish are linked but separate traces rather than one tree.",
     },
   },
   {
@@ -276,7 +276,7 @@ export const PROJECTS: Project[] = [
       problem:
         "RAVDESS has 24 actors speaking the same two sentences. The usual random train/test split puts the same voices on both sides, so the model gets rewarded for recognizing the actor, not the emotion. That is why so many reported numbers sit in the 90s, and why my own earlier version looked better than it was.",
       approach:
-        "Rebuilt around actor-disjoint cross-validation so no speaker is ever in both train and test. WavLM-large with a learnable weighted sum over its layers and attentive statistics pooling for audio, fused with a face model trained on expressions (not identities) through a small gated layer.",
+        "Rebuilt around actor-disjoint cross-validation so no speaker is ever in both train and test. WavLM-large with a learnable weighted sum over its layers and attentive statistics pooling for audio, fused with a face model trained on expressions (not identities) through calibrated late fusion.",
       decisions: [
         {
           title: "Split by actor, and prove it with a test",
@@ -291,7 +291,7 @@ export const PROJECTS: Project[] = [
           reasoning: "ImageNet face features scored 89% when faces leaked but 35% on new faces: they were memorizing identity. Swapping to a facial-expression model lifted video-alone accuracy on unseen faces to 58%, so fusing it actually helps.",
         },
       ],
-      results: "70.3% audio-only (in line with the peer-reviewed EmoBox speaker-independent range) and 78.8% audio-visual, speaker-independent. Naive joint fusion scored below audio alone; calibrated late fusion (train each modality separately, then weight their probabilities on validation) added a real 8.6 points from the face with no leak. Full write-up and methodology on the blog.",
+      results: "70.3% audio-only (in line with the peer-reviewed EmoBox speaker-independent range) and 78.8% audio-visual, speaker-independent. Naive joint fusion scored below audio alone; calibrated late fusion (train each modality separately, then weight their probabilities on validation) added a real 8.5 points from the face with no leak. Full write-up and methodology on the blog.",
       embedDemo: { type: "iframe", src: "https://ab-romia-ravdess-emotion-recognition.hf.space" },
     },
   },

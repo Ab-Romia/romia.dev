@@ -31,6 +31,7 @@ export async function generateMetadata({
       description: post.description,
       type: "article",
       publishedTime: post.date,
+      images: ["/opengraph-image"],
     },
     alternates: { canonical: `/blog/${slug}` },
   };
@@ -44,10 +45,12 @@ function formatDate(iso: string): string {
   });
 }
 
-// Render a small markdown subset: [text](url) links and `inline code`.
+// Render a small markdown subset: [text](url) links, `inline code`,
+// **bold**, and *italic*.
 function renderMd(md: string): ReactNode[] {
   const nodes: ReactNode[] = [];
-  const re = /\[([^\]]+)\]\(([^)]+)\)|`([^`]+)`/g;
+  const re =
+    /\[([^\]]+)\]\(([^)]+)\)|`([^`]+)`|\*\*([^*]+)\*\*|\*([^*\s][^*]*)\*/g;
   let last = 0;
   let key = 0;
   let m: RegExpExecArray | null;
@@ -70,7 +73,7 @@ function renderMd(md: string): ReactNode[] {
           {m[1]}
         </a>
       );
-    } else {
+    } else if (m[3] !== undefined) {
       nodes.push(
         <code
           key={key++}
@@ -79,6 +82,14 @@ function renderMd(md: string): ReactNode[] {
           {m[3]}
         </code>
       );
+    } else if (m[4] !== undefined) {
+      nodes.push(
+        <strong key={key++} className="font-semibold text-foreground">
+          {m[4]}
+        </strong>
+      );
+    } else {
+      nodes.push(<em key={key++}>{m[5]}</em>);
     }
     last = re.lastIndex;
   }

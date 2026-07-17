@@ -46,7 +46,7 @@
 
 % -------------------- SUMMARY --------------------
 \section{Summary}
-AI Engineer building production multi-agent and Retrieval-Augmented Generation (RAG) systems with full-stack breadth: FastAPI and Spring Boot backends, Kafka event-driven microservices, and React/Next.js. Co-founded Zaylon AI and built its LangGraph tool-calling agent and tri-lingual NLP on a multi-tenant FastAPI backend.
+AI Engineer building production LLM agents and Retrieval-Augmented Generation (RAG) systems with full-stack breadth: FastAPI and Spring Boot backends, Kafka event-driven microservices, and React/Next.js. Co-founded Zaylon AI and built its LangGraph tool-calling agent and tri-lingual NLP on a multi-tenant FastAPI backend.
 
 % -------------------- EXPERIENCE --------------------
 \section{Experience}
@@ -57,12 +57,12 @@ AI Engineer building production multi-agent and Retrieval-Augmented Generation (
 \item Lead engineering (architecture, reviews, roadmap, DevOps); built the \textbf{FastAPI} backend with \textbf{Docker} and CI/CD.
 \item Built the conversational AI as a single \textbf{LangGraph} tool-calling agent with around 30 scoped tools.
 \item Engineered \textbf{DialectBridge}: tri-lingual NLP with dialect detection for English, Egyptian Arabic, and Franco-Arabic.
-\item Hardened the backend: \textbf{argon2id} auth, row-level multi-tenant isolation over 80+ tables, a Postgres checkout saga.
+\item Hardened the backend: \textbf{argon2id} auth, row-level tenant isolation across about 80 tables, a Postgres checkout saga.
 \end{itemize}
 
 \vspace{3pt}
 \textbf{AI Coding Expert} \hfill \textbf{Sep 2024 -- Feb 2026} \\
-\textit{Scale AI}
+\textit{Scale AI (Contract)}
 \begin{itemize}
 \item Reviewed and ranked code repositories across languages for RLHF pipelines training frontier AI models.
 \item Built test suites as quality control, scoring correctness, efficiency, and edge-case handling.
@@ -87,37 +87,37 @@ AI Engineer building production multi-agent and Retrieval-Augmented Generation (
 % -------------------- PROJECTS --------------------
 \section{Projects}
 
-\textbf{Talos: Multi-User RAG Document Platform} \hfill \textit{Graduation Project} \ \textbar\ \ \href{https://github.com/Ab-Romia/talos}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/talos}{Case Study}
+\textbf{Talos: Team Chat Platform with a RAG Assistant} \hfill \textit{Graduation Project} \ \textbar\ \ \href{https://github.com/Ab-Romia/talos}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/talos}{Case Study}
 \begin{itemize}
-\item Owned the RAG assistant on a \textbf{FastAPI} team-chat platform: hybrid retrieval (dense + \textbf{BM25}, RRF), cross-encoder rerank, cited answers over SSE.
-\item Async \textbf{taskiq}/\textbf{MinIO}/\textbf{Milvus} ingestion; proved a chunking fix with a paired evaluation, raising judged answer correctness from 0.657 to 0.855.
+\item Owned the RAG assistant on a \textbf{FastAPI} team-chat platform: \textbf{taskiq}/\textbf{Milvus} ingestion, hybrid retrieval, rerank, citations.
+\item Proved a chunking fix with a paired eval: judged answer correctness 0.657 to 0.855 on the workspace's own corpus.
 \end{itemize}
 
 \vspace{2pt}
 \textbf{ContextIQ: Hybrid-Retrieval RAG} \hfill \href{https://github.com/Ab-Romia/ContextIQ-RAG}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/contextiq-rag}{Case Study}
 \begin{itemize}
-\item \textbf{FastAPI} RAG on CPU (ONNX): dense + \textbf{BM25} fused with RRF, cross-encoder reranking, grounded citations.
-\item Evaluation harness over a corpus of confusable distractors; abstains when the context is insufficient.
+\item Built \textbf{FastAPI} RAG on CPU (ONNX): dense + \textbf{BM25} fused with RRF, cross-encoder reranking, grounded citations.
+\item Built an evaluation harness over a corpus of confusable distractors; abstains when the context is insufficient.
 \end{itemize}
 
 \vspace{2pt}
 \textbf{Multimodal Emotion Recognition} \hfill \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/emotion-recognition}{Case Study}
 \begin{itemize}
-\item Speaker-independent (actor-disjoint): frozen \textbf{WavLM-large} + facial-expression model, calibrated late fusion.
-\item Learnable layer-weighting and attentive pooling over WavLM; a unit test guards against speaker leakage.
+\item Trained a speaker-independent (actor-disjoint) pipeline: frozen \textbf{WavLM-large} + facial model, calibrated late fusion.
+\item Added learnable layer-weighting and attentive pooling over WavLM; a unit test guards against speaker leakage.
 \end{itemize}
 
 \vspace{2pt}
 \textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/virtual-banking}{Case Study}
 \begin{itemize}
-\item Five \textbf{Spring Boot 3} services behind a gateway; \textbf{Kafka} transfer saga: outbox, idempotent consumers, RS256 JWT.
-\item Atomic transfers via pessimistic locking and a balance constraint, with Testcontainers integration tests.
+\item Built a gateway and four \textbf{Spring Boot 3} services; \textbf{Kafka} transfer saga: outbox, idempotent consumers, RS256 JWT.
+\item Proved atomic transfers with pessimistic locking, a balance constraint, and Testcontainers integration tests.
 \end{itemize}
 
 \vspace{2pt}
 \textbf{VoicePrint: Authorship Stylometry} \hfill \href{https://github.com/Ab-Romia/VoicePrint}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/voiceprint}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/voiceprint}{Case Study}
 \begin{itemize}
-\item \textbf{StyleDistance} embedding plus function-word features; scores voice match and rewrites a draft toward you.
+\item Combined a \textbf{StyleDistance} embedding with function-word features to score voice match and rewrite drafts.
 \end{itemize}
 
 % -------------------- EDUCATION --------------------

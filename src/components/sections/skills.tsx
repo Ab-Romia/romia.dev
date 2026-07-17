@@ -23,7 +23,7 @@ function SkillCard({
           {category === "AI / ML" && "Powers Zaylon AI, ContextIQ RAG, Emotion Recognition"}
           {category === "Backend" && "Powers Zaylon AI, Virtual Banking, ContextIQ RAG"}
           {category === "DevOps & Cloud" && "CI/CD and deployment across all projects"}
-          {category === "Languages" && "Primary: Python, Java. Growing: Go, TypeScript"}
+          {category === "Languages" && "Primary: Python, Java, TypeScript. Growing: Go"}
         </p>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (

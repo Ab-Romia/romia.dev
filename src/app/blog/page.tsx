@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     title: "Blog | Abdelrahman Abouroumia",
     description:
       "Writing on NLP, stylometry, and the systems I build. Plain, technical notes from Abdelrahman Abouroumia (Romia).",
+    images: ["/opengraph-image"],
   },
   alternates: { canonical: "/blog" },
 };

@@ -14,10 +14,11 @@ import { Connect4Wrapper } from "@/components/connect4-wrapper";
 import { SudokuWrapper } from "@/components/sudoku-wrapper";
 
 export const statusColors: Record<string, string> = {
-  Production: "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30",
-  Demo: "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30",
-  Ongoing: "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/30",
-  Deployed: "bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30",
+  Production: "bg-accent/10 text-accent border-accent/30",
+  Demo: "bg-muted text-muted-foreground border-border",
+  Ongoing: "bg-muted text-muted-foreground border-border",
+  Deployed: "bg-muted text-muted-foreground border-border",
+  Completed: "bg-muted text-muted-foreground border-border",
 };
 
 const categories = ["All", "AI/ML", "Backend", "Full-Stack", "Games/Puzzles"] as const;
@@ -195,7 +196,7 @@ function ProjectCard({
           href={`/projects/${project.slug}`}
           className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
         >
-          View Case Study <ArrowUpRight className="size-3" />
+          View case study <ArrowUpRight className="size-3" />
         </Link>
       )}
     </div>

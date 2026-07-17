@@ -99,7 +99,7 @@ export function About() {
                     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors group/cert">
                       {"image" in cert && cert.image ? (
                         <div className="size-8 rounded-md overflow-hidden shrink-0">
-                          <Image src={cert.image} alt={cert.issuer} width={32} height={32} className="w-full h-full object-cover" />
+                          <Image src={cert.image} alt="" width={32} height={32} className="w-full h-full object-cover" />
                         </div>
                       ) : (
                         <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0 group-hover/cert:bg-accent/20 transition-colors">

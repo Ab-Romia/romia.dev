@@ -232,7 +232,11 @@ export function Connect4Game() {
   return (
     <div className="max-w-sm mx-auto">
       <div className="flex items-center justify-between mb-4">
-        <p className={cn("text-sm font-medium", gameOver && winner === PLAYER && "text-accent")}>
+        <p
+          role="status"
+          aria-live="polite"
+          className={cn("text-sm font-medium", gameOver && winner === PLAYER && "text-accent")}
+        >
           {status}
         </p>
         <button
@@ -281,7 +285,7 @@ export function Connect4Game() {
                 onMouseLeave={() => setHoverCol(null)}
                 onClick={() => handleClick(c)}
                 disabled={gameOver || thinking}
-                aria-label={`Row ${r + 1}, Column ${c + 1}`}
+                aria-label={`Row ${r + 1}, Column ${c + 1}, ${cell === PLAYER ? "you" : cell === AI ? "AI" : "empty"}`}
               />
             ))}
           </div>

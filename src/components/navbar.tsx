@@ -7,6 +7,7 @@ import {
   m,
   LayoutGroup,
   useScroll,
+  useReducedMotion,
 } from "motion/react";
 import { Menu, X, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,7 @@ export function Navbar() {
   );
   const activeSection = useActiveSection(sectionIds);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     if (mobileOpen) {
@@ -31,8 +33,13 @@ export function Navbar() {
     } else {
       document.body.style.overflow = "";
     }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    if (mobileOpen) window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [mobileOpen]);
 
@@ -99,11 +106,11 @@ export function Navbar() {
                       <m.span
                         layoutId="nav-underline"
                         className="absolute -bottom-0.5 left-2 right-2 h-0.5 bg-accent rounded-full"
-                        transition={{
-                          type: "spring",
-                          stiffness: 350,
-                          damping: 30,
-                        }}
+                        transition={
+                          reduceMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 350, damping: 30 }
+                        }
                       />
                     )}
                   </a>
@@ -126,6 +133,8 @@ export function Navbar() {
             onClick={() => setMobileOpen(true)}
             className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
             <Menu className="size-5" />
           </button>
@@ -136,10 +145,18 @@ export function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <m.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            initial={reduceMotion ? { opacity: 0 } : { x: "100%" }}
+            animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}
+            transition={
+              reduceMotion
+                ? { duration: 0.1 }
+                : { type: "spring", damping: 25, stiffness: 200 }
+            }
             className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md md:hidden"
           >
             <div className="flex items-center justify-between h-16 px-6">
@@ -150,6 +167,7 @@ export function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Close menu"
+                autoFocus
               >
                 <X className="size-5" />
               </button>

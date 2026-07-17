@@ -21,7 +21,7 @@ export function Experience() {
 
             return (
               <SlideFromLeft key={entry.company} delay={i * 0.08}>
-                <div className="group relative border border-border rounded-xl p-6 sm:p-8 bg-card transition-colors duration-200 hover:border-accent/40">
+                <div className="group relative border border-border rounded-lg p-6 bg-card transition-colors duration-200 hover:border-accent/40">
                   {/* Header */}
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="flex items-start gap-3">
@@ -35,7 +35,7 @@ export function Experience() {
                         if (logo) {
                           return (
                             <div className="size-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center" style={{ background: logo.bg }}>
-                              <Image src={logo.src} alt={entry.company} width={28} height={28} className="object-contain" />
+                              <Image src={logo.src} alt="" width={28} height={28} className="object-contain" />
                             </div>
                           );
                         }
@@ -63,7 +63,7 @@ export function Experience() {
                             <span>{entry.company}</span>
                           )}
                           {"type" in entry && entry.type && (
-                            <span className="text-muted-foreground/70"> · {entry.type}</span>
+                            <span className="text-muted-foreground"> · {entry.type}</span>
                           )}
                         </p>
                       </div>

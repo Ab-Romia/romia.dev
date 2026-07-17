@@ -224,15 +224,16 @@ export function SudokuGame() {
   const selectedVal = selected ? userBoard[selected[0]][selected[1]] : null;
 
   return (
-    <div className="max-w-sm mx-auto" onKeyDown={handleKeyDown} tabIndex={0}>
+    <div className="max-w-sm mx-auto" onKeyDown={handleKeyDown} tabIndex={0} role="application" aria-label="Sudoku puzzle">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <p className={cn("text-sm font-medium", solved && "text-accent")}>
+        <p role="status" aria-live="polite" className={cn("text-sm font-medium", solved && "text-accent")}>
           {solved ? "Solved!" : noteMode ? "Notes mode (N)" : "Fill in the blanks"}
         </p>
         <div className="flex gap-2">
           <button
             onClick={() => setNoteMode((m) => !m)}
+            aria-pressed={noteMode}
             className={cn(
               "text-xs font-mono px-2.5 py-1 rounded border transition-colors",
               noteMode
@@ -250,11 +251,13 @@ export function SudokuGame() {
       </div>
 
       {/* Difficulty pills */}
-      <div className="flex gap-1.5 mb-3">
+      <div className="flex gap-1.5 mb-3" role="radiogroup" aria-label="Difficulty">
         {(["Easy", "Medium", "Hard", "Expert"] as Difficulty[]).map((d) => (
           <button
             key={d}
             onClick={() => newGame(d)}
+            role="radio"
+            aria-checked={difficulty === d}
             className={cn(
               "text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all",
               difficulty === d && !solved
@@ -298,7 +301,7 @@ export function SudokuGame() {
                     !isGiven(r, c) && !solved && "cursor-pointer hover:bg-muted/30"
                   )}
                   disabled={solved}
-                  aria-label={`Row ${r + 1}, Column ${c + 1}${cell ? `, value ${cell}` : ", empty"}`}
+                  aria-label={`Row ${r + 1}, Column ${c + 1}, ${isGiven(r, c) ? "given" : "editable"}, ${cell ? `value ${cell}` : "empty"}`}
                 >
                   {cell ? (
                     cell

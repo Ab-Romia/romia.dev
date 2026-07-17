@@ -19,7 +19,7 @@ import { getAdjacentProjects } from "@/data/resume";
 export const metadata: Metadata = {
   title: "Talos: a workspace-grounded RAG assistant, proven with a real evaluation",
   description:
-    "Case study of Talos, a team chat platform with a retrieval-augmented assistant that answers from your own documents with citations. I owned the AI, retrieval, and evaluation, and proved the retrieval fix with a paired experiment that raised judged answer correctness from 0.657 to 0.855.",
+    "Case study of Talos, a team chat platform with a retrieval-augmented assistant that answers from your own documents with citations. I owned the AI, retrieval, and evaluation, and proved the retrieval fix with a paired experiment that raised judged answer correctness from 0.657 to 0.855 on the workspace's own corpus.",
   openGraph: {
     title: "Talos | Case Study by Abdelrahman Abouroumia",
     description:
@@ -126,7 +126,7 @@ const PIPELINE = [
   {
     Icon: Quote,
     title: "Answer",
-    body: "The model answers from the reranked passages only, streamed back over SSE with inline citations. Ask something the corpus doesn't cover and it cites nothing.",
+    body: "The model answers from the reranked passages only, streamed token by token with inline citations. Ask something the corpus doesn't cover and it says so instead of guessing.",
   },
 ];
 
@@ -232,15 +232,15 @@ export default function TalosCaseStudyPage() {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
             >
               <ArrowLeft className="size-4" />
-              Back to Projects
+              Back to projects
             </Link>
           </FadeUp>
 
           {/* Hero */}
           <FadeUp delay={0.1}>
             <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded border bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30">
-                Deployed
+              <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded border bg-muted text-muted-foreground border-border">
+                Completed
               </span>
               <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
                 Graduation project, 2026
@@ -269,7 +269,7 @@ export default function TalosCaseStudyPage() {
           {/* Tags + role note + source */}
           <FadeUp delay={0.15}>
             <div className="flex flex-wrap gap-2 mt-6">
-              {["FastAPI", "Python 3.13", "LangChain", "Milvus", "MinIO", "taskiq / Redis", "SSE"].map(
+              {["FastAPI", "Python 3.13", "LangChain", "Milvus", "MinIO", "taskiq / Redis", "HTTP streaming"].map(
                 (tag) => (
                   <span
                     key={tag}
@@ -328,7 +328,7 @@ export default function TalosCaseStudyPage() {
               A general chatbot is useless for a specific team, because the answers it needs are in
               that team&apos;s own documents, not in the model&apos;s training data. We wanted the
               assistant to sit inside the chat people already use, answer only from the workspace&apos;s
-              uploaded files, point to the exact source of each answer, and stay silent when the
+              uploaded files, point to the exact source of each answer, and say so when the
               files don&apos;t cover the question. Scoped per workspace, so one team&apos;s documents
               never leak into another team&apos;s answers.
             </Body>

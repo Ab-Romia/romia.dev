@@ -32,7 +32,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     "title": "Talos: a document-grounded team assistant, and the retrieval evaluation behind it",
     "slug": "talos-rag-retrieval-evaluation",
-    "description": "A walkthrough of Talos, a team chat platform whose assistant answers from a team's own uploaded documents with citations. It covers the retrieval pipeline (hybrid search, cross-encoder reranking, cited generation) and the paired evaluation that found and fixed the chunking bug behind weak answers, raising judged correctness from 0.657 to 0.855.",
+    "description": "A walkthrough of Talos, a team chat platform whose assistant answers from a team's own uploaded documents with citations. It covers the retrieval pipeline (hybrid search, cross-encoder reranking, cited generation) and the paired evaluation that found and fixed the chunking bug behind weak answers, raising judged correctness from 0.657 to 0.855 on the workspace's own corpus.",
     "date": "2026-07-05",
     "tags": [
       "RAG",
@@ -64,7 +64,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "It's grounded on purpose. The assistant answers only from the workspace's own documents, scoped so one team's files never show up in another team's answers, and it stays quiet when the corpus doesn't cover the question instead of guessing."
+        "md": "It's grounded on purpose. The assistant answers only from the workspace's own documents, scoped so one team's files never show up in another team's answers, and it says so when the corpus doesn't cover the question instead of guessing."
       },
       {
         "type": "figure",
@@ -87,7 +87,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "**Process.** A taskiq worker parses the document, chunks it by title, embeds each chunk with `bge-small`, and writes the vectors into the workspace's Milvus collection.",
           "**Retrieve.** A question runs dense search and BM25 in parallel, fused with reciprocal rank fusion, fetching around 50 candidates so nothing good gets missed early.",
           "**Rerank.** A cross-encoder reads the question and each candidate together and keeps the top 10. That second pass is what pulls the right passage up from the pack.",
-          "**Answer.** The model answers from the reranked passages only, streamed back over SSE with inline citations. Ask something out of corpus and it cites nothing."
+          "**Answer.** The model answers from the reranked passages only, streamed token by token with inline citations. Ask something out of corpus and it says so instead of guessing."
         ]
       },
       {
@@ -175,7 +175,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     "title": "The Virtual Bank System: event-driven microservices and a correct transfer saga",
     "slug": "event-driven-bank-transfer-saga",
-    "description": "A study guide to the Virtual Bank System: five Spring Boot services behind a gateway, synchronous REST at the edge and an event-driven transfer saga over Kafka. It explains the architecture, the transfer step by step, and the three mechanisms that keep the money path correct: the transactional outbox, idempotent consumers, and pessimistic locking.",
+    "description": "A study guide to the Virtual Bank System: a Spring Cloud Gateway fronting four core services, synchronous REST at the edge and an event-driven transfer saga over Kafka. It explains the architecture, the transfer step by step, and the three mechanisms that keep the money path correct: the transactional outbox, idempotent consumers, and pessimistic locking.",
     "date": "2025-07-15",
     "tags": [
       "Microservices",
@@ -243,7 +243,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "Five Spring Boot services sit behind a Spring Cloud Gateway. The gateway is the only thing reachable from outside: it validates the request's token, routes `/api/**` to a service, and aggregates the dashboard. Behind it, four services each own a single responsibility, backed by one PostgreSQL server (a database per service) and one KRaft Kafka broker. An optional Spring AI assistant over OpenRouter can be turned on (it uses a local embedding model for retrieval and degrades gracefully without a key), and so can a Tempo, Prometheus, and Grafana stack for observability."
+        "md": "Five Spring Boot apps make up the system: a Spring Cloud Gateway and four services behind it. The gateway is the only thing reachable from outside: it validates the request's token, routes `/api/**` to a service, and aggregates the dashboard. Behind it, the four services each own a single responsibility, backed by one PostgreSQL server (a database per service) and one KRaft Kafka broker. An optional Spring AI assistant over OpenRouter can be turned on (it uses a local embedding model for retrieval and degrades gracefully without a key), and so can a Tempo, Prometheus, and Grafana stack for observability."
       },
       {
         "type": "figure",
@@ -384,7 +384,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "The only requirement is Docker (or podman) and Docker Compose; the services build from source inside the images. One command brings up PostgreSQL, a single KRaft Kafka broker, and the five services, with the gateway on `http://localhost:8080`:"
+        "md": "The only requirement is Docker (or podman) and Docker Compose; the services build from source inside the images. One command brings up PostgreSQL, a single KRaft Kafka broker, and the five Spring Boot apps, with the gateway on `http://localhost:8080`:"
       },
       {
         "type": "code",
@@ -415,7 +415,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
       "title": "When a speech-emotion model is really just recognizing the actors",
       "slug": "speaker-leakage-ravdess",
-      "description": "A speech-emotion model can look impressive and still be mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the one number I will stand behind: 78.8%.",
+      "description": "A speech-emotion model can look impressive and still be mostly memorizing the 24 RAVDESS actors. Here is the leak, the speaker-independent pipeline that replaced it (frozen WavLM, layer weighting, attentive pooling, calibrated late fusion), and the honest speaker-independent result: 78.8%.",
       "date": "2025-11-01",
       "tags": [
         "Speech",
@@ -436,7 +436,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "This is the honest rebuild: a speaker-independent pipeline that fuses voice and face, with every number measured on people the model has never heard or seen. The [code is on GitHub](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) and there is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) you can talk to. The one number I will defend by the end of this post is 78.8%, and I will show you exactly why it is worth more than that inflated score was."
+          "md": "This is the honest rebuild: a speaker-independent pipeline that fuses voice and face, with every number measured on people the model has never heard or seen. The [code is on GitHub](https://github.com/Ab-Romia/RAVDESS-emotion-recognition) and there is a [live demo](https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition) you can talk to. The headline number is 78.8%, speaker-independent, and by the end of this post you can see exactly why it is worth more than that inflated score was."
         },
         {
           "type": "h2",
@@ -572,7 +572,7 @@ export const BLOG_POSTS: BlogPost[] = [
           "type": "figure",
           "src": "/blog/ravdess-emotion/training-curves.png",
           "alt": "Two panels of validation macro-F1 against training epoch, each showing six thin per-fold lines and a bold mean line, with the held-out test accuracy boxed in each. The frozen WavLM panel settles at 70.3% test; the full fine-tune panel reaches 67.6%.",
-          "caption": "Validation macro-F1 through training, every fold drawn. The frozen probe climbs steadily and lands at 70.3% on held-out actors; fully fine-tuning the backbone on so few clips tops out lower, at 67.6%. Freezing is not only simpler here, it wins."
+          "caption": "Validation macro-F1 through training, every fold drawn. The frozen probe climbs steadily and lands at 70.3% on held-out actors; fully fine-tuning the backbone on so few clips tops out lower, at 67.6%. Freezing is simpler here, and it wins."
         },
         {
           "type": "callout",
@@ -633,7 +633,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "h2",
-          "text": "The result: fold by fold, emotion by emotion"
+          "text": "Fold by fold, emotion by emotion"
         },
         {
           "type": "p",
@@ -698,7 +698,7 @@ export const BLOG_POSTS: BlogPost[] = [
         },
         {
           "type": "p",
-          "md": "So the number I stand behind is 78.8%, speaker-independent, with everything above to back it up. You can try the audio model yourself just below: record or upload a few seconds of speech and watch it predict, on a voice it has never heard."
+          "md": "So the honest number is 78.8%, speaker-independent, with everything above to back it up. You can try the audio model yourself just below: record or upload a few seconds of speech and watch it predict, on a voice it has never heard."
         }
       ]
     },
@@ -837,13 +837,13 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "There is also a character n-gram model that scored 0.996. Please do not quote that as general accuracy. It is inflated. Five authors who write nothing alike, plus two who leak topic from a single book, make this task much easier than real open-world authorship attribution. The high number is a property of the easy set, not a property of the method."
+        "md": "There is also a character n-gram model that scored 0.996 macro-F1 (0.999 accuracy). Please do not quote that as general accuracy. It is inflated. Five authors who write nothing alike, plus two who leak topic from a single book, make this task much easier than real open-world authorship attribution. The high number is a property of the easy set, not a property of the method."
       },
       {
         "type": "figure",
         "src": "/blog/voiceprint/results-trust.svg",
-        "alt": "Function words alone reach 0.889 accuracy with zero content words, the real topic-independent signal; the 0.999 char n-gram and combined scores are inflated by a tiny, easy author set.",
-        "caption": "Function words alone reach 0.889 accuracy with zero content words, the real topic-independent signal; the 0.999 char n-gram and combined scores are inflated by a tiny, easy author set."
+        "alt": "Function words alone reach 0.889 accuracy with zero content words, the real topic-independent signal; the 0.999-accuracy char n-gram and combined scores are inflated by a tiny, easy author set.",
+        "caption": "Function words alone reach 0.889 accuracy with zero content words, the real topic-independent signal; the 0.999-accuracy char n-gram and combined scores are inflated by a tiny, easy author set."
       },
       {
         "type": "h2",
@@ -956,7 +956,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "Most of all: this is voice adaptation on your own writing. The target is a positive one you can read, measure, and argue with. It is not impersonation, and it is not working against anything. The number I will stand behind is 0.889 from function words alone, because it shows that the part of your writing you never think about is the part that is most yours. The code is on [GitHub](https://github.com/Ab-Romia/VoicePrint), and you can try the [demo](https://huggingface.co/spaces/Ab-Romia/voiceprint)."
+        "md": "Most of all: this is voice adaptation on your own writing. The target is a positive one you can read, measure, and argue with. It is not impersonation, and it is not working against anything. The number that matters is 0.889 accuracy from function words alone, because it shows that the part of your writing you never think about is the part that is most yours. The code is on [GitHub](https://github.com/Ab-Romia/VoicePrint), and you can try the [demo](https://huggingface.co/spaces/Ab-Romia/voiceprint)."
       }
     ]
   },
@@ -1082,7 +1082,7 @@ return sorted(candidates.values(), key=lambda c: c.rrf_score, reverse=True)`,
       },
       {
         type: "p",
-        md: "A cross-encoder reads the query and a candidate passage together, in one pass, and scores how relevant the passage actually is. This is far more accurate than comparing two vectors that were embedded separately, because the model attends to both texts at once. Running it over all 99 chunks for every query would be slow; running it over just the roughly 50 the cheap retrievers already shortlisted is fast. That is the whole two-stage design: a fast rough filter, then a slow careful judge. I use `ms-marco-MiniLM-L-6-v2` through `fastembed`, about 80 MB.",
+        md: "A cross-encoder reads the query and a candidate passage together, in one pass, and scores how relevant the passage actually is. This is far more accurate than comparing two vectors that were embedded separately, because the model attends to both texts at once. At 99 chunks you could afford to rerank everything; the two-stage design is for real corpora with thousands of chunks, where the shortlist pins the cross-encoder's cost to roughly 50 passages no matter how large the corpus grows. That is the whole design: a fast rough filter, then a slow careful judge. I use `ms-marco-MiniLM-L-6-v2` through `fastembed`, about 80 MB.",
       },
       {
         type: "code",
@@ -1156,7 +1156,7 @@ return sorted(candidates.values(), key=lambda c: c.rrf_score, reverse=True)`,
       },
       {
         type: "p",
-        md: "Two things I will defend, and they are the whole honest headline: the naive dense-only approach is the worst across the board, and the full pipeline gives the best precision at the very top. Everything else depends on the corpus.",
+        md: "Two results hold up across the board, and they are the whole honest headline: the naive dense-only approach is the worst configuration, and the full pipeline gives the best precision at the very top. Everything else depends on the corpus.",
       },
       {
         type: "p",
@@ -1164,7 +1164,7 @@ return sorted(candidates.values(), key=lambda c: c.rrf_score, reverse=True)`,
       },
       {
         type: "p",
-        md: "The narrow result I do trust, stated narrowly: dense-only retrieval is the weakest arm, because a small embedding model cannot separate near-duplicate policy passages that share a section structure. That is the naive pipeline most tutorials produce. Adding lexical search recovers recall, putting the right passage in the top five 94 percent of the time. And reranking fixes the ordering hybrid leaves rough, lifting hit@3 to its best value and nearly doubling MRR over hybrid alone.",
+        md: "The narrow result I do trust, stated narrowly: dense-only retrieval is the weakest arm, because a small embedding model cannot separate near-duplicate policy passages that share a section structure. That is the naive pipeline most tutorials produce. Adding lexical search recovers recall, putting the right passage in the top five 94 percent of the time. And reranking fixes the ordering hybrid leaves rough, lifting hit@3 to its best value and MRR from 0.60 to 0.78 over hybrid alone.",
       },
       { type: "h2", text: "What it does not do" },
       {

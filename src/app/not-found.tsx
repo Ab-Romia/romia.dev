@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center justify-center px-6">
+      <main id="main-content" className="min-h-screen flex flex-col items-center justify-center px-6">
         <h1 className="text-8xl md:text-9xl font-bold text-accent tracking-tight">
           404
         </h1>
@@ -18,7 +18,7 @@ export default function NotFound() {
         >
           Go Home
         </Link>
-      </div>
+      </main>
     </>
   );
 }

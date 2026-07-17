@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     title: "Zaylon AI | Case Study by Abdelrahman Abouroumia",
     description:
       "Conversational commerce platform for MENA merchants. Co-founded and shipped across 6 e-commerce platforms, 5 messaging channels, and 3 dialects.",
+    images: ["/opengraph-image"],
   },
   alternates: { canonical: "/projects/zaylon-ai" },
 };
@@ -227,7 +228,7 @@ function DashboardMockup() {
           className="text-[10px] font-mono ml-2"
           style={{ color: "var(--z-text-muted)" }}
         >
-          dashboard.zaylon.ai
+          zaylon.ai
         </span>
       </div>
 
@@ -446,7 +447,7 @@ export default function ZaylonCaseStudyPage() {
                   className="text-xl md:text-2xl mt-3 font-medium"
                   style={{ color: "var(--z-text)" }}
                 >
-                  Your AI sales team for WhatsApp, Instagram, and Messenger
+                  An AI sales team for WhatsApp, Instagram, and Messenger
                 </p>
                 <p
                   className="text-base md:text-lg leading-relaxed mt-5 max-w-xl"
@@ -464,7 +465,7 @@ export default function ZaylonCaseStudyPage() {
                     href="https://zaylon.ai"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl text-white transition-all duration-300 hover:scale-[1.02]"
+                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl text-white transition-all duration-300 hover:opacity-90 active:scale-[0.97]"
                     style={{
                       background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
                       boxShadow:
@@ -502,7 +503,7 @@ export default function ZaylonCaseStudyPage() {
               style={{ borderTop: "1px solid rgba(45, 106, 94, 0.25)" }}
             >
               <Stat value="24/7" label="Always online" sublabel="Never misses a message" />
-              <Stat value="<5s" label="Avg response" sublabel="Across every channel" />
+              <Stat value="<5s" label="Reply target" sublabel="Designed for, on every channel" />
               <Stat value="6" label="Platforms" sublabel="Shopify, Salla, Odoo, more" />
               <Stat value="3" label="Dialects" sublabel="English, Arabic, Franco" />
             </div>
@@ -553,7 +554,7 @@ export default function ZaylonCaseStudyPage() {
                     step="01"
                     Icon={Link2}
                     title="Connect"
-                    body="Link your Shopify, Salla, WooCommerce, Odoo, YouCan, or Zoho store and the messaging channels where your customers already are."
+                    body="The merchant links a Shopify, Salla, WooCommerce, Odoo, YouCan, or Zoho store and the messaging channels their customers already use."
                   />
                 </FadeUp>
                 <FadeUp delay={0.1}>
@@ -561,7 +562,7 @@ export default function ZaylonCaseStudyPage() {
                     step="02"
                     Icon={Settings}
                     title="Configure"
-                    body="Set the tone, the policies, the payment gateways. The AI picks up your catalog automatically and learns your product details."
+                    body="Tone, policies, and payment gateways are set once. The AI picks up the catalog automatically and learns the product details."
                   />
                 </FadeUp>
                 <FadeUp delay={0.15}>
@@ -577,7 +578,7 @@ export default function ZaylonCaseStudyPage() {
                     step="04"
                     Icon={BarChart3}
                     title="Grow"
-                    body="Watch revenue attributed to chat. The dashboard shows what&apos;s working, what&apos;s converting, and where to nudge."
+                    body="Revenue attributed to chat, in one dashboard: what&apos;s working, what&apos;s converting, and where to nudge."
                   />
                 </FadeUp>
               </div>
@@ -593,8 +594,8 @@ export default function ZaylonCaseStudyPage() {
                 <span className="z-gradient-text">packaged into a chat window</span>
               </SectionTitle>
               <SectionLead>
-                Zaylon isn&apos;t a chatbot. It&apos;s a product advisor, a support rep, and a
-                cashier, coordinating so your customer never has to repeat themselves.
+                Zaylon works as a product advisor, a support rep, and a cashier in one
+                conversation, so the customer never has to repeat themselves.
               </SectionLead>
             </FadeUp>
 
@@ -603,12 +604,12 @@ export default function ZaylonCaseStudyPage() {
                 {
                   Icon: Bot,
                   title: "Product advisor",
-                  body: "Answers spec questions, shows variants, recommends what pairs with what, and remembers the customer&apos;s preferences between conversations.",
+                  body: "Answers spec questions, shows variants, recommends what pairs with what, and remembers the customer's preferences between conversations.",
                 },
                 {
                   Icon: Languages,
                   title: "Dialect-aware replies",
-                  body: "Replies in the customer&apos;s own dialect, whether they wrote in English, Egyptian Arabic, or Franco-Arabic. Voice notes too.",
+                  body: "Replies in the customer's own dialect, whether they wrote in English, Egyptian Arabic, or Franco-Arabic. Voice notes too.",
                 },
                 {
                   Icon: Eye,
@@ -643,8 +644,8 @@ export default function ZaylonCaseStudyPage() {
             <FadeUp>
               <SectionEyebrow>Before and after</SectionEyebrow>
               <SectionTitle>
-                What changes when you turn{" "}
-                <span className="z-gradient-text">Zaylon on</span>
+                What changes when{" "}
+                <span className="z-gradient-text">Zaylon turns on</span>
               </SectionTitle>
             </FadeUp>
 
@@ -799,7 +800,7 @@ export default function ZaylonCaseStudyPage() {
                   className="text-base md:text-lg leading-relaxed mt-4 max-w-2xl mx-auto"
                   style={{ color: "var(--z-text-muted)" }}
                 >
-                  Every merchant&apos;s stack is different. Zaylon meets yours where it is.
+                  Every merchant&apos;s stack is different. Zaylon meets it where it is.
                 </p>
               </div>
             </FadeUp>
@@ -890,7 +891,7 @@ export default function ZaylonCaseStudyPage() {
                 {
                   Icon: Sparkles,
                   title: "Proactive suggestions",
-                  body: "The platform watches for patterns and suggests the right nudge at the right time, queued for your approval.",
+                  body: "The platform watches for patterns and suggests the right nudge at the right time, queued for the merchant's approval.",
                 },
               ].map((f) => (
                 <FadeUp key={f.title} delay={0.05}>
@@ -906,7 +907,7 @@ export default function ZaylonCaseStudyPage() {
               <SectionEyebrow>Why it matters</SectionEyebrow>
               <SectionTitle>
                 Four outcomes,{" "}
-                <span className="z-gradient-text">measured on day one</span>
+                <span className="z-gradient-text">designed in from day one</span>
               </SectionTitle>
             </FadeUp>
 
@@ -920,12 +921,12 @@ export default function ZaylonCaseStudyPage() {
                 {
                   Icon: Sparkles,
                   title: "More capacity, no hiring",
-                  body: "Handle 10x the inbound volume without 10x the headcount. Scale campaigns without scaling the inbox team.",
+                  body: "Built to handle 10x the inbound volume without 10x the headcount, so campaigns can scale without scaling the inbox team.",
                 },
                 {
                   Icon: Clock,
                   title: "Replies in seconds",
-                  body: "First-reply latency under five seconds on every channel, at every hour, in every dialect your customers write in.",
+                  body: "Designed for a first reply under five seconds on every channel, at every hour, in every dialect the customer writes in.",
                 },
                 {
                   Icon: LayoutDashboard,
@@ -1051,7 +1052,7 @@ export default function ZaylonCaseStudyPage() {
                     href="https://zaylon.ai"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl text-white transition-all hover:scale-[1.02]"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl text-white transition-all hover:opacity-90 active:scale-[0.97]"
                     style={{
                       background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
                     }}
@@ -1071,7 +1072,7 @@ export default function ZaylonCaseStudyPage() {
               {prev ? (
                 <Link
                   href={`/projects/${prev.slug}`}
-                  className="group flex items-center gap-2 text-sm transition-colors"
+                  className="group flex items-center gap-2 text-sm transition-opacity hover:opacity-75"
                   style={{ color: "var(--z-text-muted)" }}
                 >
                   <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
@@ -1084,7 +1085,7 @@ export default function ZaylonCaseStudyPage() {
               {next ? (
                 <Link
                   href={`/projects/${next.slug}`}
-                  className="group flex items-center gap-2 text-sm transition-colors"
+                  className="group flex items-center gap-2 text-sm transition-opacity hover:opacity-75"
                   style={{ color: "var(--z-text-muted)" }}
                 >
                   <span className="hidden sm:inline">{next.title}</span>

@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
         destination: "/blog/measuring-a-writing-voice",
         permanent: true,
       },
+      {
+        source: "/projects/virtual-banking",
+        destination: "/blog/event-driven-bank-transfer-saga",
+        permanent: true,
+      },
+      {
+        source: "/projects/emotion-recognition",
+        destination: "/blog/speaker-leakage-ravdess",
+        permanent: true,
+      },
     ];
   },
   async headers() {

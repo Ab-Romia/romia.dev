@@ -12,10 +12,11 @@ import { Footer } from "@/components/sections/footer";
 import { cn } from "@/lib/utils";
 
 const statusColors: Record<string, string> = {
-  Production: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30",
-  Demo: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30",
-  Ongoing: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30",
-  Deployed: "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30",
+  Production: "bg-accent/10 text-accent border-accent/30",
+  Demo: "bg-muted text-muted-foreground border-border",
+  Ongoing: "bg-muted text-muted-foreground border-border",
+  Deployed: "bg-muted text-muted-foreground border-border",
+  Completed: "bg-muted text-muted-foreground border-border",
 };
 
 export async function generateStaticParams() {
@@ -43,6 +44,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${project.title} | Abdelrahman Abouroumia`,
       description: project.caseStudy.problem,
+      images: ["/opengraph-image"],
     },
     alternates: { canonical: `/projects/${slug}` },
   };
@@ -80,7 +82,7 @@ export default async function ProjectPage({
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="size-4" />
-            Back to Projects
+            Back to projects
           </Link>
         </FadeUp>
 
@@ -157,14 +159,14 @@ export default async function ProjectPage({
 
         {/* The Problem */}
         <BlurIn>
-          <h2 className="text-2xl font-bold tracking-tight">The Problem</h2>
+          <h2 className="text-2xl font-bold tracking-tight">The problem</h2>
           <p className="text-muted-foreground leading-relaxed mt-3">{cs.problem}</p>
         </BlurIn>
 
         {/* Architecture & Approach */}
         <FadeUp delay={0.1}>
           <h2 className="text-2xl font-bold tracking-tight mt-12">
-            Architecture & Approach
+            Architecture and approach
           </h2>
           <p className="text-muted-foreground leading-relaxed mt-3">{cs.approach}</p>
         </FadeUp>
@@ -174,7 +176,7 @@ export default async function ProjectPage({
           <>
             <FadeUp delay={0.15}>
               <h2 className="text-2xl font-bold tracking-tight mt-12">
-                Key Technical Decisions
+                Key technical decisions
               </h2>
             </FadeUp>
             <StaggerContainer className="space-y-4 mt-6">
@@ -204,7 +206,7 @@ export default async function ProjectPage({
         {cs.embedDemo && (
           <FadeUp>
             <h2 className="text-2xl font-bold tracking-tight mt-12">
-              Interactive Demo
+              Interactive demo
             </h2>
             <div className="mt-6">
               {cs.embedDemo.type === "iframe" && cs.embedDemo.src && (
