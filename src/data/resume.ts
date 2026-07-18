@@ -146,7 +146,7 @@ export const PROJECTS: Project[] = [
     slug: "talos",
     categories: ["AI/ML", "Backend"],
     description:
-      "Graduation project (team): a team chat platform with a workspace-grounded RAG assistant that answers from your own documents, with citations. I owned the AI, retrieval, and evaluation.",
+      "Graduation project (team): a team chat platform with a workspace-grounded RAG assistant that answers from your own documents, with citations. I owned the AI, retrieval, evaluation, and deployment.",
     tags: ["FastAPI", "RAG", "Milvus", "LangChain", "Evaluation"],
     github: "https://github.com/Ab-Romia/talos",
     status: "Completed",
@@ -157,7 +157,7 @@ export const PROJECTS: Project[] = [
       problem:
         "A team's real knowledge lives in its own documents, so a general chatbot is useless for it. People need answers grounded in their own files, scoped per workspace, with a pointer to where each answer came from.",
       approach:
-        "Talos is a team project; I owned the AI, retrieval, and evaluation track. Files upload to MinIO and a taskiq worker processes them out of band: parse, chunk by title, embed with bge-small, and write into a per-workspace Milvus collection. A question runs a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, and the model answers from the reranked passages only, streamed token by token with inline citations. When the assistant gave weak answers, I built a statistical harness that runs the exact production pipeline to find and prove the fix.",
+        "Talos is a team project; I owned the AI, retrieval, evaluation, and deployment track. Files upload to MinIO and a taskiq worker processes them out of band: parse, chunk by title, embed with bge-small, and write into a per-workspace Milvus collection. A question runs a dense plus BM25 hybrid fused with reciprocal rank fusion, then a cross-encoder reranker, and the model answers from the reranked passages only, streamed token by token with inline citations. When the assistant gave weak answers, I built a statistical harness that runs the exact production pipeline to find and prove the fix.",
       decisions: [
         {
           title: "Milvus for vector search, MinIO for files",
@@ -172,7 +172,7 @@ export const PROJECTS: Project[] = [
           reasoning: "When answers were weak, I traced it to over-fragmented chunks (1,778 fragments, median 67 characters) and proved the fix with a paired evaluation on the production pipeline. Chunk hygiene alone raised judged correctness by 18.6 points; the reranker earned its latency; the numbers, not a hunch, set the defaults.",
         },
       ],
-      results: "Deployed and demoed live at the defense (A+), then decommissioned. The retrieval fix is proven with a paired, Holm-corrected evaluation on the production pipeline: judged answer correctness rose from 0.657 to 0.855 on the workspace's own corpus. Full write-up in the case study.",
+      results: "Deployed on Railway with managed Milvus on Zilliz Cloud, demoed live at the defense (A+), then decommissioned. The retrieval fix is proven with a paired, Holm-corrected evaluation on the production pipeline: judged answer correctness rose from 0.657 to 0.855 on the workspace's own corpus. Full write-up in the case study.",
     },
   },
   {

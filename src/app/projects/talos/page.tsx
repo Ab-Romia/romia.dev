@@ -19,11 +19,11 @@ import { getAdjacentProjects } from "@/data/resume";
 export const metadata: Metadata = {
   title: "Talos: a workspace-grounded RAG assistant, proven with a real evaluation",
   description:
-    "Case study of Talos, a team chat platform with a retrieval-augmented assistant that answers from your own documents with citations. I owned the AI, retrieval, and evaluation, and proved the retrieval fix with a paired experiment that raised judged answer correctness from 0.657 to 0.855 on the workspace's own corpus.",
+    "Case study of Talos, a team chat platform with a retrieval-augmented assistant that answers from your own documents with citations. I owned the AI, retrieval, evaluation, and deployment, and proved the retrieval fix with a paired experiment that raised judged answer correctness from 0.657 to 0.855 on the workspace's own corpus.",
   openGraph: {
     title: "Talos | Case Study by Abdelrahman Abouroumia",
     description:
-      "A team chat platform with a RAG assistant grounded in your own documents. Graduation project. I owned the AI, retrieval, and evaluation.",
+      "A team chat platform with a RAG assistant grounded in your own documents. Graduation project. I owned the AI, retrieval, evaluation, and deployment.",
     images: ["/projects/talos/01-chat-ai-answer.png"],
   },
   alternates: { canonical: "/projects/talos" },
@@ -586,9 +586,10 @@ export default function TalosCaseStudyPage() {
               <H2>A+, demoed live, then decommissioned</H2>
             </BlurIn>
             <Body>
-              The project got an A+. We deployed it and ran the whole thing live during the defense,
-              then took the hosted app down afterward. The screenshots here are from that running
-              build.
+              The project got an A+. I deployed the stack for the defense, a Dockerized backend,
+              worker, and scheduler on Railway with managed Milvus on Zilliz Cloud, and we ran the
+              whole thing live, then took the hosted app down afterward. The screenshots here are
+              from that running build.
             </Body>
             <Body>
               If I kept going, I know the next moves. The honest gap in the evaluation is the lack of
