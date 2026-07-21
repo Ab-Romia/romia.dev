@@ -81,8 +81,9 @@ export default async function Image() {
             lineHeight: 1.5,
           }}
         >
-          I build production LLM agents and RAG systems. At Zaylon AI, the agent
-          I built lets customers shop and check out on WhatsApp and Instagram.
+          I build production LLM agents, RAG systems, and the backends they run
+          on. At Zaylon AI, the agent I built lets customers shop and check out
+          on WhatsApp and Instagram.
         </p>
         <div
           style={{
