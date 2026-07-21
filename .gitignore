@@ -57,3 +57,7 @@ unnamed.jpg
 
 # playwright mcp scratch
 .playwright-mcp/
+
+# Local development notes, never published
+CLAUDE.md
+.claude/
