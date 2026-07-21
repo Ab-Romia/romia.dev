@@ -18,10 +18,10 @@ const personSchema = {
   givenName: "Abdelrahman",
   familyName: "Abouroumia",
   alternateName: ["Romia", "Ab-Romia", "Abouroumia"],
-  jobTitle: "AI Engineer",
+  jobTitle: "AI & Backend Engineer",
   url: "https://romia.dev",
   description:
-    "AI Engineer and Co-Founder of Zaylon AI. Builds production LLM agents, RAG systems, and the full-stack platforms and backends around them.",
+    "AI & Backend Engineer and Co-Founder of Zaylon AI. Builds production LLM agents, RAG systems, and the full-stack platforms and backends around them.",
   sameAs: [
     "https://linkedin.com/in/abdelrahman-abouroumia",
     "https://github.com/Ab-Romia",
@@ -70,8 +70,8 @@ const personSchema = {
   },
   hasOccupation: {
     "@type": "Occupation",
-    name: "AI Engineer",
-    occupationalCategory: "15-1251.00",
+    name: "AI & Backend Engineer",
+    occupationalCategory: "15-1252.00",
   },
 };
 
@@ -82,7 +82,7 @@ const websiteSchema = {
   alternateName: "romia.dev",
   url: "https://romia.dev",
   description:
-    "Portfolio of Abdelrahman Abouroumia (Romia), AI Engineer and Co-Founder of Zaylon AI.",
+    "Portfolio of Abdelrahman Abouroumia (Romia), AI & Backend Engineer and Co-Founder of Zaylon AI.",
   author: { "@id": "https://romia.dev/#person" },
 };
 

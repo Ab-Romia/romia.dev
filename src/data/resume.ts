@@ -1,7 +1,7 @@
 export const PERSONAL = {
   name: "Abdelrahman Abouroumia",
   displayName: "Romia",
-  title: "AI Engineer",
+  title: "AI & Backend Engineer",
   email: "aabouroumia@gmail.com",
   tagline:
     "I build production LLM agents and RAG systems. At Zaylon AI, the company I co-founded, the agent I built lets customers shop and check out by chatting on WhatsApp and Instagram in their own dialect.",

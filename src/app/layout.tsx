@@ -28,11 +28,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://romia.dev"),
   title: {
-    default: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    default: "Abdelrahman Abouroumia (Romia) | AI & Backend Engineer",
     template: "%s | Abdelrahman Abouroumia",
   },
   description:
-    "Abdelrahman Abouroumia (Romia) is an AI Engineer and Co-Founder of Zaylon AI. Builds production LLM agents, RAG systems, and the full-stack platforms and backends around them.",
+    "Abdelrahman Abouroumia (Romia) is an AI & Backend Engineer and Co-Founder of Zaylon AI. Builds production LLM agents, RAG systems, and the full-stack platforms and backends around them.",
   keywords: [
     "Romia",
     "Romia developer",
@@ -47,6 +47,7 @@ export const metadata: Metadata = {
     "Backend Engineer",
     "Full-Stack Engineer",
     "AI Engineer",
+    "AI & Backend Engineer",
     "Co-Founder Zaylon AI",
     "LangGraph",
     "Multi-Agent Systems",
@@ -57,9 +58,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Abdelrahman Abouroumia", url: "https://romia.dev" }],
   creator: "Abdelrahman Abouroumia",
   openGraph: {
-    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | AI & Backend Engineer",
     description:
-      "Abdelrahman Abouroumia (Romia). AI Engineer and Co-Founder of Zaylon AI. Production LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
+      "Abdelrahman Abouroumia (Romia). AI & Backend Engineer and Co-Founder of Zaylon AI. Production LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
     url: "https://romia.dev",
     siteName: "Abdelrahman Abouroumia - Portfolio",
     locale: "en_US",
@@ -67,9 +68,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdelrahman Abouroumia (Romia) | AI Engineer",
+    title: "Abdelrahman Abouroumia (Romia) | AI & Backend Engineer",
     description:
-      "Abdelrahman Abouroumia (Romia). AI Engineer and Co-Founder of Zaylon AI. Production LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
+      "Abdelrahman Abouroumia (Romia). AI & Backend Engineer and Co-Founder of Zaylon AI. Production LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
   },
   alternates: {
     canonical: "/",

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Abdelrahman Abouroumia (Romia) - AI Engineer";
+export const alt = "Abdelrahman Abouroumia (Romia) - AI & Backend Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -45,7 +45,7 @@ export default async function Image() {
               letterSpacing: "0.1em",
             }}
           >
-            AI Engineer
+            AI &amp; Backend Engineer
           </span>
         </div>
         <h1
