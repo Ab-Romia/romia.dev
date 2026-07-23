@@ -31,6 +31,9 @@ export function ZaylonBrainOrbLazy() {
     const node = ref.current;
     if (!node) return;
 
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (conn?.saveData) return;
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

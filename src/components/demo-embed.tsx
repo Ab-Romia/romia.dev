@@ -6,16 +6,14 @@ import { cn } from "@/lib/utils";
 export function DemoEmbed({
   src,
   title,
-  height = "600px",
 }: {
   src: string;
   title: string;
-  height?: string;
 }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="relative rounded-lg border border-border overflow-hidden" style={{ height }}>
+    <div className="relative rounded-lg border border-border overflow-hidden h-[440px] sm:h-[600px]">
       {!loaded && (
         <div className="absolute inset-0 bg-muted animate-pulse flex items-center justify-center">
           <p className="text-sm text-muted-foreground font-mono">

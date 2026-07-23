@@ -31,6 +31,8 @@ export function useActiveSection(sectionIds: string[]) {
               }
             });
             setActiveId(maxId);
+          } else {
+            setActiveId("");
           }
         },
         {

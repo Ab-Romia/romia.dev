@@ -32,14 +32,13 @@ import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
 import { getAdjacentProjects } from "@/data/resume";
 
 export const metadata: Metadata = {
-  title: "Zaylon AI: Conversational commerce for MENA merchants",
+  title: "Zaylon AI: Conversational Commerce",
   description:
     "Case study of Zaylon AI, a conversational commerce platform I co-founded that turns WhatsApp, Instagram, and Messenger into full sales channels for MENA merchants.",
   openGraph: {
     title: "Zaylon AI | Case Study by Abdelrahman Abouroumia",
     description:
       "Conversational commerce platform for MENA merchants. Co-founded and shipped across 6 e-commerce platforms, 5 messaging channels, and 3 dialects.",
-    images: ["/opengraph-image"],
   },
   alternates: { canonical: "/projects/zaylon-ai" },
 };
@@ -55,10 +54,17 @@ function SectionEyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionTitle({
+  id,
+  children,
+}: {
+  id?: string;
+  children: React.ReactNode;
+}) {
   return (
     <h2
-      className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]"
+      id={id}
+      className="scroll-mt-24 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]"
       style={{ color: "var(--z-text)" }}
     >
       {children}
@@ -513,7 +519,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>The problem</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="problem">
                 MENA customers shop in chat,{" "}
                 <span className="z-gradient-text">and chat never sleeps</span>
               </SectionTitle>
@@ -531,7 +537,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>How it works</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="how-it-works">
                 From connected store to first sale in{" "}
                 <span className="z-gradient-text">one afternoon</span>
               </SectionTitle>
@@ -589,7 +595,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>What it does</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="what-it-does">
                 A full sales team,{" "}
                 <span className="z-gradient-text">packaged into a chat window</span>
               </SectionTitle>
@@ -643,7 +649,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>Before and after</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="before-after">
                 What changes when{" "}
                 <span className="z-gradient-text">Zaylon turns on</span>
               </SectionTitle>
@@ -663,7 +669,7 @@ export default function ZaylonCaseStudyPage() {
                   className="relative z-card rounded-2xl overflow-hidden"
                   style={{ borderColor: "rgba(45,106,94,0.28)" }}
                 >
-                  <div className="grid grid-cols-2">
+                  <div className="hidden sm:grid grid-cols-2">
                     <div
                       className="p-4 md:p-5"
                       style={{ borderBottom: "1px solid rgba(45,106,94,0.25)" }}
@@ -708,7 +714,7 @@ export default function ZaylonCaseStudyPage() {
                   ].map((row, idx, arr) => (
                     <div
                       key={row.before}
-                      className="grid grid-cols-2"
+                      className="grid grid-cols-1 sm:grid-cols-2"
                       style={{
                         borderBottom:
                           idx < arr.length - 1 ? "1px solid rgba(45,106,94,0.18)" : undefined,
@@ -746,7 +752,7 @@ export default function ZaylonCaseStudyPage() {
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 items-center">
               <FadeUp>
                 <SectionEyebrow>Built for MENA</SectionEyebrow>
-                <SectionTitle>
+                <SectionTitle id="dialects">
                   Three dialects,{" "}
                   <span className="z-gradient-text">one conversation</span>
                 </SectionTitle>
@@ -859,7 +865,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>The control room</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="dashboard">
                 A merchant dashboard that{" "}
                 <span className="z-gradient-text">speaks Arabic first</span>
               </SectionTitle>
@@ -905,7 +911,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>Why it matters</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="why-it-matters">
                 Four outcomes,{" "}
                 <span className="z-gradient-text">designed in from day one</span>
               </SectionTitle>
@@ -945,7 +951,7 @@ export default function ZaylonCaseStudyPage() {
           <section className="mt-24">
             <FadeUp>
               <SectionEyebrow>My role</SectionEyebrow>
-              <SectionTitle>
+              <SectionTitle id="role">
                 Co-founder and{" "}
                 <span className="z-gradient-text">backend engineering lead</span>
               </SectionTitle>
@@ -1072,12 +1078,11 @@ export default function ZaylonCaseStudyPage() {
               {prev ? (
                 <Link
                   href={`/projects/${prev.slug}`}
-                  className="group flex items-center gap-2 text-sm transition-opacity hover:opacity-75"
+                  className="group flex min-w-0 items-center gap-2 text-sm transition-opacity hover:opacity-75"
                   style={{ color: "var(--z-text-muted)" }}
                 >
-                  <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-                  <span className="hidden sm:inline">{prev.title}</span>
-                  <span className="sm:hidden">Previous</span>
+                  <ArrowLeft className="size-4 shrink-0 group-hover:-translate-x-1 transition-transform" />
+                  <span className="truncate">{prev.title}</span>
                 </Link>
               ) : (
                 <div />
@@ -1085,12 +1090,11 @@ export default function ZaylonCaseStudyPage() {
               {next ? (
                 <Link
                   href={`/projects/${next.slug}`}
-                  className="group flex items-center gap-2 text-sm transition-opacity hover:opacity-75"
+                  className="group flex min-w-0 items-center gap-2 text-sm transition-opacity hover:opacity-75"
                   style={{ color: "var(--z-text-muted)" }}
                 >
-                  <span className="hidden sm:inline">{next.title}</span>
-                  <span className="sm:hidden">Next</span>
-                  <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+                  <span className="truncate">{next.title}</span>
+                  <ArrowRight className="size-4 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </Link>
               ) : (
                 <div />

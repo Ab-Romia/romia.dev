@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   AnimatePresence,
   m,
@@ -12,6 +13,7 @@ import {
 import { Menu, X, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS } from "@/data/resume";
+import { SOCIAL_LINKS } from "@/components/social-icons";
 import { useScrollDirection } from "@/hooks/use-scroll-direction";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -24,21 +26,37 @@ export function Navbar() {
     []
   );
   const activeSection = useActiveSection(sectionIds);
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const reduceMotion = useReducedMotion();
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
+
+  const closeMenu = () => setMobileOpen(false);
 
   useEffect(() => {
+    const main = document.getElementById("main-content");
     if (mobileOpen) {
+      wasOpen.current = true;
       document.body.style.overflow = "hidden";
+      main?.toggleAttribute("inert", true);
     } else {
       document.body.style.overflow = "";
+      main?.toggleAttribute("inert", false);
+      // Restore focus only after the header's inert is gone; focusing an
+      // inert subtree is silently ignored.
+      if (wasOpen.current) {
+        wasOpen.current = false;
+        hamburgerRef.current?.focus();
+      }
     }
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileOpen(false);
+      if (e.key === "Escape") closeMenu();
     };
     if (mobileOpen) window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = "";
+      main?.removeAttribute("inert");
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [mobileOpen]);
@@ -52,6 +70,7 @@ export function Navbar() {
       />
 
       <header
+        inert={mobileOpen}
         className={cn(
           "fixed top-0 left-0 right-0 z-50 h-16 transition-transform duration-300 motion-reduce:transition-none",
           direction === "down" && !isAtTop && !mobileOpen
@@ -88,12 +107,17 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-1">
             <LayoutGroup>
               {NAV_LINKS.map((link) => {
-                const sectionId = link.href.replace("#", "");
-                const isActive = activeSection === sectionId;
+                const isRouteLink = !link.href.startsWith("#");
+                const isActive = isRouteLink
+                  ? pathname.startsWith(link.href)
+                  : pathname === "/" &&
+                    activeSection === link.href.replace("#", "");
+                const Comp = isRouteLink ? Link : "a";
+                const hrefProp = isRouteLink ? link.href : `/${link.href}`;
                 return (
-                  <a
+                  <Comp
                     key={link.href}
-                    href={link.href.startsWith("#") ? `/${link.href}` : link.href}
+                    href={hrefProp}
                     className={cn(
                       "relative px-3 py-2 text-sm font-medium rounded-lg transition-colors",
                       isActive
@@ -113,7 +137,7 @@ export function Navbar() {
                         }
                       />
                     )}
-                  </a>
+                  </Comp>
                 );
               })}
             </LayoutGroup>
@@ -128,16 +152,20 @@ export function Navbar() {
             </a>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Open menu"
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-menu"
-          >
-            <Menu className="size-5" />
-          </button>
+          {/* Mobile controls */}
+          <div className="md:hidden flex items-center gap-1">
+            <ThemeToggle className="p-3.5" />
+            <button
+              ref={hamburgerRef}
+              onClick={() => setMobileOpen(true)}
+              className="p-3 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Open menu"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
+            >
+              <Menu className="size-5" />
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -157,15 +185,15 @@ export function Navbar() {
                 ? { duration: 0.1 }
                 : { type: "spring", damping: 25, stiffness: 200 }
             }
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md md:hidden"
+            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md md:hidden flex flex-col"
           >
-            <div className="flex items-center justify-between h-16 px-6">
+            <div className="flex items-center justify-between h-16 px-6 shrink-0">
               <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground">
                 romia<span className="text-accent">.</span>dev
               </span>
               <button
-                onClick={() => setMobileOpen(false)}
-                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                onClick={closeMenu}
+                className="p-3 text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Close menu"
                 autoFocus
               >
@@ -173,15 +201,20 @@ export function Navbar() {
               </button>
             </div>
 
-            <nav className="flex flex-col items-center justify-center gap-6 pt-16">
+            <nav className="flex-1 flex flex-col items-center justify-center gap-6 overflow-y-auto overscroll-contain px-6 py-8">
               {NAV_LINKS.map((link) => {
-                const sectionId = link.href.replace("#", "");
-                const isActive = activeSection === sectionId;
+                const isRouteLink = !link.href.startsWith("#");
+                const isActive = isRouteLink
+                  ? pathname.startsWith(link.href)
+                  : pathname === "/" &&
+                    activeSection === link.href.replace("#", "");
+                const Comp = isRouteLink ? Link : "a";
+                const hrefProp = isRouteLink ? link.href : `/${link.href}`;
                 return (
-                  <a
+                  <Comp
                     key={link.href}
-                    href={link.href.startsWith("#") ? `/${link.href}` : link.href}
-                    onClick={() => setMobileOpen(false)}
+                    href={hrefProp}
+                    onClick={closeMenu}
                     className={cn(
                       "text-2xl font-medium transition-colors",
                       isActive
@@ -190,18 +223,33 @@ export function Navbar() {
                     )}
                   >
                     {link.label}
-                  </a>
+                  </Comp>
                 );
               })}
               <a
                 href="/resume.pdf"
                 download
-                onClick={() => setMobileOpen(false)}
+                onClick={closeMenu}
                 className="inline-flex items-center gap-2 px-6 py-3 text-base font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors mt-4"
               >
                 <Download className="size-5" />
                 Download Resume
               </a>
+              <div className="flex items-center justify-center gap-2 mt-8">
+                {SOCIAL_LINKS.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={link.label}
+                    onClick={() => setMobileOpen(false)}
+                    className="p-3 text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    <link.Icon className="size-5" aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
             </nav>
           </m.div>
         )}

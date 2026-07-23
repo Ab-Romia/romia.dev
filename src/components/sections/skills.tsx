@@ -51,10 +51,8 @@ export function Skills() {
         </BlurIn>
 
         <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-8">
-          {categories.map(([category, skills], i) => (
-            <div key={category} className={i === 0 ? "sm:col-span-2" : ""}>
-              <SkillCard category={category} skills={skills} />
-            </div>
+          {categories.map(([category, skills]) => (
+            <SkillCard key={category} category={category} skills={skills} />
           ))}
         </StaggerContainer>
       </div>

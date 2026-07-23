@@ -14,9 +14,9 @@ import { Connect4Wrapper } from "@/components/connect4-wrapper";
 import { SudokuWrapper } from "@/components/sudoku-wrapper";
 
 export const statusColors: Record<string, string> = {
-  Production: "bg-accent/10 text-accent border-accent/30",
-  Demo: "bg-muted text-muted-foreground border-border",
-  Ongoing: "bg-muted text-muted-foreground border-border",
+  Production: "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
+  "Live demo": "bg-muted text-muted-foreground border-border",
+  "Case study": "bg-muted text-muted-foreground border-border",
   Deployed: "bg-muted text-muted-foreground border-border",
   Completed: "bg-muted text-muted-foreground border-border",
 };
@@ -48,7 +48,7 @@ export function Projects() {
                 onClick={() => setFilter(cat)}
                 aria-pressed={filter === cat}
                 className={cn(
-                  "text-xs font-mono px-3 py-1.5 rounded-full border transition-all duration-200",
+                  "text-xs font-mono px-3 py-1.5 min-h-11 md:min-h-0 rounded-full border transition-all duration-200",
                   filter === cat
                     ? "bg-accent text-accent-foreground border-accent"
                     : "text-muted-foreground border-border hover:border-accent/30 hover:text-foreground"
@@ -74,7 +74,7 @@ export function Projects() {
           )}
 
           {others.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {others.map((project) => (
                 <ProjectCard key={project.slug} project={project} compact />
               ))}
@@ -122,7 +122,7 @@ function ProjectCard({
         <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
           <Link
             href={project.blog ?? `/projects/${project.slug}`}
-            className="hover:text-accent transition-colors inline-flex items-center gap-1"
+            className="hover:text-accent transition-colors inline-flex items-center gap-1 py-1.5 -my-1.5"
           >
             {project.title}
             <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -152,6 +152,13 @@ function ProjectCard({
         {project.description}
       </p>
 
+      {!compact && project.impact && (
+        <p className="text-sm leading-relaxed mt-3 flex gap-2">
+          <span className="text-accent shrink-0" aria-hidden>&#8594;</span>
+          <span className="text-foreground/90">{project.impact}</span>
+        </p>
+      )}
+
       <div className="flex items-center justify-between mt-4">
         <div className="flex flex-wrap gap-2">
           {project.tags.slice(0, compact ? 3 : undefined).map((tag) => (
@@ -163,40 +170,33 @@ function ProjectCard({
         <div className="flex items-center gap-2 shrink-0 ml-2">
           {project.demo && (
             <a href={project.demo} target="_blank" rel="noopener noreferrer"
-              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors">
+              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors p-2 -m-2">
               Demo
             </a>
           )}
           {project.github && (
             <a href={project.github} target="_blank" rel="noopener noreferrer"
               aria-label={`${project.title} source on GitHub`}
-              className="p-1.5 -m-1.5 text-muted-foreground hover:text-foreground transition-colors">
+              className="p-2 -m-2 text-muted-foreground hover:text-foreground transition-colors">
               <GitHubIcon className="size-4" />
             </a>
           )}
           {project.url && (
             <a href={project.url} target="_blank" rel="noopener noreferrer"
               aria-label={`Visit ${project.title}`}
-              className="p-1.5 -m-1.5 text-muted-foreground hover:text-foreground transition-colors">
+              className="p-2 -m-2 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowUpRight className="size-4" />
             </a>
           )}
         </div>
       </div>
 
-      {project.blog ? (
+      {(project.blog || project.slug) && (
         <Link
-          href={project.blog}
-          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
+          href={project.blog ?? `/projects/${project.slug}`}
+          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors -m-2 mt-1 p-2 inline-flex items-center gap-1"
         >
           <BookOpen className="size-3" /> Read the write-up <ArrowUpRight className="size-3" />
-        </Link>
-      ) : (
-        <Link
-          href={`/projects/${project.slug}`}
-          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors mt-3 inline-flex items-center gap-1"
-        >
-          View case study <ArrowUpRight className="size-3" />
         </Link>
       )}
     </div>

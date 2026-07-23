@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 type CellValue = number | null;
@@ -115,6 +115,7 @@ export function SudokuGame() {
   const [selected, setSelected] = useState<[number, number] | null>(null);
   const [solved, setSolved] = useState(false);
   const [errors, setErrors] = useState<Set<string>>(new Set());
+  const cellRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const isGiven = useCallback(
     (r: number, c: number) => puzzle[r][c] !== null,
@@ -213,10 +214,10 @@ export function SudokuGame() {
       if (e.key === "n" || e.key === "N") setNoteMode((m) => !m);
 
       const [r, c] = selected;
-      if (e.key === "ArrowUp" && r > 0) setSelected([r - 1, c]);
-      if (e.key === "ArrowDown" && r < 8) setSelected([r + 1, c]);
-      if (e.key === "ArrowLeft" && c > 0) setSelected([r, c - 1]);
-      if (e.key === "ArrowRight" && c < 8) setSelected([r, c + 1]);
+      if (e.key === "ArrowUp" && r > 0) { e.preventDefault(); cellRefs.current[(r - 1) * 9 + c]?.focus(); }
+      if (e.key === "ArrowDown" && r < 8) { e.preventDefault(); cellRefs.current[(r + 1) * 9 + c]?.focus(); }
+      if (e.key === "ArrowLeft" && c > 0) { e.preventDefault(); cellRefs.current[r * 9 + (c - 1)]?.focus(); }
+      if (e.key === "ArrowRight" && c < 8) { e.preventDefault(); cellRefs.current[r * 9 + (c + 1)]?.focus(); }
     },
     [selected, handleNumberInput]
   );
@@ -235,7 +236,7 @@ export function SudokuGame() {
             onClick={() => setNoteMode((m) => !m)}
             aria-pressed={noteMode}
             className={cn(
-              "text-xs font-mono px-2.5 py-1 rounded border transition-colors",
+              "text-xs font-mono px-2.5 py-1.5 rounded border transition-colors",
               noteMode
                 ? "bg-accent text-accent-foreground border-accent"
                 : "text-muted-foreground border-border hover:border-accent/30"
@@ -244,7 +245,7 @@ export function SudokuGame() {
             Notes
           </button>
           <button onClick={handleSolve} disabled={solved}
-            className="text-xs font-mono text-accent hover:text-accent-muted transition-colors px-2.5 py-1 rounded border border-accent/30 hover:border-accent disabled:opacity-50">
+            className="text-xs font-mono text-accent hover:text-accent-muted transition-colors px-2.5 py-1.5 rounded border border-accent/30 hover:border-accent disabled:opacity-50">
             AI Solve
           </button>
         </div>
@@ -259,7 +260,7 @@ export function SudokuGame() {
             role="radio"
             aria-checked={difficulty === d}
             className={cn(
-              "text-[10px] font-mono px-2.5 py-1 rounded-full border transition-all",
+              "text-[10px] font-mono px-2.5 py-1.5 rounded-full border transition-all",
               difficulty === d && !solved
                 ? "bg-accent text-accent-foreground border-accent"
                 : "text-muted-foreground border-border hover:border-accent/30"
@@ -287,9 +288,11 @@ export function SudokuGame() {
               return (
                 <button
                   key={c}
+                  ref={(el) => { cellRefs.current[r * 9 + c] = el; }}
                   onClick={() => handleCellClick(r, c)}
+                  onFocus={() => !solved && setSelected([r, c])}
                   className={cn(
-                    "size-9 sm:size-10 flex items-center justify-center text-sm sm:text-base font-mono transition-colors relative",
+                    "touch-manipulation select-none size-9 sm:size-10 flex items-center justify-center text-sm sm:text-base font-mono transition-colors relative",
                     c % 3 === 2 && c < 8 && "border-r-2 border-foreground/20",
                     c % 3 !== 2 && c < 8 && "border-r border-border",
                     r < 8 && r % 3 !== 2 && "border-b border-border",
@@ -297,7 +300,7 @@ export function SudokuGame() {
                     !isSel && (sameRowCol || sameBox) && "bg-muted/50",
                     !isSel && sameNum && "bg-accent/10",
                     isGiven(r, c) ? "text-foreground font-semibold" : "text-accent",
-                    hasError && "text-red-500",
+                    hasError && "text-red-700 dark:text-red-500 underline decoration-dotted decoration-2 underline-offset-2",
                     !isGiven(r, c) && !solved && "cursor-pointer hover:bg-muted/30"
                   )}
                   disabled={solved}
@@ -331,7 +334,7 @@ export function SudokuGame() {
               key={n}
               onClick={() => handleNumberInput(n)}
               className={cn(
-                "aspect-square rounded text-sm font-mono transition-colors",
+                "touch-manipulation select-none h-11 rounded text-sm font-mono transition-colors",
                 noteMode
                   ? "bg-accent/10 text-accent hover:bg-accent/20"
                   : "bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80"
@@ -349,7 +352,7 @@ export function SudokuGame() {
         </p>
         <button
           onClick={() => handleNumberInput(0)}
-          className="text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors"
+          className="text-xs font-mono px-2.5 py-1.5 rounded border border-border text-muted-foreground hover:text-foreground hover:border-accent/30 transition-colors"
         >
           Clear cell
         </button>

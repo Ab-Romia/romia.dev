@@ -156,7 +156,7 @@
   --z-card: rgb(20, 26, 26);
   --z-primary: #1B3A35;
   --z-secondary: #2D6A5E;
-  --z-tertiary: #3A8A7A;
+  --z-tertiary: #4CA592;
   --z-text: #F0F2F1;
   --z-text-muted: #9CA3AF;
   --z-chip-bg: rgba(45, 106, 94, 0.18);
@@ -165,7 +165,7 @@
 
 /* Zaylon section emerald theme - light mode */
 .zaylon-section {
-  --z-bg: #F0F7F5;
+  --z-bg: #E4F1EC;
   --z-card: #FFFFFF;
   --z-primary: #D1E7E2;
   --z-secondary: #2D6A5E;
@@ -239,6 +239,9 @@
 
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

@@ -45,9 +45,7 @@ export const ZAYLON_SHOWCASE = {
     "Handles the whole conversation end to end: answers product questions, builds the cart, and closes the order, all inside the same chat and without a human stepping in.",
     "DialectBridge detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers back in the same dialect.",
     "Customers can send a photo of a product, and Zaylon matches it against the merchant's catalog.",
-    "Catalog and orders stay in sync across Shopify, Salla, WooCommerce, Odoo, YouCan, and Zoho.",
     "Follows up on abandoned carts and steps in when a conversation starts to turn negative.",
-    "Takes payments through Stripe, Paymob, and Fawry, with every charge confirmed by a verified webhook.",
     "A merchant dashboard with a live inbox, analytics, RFM segmentation, and A/B testing.",
     "Each merchant's data is encrypted on its own and isolated at the row level, so tenants never see each other.",
   ],
@@ -66,7 +64,7 @@ export const ZAYLON_LIVE_METRIC: { value: string; label: string } | null = null;
 // showcase renders it in a framed figure. Example: "/zaylon-dashboard.png"
 export const ZAYLON_DASHBOARD_IMAGE: string | null = null;
 
-export type ProjectStatus = "Production" | "Demo" | "Ongoing" | "Deployed" | "Completed";
+export type ProjectStatus = "Production" | "Live demo" | "Case study" | "Deployed" | "Completed";
 
 interface TechnicalDecision {
   title: string;
@@ -142,7 +140,7 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    title: "Talos",
+    title: "Talos: Workspace-Grounded RAG Assistant",
     slug: "talos",
     categories: ["AI/ML", "Backend"],
     description:
@@ -185,7 +183,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Ab-Romia/ContextIQ-RAG",
     demo: "https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI",
     blog: "/blog/contextiq-hybrid-rag-retrieval",
-    status: "Demo",
+    status: "Live demo",
     featured: true,
     impact: "Hybrid retrieval plus reranking measured on a confusable corpus: best precision at the top, hit@3 0.83 and MRR 0.78, against a dense-only baseline at 0.67",
     caseStudy: {
@@ -224,7 +222,7 @@ export const PROJECTS: Project[] = [
     tags: ["Spring Boot 3", "Kafka", "Java 21", "PostgreSQL", "Docker"],
     github: "https://github.com/Ab-Romia/Virtual-Bank-System",
     blog: "/blog/event-driven-bank-transfer-saga",
-    status: "Demo",
+    status: "Case study",
     featured: true,
     impact:
       "A transfer saga with a transactional outbox, idempotent consumers, and pessimistic locking; a Testcontainers test fires twenty simultaneous transfers and proves no double-spend.",
@@ -269,7 +267,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Ab-Romia/RAVDESS-emotion-recognition",
     demo: "https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition",
     blog: "/blog/speaker-leakage-ravdess",
-    status: "Demo",
+    status: "Live demo",
     featured: true,
     impact: "Honest speaker-independent: 78.8% audio-visual (calibrated late fusion) on a 70.3% audio base, all leak-free, where the common random split would fake the audio up to ~78% by memorizing speakers",
     caseStudy: {
@@ -305,7 +303,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Ab-Romia/VoicePrint",
     demo: "https://huggingface.co/spaces/Ab-Romia/voiceprint",
     blog: "/blog/measuring-a-writing-voice",
-    status: "Demo",
+    status: "Live demo",
     featured: true,
     impact: "With zero content words, a 130-dimensional function-word vector separated five authors at 0.684 macro-F1 and 0.889 accuracy, against a 0.20 five-class baseline",
     caseStudy: {
@@ -411,7 +409,6 @@ export const EXPERIENCE = [
     description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on a FastAPI backend with PostgreSQL/Redis, multi-tenant isolation, and Docker deployment, serving MENA merchants across WhatsApp, Instagram, and web.",
     highlights: [
       "Built the conversational AI in LangGraph as a single tool-calling agent with about 30 scoped tools across sales, support, and checkout, consolidated from an earlier multi-agent supervisor for reliability and easier reasoning",
-      "Built DialectBridge, an NLP pipeline that detects whether a customer is writing English, Egyptian Arabic, or Franco-Arabic and answers in the same dialect",
       "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring",
       "Wrote the FastAPI Python backend and its service architecture, containerized with Docker for deployment",
       "Built multi-tenant security: argon2id key auth, per-merchant row-level isolation across roughly 80 tables, and semgrep CI gates enforcing tenant scoping",
@@ -449,8 +446,6 @@ export const EXPERIENCE = [
     description: "Contributed to automotive cybersecurity research, building security scenario catalogs and running attack simulations in vehicle simulation environments.",
     highlights: [
       "Built security scenario catalogs with threat models, attack vectors, and mitigations for CAN bus and ECU communication systems following automotive cybersecurity standards",
-      "Designed and ran cybersecurity test scenarios in Dyna4 and CARLA, covering spoofing, replay, and denial-of-service attacks on vehicle CAN networks",
-      "Used Vector CANoe for CAN bus simulation and analysis, monitoring message traffic, injecting fault conditions, and validating ECU response behavior under adversarial inputs",
       "Conducted fuzz testing on Automotive Emergency Braking (AEB) components, identifying edge cases in sensor fusion timing and brake actuation logic under corrupted input data",
     ],
   },

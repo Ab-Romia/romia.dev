@@ -50,8 +50,12 @@ export function Hero() {
                 className="inline-flex items-center gap-2 text-xs font-mono bg-card border border-border px-3 py-1.5 rounded-full"
               >
                 <span className="size-1.5 rounded-full bg-accent shrink-0" />
-                <span className="text-foreground font-medium">{signal.label}</span>
-                <span className="text-muted-foreground">{signal.detail}</span>
+                <span className="text-foreground font-medium">
+                  {signal.label}
+                  {"detail" in signal && signal.detail && (
+                    <span className="text-muted-foreground font-normal"> {signal.detail}</span>
+                  )}
+                </span>
               </span>
             ))}
           </div>
@@ -63,7 +67,7 @@ export function Hero() {
               href="#zaylon"
               className={cn(
                 buttonVariants({ variant: "default", size: "lg" }),
-                "gap-2 transition-transform active:scale-[0.97]"
+                "gap-2 h-11 md:h-9 transition-transform active:scale-[0.97]"
               )}
             >
               Explore Zaylon
@@ -74,7 +78,7 @@ export function Hero() {
               download
               className={cn(
                 buttonVariants({ variant: "ghost", size: "lg" }),
-                "gap-2 transition-transform active:scale-[0.97]"
+                "gap-2 h-11 md:h-9 transition-transform active:scale-[0.97]"
               )}
             >
               <Download className="size-4" />

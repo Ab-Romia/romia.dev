@@ -17,7 +17,7 @@ import { Footer } from "@/components/sections/footer";
 import { getAdjacentProjects } from "@/data/resume";
 
 export const metadata: Metadata = {
-  title: "Talos: a workspace-grounded RAG assistant, proven with a real evaluation",
+  title: "Talos: RAG Assistant Case Study",
   description:
     "Case study of Talos, a team chat platform with a retrieval-augmented assistant that answers from your own documents with citations. I owned the AI, retrieval, evaluation, and deployment, and proved the retrieval fix with a paired experiment that raised judged answer correctness from 0.657 to 0.855 on the workspace's own corpus.",
   openGraph: {

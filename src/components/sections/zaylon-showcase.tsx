@@ -199,7 +199,7 @@ export function ZaylonShowcase() {
                 </a>
                 <Link
                   href="/projects/zaylon-ai"
-                  className="inline-flex items-center gap-1.5 text-sm font-mono group"
+                  className="inline-flex items-center gap-1.5 text-sm font-mono group py-2.5 -my-2.5"
                   style={{ color: "var(--z-tertiary)" }}
                 >
                   Read the case study

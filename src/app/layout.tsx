@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MotionProvider } from "@/components/motion-wrapper";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -68,9 +69,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdelrahman Abouroumia (Romia) | AI & Backend Engineer",
-    description:
-      "Abdelrahman Abouroumia (Romia). AI & Backend Engineer and Co-Founder of Zaylon AI. Production LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
   },
   alternates: {
     canonical: "/",
@@ -111,6 +109,7 @@ export default function RootLayout({
         <ThemeProvider>
           <MotionProvider>{children}</MotionProvider>
         </ThemeProvider>
+        <ScrollToTop />
         <Analytics />
         <SpeedInsights />
       </body>

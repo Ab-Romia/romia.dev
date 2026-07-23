@@ -55,7 +55,7 @@ export function Experience() {
                               href={entry.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="hover:text-accent transition-colors link-underline"
+                              className="hover:text-accent transition-colors link-underline inline-block py-2 -my-2"
                             >
                               {entry.company}
                             </a>
@@ -73,7 +73,7 @@ export function Experience() {
                         {entry.period}
                       </span>
                       {isCurrent && (
-                        <span className="text-[10px] font-mono text-green-700 dark:text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/30 flex items-center gap-1">
+                        <span className="text-[10px] font-mono text-green-800 dark:text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/30 flex items-center gap-1">
                           <span className="size-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
                           Current
                         </span>
@@ -83,13 +83,13 @@ export function Experience() {
 
                   {/* Description */}
                   {"description" in entry && entry.description && (
-                    <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
+                    <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-2xl">
                       {entry.description}
                     </p>
                   )}
 
                   {/* Highlights */}
-                  <ul className="mt-4 space-y-2.5">
+                  <ul className="mt-4 space-y-2.5 max-w-2xl">
                     {entry.highlights.map((highlight) => (
                       <li
                         key={highlight}

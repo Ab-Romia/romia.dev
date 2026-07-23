@@ -8,7 +8,6 @@ import { Writing } from "@/components/sections/writing";
 import { About } from "@/components/sections/about";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
-import { ScrollToTop } from "@/components/scroll-to-top";
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -119,8 +118,7 @@ export default function Home() {
         <SectionDivider />
         <Contact />
       </main>
-      <Footer />
-      <ScrollToTop />
+      <Footer showSocials={false} />
     </>
   );
 }

@@ -12,9 +12,9 @@ import { Footer } from "@/components/sections/footer";
 import { cn } from "@/lib/utils";
 
 const statusColors: Record<string, string> = {
-  Production: "bg-accent/10 text-accent border-accent/30",
-  Demo: "bg-muted text-muted-foreground border-border",
-  Ongoing: "bg-muted text-muted-foreground border-border",
+  Production: "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
+  "Live demo": "bg-muted text-muted-foreground border-border",
+  "Case study": "bg-muted text-muted-foreground border-border",
   Deployed: "bg-muted text-muted-foreground border-border",
   Completed: "bg-muted text-muted-foreground border-border",
 };
@@ -44,7 +44,6 @@ export async function generateMetadata({
     openGraph: {
       title: `${project.title} | Abdelrahman Abouroumia`,
       description: project.caseStudy.problem,
-      images: ["/opengraph-image"],
     },
     alternates: { canonical: `/projects/${slug}` },
   };
@@ -159,13 +158,13 @@ export default async function ProjectPage({
 
         {/* The Problem */}
         <BlurIn>
-          <h2 className="text-2xl font-bold tracking-tight">The problem</h2>
+          <h2 id="problem" className="scroll-mt-24 text-2xl font-bold tracking-tight">The problem</h2>
           <p className="text-muted-foreground leading-relaxed mt-3">{cs.problem}</p>
         </BlurIn>
 
         {/* Architecture & Approach */}
         <FadeUp delay={0.1}>
-          <h2 className="text-2xl font-bold tracking-tight mt-12">
+          <h2 id="architecture" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
             Architecture and approach
           </h2>
           <p className="text-muted-foreground leading-relaxed mt-3">{cs.approach}</p>
@@ -175,7 +174,7 @@ export default async function ProjectPage({
         {cs.decisions && cs.decisions.length > 0 && (
           <>
             <FadeUp delay={0.15}>
-              <h2 className="text-2xl font-bold tracking-tight mt-12">
+              <h2 id="decisions" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
                 Key technical decisions
               </h2>
             </FadeUp>
@@ -198,14 +197,14 @@ export default async function ProjectPage({
 
         {/* Results */}
         <FadeUp>
-          <h2 className="text-2xl font-bold tracking-tight mt-12">Results</h2>
+          <h2 id="results" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">Results</h2>
           <p className="text-muted-foreground leading-relaxed mt-3">{cs.results}</p>
         </FadeUp>
 
         {/* Embedded Demo */}
         {cs.embedDemo && (
           <FadeUp>
-            <h2 className="text-2xl font-bold tracking-tight mt-12">
+            <h2 id="demo" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
               Interactive demo
             </h2>
             <div className="mt-6">
@@ -229,11 +228,10 @@ export default async function ProjectPage({
           {prev ? (
             <Link
               href={prev.blog ?? `/projects/${prev.slug}`}
-              className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="group flex min-w-0 items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="hidden sm:inline">{prev.title}</span>
-              <span className="sm:hidden">Previous</span>
+              <ArrowLeft className="size-4 shrink-0 group-hover:-translate-x-1 transition-transform" />
+              <span className="truncate">{prev.title}</span>
             </Link>
           ) : (
             <div />
@@ -241,11 +239,10 @@ export default async function ProjectPage({
           {next ? (
             <Link
               href={next.blog ?? `/projects/${next.slug}`}
-              className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="group flex min-w-0 items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <span className="hidden sm:inline">{next.title}</span>
-              <span className="sm:hidden">Next</span>
-              <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+              <span className="truncate">{next.title}</span>
+              <ArrowRight className="size-4 shrink-0 group-hover:translate-x-1 transition-transform" />
             </Link>
           ) : (
             <div />

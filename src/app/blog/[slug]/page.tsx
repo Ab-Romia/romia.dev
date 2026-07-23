@@ -31,7 +31,6 @@ export async function generateMetadata({
       description: post.description,
       type: "article",
       publishedTime: post.date,
-      images: ["/opengraph-image"],
     },
     alternates: { canonical: `/blog/${slug}` },
   };
@@ -44,6 +43,12 @@ function formatDate(iso: string): string {
     day: "numeric",
   });
 }
+
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
 // Render a small markdown subset: [text](url) links, `inline code`,
 // **bold**, and *italic*.
@@ -103,7 +108,12 @@ function Block({ block }: { block: ContentBlock }) {
   switch (block.type) {
     case "h2":
       return (
-        <h2 className="text-2xl font-bold tracking-tight mt-12">{block.text}</h2>
+        <h2
+          id={slugify(block.text)}
+          className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12"
+        >
+          {block.text}
+        </h2>
       );
     case "p":
       return (
@@ -183,14 +193,14 @@ function Block({ block }: { block: ContentBlock }) {
     case "figure":
       return (
         <figure className="mt-8">
-          {/* Diagrams are self-contained SVGs in /public; a plain img keeps
-              them portable and avoids the loader for vector art. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={block.src}
-            alt={block.alt}
-            className="w-full rounded-lg border border-border bg-card p-4 md:p-6"
-          />
+          <div className="overflow-x-auto rounded-lg border border-border bg-card">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={block.src}
+              alt={block.alt}
+              className="w-full min-w-[640px] p-4 md:p-6"
+            />
+          </div>
           {block.caption ? (
             <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
               {block.caption}
@@ -226,8 +236,31 @@ export default async function BlogPostPage({
   const demoProject = PROJECTS.find((p) => p.blog === `/blog/${slug}`);
   const embed = demoProject?.caseStudy.embedDemo;
 
+  const headings = post.body.flatMap((b) =>
+    b.type === "h2" ? [{ text: b.text, id: slugify(b.text) }] : []
+  );
+
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    url: `https://romia.dev/blog/${slug}`,
+    mainEntityOfPage: `https://romia.dev/blog/${slug}`,
+    image: "https://romia.dev/opengraph-image",
+    keywords: post.tags,
+    author: { "@id": "https://romia.dev/#person" },
+    publisher: { "@id": "https://romia.dev/#person" },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
+      />
       <Navbar />
       <main id="main-content" className="min-h-screen pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
@@ -265,6 +298,28 @@ export default async function BlogPostPage({
                 </span>
               ))}
             </div>
+
+            {headings.length > 1 && (
+              <details className="mt-6 rounded-lg border border-border bg-card/50">
+                <summary className="cursor-pointer px-4 py-3 text-sm font-mono text-muted-foreground">
+                  Contents
+                </summary>
+                <nav className="px-4 pb-3">
+                  <ul className="space-y-1.5">
+                    {headings.map((h) => (
+                      <li key={h.id}>
+                        <a
+                          href={`#${h.id}`}
+                          className="link-underline text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          {h.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </details>
+            )}
           </FadeUp>
 
           <div className="section-divider mt-10 mb-2" />
@@ -280,7 +335,12 @@ export default async function BlogPostPage({
 
           {embed?.type === "iframe" && embed.src && (
             <section>
-              <h2 className="text-2xl font-bold tracking-tight mt-12">Try it</h2>
+              <h2
+                id="try-it"
+                className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12"
+              >
+                Try it
+              </h2>
               <p className="text-muted-foreground leading-relaxed mt-3">
                 The live demo runs in your browser. It may take a few seconds to wake up.
               </p>

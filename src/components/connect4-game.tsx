@@ -241,7 +241,7 @@ export function Connect4Game() {
         </p>
         <button
           onClick={reset}
-          className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors px-3 py-1 rounded border border-border hover:border-accent/30"
+          className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded border border-border hover:border-accent/30"
         >
           New Game
         </button>
@@ -254,7 +254,7 @@ export function Connect4Game() {
             <button
               key={`top-${c}`}
               className={cn(
-                "aspect-square rounded-full transition-colors",
+                "aspect-square rounded-full transition-colors touch-manipulation",
                 hoverCol === c && !gameOver && !thinking && board[0][c] === EMPTY
                   ? "bg-accent/30"
                   : "bg-transparent"
@@ -275,8 +275,8 @@ export function Connect4Game() {
               <button
                 key={`${r}-${c}`}
                 className={cn(
-                  "aspect-square rounded-full transition-all duration-200 border-2",
-                  cell === EMPTY && "bg-muted/30 border-transparent",
+                  "aspect-square rounded-full transition-all duration-200 border-2 touch-manipulation",
+                  cell === EMPTY && "bg-muted border-border",
                   cell === PLAYER && "bg-accent border-accent/50",
                   cell === AI && "bg-red-500 border-red-400/50",
                   isWinCell(r, c) && "ring-2 ring-white animate-pulse scale-105"

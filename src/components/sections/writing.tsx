@@ -30,7 +30,7 @@ export function Writing() {
             </h2>
             <Link
               href="/blog"
-              className="text-sm font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1 shrink-0"
+              className="text-sm font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1 shrink-0 p-2 -m-2"
             >
               All posts <ArrowUpRight className="size-3.5" />
             </Link>
@@ -61,7 +61,7 @@ export function Writing() {
                   <ArrowUpRight className="size-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </h3>
 
-                <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+                <p className="text-sm text-muted-foreground leading-relaxed mt-2 max-w-2xl">
                   {post.description}
                 </p>
 

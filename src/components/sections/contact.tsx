@@ -53,7 +53,7 @@ export function Contact() {
             <span className="text-xs font-mono text-muted-foreground">{PERSONAL.email}</span>
             <button
               onClick={copyEmail}
-              className="ml-1 p-1 rounded hover:bg-muted transition-colors active:scale-90"
+              className="p-2.5 -m-2 rounded hover:bg-muted transition-colors active:scale-90"
               aria-label={copied ? "Email copied" : "Copy email"}
             >
               {copied ? (
@@ -62,6 +62,7 @@ export function Contact() {
                 <Copy className="size-3.5 text-muted-foreground" />
               )}
             </button>
+            <span aria-live="polite" className="sr-only">{copied ? "Email copied to clipboard" : ""}</span>
           </div>
         </FadeUp>
 

@@ -114,11 +114,6 @@ export function About() {
                         </p>
                       </div>
                     </div>
-                    {"image" in cert && cert.image && (
-                      <div className="mt-2 rounded-lg overflow-hidden border border-border">
-                        <Image src={cert.image} alt={`${cert.name} certificate`} width={600} height={424} className="w-full h-auto" />
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
