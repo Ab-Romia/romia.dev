@@ -181,38 +181,37 @@ const EVAL_ROWS = [
 const CONTRIBUTORS = [
   {
     name: "Abdelrahman Abouroumia",
-    role: "AI and RAG system: implementation, integration, and evaluation. Also the temporary deployment, previously live at talos.romia.dev.",
+    role: "AI and RAG system: implementation, integration, evaluation, and the live demo deployment.",
     github: "https://github.com/Ab-Romia",
-    lead: true,
   },
   {
     name: "Mohab Sherif",
-    role: "MCP and third-party integrations",
+    role: "MCP server and the third-party integrations that connect the assistant to external tools.",
     github: "https://github.com/MohabG2",
   },
   {
-    name: "Kyria",
-    role: "Notification system and workspace features",
+    name: "Kyria Ekladyous",
+    role: "Notification system and the workspace features that keep teams organized.",
     github: "https://github.com/KyriaEkladyous",
   },
   {
-    name: "Kyrollos",
-    role: "Permission system and security",
+    name: "Kyrollos Salama",
+    role: "Permission system and the security model across workspaces and channels.",
     github: "https://github.com/k1rowashere",
   },
   {
     name: "Abdelrahman Mashaal",
-    role: "Frontend and backend integration",
+    role: "Frontend and backend integration, wiring the interface to the platform APIs.",
     github: "https://github.com/mash3al-29",
   },
   {
     name: "Abdullah Elsalmy",
-    role: "Frontend",
+    role: "Frontend development across the app's screens, flows, and components.",
     github: "https://github.com/aelsalmy",
   },
   {
-    name: "Nourhane",
-    role: "Messaging system",
+    name: "Nourhane Tarek",
+    role: "Messaging system: channels, direct messages, threads, and group chats.",
     github: "https://github.com/nourhanetarek",
   },
 ];
@@ -614,12 +613,7 @@ export default function TalosCaseStudyPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
               {CONTRIBUTORS.map((c) => (
                 <FadeUp key={c.name} delay={0.05}>
-                  <div
-                    className={
-                      "h-full rounded-xl border p-5 " +
-                      (c.lead ? "bg-accent/5 border-accent/30" : "bg-card border-border")
-                    }
-                  >
+                  <div className="h-full rounded-xl border p-5 bg-card border-border">
                     <div className="flex items-center justify-between gap-3">
                       <h3 className="text-sm font-semibold text-foreground">{c.name}</h3>
                       <a
