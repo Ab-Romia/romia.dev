@@ -14,8 +14,7 @@ import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
 
 function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
   const [open, setOpen] = useState(false);
-  const certificate = "certificate" in cert ? cert.certificate : undefined;
-  const verifyUrl = "verifyUrl" in cert ? cert.verifyUrl : undefined;
+  const certificates = "certificates" in cert ? cert.certificates : undefined;
 
   const inner = (
     <>
@@ -38,7 +37,7 @@ function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
           {"year" in cert && cert.year && ` · ${cert.year}`}
         </p>
       </div>
-      {certificate && (
+      {certificates && (
         <ChevronDown
           aria-hidden="true"
           className={`size-4 text-muted-foreground ml-auto shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
@@ -47,7 +46,7 @@ function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
     </>
   );
 
-  if (!certificate) {
+  if (!certificates) {
     return <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">{inner}</div>;
   }
 
@@ -62,26 +61,30 @@ function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
         {inner}
       </button>
       {open && (
-        <div className="mt-2">
-          <div className="rounded-lg overflow-hidden border border-border">
-            <Image
-              src={certificate.src}
-              alt={`${cert.name} certificate`}
-              width={certificate.width}
-              height={certificate.height}
-              className="w-full h-auto"
-            />
-          </div>
-          {verifyUrl && (
-            <a
-              href={verifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1 mt-2 p-2 -m-2"
-            >
-              Verify on Kaggle <ArrowUpRight className="size-3" />
-            </a>
-          )}
+        <div className="mt-2 space-y-3">
+          {certificates.map((c) => (
+            <div key={c.src}>
+              <div className="rounded-lg overflow-hidden border border-border">
+                <Image
+                  src={c.src}
+                  alt={`${cert.name} certificate`}
+                  width={c.width}
+                  height={c.height}
+                  className="w-full h-auto"
+                />
+              </div>
+              {"verifyUrl" in c && c.verifyUrl && (
+                <a
+                  href={c.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1 mt-2 p-2 -m-2"
+                >
+                  {c.verifyLabel} <ArrowUpRight className="size-3" />
+                </a>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>

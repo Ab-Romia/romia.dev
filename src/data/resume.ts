@@ -479,18 +479,46 @@ export const CERTIFICATIONS = [
     issuer: "micro1",
     year: "2026",
     logo: "/certs/micro1.jpg",
-    certificate: { src: "/certs/micro1.jpg", width: 600, height: 424 },
+    certificates: [{ src: "/certs/micro1.jpg", width: 600, height: 424 }],
   },
   {
     name: "Google AI Agents Intensive",
     issuer: "Google / Kaggle",
     year: "2025",
     logo: "/logos/google.svg",
-    certificate: { src: "/certs/google-ai-agents.png", width: 1600, height: 987 },
-    verifyUrl: "https://www.kaggle.com/certification/badges/abdelrahmanromia/105",
+    certificates: [
+      {
+        src: "/certs/google-ai-agents.png",
+        width: 1600,
+        height: 987,
+        verifyUrl: "https://www.kaggle.com/certification/badges/abdelrahmanromia/105",
+        verifyLabel: "Verify on Kaggle",
+      },
+    ],
   },
   { name: "Meta Back-end Developer Specialization", issuer: "Coursera", logo: "/logos/coursera.svg" },
-  { name: "AWS Cloud & ML Foundations", issuer: "AWS Academy", logo: "/logos/aws.svg" },
+  {
+    name: "AWS Cloud & ML Foundations",
+    issuer: "AWS Academy",
+    year: "2024",
+    logo: "/logos/aws.svg",
+    certificates: [
+      {
+        src: "/certs/aws-cloud-foundations.png",
+        width: 1600,
+        height: 1236,
+        verifyUrl: "https://www.credly.com/go/vM9Vw99o",
+        verifyLabel: "Verify on Credly",
+      },
+      {
+        src: "/certs/aws-ml-foundations.png",
+        width: 1600,
+        height: 1236,
+        verifyUrl: "https://www.credly.com/go/brqqLkmU",
+        verifyLabel: "Verify on Credly",
+      },
+    ],
+  },
 ] as const;
 
 export const COMPETITIONS = [
