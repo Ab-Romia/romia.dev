@@ -496,7 +496,6 @@ export const CERTIFICATIONS = [
       },
     ],
   },
-  { name: "Meta Back-end Developer Specialization", issuer: "Coursera", year: "2023", logo: "/logos/coursera.svg" },
   {
     name: "AWS Cloud & ML Foundations",
     issuer: "AWS Academy",
@@ -519,6 +518,7 @@ export const CERTIFICATIONS = [
       },
     ],
   },
+  { name: "Meta Back-end Developer Specialization", issuer: "Coursera", year: "2023", logo: "/logos/coursera.svg" },
 ] as const;
 
 export const COMPETITIONS = [
