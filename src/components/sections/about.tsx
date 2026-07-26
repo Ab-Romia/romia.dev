@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   ABOUT,
   EDUCATION,
@@ -8,7 +9,84 @@ import {
   LANGUAGES_SPOKEN,
 } from "@/data/resume";
 import Image from "next/image";
+import { ChevronDown, ArrowUpRight } from "lucide-react";
 import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
+
+function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
+  const [open, setOpen] = useState(false);
+  const certificate = "certificate" in cert ? cert.certificate : undefined;
+  const verifyUrl = "verifyUrl" in cert ? cert.verifyUrl : undefined;
+
+  const inner = (
+    <>
+      {cert.logo.endsWith(".svg") ? (
+        // Brand SVGs sit on a white chip so dark logo marks stay legible in
+        // dark mode, matching the orb's integration pills.
+        <div className="size-8 rounded-md bg-white p-1.5 shrink-0 flex items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={cert.logo} alt="" className="w-full h-full object-contain" />
+        </div>
+      ) : (
+        <div className="size-8 rounded-md overflow-hidden shrink-0">
+          <Image src={cert.logo} alt="" width={32} height={32} className="w-full h-full object-cover" />
+        </div>
+      )}
+      <div className="min-w-0 text-left">
+        <p className="text-sm font-medium leading-tight">{cert.name}</p>
+        <p className="text-xs text-muted-foreground">
+          {cert.issuer}
+          {"year" in cert && cert.year && ` · ${cert.year}`}
+        </p>
+      </div>
+      {certificate && (
+        <ChevronDown
+          aria-hidden="true"
+          className={`size-4 text-muted-foreground ml-auto shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      )}
+    </>
+  );
+
+  if (!certificate) {
+    return <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">{inner}</div>;
+  }
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="w-full flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+      >
+        {inner}
+      </button>
+      {open && (
+        <div className="mt-2">
+          <div className="rounded-lg overflow-hidden border border-border">
+            <Image
+              src={certificate.src}
+              alt={`${cert.name} certificate`}
+              width={certificate.width}
+              height={certificate.height}
+              className="w-full h-auto"
+            />
+          </div>
+          {verifyUrl && (
+            <a
+              href={verifyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1 mt-2 p-2 -m-2"
+            >
+              Verify on Kaggle <ArrowUpRight className="size-3" />
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function InfoCard({
   children,
@@ -95,26 +173,7 @@ export function About() {
               </h3>
               <div className="space-y-3">
                 {CERTIFICATIONS.map((cert) => (
-                  <div key={cert.name}>
-                    <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors group/cert">
-                      {"image" in cert && cert.image ? (
-                        <div className="size-8 rounded-md overflow-hidden shrink-0">
-                          <Image src={cert.image} alt="" width={32} height={32} className="w-full h-full object-cover" />
-                        </div>
-                      ) : (
-                        <div className="size-8 rounded-md bg-accent/10 flex items-center justify-center shrink-0 group-hover/cert:bg-accent/20 transition-colors">
-                          <span className="text-accent text-sm font-bold">{cert.issuer.charAt(0)}</span>
-                        </div>
-                      )}
-                      <div>
-                        <p className="text-sm font-medium leading-tight">{cert.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {cert.issuer}
-                          {"year" in cert && cert.year && ` · ${cert.year}`}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <CertRow key={cert.name} cert={cert} />
                 ))}
               </div>
             </InfoCard>

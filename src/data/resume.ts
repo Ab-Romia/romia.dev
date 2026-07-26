@@ -474,10 +474,23 @@ export const EDUCATION = {
 } as const;
 
 export const CERTIFICATIONS = [
-  { name: "micro1 Certified Software Engineer", issuer: "micro1", year: "2026", image: "/certs/micro1.jpg" },
-  { name: "Google AI Agents Intensive", issuer: "Google / Kaggle", year: "2025" },
-  { name: "Meta Back-end Developer Specialization", issuer: "Coursera" },
-  { name: "AWS Cloud & ML Foundations", issuer: "AWS Academy" },
+  {
+    name: "micro1 Certified Software Engineer",
+    issuer: "micro1",
+    year: "2026",
+    logo: "/certs/micro1.jpg",
+    certificate: { src: "/certs/micro1.jpg", width: 600, height: 424 },
+  },
+  {
+    name: "Google AI Agents Intensive",
+    issuer: "Google / Kaggle",
+    year: "2025",
+    logo: "/logos/google.svg",
+    certificate: { src: "/certs/google-ai-agents.png", width: 1600, height: 987 },
+    verifyUrl: "https://www.kaggle.com/certification/badges/abdelrahmanromia/105",
+  },
+  { name: "Meta Back-end Developer Specialization", issuer: "Coursera", logo: "/logos/coursera.svg" },
+  { name: "AWS Cloud & ML Foundations", issuer: "AWS Academy", logo: "/logos/aws.svg" },
 ] as const;
 
 export const COMPETITIONS = [
