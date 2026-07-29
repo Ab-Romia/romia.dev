@@ -521,6 +521,19 @@ export const CERTIFICATIONS = [
   { name: "Meta Back-end Developer Specialization", issuer: "Coursera", year: "2023", logo: "/logos/coursera.svg" },
 ] as const;
 
+// Contact details are deliberately not published here. They are shared directly
+// when a reference is requested, which is what the reference agreed to.
+export const REFERENCES = [
+  {
+    name: "Dr. Mohamed Moustafa Mahmoud",
+    alsoKnownAs: "Dr. 3M",
+    title: "Founder and Chief Executive Officer",
+    organization: "Madinah Institute for Leadership and Entrepreneurship (MILE)",
+    url: "https://www.mile.org/",
+    relationship: "Client. AI agents and automation for his organization.",
+  },
+] as const;
+
 export const COMPETITIONS = [
   { name: "MTC-AIC3 BCI Challenge", detail: "Egypt National AI Competition" },
   { name: "ECPC", detail: "3x Participant" },

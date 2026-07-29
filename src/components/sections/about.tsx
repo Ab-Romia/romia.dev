@@ -7,6 +7,7 @@ import {
   CERTIFICATIONS,
   COMPETITIONS,
   LANGUAGES_SPOKEN,
+  REFERENCES,
 } from "@/data/resume";
 import Image from "next/image";
 import { ChevronDown, ArrowUpRight } from "lucide-react";
@@ -198,6 +199,40 @@ export function About() {
                     </span>
                   </div>
                 ))}
+              </div>
+            </InfoCard>
+          </ScaleUp>
+
+          <ScaleUp delay={0.3} className="md:col-span-2">
+            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
+              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-accent" />
+                References
+              </h3>
+              <div className="space-y-4">
+                {REFERENCES.map((ref) => (
+                  <div key={ref.name}>
+                    <p className="text-sm font-medium leading-snug">
+                      {ref.name}
+                      <span className="text-muted-foreground font-normal"> ({ref.alsoKnownAs})</span>
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {ref.title},{" "}
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-underline text-foreground/90 hover:text-accent transition-colors"
+                      >
+                        {ref.organization}
+                      </a>
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">{ref.relationship}</p>
+                  </div>
+                ))}
+                <p className="text-xs font-mono text-muted-foreground pt-1">
+                  Contact details available on request.
+                </p>
               </div>
             </InfoCard>
           </ScaleUp>
