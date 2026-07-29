@@ -521,8 +521,7 @@ export const CERTIFICATIONS = [
   { name: "Meta Back-end Developer Specialization", issuer: "Coursera", year: "2023", logo: "/logos/coursera.svg" },
 ] as const;
 
-// Contact details are deliberately not published here. They are shared directly
-// when a reference is requested, which is what the reference agreed to.
+// Contact details are published with the reference's own agreement.
 export const REFERENCES = [
   {
     name: "Dr. Mohamed Moustafa Mahmoud",
@@ -531,6 +530,9 @@ export const REFERENCES = [
     organization: "Madinah Institute for Leadership and Entrepreneurship (MILE)",
     url: "https://www.mile.org/",
     relationship: "Client. AI agents and automation for his organization.",
+    email: "mmmim1954@gmail.com",
+    phone: "+966 53 008 1400",
+    phoneHref: "tel:+966530081400",
   },
 ] as const;
 

@@ -10,7 +10,7 @@ import {
   REFERENCES,
 } from "@/data/resume";
 import Image from "next/image";
-import { ChevronDown, ArrowUpRight } from "lucide-react";
+import { ChevronDown, ArrowUpRight, Mail, Phone } from "lucide-react";
 import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
 
 function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
@@ -228,11 +228,24 @@ export function About() {
                       </a>
                     </p>
                     <p className="text-sm text-muted-foreground mt-1">{ref.relationship}</p>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
+                      <a
+                        href={`mailto:${ref.email}`}
+                        className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1.5 p-2 -m-2"
+                      >
+                        <Mail className="size-3.5 shrink-0" aria-hidden="true" />
+                        {ref.email}
+                      </a>
+                      <a
+                        href={ref.phoneHref}
+                        className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1.5 p-2 -m-2"
+                      >
+                        <Phone className="size-3.5 shrink-0" aria-hidden="true" />
+                        {ref.phone}
+                      </a>
+                    </div>
                   </div>
                 ))}
-                <p className="text-xs font-mono text-muted-foreground pt-1">
-                  Contact details available on request.
-                </p>
               </div>
             </InfoCard>
           </ScaleUp>
