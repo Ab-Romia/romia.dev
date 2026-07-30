@@ -217,7 +217,7 @@ export function About() {
                       <span className="text-muted-foreground font-normal"> ({ref.alsoKnownAs})</span>
                     </p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {ref.title},{" "}
+                      {ref.title ? `${ref.title}, ` : null}
                       <a
                         href={ref.url}
                         target="_blank"
@@ -227,6 +227,7 @@ export function About() {
                         {ref.organization}
                       </a>
                     </p>
+                    <p className="text-sm text-muted-foreground mt-1">{ref.credential}</p>
                     <p className="text-sm text-muted-foreground mt-1">{ref.relationship}</p>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
                       <a

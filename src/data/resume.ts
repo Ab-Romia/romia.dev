@@ -526,9 +526,12 @@ export const REFERENCES = [
   {
     name: "Dr. Mohamed Moustafa Mahmoud",
     alsoKnownAs: "Dr. 3M",
-    title: "Founder and Chief Executive Officer",
-    organization: "Madinah Institute for Leadership and Entrepreneurship (MILE)",
-    url: "https://www.mile.org/",
+    // Title left out until confirmed by him directly: public sources disagree on
+    // his exact GPMA title, and the MILE listings are archived or stale.
+    title: "",
+    credential: "Ph.D., University of Pennsylvania",
+    organization: "Global Performance Management Academy (GPMA)",
+    url: "https://gpmacademy.org/",
     relationship: "Client. AI agents and automation for his organization.",
     email: "mmmim1954@gmail.com",
     phone: "+966 53 008 1400",
