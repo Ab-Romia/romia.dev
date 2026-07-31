@@ -714,10 +714,7 @@ export default function ZaylonBrainOrb({ className = "" }: ZaylonBrainOrbProps) 
   const { conversations, integrations, convOrbits, intOrbits } = useMemo(() => {
     const convCount = isMobile ? 2 : 3;
     const intCount = isMobile ? 3 : 4;
-    const convPool = isMobile
-      ? CONVERSATION_POOL.filter((c) => c.snippet.length <= 16)
-      : CONVERSATION_POOL;
-    const conversations = shuffle(convPool).slice(0, convCount);
+    const conversations = shuffle(CONVERSATION_POOL).slice(0, convCount);
     const integrations = shuffle(INTEGRATION_POOL).slice(0, intCount);
     const convOrbits = makeOrbitConfigs(convCount, 1.85, 2.2);
     const intOrbits = makeOrbitConfigs(intCount, 2.85, 3.15);
@@ -742,7 +739,7 @@ export default function ZaylonBrainOrb({ className = "" }: ZaylonBrainOrbProps) 
     >
       <Canvas
         camera={{ position: [0, 0, 6.8], fov: 48 }}
-        dpr={[1, isMobile ? 1.25 : 1.75]}
+        dpr={[1, isMobile ? 1.5 : 1.75]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={!isInView ? "never" : "always"}
       >
@@ -771,7 +768,7 @@ export default function ZaylonBrainOrb({ className = "" }: ZaylonBrainOrbProps) 
             full={staticFull}
           />
         ))}
-        <ParticleCloud count={isMobile ? 90 : 280} power={fullPower} full={staticFull} pal={pal} />
+        <ParticleCloud count={isMobile ? 150 : 280} power={fullPower} full={staticFull} pal={pal} />
       </Canvas>
     </div>
   );

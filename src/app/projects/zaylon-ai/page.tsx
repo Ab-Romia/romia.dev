@@ -125,7 +125,7 @@ function FeatureCard({
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
         style={{
           background:
-            "linear-gradient(135deg, rgba(27,58,53,0.04), rgba(45,106,94,0.08), rgba(58,138,122,0.04))",
+            "linear-gradient(135deg, color-mix(in oklab, var(--accent) 6%, transparent), transparent)",
         }}
         aria-hidden="true"
       />
@@ -133,7 +133,7 @@ function FeatureCard({
         <div
           className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
           style={{
-            background: "linear-gradient(135deg, rgba(27,58,53,0.28), rgba(45,106,94,0.28))",
+            background: "color-mix(in oklab, var(--accent) 12%, transparent)",
           }}
         >
           <Icon className="w-5 h-5" style={{ color: "var(--z-tertiary)" }} />
@@ -167,12 +167,12 @@ function StepCard({
           className="relative w-14 h-14 rounded-full flex items-center justify-center z-10 transition-colors"
           style={{
             background: "var(--z-card)",
-            border: "2px solid rgba(58, 138, 122, 0.4)",
+            border: "2px solid color-mix(in oklab, var(--accent) 35%, transparent)",
           }}
         >
           <div
             className="absolute inset-1.5 rounded-full animate-pulse"
-            style={{ background: "rgba(45, 106, 94, 0.35)" }}
+            style={{ background: "color-mix(in oklab, var(--accent) 40%, transparent)" }}
             aria-hidden="true"
           />
           <Icon className="relative z-10 w-5 h-5" style={{ color: "var(--z-tertiary)" }} />
@@ -203,8 +203,8 @@ function IntegrationChip({ label }: { label: string }) {
     <span
       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
       style={{
-        background: "rgba(27, 58, 53, 0.35)",
-        border: "1px solid rgba(45, 106, 94, 0.25)",
+        background: "var(--muted)",
+        border: "1px solid var(--border)",
         color: "var(--z-text)",
       }}
     >
@@ -223,7 +223,7 @@ function DashboardMockup() {
     <div className="z-card relative rounded-2xl overflow-hidden">
       <div
         className="flex items-center gap-2 px-4 py-3"
-        style={{ borderBottom: "1px solid rgba(45, 106, 94, 0.25)" }}
+        style={{ borderBottom: "1px solid var(--border)" }}
       >
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
@@ -241,7 +241,7 @@ function DashboardMockup() {
       <div className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-0">
         <div
           className="p-4 hidden sm:block"
-          style={{ borderRight: "1px solid rgba(45, 106, 94, 0.22)" }}
+          style={{ borderRight: "1px solid var(--border)" }}
         >
           {[
             { label: "Overview", items: ["Dashboard", "Inbox"] },
@@ -262,7 +262,7 @@ function DashboardMockup() {
                   className="text-[11px] py-1 px-2 rounded"
                   style={{
                     background:
-                      idx === 0 && group.label === "Overview" ? "rgba(45,106,94,0.2)" : "transparent",
+                      idx === 0 && group.label === "Overview" ? "var(--border)" : "transparent",
                     color:
                       idx === 0 && group.label === "Overview"
                         ? "var(--z-tertiary)"
@@ -289,7 +289,7 @@ function DashboardMockup() {
                 className="rounded-lg p-2.5"
                 style={{
                   background: "var(--z-primary)",
-                  border: "1px solid rgba(45,106,94,0.2)",
+                  border: "1px solid var(--border)",
                 }}
               >
                 <p className="text-base sm:text-lg font-bold z-gradient-text leading-none">
@@ -307,7 +307,7 @@ function DashboardMockup() {
 
           <div
             className="rounded-lg p-3"
-            style={{ background: "var(--z-primary)", border: "1px solid rgba(45,106,94,0.2)" }}
+            style={{ background: "var(--z-primary)", border: "1px solid var(--border)" }}
           >
             <div className="flex items-center justify-between mb-2.5">
               <p className="text-xs font-semibold" style={{ color: "var(--z-text)" }}>
@@ -330,13 +330,13 @@ function DashboardMockup() {
                 <div
                   key={row.who}
                   className="flex items-center justify-between gap-2 py-1.5 px-2 rounded"
-                  style={{ background: "rgba(45,106,94,0.08)" }}
+                  style={{ background: "var(--border)" }}
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[9px] font-bold"
                       style={{
-                        background: "rgba(58,138,122,0.35)",
+                        background: "color-mix(in oklab, var(--accent) 35%, transparent)",
                         color: "var(--z-text)",
                       }}
                     >
@@ -373,7 +373,7 @@ function DashboardMockup() {
         className="text-[10px] font-mono px-4 py-2 text-center"
         style={{
           color: "var(--z-text-muted)",
-          borderTop: "1px solid rgba(45, 106, 94, 0.25)",
+          borderTop: "1px solid var(--border)",
         }}
       >
         Representative illustration, not measured results.
@@ -389,30 +389,6 @@ export default function ZaylonCaseStudyPage() {
     <>
       <Navbar />
       <main id="main-content" className="zaylon-section relative overflow-hidden">
-        {/* Emerald atmosphere */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          aria-hidden="true"
-          style={{
-            backgroundImage: `linear-gradient(rgba(45, 106, 94, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(45, 106, 94, 0.08) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
-          }}
-        />
-        <div
-          className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-background via-background/60 to-transparent z-[2] pointer-events-none"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute top-[18%] -left-40 w-[560px] h-[560px] rounded-full blur-2xl pointer-events-none"
-          aria-hidden="true"
-          style={{ background: "rgba(45, 106, 94, 0.06)" }}
-        />
-        <div
-          className="absolute bottom-[20%] -right-40 w-[420px] h-[420px] rounded-full blur-2xl pointer-events-none"
-          aria-hidden="true"
-          style={{ background: "rgba(27, 58, 53, 0.06)" }}
-        />
-
         <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-28 pb-20 z-10">
           {/* Back link */}
           <FadeUp>
@@ -471,12 +447,7 @@ export default function ZaylonCaseStudyPage() {
                     href="https://zaylon.ai"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl text-white transition-all duration-300 hover:opacity-90 active:scale-[0.97]"
-                    style={{
-                      background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
-                      boxShadow:
-                        "0 4px 20px rgba(27, 58, 53, 0.5), 0 8px 30px rgba(45, 106, 94, 0.2)",
-                    }}
+                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
                   >
                     Visit zaylon.ai
                     <ArrowUpRight className="size-4" />
@@ -487,17 +458,13 @@ export default function ZaylonCaseStudyPage() {
 
             {/* Orb */}
             <FadeUp delay={0.15}>
-              <div className="relative aspect-square w-full max-w-[500px] mx-auto">
+              <div className="brain-orb-stage relative rounded-3xl overflow-hidden">
                 <div
-                  className="absolute inset-[-10%] rounded-full pointer-events-none"
-                  aria-hidden="true"
-                  style={{
-                    background:
-                      "radial-gradient(circle at center, rgba(52, 211, 153, 0.18) 0%, rgba(45, 106, 94, 0.08) 35%, transparent 70%)",
-                    filter: "blur(24px)",
-                  }}
-                />
-                <ZaylonBrainOrbLazy />
+                  dir="ltr"
+                  className="brain-orb-mask relative mx-auto aspect-square w-[min(70vw,300px)] sm:w-[min(48vw,340px)] lg:w-[min(30vw,380px)]"
+                >
+                  <ZaylonBrainOrbLazy />
+                </div>
               </div>
             </FadeUp>
           </section>
@@ -506,7 +473,7 @@ export default function ZaylonCaseStudyPage() {
           <FadeUp delay={0.2}>
             <div
               className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 pt-8"
-              style={{ borderTop: "1px solid rgba(45, 106, 94, 0.25)" }}
+              style={{ borderTop: "1px solid var(--border)" }}
             >
               <Stat value="24/7" label="Always online" sublabel="Never misses a message" />
               <Stat value="<5s" label="Reply target" sublabel="Designed for, on every channel" />
@@ -550,7 +517,7 @@ export default function ZaylonCaseStudyPage() {
                 aria-hidden="true"
                 style={{
                   background:
-                    "linear-gradient(90deg, transparent 0%, rgba(45, 106, 94, 0.45) 15%, rgba(45, 106, 94, 0.45) 85%, transparent 100%)",
+                    "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--accent) 40%, transparent) 15%, color-mix(in oklab, var(--accent) 40%, transparent) 85%, transparent 100%)",
                 }}
               />
 
@@ -662,17 +629,17 @@ export default function ZaylonCaseStudyPage() {
                   aria-hidden="true"
                   style={{
                     background:
-                      "linear-gradient(90deg, rgba(45,106,94,0.05), rgba(58,138,122,0.12), rgba(45,106,94,0.05))",
+                      "linear-gradient(90deg, var(--border), color-mix(in oklab, var(--accent) 35%, transparent), var(--border))",
                   }}
                 />
                 <div
                   className="relative z-card rounded-2xl overflow-hidden"
-                  style={{ borderColor: "rgba(45,106,94,0.28)" }}
+                  style={{ borderColor: "var(--border)" }}
                 >
                   <div className="hidden sm:grid grid-cols-2">
                     <div
                       className="p-4 md:p-5"
-                      style={{ borderBottom: "1px solid rgba(45,106,94,0.25)" }}
+                      style={{ borderBottom: "1px solid var(--border)" }}
                     >
                       <span className="text-sm font-medium" style={{ color: "var(--z-text-muted)" }}>
                         Without Zaylon
@@ -681,8 +648,8 @@ export default function ZaylonCaseStudyPage() {
                     <div
                       className="p-4 md:p-5"
                       style={{
-                        borderBottom: "1px solid rgba(45,106,94,0.25)",
-                        background: "rgba(45,106,94,0.08)",
+                        borderBottom: "1px solid var(--border)",
+                        background: "var(--border)",
                       }}
                     >
                       <span
@@ -717,7 +684,7 @@ export default function ZaylonCaseStudyPage() {
                       className="grid grid-cols-1 sm:grid-cols-2"
                       style={{
                         borderBottom:
-                          idx < arr.length - 1 ? "1px solid rgba(45,106,94,0.18)" : undefined,
+                          idx < arr.length - 1 ? "1px solid var(--border)" : undefined,
                       }}
                     >
                       <div
@@ -731,7 +698,7 @@ export default function ZaylonCaseStudyPage() {
                         className="p-4 md:p-5 text-sm leading-relaxed flex items-start gap-2"
                         style={{
                           color: "var(--z-text)",
-                          background: "rgba(45,106,94,0.05)",
+                          background: "var(--border)",
                         }}
                       >
                         <Check
@@ -841,7 +808,7 @@ export default function ZaylonCaseStudyPage() {
                         className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                         style={{
                           background:
-                            "linear-gradient(135deg, rgba(27,58,53,0.35), rgba(45,106,94,0.35))",
+                            "color-mix(in oklab, var(--accent) 12%, transparent)",
                         }}
                       >
                         <group.Icon className="w-4 h-4" style={{ color: "var(--z-tertiary)" }} />
@@ -979,8 +946,8 @@ export default function ZaylonCaseStudyPage() {
                     key={item}
                     className="flex items-start gap-2.5 rounded-lg px-3 py-2.5"
                     style={{
-                      background: "rgba(27, 58, 53, 0.22)",
-                      border: "1px solid rgba(45, 106, 94, 0.22)",
+                      background: "var(--muted)",
+                      border: "1px solid var(--border)",
                     }}
                   >
                     <Check
@@ -1020,9 +987,9 @@ export default function ZaylonCaseStudyPage() {
                     key={tech}
                     className="text-xs font-mono px-3 py-1.5 rounded-full"
                     style={{
-                      background: "rgba(27, 58, 53, 0.3)",
+                      background: "var(--muted)",
                       color: "var(--z-tertiary)",
-                      border: "1px solid rgba(45, 106, 94, 0.25)",
+                      border: "1px solid var(--border)",
                     }}
                   >
                     {tech}
@@ -1039,7 +1006,7 @@ export default function ZaylonCaseStudyPage() {
                 className="z-card rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(27,58,53,0.55), rgba(45,106,94,0.35), rgba(58,138,122,0.2))",
+                    "color-mix(in oklab, var(--accent) 12%, transparent)",
                 }}
               >
                 <div>
@@ -1058,10 +1025,7 @@ export default function ZaylonCaseStudyPage() {
                     href="https://zaylon.ai"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl text-white transition-all hover:opacity-90 active:scale-[0.97]"
-                    style={{
-                      background: "linear-gradient(135deg, #1B3A35, #2D6A5E, #3A8A7A)",
-                    }}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
                   >
                     Visit zaylon.ai
                     <ArrowUpRight className="size-4" />
@@ -1073,7 +1037,7 @@ export default function ZaylonCaseStudyPage() {
             {/* Prev / next */}
             <div
               className="mt-12 pt-8 flex items-center justify-between"
-              style={{ borderTop: "1px solid rgba(45, 106, 94, 0.25)" }}
+              style={{ borderTop: "1px solid var(--border)" }}
             >
               {prev ? (
                 <Link

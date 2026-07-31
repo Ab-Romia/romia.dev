@@ -124,10 +124,6 @@ export function ZaylonShowcase() {
       id="zaylon"
       className="zaylon-section relative py-24 md:py-32 overflow-hidden"
     >
-      {/* Soft edges blending the section into the page above and below */}
-      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-background via-background/60 to-transparent z-[2] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background via-background/60 to-transparent z-[2] pointer-events-none" />
-
       <div className="relative max-w-6xl mx-auto px-6 lg:px-8 z-20">
         {/* Split hero: copy on the left, orb on the right */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-14 items-center">
@@ -189,10 +185,7 @@ export function ZaylonShowcase() {
                   href={ZAYLON_SHOWCASE.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-xl text-white transition-transform active:scale-[0.97]"
-                  style={{
-                    background: "linear-gradient(135deg, #1B3A35, #2D6A5E)",
-                  }}
+                  className="inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
                 >
                   Visit zaylon.ai
                   <ArrowUpRight className="size-4" />
@@ -211,18 +204,15 @@ export function ZaylonShowcase() {
 
           {/* Orb column */}
           <FadeUp delay={0.15}>
-            <div className="relative aspect-square w-full max-w-[520px] mx-auto">
-              {/* Ambient emerald halo behind the orb */}
+            {/* Container and mask match zaylon.ai so the orb reads identically
+                on both sites. */}
+            <div className="brain-orb-stage relative rounded-3xl overflow-hidden">
               <div
-                className="absolute inset-[-10%] rounded-full pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(circle at center, rgba(52, 211, 153, 0.18) 0%, rgba(45, 106, 94, 0.08) 35%, transparent 70%)",
-                  filter: "blur(24px)",
-                }}
-                aria-hidden="true"
-              />
-              <ZaylonBrainOrbLazy />
+                dir="ltr"
+                className="brain-orb-mask relative mx-auto aspect-square w-[min(70vw,300px)] sm:w-[min(48vw,340px)] lg:w-[min(30vw,380px)]"
+              >
+                <ZaylonBrainOrbLazy />
+              </div>
             </div>
           </FadeUp>
         </div>
