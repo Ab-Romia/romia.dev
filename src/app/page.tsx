@@ -105,8 +105,8 @@ export default function Home() {
       <Navbar />
       <main id="main-content" className="pt-16">
         <Hero />
-        <ZaylonShowcase />
         <Projects />
+        <ZaylonShowcase />
         <SectionDivider />
         <Experience />
         <SectionDivider />

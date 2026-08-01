@@ -18,8 +18,8 @@ export const HERO_SIGNALS = [
 ] as const;
 
 export const NAV_LINKS = [
-  { label: "Zaylon", href: "#zaylon" },
   { label: "Projects", href: "#projects" },
+  { label: "Zaylon", href: "#zaylon" },
   { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Blog", href: "/blog" },
