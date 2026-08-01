@@ -20,7 +20,7 @@ const personSchema = {
   jobTitle: "AI & Backend Engineer",
   url: "https://romia.dev",
   description:
-    "AI & Backend Engineer and Co-Founder of Zaylon AI. Builds production LLM agents, RAG systems, and the full-stack platforms and backends around them.",
+    "AI & Backend Engineer and Co-Founder of Zaylon AI. Builds LLM agents, RAG systems, and the full-stack platforms and backends around them.",
   sameAs: [
     "https://linkedin.com/in/abdelrahman-abouroumia",
     "https://github.com/Ab-Romia",

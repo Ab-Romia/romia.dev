@@ -12,7 +12,7 @@ import { Footer } from "@/components/sections/footer";
 import { cn } from "@/lib/utils";
 
 const statusColors: Record<string, string> = {
-  Production: "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
+  "Pre-launch": "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
   "Live demo": "bg-muted text-muted-foreground border-border",
   "Case study": "bg-muted text-muted-foreground border-border",
   Deployed: "bg-muted text-muted-foreground border-border",

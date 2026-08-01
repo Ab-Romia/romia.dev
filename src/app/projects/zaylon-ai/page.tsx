@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Zaylon AI | Case Study by Abdelrahman Abouroumia",
     description:
-      "Conversational commerce platform for MENA merchants. Co-founded and shipped across 6 e-commerce platforms, 5 messaging channels, and 3 dialects.",
+      "Conversational commerce platform for MENA merchants. Co-founded and built across 6 e-commerce platforms, 5 messaging channels, and 3 dialects.",
   },
   alternates: { canonical: "/projects/zaylon-ai" },
 };
@@ -411,10 +411,10 @@ export default function ZaylonCaseStudyPage() {
                   style={{ color: "var(--z-tertiary)" }}
                 >
                   <span
-                    className="size-2 rounded-full animate-pulse"
+                    className="size-2 rounded-full"
                     style={{ background: "var(--z-secondary)" }}
                   />
-                  Production &middot; Co-Founded
+                  Pre-launch &middot; Co-Founded
                 </span>
               </BlurIn>
 
@@ -766,8 +766,8 @@ export default function ZaylonCaseStudyPage() {
                   className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]"
                   style={{ color: "var(--z-text)" }}
                 >
-                  Plugs into the tools{" "}
-                  <span className="z-gradient-text">MENA merchants already use</span>
+                  Built to plug into the{" "}
+                  <span className="z-gradient-text">MENA commerce stack</span>
                 </h2>
                 <p
                   className="text-base md:text-lg leading-relaxed mt-4 max-w-2xl mx-auto"
@@ -924,7 +924,7 @@ export default function ZaylonCaseStudyPage() {
               </SectionTitle>
               <SectionLead>
                 I co-founded Zaylon and built its AI system and backend. I designed the
-                conversational architecture, shipped the LangGraph agent that runs it, built the
+                conversational architecture, implemented the LangGraph agent that runs it, built the
                 tri-lingual NLP, and wrote the FastAPI application, its database layer, and the
                 multi-tenant security around it.
               </SectionLead>
@@ -1017,7 +1017,7 @@ export default function ZaylonCaseStudyPage() {
                     See it for yourself
                   </h2>
                   <p className="text-sm mt-2" style={{ color: "var(--z-text-muted)" }}>
-                    Zaylon is live. Take a look at the site.
+                    Take a look at the product site.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 shrink-0">

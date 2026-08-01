@@ -14,7 +14,7 @@ import { Connect4Wrapper } from "@/components/connect4-wrapper";
 import { SudokuWrapper } from "@/components/sudoku-wrapper";
 
 export const statusColors: Record<string, string> = {
-  Production: "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
+  "Pre-launch": "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
   "Live demo": "bg-muted text-muted-foreground border-border",
   "Case study": "bg-muted text-muted-foreground border-border",
   Deployed: "bg-muted text-muted-foreground border-border",
@@ -140,9 +140,6 @@ function ProjectCard({
               statusColors[project.status]
             )}
           >
-            {project.status === "Production" && (
-              <span className="size-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
-            )}
             {project.status}
           </span>
         </div>

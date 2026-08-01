@@ -282,8 +282,8 @@ export function ZaylonShowcase() {
               className="text-2xl md:text-3xl font-bold tracking-tight"
               style={{ color: "var(--z-text)" }}
             >
-              Connected to the platforms{" "}
-              <span style={{ color: "var(--z-tertiary)" }}>MENA merchants already use</span>
+              Built to plug into the{" "}
+              <span style={{ color: "var(--z-tertiary)" }}>MENA commerce stack</span>
             </h3>
           </div>
         </FadeUp>

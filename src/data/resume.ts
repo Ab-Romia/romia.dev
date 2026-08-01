@@ -4,7 +4,7 @@ export const PERSONAL = {
   title: "AI & Backend Engineer",
   email: "aabouroumia@gmail.com",
   tagline:
-    "I build production LLM agents, RAG systems, and the backends they run on. At Zaylon AI, the company I co-founded, the agent I built lets customers shop and check out by chatting on WhatsApp and Instagram in their own dialect.",
+    "I build LLM agents, RAG systems, and the backends they run on. At Zaylon AI, the company I co-founded, the agent I built takes a shopper from the first product question to a paid order inside WhatsApp and Instagram, in their own dialect.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -64,7 +64,7 @@ export const ZAYLON_LIVE_METRIC: { value: string; label: string } | null = null;
 // showcase renders it in a framed figure. Example: "/zaylon-dashboard.png"
 export const ZAYLON_DASHBOARD_IMAGE: string | null = null;
 
-export type ProjectStatus = "Production" | "Live demo" | "Case study" | "Deployed" | "Completed";
+export type ProjectStatus = "Pre-launch" | "Live demo" | "Case study" | "Deployed" | "Completed";
 
 interface TechnicalDecision {
   title: string;
@@ -112,7 +112,7 @@ export const PROJECTS: Project[] = [
       "An AI that sells over WhatsApp and Instagram for MENA merchants, carrying a customer from the first product question to a confirmed payment, all inside the chat.",
     tags: ["LangGraph", "Python", "FastAPI", "Shopify", "Next.js"],
     url: "https://zaylon.ai",
-    status: "Production",
+    status: "Pre-launch",
     badge: "Co-Founded",
     featured: true,
     impact: "LangGraph tool-calling agent and tri-lingual NLP on a multi-tenant FastAPI backend",
@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
         },
       ],
       results:
-        "Live with merchants across 6 commerce platforms, handling product discovery, support, and checkout in three dialects.",
+        "Integrates 6 commerce platforms and 5 messaging channels, handling product discovery, support, and checkout across three dialects. Launching commercially in 2026.",
     },
   },
   {
@@ -406,7 +406,7 @@ export const EXPERIENCE = [
     role: "Software Engineer & Co-Founder",
     url: "https://zaylon.ai",
     period: "May 2025 – Present",
-    description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on a FastAPI backend with PostgreSQL/Redis, multi-tenant isolation, and Docker deployment, serving MENA merchants across WhatsApp, Instagram, and web.",
+    description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on a FastAPI backend with PostgreSQL/Redis, multi-tenant isolation, and Docker deployment, built for MENA merchants selling on WhatsApp, Instagram, and web.",
     highlights: [
       "Built the conversational AI in LangGraph as a single tool-calling agent with about 30 scoped tools across sales, support, and checkout, consolidated from an earlier multi-agent supervisor for reliability and easier reasoning",
       "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring",
