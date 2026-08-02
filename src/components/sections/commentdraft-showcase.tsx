@@ -4,8 +4,8 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { FadeUp, BlurIn } from "@/components/motion-wrapper";
 import { GitHubIcon } from "@/components/social-icons";
-import { CommentdraftGate } from "@/components/commentdraft-gate";
-import { COMMENTDRAFT_SHOWCASE, COMMENTDRAFT_GATE } from "@/data/resume";
+import { CommentdraftTriage } from "@/components/commentdraft-triage";
+import { COMMENTDRAFT_SHOWCASE } from "@/data/resume";
 
 /**
  * A peer of the Zaylon section, not a second landing page. Everything that
@@ -108,15 +108,9 @@ export function CommentdraftShowcase() {
             </FadeUp>
           </div>
 
-          {/* The gate. It holds until you press a key, which is the whole point. */}
+          {/* What it decided on a real run. Judgement, not effort. */}
           <FadeUp delay={0.15}>
-            <CommentdraftGate />
-            <p className="mt-4 font-mono text-xs text-foreground/80 leading-relaxed">
-              {COMMENTDRAFT_GATE.absent} {COMMENTDRAFT_GATE.enterNote}
-            </p>
-            <p className="mt-2 font-mono text-xs text-muted-foreground leading-relaxed">
-              {COMMENTDRAFT_GATE.safety} {COMMENTDRAFT_GATE.run.note}
-            </p>
+            <CommentdraftTriage />
           </FadeUp>
         </div>
       </div>

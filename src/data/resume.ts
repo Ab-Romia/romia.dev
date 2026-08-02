@@ -94,64 +94,37 @@ export const COMMENTDRAFT_SHOWCASE = {
   ],
 } as const;
 
-/* The publish prompt, reproduced. These are the four rows of the eleven in
-   `out/showcase/review.csv` that the run produced a draft for; the other seven
-   carry no draft because the tool declined to answer them. Same run as the
-   review page screenshot below it, so the two agree. */
-export const COMMENTDRAFT_GATE = {
-  command: "commentdraft publish",
-  run: {
-    comments: 11,
-    drafts: 4,
-    declined: 7,
-    note: "11 comments in. 4 drafts out. 7 the tool declined to answer.",
-  },
-  keys: [
-    { key: "y", label: "send", action: "send" },
-    { key: "e", label: "edit", action: "edit" },
-    { key: "s", label: "skip", action: "skip" },
-    { key: "q", label: "quit", action: "quit" },
+/* What the tool decided, read out of `out/showcase/review.csv`: the same run
+   the review page screenshot on the case study was rendered from, so the two
+   agree. Comments and reasons are verbatim, never paraphrased. */
+export const COMMENTDRAFT_TRIAGE = {
+  label: "One published run",
+  total: 11,
+  counts: [
+    { decision: "reply", n: 4 },
+    { decision: "skip", n: 3 },
+    { decision: "escalate", n: 4 },
   ],
-  enterNote: "Enter does nothing at all.",
-  editNote: "e opens the draft in $EDITOR and sends what comes back, which a web page cannot do.",
-  safety: "Nothing here is sent anywhere. This is the prompt, not the tool.",
-  absent: "There is no --yes. There is no --all. There is no config key that changes it.",
-  drafts: [
+  samples: [
     {
-      platform: "youtube",
-      author: "mira_h",
-      context: "Five weeds you can eat",
+      decision: "reply",
       comment: "Does it cover mushrooms at all?",
       reason: "content question about a subject the book deliberately excludes",
-      reply:
-        "Fungi are left out on purpose, since a beginner cannot judge them safely from a photo, so it covers other plants instead, things like leaves and fruit. you can get it at https://example.com/field-guide",
     },
     {
-      platform: "youtube",
-      author: "tom.wilder",
-      context: "Five weeds you can eat",
-      comment: "How much is it and where do I get it?",
-      reason: "clear purchase intent, price and place asked together",
-      reply: "$18, here is the link: https://example.com/field-guide",
+      decision: "skip",
+      comment: "This is a scam you are just here to sell a book",
+      reason: "accusation rather than an objection, answering it widens the argument",
     },
     {
-      platform: "youtube",
-      author: "is_this_a_bot",
-      context: "What is inside the guide",
-      comment: "Is a real person writing these replies or is it a bot",
-      reason: "direct question about whether this is software, answered exactly as instructed",
-      reply: "These replies are drafted with software and read by a person before they post.",
-    },
-    {
-      platform: "instagram",
-      author: "marta.kowal",
-      context: "Hedgerow walk in April",
-      comment: "Czy ten przewodnik obejmuje Europe Srodkowa?",
-      reason: "question about regional coverage, answered from source and pointed to book",
-      reply:
-        "It covers temperate regions, which includes Central Europe. you can get it at https://example.com/field-guide",
+      decision: "escalate",
+      comment: "I have a nut allergy is any of this dangerous for me",
+      reason: "health question beyond the scope of the book, directed to medical professional",
     },
   ],
+  closing: "Seven of the eleven got no draft at all.",
+  provenance:
+    "Verbatim from a run of the shipped example, written up with the command that reproduces it.",
 } as const;
 
 /* Read against live documentation on 2026-08-01, the date every guide carries.
@@ -368,11 +341,20 @@ interface CaseStudyFigure {
   height: number;
 }
 
+/** A project-specific block rendered after the decisions, named the same way
+ *  `embedDemo` names a component rather than inlining one. */
+interface CaseStudyReference {
+  heading: string;
+  intro: string;
+  component: "commentdraft-platforms";
+}
+
 interface CaseStudy {
   problem: string;
   approach: string;
   figure?: CaseStudyFigure;
   decisions?: TechnicalDecision[];
+  reference?: CaseStudyReference;
   results: string;
   embedDemo?: EmbedDemo;
 }
@@ -480,6 +462,12 @@ export const PROJECTS: Project[] = [
             "I assumed the cheaper published rate meant the cheaper run. In the bake-off it cost about 27 times more per comment than the default, where the sticker prices alone predicted a gap near 8. The difference was the prompt cache. The prefix dominates the bill on every call here, and the default's route billed it at a reduced cached rate on 28 of its 29 calls while neither of the others was served from a cache at all. That measurement is why the prefix is assembled once and kept byte-identical, and why anything that varies per row, a timestamp, a row counter, a shuffled example order, costs every cache hit in the run rather than a little latency. It is also the reason there is no retrieval: while the source document fits the window there is nothing for a retriever to miss, and a retriever that misses is precisely the failure this tool exists to prevent. One run, one example, one gateway, one day, published with the command that reproduces it and the caveat that says to read it narrowly.",
         },
       ],
+      reference: {
+        heading: "Connecting it to a social platform",
+        intro:
+          "Reading and replying through a platform's own API is where most of the real work turned out to be, and almost none of it is code. Each of the eight platforms was researched from its own primary sources, with every endpoint, scope string, quota number and policy clause carrying the URL it came from and the date it was read, and each guide states near the top which of its claims were read twice and which cannot be settled without credentials. What follows is the short version: what stands between an operator and a first working call on each one.",
+        component: "commentdraft-platforms",
+      },
       results:
         "Published on PyPI under Apache-2.0, with a worked example in the repository, a fictional field guide with its knowledge file, its voice file and a small comment file, so the whole loop runs from a clone. The claims are built to be checked rather than believed: the test suite runs offline with no API key, the review page in the write-up is rendered by the tool from its own run rather than mocked up, and every figure in the documentation resolves to a command a reader can run. Eight platform connection guides carry the primary-source URL behind each endpoint, scope and quota, and the date each was read. What it does not do is stated in the same places: one connector exists, for Facebook Pages, and it has never been run against a live Page.",
     },

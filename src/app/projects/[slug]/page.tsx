@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { PROJECTS, getProjectBySlug, getAdjacentProjects } from "@/data/resume";
 import { FadeUp, BlurIn, StaggerContainer, StaggerItem } from "@/components/motion-wrapper";
 import { DemoEmbed } from "@/components/demo-embed";
+import { CommentdraftPlatformList } from "@/components/commentdraft-platforms";
 import { Connect4Wrapper } from "@/components/connect4-wrapper";
 import { SudokuWrapper } from "@/components/sudoku-wrapper";
 import { Navbar } from "@/components/navbar";
@@ -233,6 +234,19 @@ export default async function ProjectPage({
               ))}
             </StaggerContainer>
           </>
+        )}
+
+        {/* A project-specific reference block, when the case study declares one */}
+        {cs.reference && (
+          <FadeUp delay={0.1}>
+            <h2 id="reference" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
+              {cs.reference.heading}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mt-3">{cs.reference.intro}</p>
+            <div className="mt-6">
+              {cs.reference.component === "commentdraft-platforms" && <CommentdraftPlatformList />}
+            </div>
+          </FadeUp>
         )}
 
         {/* Results */}

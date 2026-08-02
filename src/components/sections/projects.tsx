@@ -27,8 +27,13 @@ export function Projects() {
   const [filter, setFilter] = useState<string>("All");
 
   const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.categories.includes(filter as never));
-  const featured = filtered.filter((p) => p.featured);
-  const others = filtered.filter((p) => !p.featured);
+  // The two playable demos share one card. On their own they were a pair of
+  // half-height stragglers under a grid of full cards, which read as leftovers
+  // and left the last row of that grid short.
+  const games = filtered.filter((p) => p.categories.includes("Games/Puzzles"));
+  const rest = filtered.filter((p) => !p.categories.includes("Games/Puzzles"));
+  const featured = rest.filter((p) => p.featured);
+  const others = rest.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-20 md:py-28">
@@ -63,13 +68,15 @@ export function Projects() {
           </p>
         </FadeUp>
 
-        {/* Projects grid */}
+        {/* Projects grid. The games card takes one cell like any other, so the
+            grid stays even instead of ending on an orphan plus two offcuts. */}
         <div className="mt-6 space-y-6">
-          {featured.length > 0 && (
+          {(featured.length > 0 || games.length > 0) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {featured.map((project) => (
                 <ProjectCard key={project.slug} project={project} />
               ))}
+              {games.length > 0 && <GamesCard games={games} />}
             </div>
           )}
 
@@ -101,6 +108,67 @@ export function Projects() {
         )}
       </div>
     </section>
+  );
+}
+
+/** One card, split between the two playable demos. Both are client-side search
+ *  problems and both are secondary to the rest of the grid, so they share a
+ *  slot rather than each taking one. */
+function GamesCard({ games }: { games: typeof PROJECTS }) {
+  return (
+    <div className="group relative border rounded-lg h-full overflow-hidden bg-card border-border transition-colors duration-200 hover:border-accent/40 p-6 flex flex-col">
+      <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5">
+        <h3 className="font-semibold text-lg">Games and puzzles</h3>
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border bg-muted text-muted-foreground border-border">
+          Playable
+        </span>
+      </div>
+      <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+        Two classical search problems, both running entirely in your browser.
+      </p>
+
+      <div className="mt-4 flex-1 divide-y divide-border border-t border-border">
+        {games.map((game) => (
+          <div key={game.slug} className="py-4 first:pt-4">
+            <h4 className="text-sm font-semibold">
+              <Link
+                href={`/projects/${game.slug}`}
+                className="hover:text-accent transition-colors inline-flex items-center gap-1"
+              >
+                {game.title}
+                <ArrowUpRight className="size-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+            </h4>
+            <p className="text-xs text-muted-foreground leading-relaxed mt-1.5">
+              {game.description}
+            </p>
+            <div className="flex items-center gap-3 mt-2">
+              {game.github && (
+                <a
+                  href={game.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${game.title} source on GitHub`}
+                  className="p-2 -m-2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <GitHubIcon className="size-4" />
+                </a>
+              )}
+              {game.demo && (
+                <a
+                  href={game.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-mono text-accent hover:text-accent-muted transition-colors p-2 -m-2"
+                >
+                  Demo
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
