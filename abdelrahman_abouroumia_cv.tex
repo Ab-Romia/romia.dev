@@ -3,7 +3,7 @@
 % PACKAGES
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[top=0.4in, bottom=0.35in, left=0.45in, right=0.45in]{geometry}
+\usepackage[top=0.30in, bottom=0.22in, left=0.45in, right=0.45in]{geometry}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{xcolor}
@@ -28,10 +28,10 @@
   {}
   {0em}
   {}[\vspace{1pt}{\color{rulecolor}\titlerule[0.6pt]}]
-\titlespacing{\section}{0pt}{5pt}{2pt}
+\titlespacing{\section}{0pt}{3pt}{1.5pt}
 
 % LIST SPACING
-\setlist[itemize]{leftmargin=12pt, itemsep=1pt, topsep=1pt, parsep=0pt, partopsep=0pt}
+\setlist[itemize]{leftmargin=11pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt, partopsep=0pt}
 
 \begin{document}
 
@@ -45,81 +45,78 @@
     Portfolio: \href{https://romia.dev}{\textbf{\color{secondarycolor}romia.dev}} \ \textbar\ \ case studies, architecture breakdowns, and live demos
 \end{center}
 
-% -------------------- SUMMARY --------------------
-\section{Summary}
-Software Engineer who ships production systems end to end: FastAPI and Spring Boot backends, Kafka event-driven microservices, React/Next.js frontends, and the LLM-agent and Retrieval-Augmented Generation (RAG) layers on top. Co-founded Zaylon AI and built its LangGraph tool-calling agent and tri-lingual NLP on a multi-tenant FastAPI backend.
-
 % -------------------- EXPERIENCE --------------------
 \section{Experience}
 
-\textbf{Software Engineer \& Co-Founder} \hfill \textbf{May 2025 -- Present} \\
+\textbf{Software Engineer \& Co-Founder} \hfill \textbf{May 2025 to Present} \\
 \textit{\href{https://zaylon.ai}{Zaylon AI}}
 \begin{itemize}
-\item Lead engineering (architecture, reviews, roadmap, DevOps); built the \textbf{FastAPI} backend with \textbf{Docker} and CI/CD.
-\item Built the conversational AI as a single \textbf{LangGraph} tool-calling agent with around 30 scoped tools.
-\item Engineered \textbf{DialectBridge}: tri-lingual NLP with dialect detection for English, Egyptian Arabic, and Franco-Arabic.
-\item Hardened the backend: \textbf{argon2id} auth, row-level tenant isolation across about 80 tables, a Postgres checkout saga.
+\item Owned the architecture, the code reviews and the deploys. Built the FastAPI backend behind them, with CI that load-tests the service nightly and smoke-probes the deployment every 30 minutes.
+\item Built the agent first as a multi-agent supervisor, then deliberately collapsed it into one LangGraph tool-calling agent with about 30 scoped tools, because one agent proved more reliable and far easier to evaluate.
+\item Made cross-tenant access structurally impossible rather than merely filtered, across about 80 tables, and added semgrep rules that fail the build when anyone writes a raw cross-tenant query.
+\item Wrote the dialect layer so a customer is answered in the language they actually typed, including Egyptian Arabic and Franco-Arabic written in Latin script, which general models handle badly.
+\item Verified every payment webhook by HMAC, and wrote a Postgres saga that unwinds a half-finished checkout in reverse.
 \end{itemize}
 
-\vspace{3pt}
-\textbf{AI Coding Expert} \hfill \textbf{Sep 2024 -- Feb 2026} \\
+\vspace{1pt}
+\textbf{AI Coding Expert} \hfill \textbf{Sep 2024 to Feb 2026} \\
 \textit{Scale AI (Contract)}
 \begin{itemize}
-\item Reviewed and ranked code repositories across languages for RLHF pipelines training frontier AI models.
-\item Built test suites as quality control, scoring correctness, efficiency, and edge-case handling.
+\item Reviewed and ranked code across languages, for 18 months, in the RLHF pipelines that train frontier models.
+\item Wrote the test suites that decided whether a submission was correct, efficient, and honest about its edge cases.
 \end{itemize}
 
-\vspace{3pt}
+\vspace{1pt}
 \textbf{Software Integration Engineering Intern} \hfill \textbf{Jul 2025} \\
 \textit{Ejada}
 \begin{itemize}
-\item Built \textbf{Spring Boot} REST APIs for core banking with query optimization and \textbf{Redis} caching.
-\item Ran \textbf{Kafka} producers/consumers for async messaging; secured the gateway with OAuth2 and rate limiting (WSO2).
+\item Built core-banking REST APIs in Spring Boot, tuning the slow queries and adding Redis caching.
+\item Ran Kafka producers and consumers for async messaging; secured the gateway with OAuth2 and rate limiting on WSO2.
 \end{itemize}
 
-\vspace{3pt}
-\textbf{Automotive Cybersecurity Intern} \hfill \textbf{Aug 2024 -- Oct 2024} \\
+\vspace{1pt}
+\textbf{Automotive Cybersecurity Intern} \hfill \textbf{Aug 2024 to Oct 2024} \\
 \textit{Swift-ACT}
 \begin{itemize}
-\item Built threat-model catalogs and mitigations for \textbf{CAN bus} and \textbf{ECU} in-vehicle networks.
-\item Ran attack simulations (spoofing, replay, DoS) in \textbf{Dyna4}/\textbf{CARLA}; fault injection and ECU validation via \textbf{Vector CANoe}.
+\item Wrote threat-model catalogues and mitigations for CAN bus and ECU in-vehicle networks.
+\item Ran spoofing, replay and denial-of-service simulations in Dyna4 and CARLA, with ECU validation on Vector CANoe.
 \end{itemize}
 
 % -------------------- PROJECTS --------------------
 \section{Projects}
 
-\textbf{Talos: Team Chat Platform with a RAG Assistant} \hfill \textit{Graduation Project} \ \textbar\ \ \href{https://github.com/Ab-Romia/talos}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/talos}{Case Study}
+\textbf{Talos: Team Chat Platform with a RAG Assistant} \hfill \textit{Graduation project, five-person team} \ \textbar\ \ \href{https://github.com/Ab-Romia/talos}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/talos}{Case Study}
 \begin{itemize}
-\item Owned the RAG assistant on a \textbf{FastAPI} team-chat platform: \textbf{taskiq}/\textbf{Milvus} ingestion, hybrid retrieval, rerank, citations.
-\item Proved a chunking fix with a paired eval: judged answer correctness 0.657 to 0.855 on the workspace's own corpus.
-\item Deployed the stack: \textbf{Docker}ized backend, worker, and scheduler on \textbf{Railway}, managed Milvus on \textbf{Zilliz Cloud}.
+\item Owned the assistant: ingestion through a taskiq worker into Milvus, hybrid dense and BM25 retrieval fused with reciprocal rank fusion, a cross-encoder rerank, and answers that cite the passage they came from.
+\item The answers were weak, so I measured instead of guessing. I built an evaluation harness with a judge calibrated against my own blind grading, and proved a chunking fix moved judged correctness from 0.657 to 0.855.
+\item Containerized the worker and the scheduler for the team's Railway deploy, and ran Milvus on Zilliz Cloud.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{1pt}
+\textbf{commentdraft} \hfill \textit{Published package} \ \textbar\ \ \href{https://pypi.org/project/commentdraft/}{PyPI} \ \textbar\ \ \href{https://github.com/Ab-Romia/commentdraft}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/commentdraft}{Case Study}
+\begin{itemize}
+\item Published a Python package on PyPI that triages comments on a creator's own posts into reply, skip or escalate, drafting each reply strictly from a source document so it declines what it cannot source.
+\item Made approval structural rather than configurable: no bulk-approve flag exists, one keystroke sends one reply, and a pty test proves keys typed before a draft renders approve nothing, after terminal typeahead defeated the first version.
+\item Wrote eight platform connection guides from primary sources, every claim carrying its URL and the date read, correcting published errors on the Instagram, TikTok, YouTube and Reddit comment APIs.
+\end{itemize}
+
+\vspace{1pt}
 \textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/virtual-banking}{Case Study}
 \begin{itemize}
-\item Built a gateway and four \textbf{Spring Boot 3} services; \textbf{Kafka} transfer saga: outbox, idempotent consumers, RS256 JWT.
-\item Proved atomic transfers with pessimistic locking, a balance constraint, and Testcontainers integration tests.
+\item Built a gateway and four Spring Boot services with a Kafka transfer saga: outbox, idempotent consumers, RS256 JWT.
+\item Proved the transfers were genuinely atomic with pessimistic locking, a balance constraint and Testcontainers tests.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{1pt}
 \textbf{ContextIQ: Hybrid-Retrieval RAG} \hfill \href{https://github.com/Ab-Romia/ContextIQ-RAG}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/contextiq-rag}{Case Study}
 \begin{itemize}
-\item Built \textbf{FastAPI} RAG on CPU (ONNX): dense + \textbf{BM25} fused with RRF, cross-encoder reranking, grounded citations.
-\item Built an evaluation harness over a corpus of confusable distractors; abstains when the context is insufficient.
+\item Built a retrieval service that runs entirely on CPU through ONNX, and made it abstain rather than guess when the retrieved context does not support an answer, tested against deliberately confusable distractors.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{1pt}
 \textbf{Multimodal Emotion Recognition} \hfill \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/emotion-recognition}{Case Study}
 \begin{itemize}
-\item Trained a speaker-independent (actor-disjoint) pipeline: frozen \textbf{WavLM-large} + facial model, calibrated late fusion.
-\item Added learnable layer-weighting and attentive pooling over WavLM; a unit test guards against speaker leakage.
-\end{itemize}
-
-\vspace{2pt}
-\textbf{VoicePrint: Authorship Stylometry} \hfill \href{https://github.com/Ab-Romia/VoicePrint}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/voiceprint}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/voiceprint}{Case Study}
-\begin{itemize}
-\item Combined a \textbf{StyleDistance} embedding with function-word features to score voice match and rewrite drafts.
+\item Speaker-independent audio and facial pipeline on frozen WavLM-large, late fusion, unit-tested for leakage.
 \end{itemize}
 
 % -------------------- EDUCATION --------------------
@@ -129,15 +126,15 @@ B.Sc. in Computer \& Communications Engineering (AI Concentration) \ \textbar\ \
 
 % -------------------- TECHNICAL SKILLS --------------------
 \section{Technical Skills}
-\textbf{Languages:} Python, Java, JavaScript/TypeScript, SQL, C/C++ \\[1.5pt]
-\textbf{Backend:} FastAPI, Spring Boot, Microservices, Event-Driven Architecture, Kafka, REST APIs, PostgreSQL, Redis \\[1.5pt]
-\textbf{AI / ML:} LangGraph, LangChain, PyTorch, RAG, Multi-Agent Systems, NLP, Vector DBs (ChromaDB, pgvector), Reranking \\[1.5pt]
-\textbf{Frontend \& DevOps:} React, Next.js, Tailwind CSS, Docker, Railway, Git, GitHub Actions, CI/CD, n8n, Linux
+\textbf{Languages:} Python, Java, SQL, JavaScript/TypeScript, C/C++ \\[1pt]
+\textbf{Backend:} FastAPI, Spring Boot, Microservices, Event-Driven Architecture, Kafka, REST APIs, PostgreSQL, Redis \\[1pt]
+\textbf{AI / ML:} LangGraph, LangChain, PyTorch, RAG, LLM Agents, Agent Evaluation, LLM Orchestration, NLP, pgvector, Milvus \\[1pt]
+\textbf{Infrastructure \& Tooling:} Docker, Railway, Git, GitHub Actions, CI/CD, Linux, pytest, semgrep, Testcontainers
 
 % -------------------- BOTTOM --------------------
-\vspace{3pt}
-\textbf{Certifications:} micro1 Certified Software Engineer \ \textbar\ \ \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{Google AI Agents} \ \textbar\ \ Meta Back-end \ \textbar\ \ AWS Cloud \& ML \\[2pt]
-\textbf{Competitions:} MTC-AIC3 BCI (Egypt National AI) \ \textbar\ \ ECPC (3x) \ \textbar\ \ Hepsiburada NLP Hackathon (TEKNOFEST) \\[2pt]
+\vspace{1pt}
+\textbf{Certifications:} micro1 Certified Software Engineer \ \textbar\ \ \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{Google AI Agents} \ \textbar\ \ Meta Back-end \ \textbar\ \ AWS Cloud \& ML \\[0.5pt]
+\textbf{Competitions:} MTC-AIC3 BCI (Egypt National AI) \ \textbar\ \ ECPC (3x) \ \textbar\ \ Hepsiburada NLP Hackathon (TEKNOFEST) \\[1pt]
 \textbf{Languages:} English (Fluent) \ \textbar\ \ Arabic (Native) \ \textbar\ \ German (A2) \ \textbar\ \ Spanish (Conversational)
 
 \end{document}
