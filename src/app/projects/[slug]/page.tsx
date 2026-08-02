@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { PROJECTS, getProjectBySlug, getAdjacentProjects } from "@/data/resume";
@@ -169,6 +170,45 @@ export default async function ProjectPage({
           </h2>
           <p className="text-muted-foreground leading-relaxed mt-3">{cs.approach}</p>
         </FadeUp>
+
+        {/* A real artefact from the project, when one is worth showing. It
+            breaks out of the prose column, because a screenshot dense enough to
+            be worth showing is not legible at reading width, and links to the
+            full-size file for anyone who wants to read it properly. */}
+        {cs.figure && (
+          <FadeUp delay={0.1}>
+            <figure className="mt-8 lg:-mx-24">
+              <a
+                href={cs.figure.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open the full-size image: ${cs.figure.alt}`}
+                className="block rounded-xl border border-border bg-card p-2 overflow-hidden transition-colors hover:border-accent/40"
+              >
+                <Image
+                  src={cs.figure.src}
+                  alt={cs.figure.alt}
+                  width={cs.figure.width}
+                  height={cs.figure.height}
+                  sizes="(min-width: 1024px) 896px, (min-width: 768px) 704px, 100vw"
+                  className="w-full h-auto rounded-lg"
+                />
+              </a>
+              <figcaption className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                {cs.figure.caption}{" "}
+                <a
+                  href={cs.figure.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent link-underline whitespace-nowrap"
+                >
+                  Open it full size
+                </a>
+                .
+              </figcaption>
+            </figure>
+          </FadeUp>
+        )}
 
         {/* Key Technical Decisions */}
         {cs.decisions && cs.decisions.length > 0 && (

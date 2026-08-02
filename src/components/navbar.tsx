@@ -103,8 +103,9 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop navigation. Breaks at lg rather than md: eight links plus
+              the theme toggle and the resume button do not fit a tablet. */}
+          <div className="hidden lg:flex items-center gap-1">
             <LayoutGroup>
               {NAV_LINKS.map((link) => {
                 const isRouteLink = !link.href.startsWith("#");
@@ -153,7 +154,7 @@ export function Navbar() {
           </div>
 
           {/* Mobile controls */}
-          <div className="md:hidden flex items-center gap-1">
+          <div className="lg:hidden flex items-center gap-1">
             <ThemeToggle className="p-3.5" />
             <button
               ref={hamburgerRef}
@@ -185,7 +186,7 @@ export function Navbar() {
                 ? { duration: 0.1 }
                 : { type: "spring", damping: 25, stiffness: 200 }
             }
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md md:hidden flex flex-col"
+            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md lg:hidden flex flex-col"
           >
             <div className="flex items-center justify-between h-16 px-6 shrink-0">
               <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground">

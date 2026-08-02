@@ -29,6 +29,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      // The platform guides stand on their own for someone who has never heard
+      // of the tool they came out of, so they are indexed as a resource.
+      url: "https://romia.dev/commentdraft",
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     ...projectPages,
     ...blogPostPages,
   ];

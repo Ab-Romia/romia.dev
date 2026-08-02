@@ -20,6 +20,7 @@ export const HERO_SIGNALS = [
 export const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
   { label: "Zaylon", href: "#zaylon" },
+  { label: "commentdraft", href: "#commentdraft" },
   { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Blog", href: "/blog" },
@@ -55,6 +56,287 @@ export const ZAYLON_SHOWCASE = {
   ],
 } as const;
 
+/* ── commentdraft ──────────────────────────────────────────────────────────
+   No volume counts here on purpose. Lines of source, lines of tests and a
+   test total measure how much was typed, not whether any of it was right, and
+   a portfolio that leads with them is bragging about weight. Numbers appear
+   below only where the number IS the finding: what the tool decided on a real
+   run, and what the prompt cache turned out to be worth.
+
+   Nothing here may imply the tool posts to more than one platform. One
+   connector exists, for Facebook Pages, and it has never been run against a
+   live Page. */
+export const COMMENTDRAFT_SHOWCASE = {
+  title: "commentdraft",
+  role: "Author. Apache-2.0, on PyPI.",
+  subtitle: "A command line tool that drafts replies to comments, and refuses to send them",
+  description:
+    "It reads the comments on a creator's own posts and decides, for each one, whether to reply, skip, or escalate to a person. Every decision comes back with a one-line reason the operator can disagree with, and every draft is written from one source document they supply. What the tool is, more than any of that, is a set of refusals.",
+  repo: "https://github.com/Ab-Romia/commentdraft",
+  pypi: "https://pypi.org/project/commentdraft/",
+  install: "pip install commentdraft",
+  guidesHref: "/commentdraft",
+  /* The spec plate: what the tool will not do, which is the product. Each one
+     is enforced somewhere a reader can go and check. */
+  refusals: [
+    {
+      head: "It will not send without you",
+      body: "No --yes, no --all, and no config key that changes it. Publishing thirty replies costs thirty keystrokes, which is the design and not an oversight.",
+    },
+    {
+      head: "It will not answer past the source",
+      body: "A draft may state only what your document states. A question the document does not cover becomes a person's to answer, never a guess.",
+    },
+    {
+      head: "It will not claim reach it lacks",
+      body: "One connector exists, for Facebook Pages, and it has never been run against a live Page. The other seven platforms have guides, not code.",
+    },
+  ],
+} as const;
+
+/* The publish prompt, reproduced. These are the four rows of the eleven in
+   `out/showcase/review.csv` that the run produced a draft for; the other seven
+   carry no draft because the tool declined to answer them. Same run as the
+   review page screenshot below it, so the two agree. */
+export const COMMENTDRAFT_GATE = {
+  command: "commentdraft publish",
+  run: {
+    comments: 11,
+    drafts: 4,
+    declined: 7,
+    note: "11 comments in. 4 drafts out. 7 the tool declined to answer.",
+  },
+  keys: [
+    { key: "y", label: "send", action: "send" },
+    { key: "e", label: "edit", action: "edit" },
+    { key: "s", label: "skip", action: "skip" },
+    { key: "q", label: "quit", action: "quit" },
+  ],
+  enterNote: "Enter does nothing at all.",
+  editNote: "e opens the draft in $EDITOR and sends what comes back, which a web page cannot do.",
+  safety: "Nothing here is sent anywhere. This is the prompt, not the tool.",
+  absent: "There is no --yes. There is no --all. There is no config key that changes it.",
+  drafts: [
+    {
+      platform: "youtube",
+      author: "mira_h",
+      context: "Five weeds you can eat",
+      comment: "Does it cover mushrooms at all?",
+      reason: "content question about a subject the book deliberately excludes",
+      reply:
+        "Fungi are left out on purpose, since a beginner cannot judge them safely from a photo, so it covers other plants instead, things like leaves and fruit. you can get it at https://example.com/field-guide",
+    },
+    {
+      platform: "youtube",
+      author: "tom.wilder",
+      context: "Five weeds you can eat",
+      comment: "How much is it and where do I get it?",
+      reason: "clear purchase intent, price and place asked together",
+      reply: "$18, here is the link: https://example.com/field-guide",
+    },
+    {
+      platform: "youtube",
+      author: "is_this_a_bot",
+      context: "What is inside the guide",
+      comment: "Is a real person writing these replies or is it a bot",
+      reason: "direct question about whether this is software, answered exactly as instructed",
+      reply: "These replies are drafted with software and read by a person before they post.",
+    },
+    {
+      platform: "instagram",
+      author: "marta.kowal",
+      context: "Hedgerow walk in April",
+      comment: "Czy ten przewodnik obejmuje Europe Srodkowa?",
+      reason: "question about regional coverage, answered from source and pointed to book",
+      reply:
+        "It covers temperate regions, which includes Central Europe. you can get it at https://example.com/field-guide",
+    },
+  ],
+} as const;
+
+/* Read against live documentation on 2026-08-01, the date every guide carries.
+   `connector: "ships"` is true of exactly one row and must stay that way. */
+export const COMMENTDRAFT_GUIDES = {
+  honesty:
+    "The guides document how to connect. The code connects to one of them: Facebook Pages, built and tested against fakes and never run against a live Page. On the other seven, nobody has made the call.",
+  closing:
+    "The first four need no permission from anybody. The last four each need a human at the platform to say yes, and three of the four publish no idea of how long that takes.",
+  lesson:
+    "Written across all eight, one pattern shows up that no single guide would have surfaced: where the received wisdom names an obstacle, the obstacle it names is either out of date or standing in front of a different one. The section worth reading on each page is not the published gate. It is the one headed \"What is still unknown\".",
+} as const;
+
+/* Copy for /commentdraft. The page is written for a stranger who wants to know
+   whether they can reach a platform's comments at all, and who has never heard
+   of the tool the guides came out of. */
+export const COMMENTDRAFT_GUIDES_PAGE = {
+  title: "Connecting to comment APIs on eight platforms",
+  metaTitle: "Connecting to comment APIs on eight platforms",
+  metaDescription:
+    "What it takes to read and reply to comments through the APIs of YouTube, Instagram, Facebook, Threads, X, TikTok, LinkedIn and Reddit: the gate on each, roughly what it costs, and the order worth attempting them in. Read against live documentation on 2026-08-01 and sourced to 228 primary URLs.",
+  lede: "Eight guides, one per platform, each written from the platform's own primary sources and each saying out loud how far the checking went. Every endpoint, scope string, quota number and policy clause carries the URL it came from and the date it was read. They came out of building commentdraft, and they are here because they did not exist.",
+  meta: [
+    { label: "Read against live docs", value: "2026-08-01" },
+    { label: "Platforms covered", value: "8" },
+    { label: "Primary sources cited", value: "228" },
+    { label: "Connectors built", value: "1" },
+  ],
+  orderHeading: "The order worth attempting them in",
+  orderIntro:
+    "Numbered by how much stands between you and a first working call, not by how much you want the platform.",
+  lessonHeading: "The published blocker is rarely the real one",
+  closingHeading: "Where the rest of it lives",
+  closing:
+    "Each guide carries its own verification section saying which claims were read twice, which rest on a single reading, and which cannot be settled without credentials. Two further pages carry what is the same everywhere: platform-policy.md maps each safety property in the tool to the clause that made it necessary, and limits.md is what the tool cannot do regardless of platform.",
+} as const;
+
+export type CommentdraftPlatform = {
+  name: string;
+  slug: string;
+  /** "ships" is true of Facebook Pages and of nothing else. */
+  connector: "ships" | "none";
+  /** Open means no permission is needed from the platform for a single operator. */
+  access: "open" | "gated";
+  reply: string;
+  blocker: string;
+  cost: string;
+  attempt: string;
+};
+
+export const COMMENTDRAFT_PLATFORMS: CommentdraftPlatform[] = [
+  {
+    name: "Facebook Pages",
+    slug: "facebook",
+    connector: "ships",
+    access: "open",
+    reply: "Documented, and Meta documents two readings of the same call",
+    blocker:
+      "Nothing to clear. An operator who owns the Page and makes their own app needs no App Review and no Business Verification.",
+    cost: "No fee. Under an hour from a standing start, by our own estimate.",
+    attempt:
+      "Start here even if Facebook is not the platform you want. It is the one route where nothing is queued and nobody reads anything, so it tells you whether the rest of the tool suits you before you spend a review cycle finding out.",
+  },
+  {
+    name: "Instagram",
+    slug: "instagram",
+    connector: "none",
+    access: "open",
+    reply: "Documented",
+    blocker:
+      "Nothing, for your own professional account at Standard Access. The comments webhook is the exception and needs Advanced Access.",
+    cost: "No fee. Polling instead of webhooks is the price of skipping App Review.",
+    attempt:
+      "Same Meta app, same Graph host, same token concepts. Accept polling in the first version and the whole App Review branch disappears.",
+  },
+  {
+    name: "Threads",
+    slug: "threads",
+    connector: "none",
+    access: "open",
+    reply: "Documented, a two-step container then publish",
+    blocker:
+      "Nothing, for the single-operator path. Anything beyond it needs App Review, which is not reachable until a Business has completed Business Verification.",
+    cost: "No fee. Business Verification is company paperwork, not a build.",
+    attempt:
+      "Gate-free for a single operator, but on its own hosts with its own two-step publish and its own two expiry clocks. More build than Instagram for the same amount of paperwork, which is none.",
+  },
+  {
+    name: "YouTube",
+    slug: "youtube",
+    connector: "none",
+    access: "open",
+    reply: "Documented, 50 quota units a call",
+    blocker:
+      "A 10,000 unit daily quota, so 200 replies a day at the ceiling. An app left in Testing gets refresh tokens that expire in 7 days.",
+    cost: "No fee, and no pricing page exists. OAuth verification, which Google says \"can take up to 10 days\", once anyone but you uses it.",
+    attempt:
+      "No review and no money for your own channel, and the approval gate this tool already has is a policy requirement here rather than a product opinion. What it costs is arithmetic: 50 units a reply against 10,000 units a day, minus whatever polling spends.",
+  },
+  {
+    name: "Reddit",
+    slug: "reddit",
+    connector: "none",
+    access: "gated",
+    reply: "Documented",
+    blocker:
+      "Access is granted rather than taken. The Responsible Builder Policy requires approval before the first call, through a support ticket.",
+    cost: "Free at 100 queries per minute per OAuth client id. No turnaround is published for the ticket.",
+    attempt:
+      "File the ticket early, because it is the only thing on this list where the waiting can start before the building does. Read the 48 hour deletion rule first: it reshapes what a review queue is allowed to keep.",
+  },
+  {
+    name: "X",
+    slug: "x",
+    connector: "none",
+    access: "gated",
+    reply:
+      "Unsettled. A programmatic reply is permitted when the author summoned you, and nobody has established whether replying on your own post counts.",
+    blocker:
+      "Prior written approval from X before replies written by software are deployed. No published turnaround, no queue position, no appeal, and no self-serve path.",
+    cost: "About $3 a month at 500 comments read and 250 replies published. The $100, $200 and $5,000 figures still dominating search results are for a product X stopped selling on 2026-02-06.",
+    attempt:
+      "Two questions with no published answer: whether the approval requirement covers a tool with a person approving each reply, and whether replying on your own post counts as being summoned. The second is settleable in an afternoon with a live call and it can make the first moot, so settle it before writing any connector code.",
+  },
+  {
+    name: "TikTok",
+    slug: "tiktok",
+    connector: "none",
+    access: "gated",
+    reply: "Documented, on business-api.tiktok.com",
+    blocker:
+      "The developer of record must be a company with a matching domain. A solo consultant cannot register.",
+    cost: "No published fee. Three reviews: \"three business days\", \"2 to 3 business days\", and a form with no published turnaround.",
+    attempt:
+      "Attempt only if the developer of record is a company. The requirement lands on whoever registers the app and not on the account being moderated, so a creator with a personal account can be covered by an app a company they work with registers.",
+  },
+  {
+    name: "LinkedIn",
+    slug: "linkedin",
+    connector: "none",
+    access: "gated",
+    reply: "Documented",
+    blocker:
+      "A two-stage partner review, and above it the Member Data question. The Marketing API Terms prohibit exporting Member Data to a third party and define it to include a member's comment; whether a model gateway is a third party or the operator's own service provider is unsettled, and passing the review would not answer it.",
+    cost: "No price published on any LinkedIn property. No SLA published for either review stage.",
+    attempt:
+      "Last, because the review is long and the question above it is unanswered. Settle the Member Data reading with somebody qualified before spending a fortnight on a partner application, since a no there ends the project rather than delaying it.",
+  },
+];
+
+export function commentdraftGuideUrl(slug: string): string {
+  return `https://github.com/Ab-Romia/commentdraft/blob/main/docs/platforms/${slug}.md`;
+}
+
+/* Corrections found by adversarially verifying the research rather than
+   trusting it. Each is quoted or paraphrased from the guide that carries the
+   primary source. */
+export const COMMENTDRAFT_FINDINGS = {
+  heading: "What checking the sources turned up",
+  items: [
+    {
+      platform: "Instagram",
+      title: "An id that resolves nothing and raises no error",
+      body: "GET /me?fields=id returns the app-scoped id, not the account id. It never matches the webhook payload, resolves nothing, and fails silently. The field that works is user_id.",
+    },
+    {
+      platform: "TikTok",
+      title: "The published blocker is not the real one",
+      body: "\"TikTok has no comment API\" is true of developers.tiktok.com and false of business-api.tiktok.com, a different product line with two documented comment endpoints. What TikTok refuses is not the feature but the applicant: it will not onboard individual developers at all.",
+    },
+    {
+      platform: "YouTube",
+      title: "The channel owner cannot read the original text",
+      body: "snippet.textOriginal is only returned to the comment's author, and a channel owner reading a viewer's comment is not that. A connector gets textDisplay, which Google documents as possibly differing from the original: \"it may replace video links with video titles\".",
+    },
+    {
+      platform: "Reddit",
+      title: "Every ampersand arrives escaped",
+      body: "JSON bodies replace <, > and & with entities unless raw_json=1 is passed. Tom & Jerry reaches the model as Tom &amp; Jerry, and the review page escapes it again, so a person approves a reply drafted against text nobody wrote.",
+    },
+  ],
+  closing:
+    "The last two are the same class of bug on two different platforms: the text you receive is not the text the person wrote. Neither platform mentions it at the endpoint that returns it.",
+} as const;
+
 // Real production traction. Drop in a true usage number and it renders as a
 // highlighted metric in the Zaylon showcase. Leave null to hide.
 // Example: { value: "12K+", label: "conversations handled" }
@@ -77,9 +359,19 @@ interface EmbedDemo {
   component?: string;
 }
 
+/** A real artefact from the project, rendered under the approach section. */
+interface CaseStudyFigure {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+}
+
 interface CaseStudy {
   problem: string;
   approach: string;
+  figure?: CaseStudyFigure;
   decisions?: TechnicalDecision[];
   results: string;
   embedDemo?: EmbedDemo;
@@ -137,6 +429,59 @@ export const PROJECTS: Project[] = [
       ],
       results:
         "Integrates 6 commerce platforms and 5 messaging channels, handling product discovery, support, and checkout across three dialects. Launching commercially in 2026.",
+    },
+  },
+  {
+    title: "commentdraft",
+    slug: "commentdraft",
+    categories: ["AI/ML", "Backend"],
+    description:
+      "A command line tool that triages comments on your own posts into reply, skip, or escalate, drafts the reply from one source document, and sends nothing a person has not approved one keystroke at a time.",
+    tags: ["Python", "CLI", "Apache-2.0", "PyPI", "Platform APIs"],
+    github: "https://github.com/Ab-Romia/commentdraft",
+    url: "https://pypi.org/project/commentdraft/",
+    status: "Deployed",
+    badge: "On PyPI",
+    featured: true,
+    impact:
+      "Eight platform connection guides written from primary sources, and a publish path with no way to approve in bulk: one keystroke, one reply",
+    caseStudy: {
+      problem:
+        "I was building comment handling for paying clients, and the failure that mattered was never a crash. It was a public reply under someone's own post quoting a price that had changed, or answering a question the source material never covered. That lands on the client, in front of their audience, and nothing raises an exception. Sitting on top of it, every platform has rules about replying with software, and the documentation for those rules contradicts itself often enough that reading it properly is part of the work rather than a preliminary to it. What the job needed was a tool that could refuse: refuse to answer what it cannot source, refuse to send what a person has not read, and refuse to claim a reach it does not have.",
+      approach:
+        "One model call per comment, against a prefix assembled once and kept byte-identical for the whole run so the provider serves it from cache. The prefix carries the operator's voice rules, their worked examples, the output contract, and the entire source document, which is the only thing a draft may state as fact. Every comment comes back as reply, skip, or escalate with a one-line reason the operator can disagree with, and the run writes a CSV and a review page. Publishing is a separate command that shows one comment and one draft and waits for a key. Reading a platform and writing to it are separate config tables holding separate credentials, so the starting posture holds no write credential and cannot post at all. The interesting parts of this design are all places where the obvious answer turned out to be wrong.",
+      figure: {
+        src: "/projects/commentdraft-review.png",
+        width: 1585,
+        height: 1398,
+        alt: "The commentdraft review page: eleven comments in one table, each with its decision, the reason for it, and the draft reply where there is one. Rows that were answered are tinted green, rows escalated to a person are tinted pink and carry no draft, and skipped rows are untinted.",
+        caption:
+          "The reviewer artefact, rendered by commentdraft review from the run's own CSV rather than mocked up. Green was answered, pink goes to a person, plain was left alone. Seven of these eleven comments got no draft at all, which is the part worth reading. It closes on its own status line: nothing on the page has been posted anywhere.",
+      },
+      decisions: [
+        {
+          title: "The approval gate, and the keystrokes that walked straight through it",
+          reasoning:
+            "The first version read a key before each send, and I took that to be the gate. It was not. Five characters pasted into the terminal before the reply had rendered approved five replies nobody had read: the keys were already sitting in the input queue, and the read consumed them in order. A keystroke buffered before the content appears is not consent, it is timing. The gate now discards the terminal's input queue at the moment the prompt becomes readable and reads exactly one byte after that, and a test drives a real pty to prove the pasted case approves nothing. The rest of the property is structural rather than configurable, because a setting that exists is a setting somebody eventually turns on: there is no --yes and no --all, the config vocabulary is a frozen allowlist so a key of any name that could stand in for a keystroke fails the build until somebody writes it down, and an AST test fails if the send is named anywhere outside the one branch a keystroke reaches. YouTube's Developer Policies require express consent before each action, which makes this a compliance requirement on that platform rather than a product opinion.",
+        },
+        {
+          title: "A safety claim I had to retire, and the grep that proved nothing",
+          reasoning:
+            "For a while the strongest line in the README was that no HTTP client existed anywhere in the package. It was true, it was checkable in one command, and it was about to stop being either the moment a connector shipped. It was also being checked badly: the command ran with --exclude=approve.py --exclude-dir=platforms, which excluded the only two paths a send would ever live in, so it proved the send was not somewhere it had never been. I replaced the claim rather than the connector. What survives a connector is that nothing reaches a platform a person did not read and approve, and that is what is enforced now, by a marker on the single send statement and an AST walk that fails the build if the send is referenced anywhere else, or referenced without being called, which is how an alias would otherwise carry it into a loop. A claim that is about to become false is worse than no claim, because people plan around it.",
+        },
+        {
+          title: "A contradiction in Meta's documentation, answered with a runtime check",
+          reasoning:
+            "Meta documents one call as both \"reply to this comment\" and \"edit this comment\". Both readings are published, they cannot both be right, and the wrong one means every reply silently overwrites the customer's own words. I could not settle it from the documentation and I was not going to find out on somebody's Page, so the connector proves the outcome instead of assuming it: it compares the id the POST returned against the id it posted to, then reads the reply back and confirms it carries the right parent. A read-back that cannot be performed ends the whole run rather than the row, because a write path that edits comments will edit the next one too. The comparison allows for both of Facebook's spellings of a comment id, because the two ways of being wrong are not symmetric: a false positive halts a run over an overwrite that did not happen, which is recoverable, and a false negative destroys comments quietly.",
+        },
+        {
+          title: "The cheap model that cost twenty-seven times more",
+          reasoning:
+            "I assumed the cheaper published rate meant the cheaper run. In the bake-off it cost about 27 times more per comment than the default, where the sticker prices alone predicted a gap near 8. The difference was the prompt cache. The prefix dominates the bill on every call here, and the default's route billed it at a reduced cached rate on 28 of its 29 calls while neither of the others was served from a cache at all. That measurement is why the prefix is assembled once and kept byte-identical, and why anything that varies per row, a timestamp, a row counter, a shuffled example order, costs every cache hit in the run rather than a little latency. It is also the reason there is no retrieval: while the source document fits the window there is nothing for a retriever to miss, and a retriever that misses is precisely the failure this tool exists to prevent. One run, one example, one gateway, one day, published with the command that reproduces it and the caveat that says to read it narrowly.",
+        },
+      ],
+      results:
+        "Published on PyPI under Apache-2.0, with a worked example in the repository, a fictional field guide with its knowledge file, its voice file and a small comment file, so the whole loop runs from a clone. The claims are built to be checked rather than believed: the test suite runs offline with no API key, the review page in the write-up is rendered by the tool from its own run rather than mocked up, and every figure in the documentation resolves to a command a reader can run. Eight platform connection guides carry the primary-source URL behind each endpoint, scope and quota, and the date each was read. What it does not do is stated in the same places: one connector exists, for Facebook Pages, and it has never been run against a live Page.",
     },
   },
   {

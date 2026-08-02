@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/sections/hero";
 import { ZaylonShowcase } from "@/components/sections/zaylon-showcase";
+import { CommentdraftShowcase } from "@/components/sections/commentdraft-showcase";
 import { Projects } from "@/components/sections/projects";
 import { Experience } from "@/components/sections/experience";
 import { Skills } from "@/components/sections/skills";
@@ -107,6 +108,8 @@ export default function Home() {
         <Hero />
         <Projects />
         <ZaylonShowcase />
+        <SectionDivider />
+        <CommentdraftShowcase />
         <SectionDivider />
         <Experience />
         <SectionDivider />

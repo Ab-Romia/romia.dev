@@ -118,7 +118,9 @@ function ProjectCard({
         compact ? "p-4" : "p-6"
       )}
     >
-      <div className="flex items-start justify-between gap-2">
+      {/* Wraps rather than clips: a long title beside a badge and a status chip
+          does not fit a 320px card, and the card is overflow-hidden. */}
+      <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5">
         <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
           <Link
             href={project.blog ?? `/projects/${project.slug}`}
