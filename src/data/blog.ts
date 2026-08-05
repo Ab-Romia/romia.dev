@@ -30,6 +30,321 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    "title": "commentdraft: replying in public on a client's behalf, and the eight guides that did not exist",
+    "slug": "commentdraft-guides-that-did-not-exist",
+    "description": "commentdraft started as paid work: drafting public replies on a client's behalf, where a wrong price in a reply is a bill the client pays. This is the long version of what that constraint built: the four ways the obvious build fails the person paying for it, the approval gate one platform's policy makes mandatory, a measured run where the bargain model billed 27 times more per comment, and the eight platform connection guides that did not exist until this project needed them.",
+    "date": "2026-08-05",
+    "tags": [
+      "CLI",
+      "Python",
+      "Platform APIs",
+      "AI/ML",
+      "Evaluation"
+    ],
+    "readingMinutes": 15,
+    "body": [
+      {
+        "type": "p",
+        "md": "The job arrived the way freelance work does: a client with a real product, a real price and a real audience, and more comments under their posts than they could keep up with. The obvious build is a loop that reads the comments, sends each one to a model, and posts what comes back, and it takes about an afternoon. It is also wrong in four specific ways, and every one of them sends the bill to the client rather than to the person who wrote the loop."
+      },
+      {
+        "type": "p",
+        "md": "What the job actually needed is [commentdraft](https://github.com/Ab-Romia/commentdraft), a command line tool on [PyPI](https://pypi.org/project/commentdraft/) under Apache-2.0, generalized from that engagement once its constraints turned out to have nothing to do with the client in particular. It reads the comments on a creator's own posts, decides for each one whether to reply, skip, or escalate to a person, and drafts the reply from one source document the operator supplies; a person approves every draft, one keystroke per reply, immediately before that one reply is sent. This post is the long version, the four failures and the design each one forced. If you want the shorter visual tour instead, the [case study](/projects/commentdraft) covers the same system with more screenshots and less argument."
+      },
+      {
+        "type": "h2",
+        "text": "A wrong price is a bill somebody else pays"
+      },
+      {
+        "type": "p",
+        "md": "The first failure named the requirements. A public reply under the client's own post that quotes a price that changed last month, or promises a delivery window the product does not offer, is not a bug. It is a wrong number, in public, under their name, read by the one audience they cannot afford to mislead. Nothing crashes and nothing raises an exception. The client pays."
+      },
+      {
+        "type": "p",
+        "md": "So the drafting rule is absolute rather than encouraged: a draft may state as fact only what one source document states, the document the operator supplies, and a question that document does not answer is never an invitation to be helpful. It becomes an escalation, no draft, routed to the person who can actually answer it. Declining to answer is an output, not a failure to produce one."
+      },
+      {
+        "type": "p",
+        "md": "There is no retrieval step behind that rule, and the absence is a decision rather than a shortcut. The whole document goes into the prompt, once, byte for byte. Retrieval exists to fit a corpus that does not fit a context window, and it buys that at the price of a new failure mode: the retriever misses the relevant passage, the model answers anyway, and the answer is confident and wrong. That is precisely the failure this tool exists to prevent, so at this size a retriever is a way of introducing the thing it is supposed to protect against. While the document fits the window there is nothing to miss, and when a document outgrows the window the tool says the design is wrong for it rather than truncating quietly. The cost section further down pays this decision off with a measurement."
+      },
+      {
+        "type": "figure",
+        "src": "/projects/commentdraft-review.png",
+        "alt": "The commentdraft review page: eleven comments in one table, each row carrying the platform, the author, the comment, the decision, the one-line reason for that decision, and the draft reply where one exists. Rows that were answered are tinted green, rows escalated to a person are tinted pink and carry no draft, skipped rows are untinted, and a footer states that nothing on the page has been posted anywhere.",
+        "caption": "Eleven comments from the run measured later in this post, rendered by the tool from its own CSV rather than mocked up. Four got replies. Seven got no draft at all, three skipped and four sent to a person, and that ratio is the part worth reading. The footer is the page's own status line: nothing on it has been posted anywhere."
+      },
+      {
+        "type": "h2",
+        "text": "Approval is structural, because a setting eventually gets turned on"
+      },
+      {
+        "type": "p",
+        "md": "The second failure is that the afternoon build posts. Every platform has rules about replying with software, almost nobody reads them, and at least one of them decides the design outright. YouTube's API Services Developer Policies require that the user \"expressly consent to those actions prior to their actual execution.\" Read narrowly, the way a policy gets read when a client's channel is the one at stake, that rules out a batch approval, a default, and any setting that stands in for a person. What it leaves is per-reply human approval, which on YouTube is not a product preference. It is the only compliant design."
+      },
+      {
+        "type": "p",
+        "md": "So there is no `--yes`, no `--all`, and no config key that changes it. Not defaulted off; absent, and kept absent by a test that walks the config schema, which is a frozen allowlist, so a key of any name that could stand in for a keystroke fails the build until somebody writes it down. Publishing thirty replies costs thirty keystrokes, on purpose."
+      },
+      {
+        "type": "p",
+        "md": "The first version of that gate did not survive contact with a terminal. Five characters, pasted before the tool had rendered anything, approved five replies nobody had read: the keys were sitting in the terminal's input queue, and the prompt consumed them in order. The gate was proving that a key was pressed, which is easy, when the property it exists for is that the key arrived after the reply was readable. The fix discards the input queue at the moment the prompt becomes readable and reads exactly one byte after that, a test drives a real pty to prove the pasted case approves nothing, and the whole story, including the bug in the test that briefly hid the bug in the gate, is in [its own post](/blog/typeahead-is-not-consent)."
+      },
+      {
+        "type": "h2",
+        "text": "The text you receive is not the text the person wrote"
+      },
+      {
+        "type": "p",
+        "md": "The third failure is quieter, and I found it twice, on two platforms, by checking the research against each platform's own reference pages rather than trusting it. The afternoon build assumes the API hands it the comment. On at least two of the eight platforms I researched, the text that arrives is not the text the person typed, and neither platform says so at the endpoint that returns it."
+      },
+      {
+        "type": "p",
+        "md": "On YouTube, `snippet.textOriginal` is returned only to the comment's author, and a channel owner reading a viewer's comment is not the author. A connector therefore gets `textDisplay`, which Google documents as possibly differing from what was written: \"it may replace video links with video titles.\" The people a tool like this exists for are channel owners, so every one of them drafts replies against text the platform reserves the right to have rewritten."
+      },
+      {
+        "type": "p",
+        "md": "Reddit is the same class of bug in different clothes. Unless a request passes `raw_json=1`, Reddit replaces `<`, `>` and `&` with HTML entities in every JSON body, so `Tom & Jerry` reaches the model as `Tom &amp; Jerry`; a review page that escapes its own output, which any page rendering strangers' text must, then escapes it a second time, and a person ends up approving a reply drafted against text nobody wrote."
+      },
+      {
+        "type": "p",
+        "md": "A tool that quotes a comment back at its author has to know both of these, and almost nothing says so. The tutorials skip them because the demo still works. The escaped ampersand and the rewritten link stay invisible until a real comment comes back wrong, in public, under the client's name."
+      },
+      {
+        "type": "h2",
+        "text": "Meta documents the same call as reply and as edit"
+      },
+      {
+        "type": "p",
+        "md": "The fourth failure is the one that could have destroyed something that was not mine to destroy. Meta documents one Graph API call as both \"reply to this comment\" and \"edit this comment.\" Both readings are published, and they cannot both be right. Pick the wrong one and every approved reply silently overwrites the customer's own comment with the client's words. Read that again: not a failed reply, which you would notice, but a customer's comment replaced in place, which you would not, until somebody complains."
+      },
+      {
+        "type": "p",
+        "md": "I could not settle it from the documentation, and I was not going to settle it experimentally on somebody's Page. So the connector proves the outcome on every write instead of assuming it. The id the platform returns must differ from the id that was posted to, and the reply read back must carry the right parent, the comment it was answering. A read-back that cannot be performed ends the whole run rather than the row, because a write path that edits comments will edit the next one too."
+      },
+      {
+        "type": "code",
+        "code": "created = _call(\"POST\", _url(f\"{parent}/comments\", token), {\"message\": text})\npublished = _identifier(created.get(\"id\"))\nif not published:\n    raise _unusable(parent, token, text)\nif _same_comment(published, parent):\n    raise ReplyInvariantError(_overwritten(parent), parent)\nseen = _verify(published, parent, token)   # reads back id, parent{id}, message\n_confirm(published, parent, token, text, seen)"
+      },
+      {
+        "type": "p",
+        "md": "The check is permanent, not a placeholder until Meta's pages agree with each other, and its two failure directions are deliberately not symmetric. A false positive halts a run over an overwrite that did not happen, which costs a re-run. A false negative destroys customers' comments quietly. The comparison is built to fail toward the first."
+      },
+      {
+        "type": "p",
+        "md": "That connector, for Facebook Pages, is the only one that exists. It is built and tested against fakes, and it has never been run against a live Page. The other seven platforms have guides, not code."
+      },
+      {
+        "type": "h2",
+        "text": "Eight guides, because the tutorials name the wrong obstacle"
+      },
+      {
+        "type": "p",
+        "md": "Underneath all four failures sits the question a client asks first, which is what it takes to connect to their platform at all. Answering it honestly, eight times, turned out to be most of the project. Not most of the code; most of the work. For each platform it meant reading the primary sources end to end, the developer policies, the API reference, the quota tables, the pricing pages, because the tutorials answering the same question are wrong, and wrong in a consistent direction."
+      },
+      {
+        "type": "p",
+        "md": "The guides exist because I went looking for them and they did not exist."
+      },
+      {
+        "type": "p",
+        "md": "X is the cleanest example. The received wisdom is that the barrier is money, and the $100, $200 and $5,000 figures still dominate the search results. Those are prices for a product X stopped selling on 2026-02-06; at this tool's shape of workload, the metered replacement bills about three dollars a month. What replaced the money is a requirement for prior written approval from X before replies written by software are deployed, with no published turnaround, no queue position, and no appeal. The obstacle everyone names is gone, and the one standing in its place is a permission with no clock on it."
+      },
+      {
+        "type": "p",
+        "md": "TikTok is repeated everywhere as having no comment API. It has two documented comment endpoints, on `business-api.tiktok.com`, a different product line from the `developers.tiktok.com` portal every tutorial means. What TikTok refuses is not the feature but the applicant: it does not onboard individual developers, and says so on its registration page."
+      },
+      {
+        "type": "p",
+        "md": "That pattern held across all eight: where the received wisdom names an obstacle, the named obstacle is out of date or standing in front of a different one, so the section worth reading on each guide is the one headed \"What is still unknown.\" The eight guides run to 7,036 lines, which is more than the 5,612 lines of Python they came out of. Line counts measure typing rather than truth, but the ratio says where the work went, and every endpoint, scope string, quota number and policy clause in those lines carries the URL it came from and the date it was read, 2026-08-01. The short version, what stands between an operator and a first working call on each platform and the order worth attempting them in, is at [/commentdraft](/commentdraft)."
+      },
+      {
+        "type": "h2",
+        "text": "The sticker prices predicted a gap of 8; the run measured 27"
+      },
+      {
+        "type": "p",
+        "md": "Cost is where this design is easiest to doubt, because the prompt carries the whole document on every call. So the model comparison ships as a subcommand rather than a slide: `commentdraft bakeoff` runs the same comments through the default model and every challenger in the config and writes one CSV per model, and a `--blind` flag on the review command turns those CSVs into one page with the sources hidden behind letters and the key returned separately. One run is published in [docs/bakeoff.md](https://github.com/Ab-Romia/commentdraft/blob/main/docs/bakeoff.md): thirty comments against the fictional field guide the repository ships, on 2026-08-01. One comment is empty and is decided locally as a skip with no call and no cost, so each model billed twenty-nine calls."
+      },
+      {
+        "type": "table",
+        "headers": ["Label", "Model", "Total cost", "Per billed call", "Cache hits", "Decisions"],
+        "rows": [
+          ["primary", "qwen/qwen3.7-flash", "$0.0012", "$0.000040", "28/29", "16 reply, 9 skip, 5 escalate"],
+          ["cheap", "deepseek/deepseek-chat", "$0.0318", "$0.001095", "0/29", "16 reply, 9 skip, 5 escalate"],
+          ["small", "mistralai/mistral-small-3.2-24b-instruct", "$0.0093", "$0.000320", "0/29", "16 reply, 10 skip, 4 escalate"]
+        ],
+        "highlightRow": 0,
+        "caption": "One run, thirty comments, 2026-08-01. The route with the bargain reputation is the middle row: per comment it billed about 27 times the default, where published rates alone predict a gap near 8. The column that explains it is the cache column, not the price."
+      },
+      {
+        "type": "p",
+        "md": "The arithmetic is short. The `cheap` entry's input rate is 8.6 times the default's and its output rate 7.9 times, so sticker prices predict a gap somewhere near 8, not 27. The rest is the prompt cache. The prefix, 4,162 tokens holding the voice rules, the worked examples, the output contract and the entire source document, dominates the bill on every call, against a user message holding one comment and a reply of a sentence or two. The default's route served that prefix from cache on 28 of its 29 calls and billed it at the cached rate; the other two billed it at full input rate on all 29, because neither route served it from a cache at all. This is the no-retrieval decision arriving as a measurement rather than an argument: the prefix is assembled once and kept byte-identical across a run specifically so a provider can cache it, and on this run that property was worth more than the difference in sticker price between all three routes."
+      },
+      {
+        "type": "callout",
+        "title": "What one run does and does not establish",
+        "md": "It establishes that on this gateway, on this day, the cache term dominated the rate term. It is one run, on one example product, through one gateway. A route that adds or drops cached input pricing moves that column further than these three models differ from each other, and none of those changes announces itself. Re-run the command before relying on any number in the table."
+      },
+      {
+        "type": "p",
+        "md": "The same run reports the results that do not flatter it, at the same size. The example config sets an alarm threshold on how often a reply mentions the product, and two of the three models went over it. The report line, identical for `primary` and `cheap`:"
+      },
+      {
+        "type": "code",
+        "code": "plugs: 13/16 replies contain a configured plug marker OVER plug_cap 0.75"
+      },
+      {
+        "type": "p",
+        "md": "Nothing stopped, nothing was rewritten, and no row was dropped, because the cap is an alarm and never a limiter; what holds the rate down is what the operator wrote in their voice file. The default model's report also named, row by row, the thirteen replies that closed on the same pointer and the six that opened on the same word, a repetition no per-comment call can prevent, since no call knows how any other call ended. The reason to trust the 27 above is that it was measured by a report that also prints these."
+      },
+      {
+        "type": "h2",
+        "text": "What survived the engagement"
+      },
+      {
+        "type": "p",
+        "md": "The client-specific parts are gone. The product, the language, the source document and the credentials all stayed behind, and nothing was copied forward from them. What survived is the shape the constraints forced, and the constraints turned out not to be about the client at all: anyone with a price and an audience has a document that is true, questions it does not answer, platforms with rules about software that replies, and comment text the platform already touched on its way in."
+      },
+      {
+        "type": "p",
+        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and 707 tests that run offline with no API key. Its claims are written to be checked rather than believed. The review page above is the tool's own output; the run behind the table sits in the repository with the command that reproduces it; and the README is not allowed to say bot, auto-reply, engagement, or growth, because a test fails the build on each of those words. Every one of them would claim something the code does not do."
+      },
+      {
+        "type": "p",
+        "md": "If you are about to build the afternoon version for a client of your own, read the guide for their platform before writing any code. The loop is the easy part, and it was never the part they were paying for."
+      }
+    ]
+  },
+  {
+    "title": "Typeahead is not consent",
+    "slug": "typeahead-is-not-consent",
+    "description": "I built a tool that asks a person to approve every reply before it is sent. Then five characters, pasted before the screen had drawn anything, approved five replies nobody had read. The bug is in almost every confirmation prompt I have ever written, and the fix is four lines in a specific order.",
+    "date": "2026-08-05",
+    "tags": [
+      "CLI",
+      "Terminal",
+      "Security",
+      "Python",
+      "Testing"
+    ],
+    "readingMinutes": 7,
+    "body": [
+      {
+        "type": "p",
+        "md": "I have a command line tool that drafts replies to social media comments and then refuses to send any of them until a person has read that specific reply and pressed a key. The whole design rests on that. Not a setting, not a default, not a flag you can pass once and forget: one keystroke, against one reply, immediately before that one reply goes out."
+      },
+      {
+        "type": "p",
+        "md": "Then I pointed three reviewers at it and asked them to break it. One of them did, in a way I would not have found, and the bug turned out to be sitting in more or less every confirmation prompt I have ever written."
+      },
+      {
+        "type": "h2",
+        "text": "The attack"
+      },
+      {
+        "type": "p",
+        "md": "Start the tool under a pseudo-terminal. Before it has printed a single character, write five approvals into the terminal. Then wait."
+      },
+      {
+        "type": "code",
+        "code": "LEAD = 1.0                    # the child sleeps this long before rendering\nPAYLOAD = b\"y\\ny\\ny\\ny\\ny\\n\"    # five approvals, delivered during the sleep\nROWS = 5\n\npid, master = pty.fork()\nif pid == 0:\n    os.execv(sys.executable, [sys.executable, driver, ...])\n\ntime.sleep(0.3)\nos.write(master, PAYLOAD)     # nothing has been drawn yet"
+      },
+      {
+        "type": "p",
+        "md": "Five replies published. Not one of them was on the screen when the key that approved it arrived. No pipe, no flag, no configuration, no monkeypatching, no edit to the source. On a real terminal, in front of a real person, that sequence is a single paste."
+      },
+      {
+        "type": "callout",
+        "title": "Why this is worse than it looks",
+        "md": "The tool exists because platforms require it. YouTube's API Services Developer Policies say the user must \"expressly consent to those actions prior to their actual execution.\" Prior, and express. A keystroke that was sitting in a buffer before the content existed is neither. The gate was worse than bypassable: it was failing at the exact thing the policy asks for, while reporting success."
+      },
+      {
+        "type": "h2",
+        "text": "The cause"
+      },
+      {
+        "type": "p",
+        "md": "The prompt was reading with `input()`. That reads a line from the terminal's input queue, and the terminal's line discipline has been filling that queue since long before the program asked. Everything typed or pasted while the reply was still being written to the screen is already sitting there, waiting."
+      },
+      {
+        "type": "p",
+        "md": "So the gate proved a key was pressed. It proved the send happened inside the branch that key selects. It never proved the key arrived after the reply was readable, and that is the only part that makes it consent."
+      },
+      {
+        "type": "p",
+        "md": "Every confirmation prompt I have written has this shape. `Delete 400 files? [y/N]`. `Deploy to production? [y/N]`. `Run this migration? [y/N]`. If the user was typing while the tool was still computing what to warn them about, the answer was already in the buffer before the question was on the screen."
+      },
+      {
+        "type": "h2",
+        "text": "The fix, and the order it has to be in"
+      },
+      {
+        "type": "code",
+        "code": "_line(stream, PROMPT)                                  # 1. print the prompt\n_flush(stream)                                         # 2. push it to the screen\n\ndescriptor = sys.stdin.fileno()\nsaved = termios.tcgetattr(descriptor)\ntry:\n    termios.tcflush(descriptor, termios.TCIFLUSH)      # 3. discard what was typed before\n    tty.setcbreak(descriptor)                          # 4. no line discipline, no Enter\n    pressed = os.read(descriptor, 1)                   # 5. exactly one byte\nfinally:\n    termios.tcsetattr(descriptor, termios.TCSADRAIN, saved)"
+      },
+      {
+        "type": "p",
+        "md": "Four lines, and the order is the whole of it. Discard the queue at the moment the prompt becomes readable, then read one byte after that. Anything typed before the reader could have seen the reply is gone; the only key that counts is one pressed after the question was on the screen."
+      },
+      {
+        "type": "p",
+        "md": "`cbreak` matters for a second reason. A key needs no Enter behind it, so it also cannot be joined to the key behind it. A held-down key walks nothing."
+      },
+      {
+        "type": "h2",
+        "text": "Two things the replacement quietly loses"
+      },
+      {
+        "type": "p",
+        "md": "`input()` flushes stdout before it reads. A hand-rolled replacement does not, and nothing tells you. If output is block buffered, which is what a piped run looks like, the prompt sits in a buffer while the program waits for a key, and the reviewer is approving a blank screen. That is the same bug wearing different clothes, so the flush is step two and not an afterthought."
+      },
+      {
+        "type": "p",
+        "md": "And the terminal has to be restored in a `finally`. Not on the happy path, not at the end of the loop. If anything below raises, or the operator presses Ctrl-C, the alternative is handing them back a shell with no echo and no line editing, which they will fix by closing the window."
+      },
+      {
+        "type": "h2",
+        "text": "The test that nearly did not work"
+      },
+      {
+        "type": "p",
+        "md": "A bug about terminals has to be tested against a real terminal, so the test forks a pty, writes the payload during the lead time, and asserts that nothing was published and that the queue is still sitting on the first row."
+      },
+      {
+        "type": "p",
+        "md": "The first version of that test passed against the broken code. The child was a fork of the pytest process, and pytest imports `readline`. A forked child inherits the hook `readline` installs under `input()`, that hook handles the terminal itself, and it hid the entire behavior I was trying to catch."
+      },
+      {
+        "type": "p",
+        "md": "So the child is a fresh interpreter with `os.execv`, not a fork of the test runner. That is also the honest shape of the reproduction, because a fresh interpreter is what an operator's own process looks like."
+      },
+      {
+        "type": "code",
+        "code": "# before\nISATTY True   RC 0   SENDS 5  ['r1', 'r2', 'r3', 'r4', 'r5']\n\n# after\nISATTY True   SENDS 0  []\nLAST ROW SHOWN ['[ 1 / 5 ]  video-site  r1 on \"a clip\"']"
+      },
+      {
+        "type": "p",
+        "md": "There is no `RC` line in the second one because the queue is still holding, waiting for a key that has to arrive after the reply was on the screen. That is the fix working."
+      },
+      {
+        "type": "h2",
+        "text": "What I took from it"
+      },
+      {
+        "type": "p",
+        "md": "I had tested that the gate could not be bypassed by a flag, by a config key, by calling the function directly, or by piping `yes` into it. All of those were closed. I had not tested the one property the gate exists to guarantee, which is that the person saw the thing before they agreed to it, because I had not noticed it was a separate property from having pressed the key."
+      },
+      {
+        "type": "p",
+        "md": "The prompt was proving the wrong half. Proving a keystroke happened is easy and I had done it thoroughly. Proving the keystroke came after the content was readable is the part that makes it consent, and it needed four lines in a particular order to be true at all."
+      },
+      {
+        "type": "p",
+        "md": "The tool is [commentdraft](https://github.com/Ab-Romia/commentdraft), and the gate, the pty test and the reasoning above are all in it; the job that made the gate worth this much care has [a post of its own](/blog/commentdraft-guides-that-did-not-exist). If you have a confirmation prompt anywhere that guards something expensive, it is worth twenty seconds with a paste buffer to find out which half yours is proving."
+      }
+    ]
+  },
+  {
     "title": "Talos: a document-grounded team assistant, and the retrieval evaluation behind it",
     "slug": "talos-rag-retrieval-evaluation",
     "description": "A walkthrough of Talos, a team chat platform whose assistant answers from a team's own uploaded documents with citations. It covers the retrieval pipeline (hybrid search, cross-encoder reranking, cited generation) and the paired evaluation that found and fixed the chunking bug behind weak answers, raising judged correctness from 0.657 to 0.855 on the workspace's own corpus.",
