@@ -864,7 +864,7 @@ export const REFERENCES = [
     title: "",
     credential: "Ph.D., University of Pennsylvania",
     organization: "Global Performance Management Academy (GPMA)",
-    url: "https://gpmacademy.org/",
+    url: "https://gpma-mena.com/",
     relationship: "Client. AI agents and automation for his organization.",
     email: "mmmim1954@gmail.com",
     phone: "+966 53 008 1400",
