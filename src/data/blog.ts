@@ -28,6 +28,20 @@ export type BlogPost = {
   body: ContentBlock[];
 };
 
+/* Figures in the commentdraft posts describe the public repository, not a local
+   branch, because every one of them is a link away from being checked. Today
+   that is origin/main: 703 tests, 7,036 lines across the eight guides, 5,612
+   lines of Python. Re-derive rather than edit:
+
+     git -C ~/commentdraft fetch && git -C ~/commentdraft worktree add /tmp/pub main
+     cd /tmp/pub && uv run pytest
+     wc -l docs/platforms/{facebook,instagram,linkedin,reddit,threads,tiktok,x,youtube}.md
+     find src -name '*.py' | xargs wc -l | tail -1
+
+   One figure here is ahead of main on purpose. The cached prefix is 4,112
+   tokens, which is what the run's own CSV holds; docs/bakeoff.md still says
+   4,162 on main and is corrected on the unpushed branch. Push before this
+   deploys, or the post disagrees with the page it cites. */
 export const BLOG_POSTS: BlogPost[] = [
   {
     "title": "Three of eight comment APIs return a value that nothing flags as wrong",
@@ -321,6 +335,10 @@ export const BLOG_POSTS: BlogPost[] = [
         "md": "Nothing stopped, nothing was rewritten, and no row was dropped, because the cap is an alarm and never a limiter; what holds the rate down is what the operator wrote in their voice file. The default model's report also named, row by row, the thirteen replies that closed on the same pointer and the six that opened on the same word, a repetition no per-comment call can prevent, since no call knows how any other call ended. The reason to trust the 27 above is that it was measured by a report that also prints these."
       },
       {
+        "type": "p",
+        "md": "The report does not catch everything, and the screenshot above carries one it missed. Row 22 is a question in Polish. The voice file's first rule is to reply in the language of the comment, and the default model answered it in English. The two cheaper models both answered in Polish. So the entry this pass ranked first is the one that broke the rule, on the only row where the rule was tested, and no threshold in the report was watching for it. That is the shape of the whole method: a report catches what somebody thought to count, and the row it misses is the row you find later by reading."
+      },
+      {
         "type": "h2",
         "text": "What survived the job"
       },
@@ -330,7 +348,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and a suite of 703 tests in the repository that runs offline with no API key. Its claims are written to be checked rather than believed. The review page above is the tool's own output; the run behind the table is written up in the repository with the command that reproduces it; and the README is not allowed to say bot, auto-reply, engagement, or growth, because a test fails the build on each of those words. Every one of them would claim something the code does not do."
+        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and a suite of 703 tests in the repository that runs offline with no API key. One thing to know before you install it: the release on PyPI is the drafting half. It reads a CSV, writes the page of drafts, and exits. The connector and the approval gate this post spends most of its length on are in the repository and not yet in a release, so `pip install` today gets the part that cannot send anything at all. Its claims are written to be checked rather than believed. The review page above is the tool's own output; the run behind the table is written up in the repository with the command that reproduces it; and the README is not allowed to say bot, auto-reply, engagement, or growth, because a test fails the build on each of those words. Every one of them would claim something the code does not do."
       },
       {
         "type": "p",

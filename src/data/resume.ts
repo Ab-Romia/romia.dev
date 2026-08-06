@@ -148,7 +148,7 @@ export const COMMENTDRAFT_GUIDES_PAGE = {
   title: "Connecting to comment APIs on eight platforms",
   metaTitle: "Connecting to comment APIs on eight platforms",
   metaDescription:
-    "What it takes to read and reply to comments through the APIs of YouTube, Instagram, Facebook, Threads, X, TikTok, LinkedIn and Reddit: the gate on each, roughly what it costs, and the order worth attempting them in. Read against live documentation on 2026-08-01 and sourced to 226 primary URLs.",
+    "What it takes to read and reply to comments through the APIs of YouTube, Instagram, Facebook, Threads, X, TikTok, LinkedIn and Reddit: the gate on each, roughly what it costs, and the order worth attempting them in. Read against live documentation on 2026-08-01, citing 226 distinct URLs.",
   lede: "Eight guides, one per platform, each written from the platform's own primary sources and each saying out loud how far the checking went. Every endpoint, scope string, quota number and policy clause carries the URL it came from and the date it was read. They came out of building commentdraft, and they are here because they did not exist.",
   /* "Primary sources cited" is distinct http(s) URLs across the eight guides,
      re-derivable in the commentdraft repository with:
@@ -159,7 +159,7 @@ export const COMMENTDRAFT_GUIDES_PAGE = {
   meta: [
     { label: "Read against live docs", value: "2026-08-01" },
     { label: "Platforms covered", value: "8" },
-    { label: "Primary sources cited", value: "226" },
+    { label: "Distinct URLs cited", value: "226" },
     { label: "Connectors built", value: "1" },
   ],
   orderHeading: "The order worth attempting them in",

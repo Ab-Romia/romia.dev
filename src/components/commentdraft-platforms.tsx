@@ -21,8 +21,9 @@ export function CommentdraftPlatformList() {
         {COMMENTDRAFT_GUIDES.honesty}
       </p>
 
-      {/* One legend for all eight rows, rather than a chip on each of the two
-          rows that carry one. */}
+      {/* One legend for all eight rows, rather than a chip on the one row that
+          carries a connector today. A legend does not have to be re-counted
+          when a second one ships. */}
       <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs text-muted-foreground">
         <li className="flex items-center gap-1.5">
           <Check className="size-3.5 text-accent shrink-0" aria-hidden="true" />
