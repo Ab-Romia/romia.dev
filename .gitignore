@@ -44,9 +44,13 @@ next-env.d.ts
 *.out
 img.jpeg
 
-# working / prep files (never commit)
+# working / prep files (never commit). The wildcards are the point: these keep
+# appearing under new names, and each one carries private client facts.
 FIX-PROMPT.md
 ALIGNMENT-PROMPT.md
+TRUTH-PASS-SESSION.md
+*-PROMPT.md
+*-SESSION.md
 # root PDFs (the public CV lives at public/resume.pdf)
 /*.pdf
 compass_artifact_*.md
