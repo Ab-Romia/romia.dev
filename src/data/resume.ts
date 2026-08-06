@@ -63,9 +63,12 @@ export const ZAYLON_SHOWCASE = {
    below only where the number IS the finding: what the tool decided on a real
    run, and what the prompt cache turned out to be worth.
 
-   Nothing here may imply the tool posts to more than one platform. One
-   connector exists, for Facebook Pages, and it has never been run against a
-   live Page. */
+   Nothing here may imply a connector has been pointed at a real account.
+   One connector is published, for Facebook Pages, and it has never been run
+   against a live Page. A YouTube connector exists only on an unmerged local
+   branch, so nothing on this site may count it: every claim here has to hold
+   against github.com/Ab-Romia/commentdraft at main, which is where the links
+   send the reader. Raise these numbers when the branch is pushed, not before. */
 export const COMMENTDRAFT_SHOWCASE = {
   title: "commentdraft",
   role: "Author. Apache-2.0, on PyPI.",
@@ -81,7 +84,7 @@ export const COMMENTDRAFT_SHOWCASE = {
   refusals: [
     {
       head: "It will not send without you",
-      body: "No --yes, no --all, and no config key that changes it. Publishing thirty replies costs thirty keystrokes, which is the design and not an oversight.",
+      body: "No --yes, no --all, and no config key that changes it. Publishing thirty replies costs thirty keystrokes, which is the design and not an oversight. The release on PyPI today is the drafting half: it reads a CSV, writes a page of drafts, and exits.",
     },
     {
       head: "It will not answer past the source",
@@ -128,10 +131,10 @@ export const COMMENTDRAFT_TRIAGE = {
 } as const;
 
 /* Read against live documentation on 2026-08-01, the date every guide carries.
-   `connector: "ships"` is true of exactly one row and must stay that way. */
+   `connector: "ships"` is true of exactly one row, Facebook Pages. */
 export const COMMENTDRAFT_GUIDES = {
   honesty:
-    "The guides document how to connect. The code connects to one of them: Facebook Pages, built and tested against fakes and never run against a live Page. On the other seven, nobody has made the call.",
+    "The guides document how to connect. The code connects to one of them, Facebook Pages, built and tested against fakes and never run against a live Page. Nobody has made a call on any of the eight, the one with a connector included.",
   closing:
     "The first four need no permission from anybody. The last four each need a human at the platform to say yes, and three of the four publish no idea of how long that takes.",
   lesson:
@@ -145,12 +148,18 @@ export const COMMENTDRAFT_GUIDES_PAGE = {
   title: "Connecting to comment APIs on eight platforms",
   metaTitle: "Connecting to comment APIs on eight platforms",
   metaDescription:
-    "What it takes to read and reply to comments through the APIs of YouTube, Instagram, Facebook, Threads, X, TikTok, LinkedIn and Reddit: the gate on each, roughly what it costs, and the order worth attempting them in. Read against live documentation on 2026-08-01 and sourced to 228 primary URLs.",
+    "What it takes to read and reply to comments through the APIs of YouTube, Instagram, Facebook, Threads, X, TikTok, LinkedIn and Reddit: the gate on each, roughly what it costs, and the order worth attempting them in. Read against live documentation on 2026-08-01 and sourced to 226 primary URLs.",
   lede: "Eight guides, one per platform, each written from the platform's own primary sources and each saying out loud how far the checking went. Every endpoint, scope string, quota number and policy clause carries the URL it came from and the date it was read. They came out of building commentdraft, and they are here because they did not exist.",
+  /* "Primary sources cited" is distinct http(s) URLs across the eight guides,
+     re-derivable in the commentdraft repository with:
+     grep -ohE 'https?://[^ )>,"`]+' docs/platforms/{facebook,instagram,linkedin,reddit,threads,tiktok,x,youtube}.md \
+       | sed 's#[.,;)]*$##' | sort -u | wc -l
+     Run it against main, the branch these links point at, not a working
+     branch. Anything published here must come back from that command. */
   meta: [
     { label: "Read against live docs", value: "2026-08-01" },
     { label: "Platforms covered", value: "8" },
-    { label: "Primary sources cited", value: "228" },
+    { label: "Primary sources cited", value: "226" },
     { label: "Connectors built", value: "1" },
   ],
   orderHeading: "The order worth attempting them in",
@@ -165,7 +174,7 @@ export const COMMENTDRAFT_GUIDES_PAGE = {
 export type CommentdraftPlatform = {
   name: string;
   slug: string;
-  /** "ships" is true of Facebook Pages and of nothing else. */
+  /** "ships" is true of Facebook Pages, and of nothing else. */
   connector: "ships" | "none";
   /** Open means no permission is needed from the platform for a single operator. */
   access: "open" | "gated";
@@ -184,9 +193,9 @@ export const COMMENTDRAFT_PLATFORMS: CommentdraftPlatform[] = [
     reply: "Documented, and Meta documents two readings of the same call",
     blocker:
       "Nothing to clear. An operator who owns the Page and makes their own app needs no App Review and no Business Verification.",
-    cost: "No fee. Under an hour from a standing start, by our own estimate.",
+    cost: "No fee. Under an hour from a standing start, by my own estimate.",
     attempt:
-      "Start here even if Facebook is not the platform you want. It is the one route where nothing is queued and nobody reads anything, so it tells you whether the rest of the tool suits you before you spend a review cycle finding out.",
+      "Start here even if Facebook is not the platform you want. It is a route where nothing is queued and nobody reads anything, so it tells you whether the rest of the tool suits you before you spend a review cycle finding out.",
   },
   {
     name: "Instagram",
@@ -217,12 +226,12 @@ export const COMMENTDRAFT_PLATFORMS: CommentdraftPlatform[] = [
     slug: "youtube",
     connector: "none",
     access: "open",
-    reply: "Documented, 50 quota units a call",
+    reply: "Documented, 50 quota units a call, or 52. Google's own page carries both",
     blocker:
-      "A 10,000 unit daily quota, so 200 replies a day at the ceiling. An app left in Testing gets refresh tokens that expire in 7 days.",
+      "A 10,000 unit daily quota, so 200 replies a day at the ceiling, 192 if a reply costs 52. An app left in Testing gets refresh tokens that expire in 7 days.",
     cost: "No fee, and no pricing page exists. OAuth verification, which Google says \"can take up to 10 days\", once anyone but you uses it.",
     attempt:
-      "No review and no money for your own channel, and the approval gate this tool already has is a policy requirement here rather than a product opinion. What it costs is arithmetic: 50 units a reply against 10,000 units a day, minus whatever polling spends.",
+      "The gate here is paperwork rather than code: no review and no money for your own channel, and the approval gate this tool already has is a policy requirement here rather than a product opinion. What it costs is arithmetic: 50 units a reply, or 52, against 10,000 units a day, minus whatever polling spends.",
   },
   {
     name: "Reddit",
@@ -242,7 +251,7 @@ export const COMMENTDRAFT_PLATFORMS: CommentdraftPlatform[] = [
     connector: "none",
     access: "gated",
     reply:
-      "Unsettled. A programmatic reply is permitted when the author summoned you, and nobody has established whether replying on your own post counts.",
+      "Unsettled. A programmatic reply is permitted only when the author summoned you, and nobody has established whether replying on your own post counts.",
     blocker:
       "Prior written approval from X before replies written by software are deployed. No published turnaround, no queue position, no appeal, and no self-serve path.",
     cost: "About $3 a month at 500 comments read and 250 replies published. The $100, $200 and $5,000 figures still dominating search results are for a product X stopped selling on 2026-02-06.",
@@ -431,7 +440,7 @@ export const PROJECTS: Project[] = [
       problem:
         "I was building comment handling for paying clients, and the failure that mattered was never a crash. It was a public reply under someone's own post quoting a price that had changed, or answering a question the source material never covered. That lands on the client, in front of their audience, and nothing raises an exception. Sitting on top of it, every platform has rules about replying with software, and the documentation for those rules contradicts itself often enough that reading it properly is part of the work rather than a preliminary to it. What the job needed was a tool that could refuse: refuse to answer what it cannot source, refuse to send what a person has not read, and refuse to claim a reach it does not have.",
       approach:
-        "One model call per comment, against a prefix assembled once and kept byte-identical for the whole run so the provider serves it from cache. The prefix carries the operator's voice rules, their worked examples, the output contract, and the entire source document, which is the only thing a draft may state as fact. Every comment comes back as reply, skip, or escalate with a one-line reason the operator can disagree with, and the run writes a CSV and a review page. Publishing is a separate command that shows one comment and one draft and waits for a key. Reading a platform and writing to it are separate config tables holding separate credentials, so the starting posture holds no write credential and cannot post at all. The interesting parts of this design are all places where the obvious answer turned out to be wrong.",
+        "One model call per comment, against a prefix assembled once and kept byte-identical for the whole run so the provider serves it from cache. The prefix carries the operator's voice rules, their worked examples, the output contract, and the entire source document, which the prompt instructs it to treat as the only thing it may state as fact. Every comment comes back as reply, skip, or escalate with a one-line reason the operator can disagree with, and the run writes a CSV and a review page. Publishing is a separate command that shows one comment and one draft and waits for a key. Reading a platform and writing to it are separate config tables holding separate credentials, so the starting posture holds no write credential and cannot post at all. The interesting parts of this design are all places where the obvious answer turned out to be wrong.",
       figure: {
         src: "/projects/commentdraft-review.png",
         width: 1585,

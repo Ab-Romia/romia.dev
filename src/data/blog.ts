@@ -30,6 +30,129 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    "title": "Three of eight comment APIs return a value that nothing flags as wrong",
+    "slug": "text-nobody-wrote",
+    "description": "The string your code receives when it fetches a comment is a rendering, not a transcript. YouTube returns the original text only to its author; Reddit escapes every ampersand unless raw_json=1 is passed; Instagram answers the obvious id call with an id that matches nothing and raises nothing. Three platforms, three values that arrive looking correct, every claim quoted from the platform's own documentation.",
+    "date": "2026-08-06",
+    "tags": [
+      "Platform APIs",
+      "Data Quality",
+      "Documentation"
+    ],
+    "readingMinutes": 9,
+    "body": [
+      {
+        "type": "p",
+        "md": "I read the comment documentation of eight platforms end to end, and on three of them the value that comes back is not the one it appears to be. A comment arrives looking like a transcript: a field named for text, under the author's name, holding a sentence that reads perfectly well. Two of the three alter that text before you ever see it. The third hands back an identifier that looks exactly right and matches nothing. None of the three says so at the endpoint that returns the value, and the code that inherits it is not the platform's. It is yours."
+      },
+      {
+        "type": "p",
+        "md": "Everything below is checkable without an account. Every claim is quoted from the platform's own reference, with the URL it came from, and every page cited was read on 2026-08-01. If your code quotes comments back at their authors, moderates them on exact match, runs sentiment or search over them, or trains on them, it is working with strings a platform may already have touched, and no log line marks the ones it did."
+      },
+      {
+        "type": "h2",
+        "text": "YouTube returns the original only to its author"
+      },
+      {
+        "type": "p",
+        "md": "A YouTube comment resource carries two text fields. The first, `snippet.textOriginal`, is documented on the [comments resource page](https://developers.google.com/youtube/v3/docs/comments) as \"The original, raw text of the comment as it was initially posted or last updated. The original text is only returned to the authenticated user if they are the comment's author.\" The second sentence is the one that costs. Nobody moderating their own video is the author of the comments under it, so on every one of them the field holding the typed words is withheld. Not empty by accident; withheld by rule, and the one account exempt from the rule is the account that already knows what it wrote."
+      },
+      {
+        "type": "p",
+        "md": "What you get instead is `snippet.textDisplay`, and Google says what that is on the same page, last updated 2026-06-01: \"Even the plain text may differ from the original comment text. For example, it may replace video links with video titles.\" A viewer pastes a link; what arrives is a title. Quote their comment back and you publish words they never typed. A link blocklist matched against that string never fires, because the string that held the link now holds English."
+      },
+      {
+        "type": "p",
+        "md": "There is a second alteration stacked on the first. The `textFormat` parameter on the read endpoints defaults to `html`, per [commentThreads.list](https://developers.google.com/youtube/v3/docs/commentThreads/list), so a reader that does not explicitly ask for `plainText` gets Google's rendering with HTML markup on top of it. Two transformations, both on by default, and the whole picture exists only across two pages."
+      },
+      {
+        "type": "h2",
+        "text": "Reddit escapes three characters in every response, and says so on a different page"
+      },
+      {
+        "type": "p",
+        "md": "Reddit, to its credit, writes down exactly what it does. It writes it on the [API overview page](https://www.reddit.com/dev/api/oauth), not at any endpoint that returns a comment: \"For legacy reasons, all JSON response bodies currently have `<`, `>`, and `&` replaced with `&lt;`, `&gt;`, and `&amp;`, respectively. If you wish to opt out of this behaviour, add a `raw_json=1` parameter to your request.\" All response bodies. Not comment text specifically: every JSON body the API produces, on every request that does not opt out."
+      },
+      {
+        "type": "p",
+        "md": "So `Tom & Jerry` arrives as `Tom &amp; Jerry`, is stored that way, and reaches whatever reads your store that way. Then the trap closes a second time. Any page that renders strangers' text has to escape its output; that is not a choice, it is the defense against script injection. So a correctly built page escapes the already-escaped string and shows a person `Tom &amp; Jerry`, rendered faithfully, as if that is what got typed."
+      },
+      {
+        "type": "p",
+        "md": "Every component did its job, and the text on the screen is still text nobody wrote."
+      },
+      {
+        "type": "p",
+        "md": "The way out costs one query parameter on every read, and nothing about it is ambiguous. What makes this the likeliest of the three to ship unnoticed is the distance between the disclosure and the work: the paragraph is old, public, and one page away from where an implementer is looking. An exact-match rule for `AT&T` never fires against `AT&amp;T`. A corpus fetched without `raw_json=1` teaches a model that people write `&amp;`, because in that corpus everyone does."
+      },
+      {
+        "type": "h2",
+        "text": "An id that resolves nothing and raises no error"
+      },
+      {
+        "type": "p",
+        "md": "The third is not comment text at all, and it fails the same way: silently. On Instagram, a comment webhook names the account it belongs to in the payload's `entry.id`, so a handler's first job is to know its own account's id. The obvious call is `GET /me?fields=id`, and it is the one I reached for."
+      },
+      {
+        "type": "p",
+        "md": "On the Instagram Login route, the [get-started page](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/get-started) carries a field table with two entries a reader skims past. `id` is \"The app user's app-scoped ID\". `user_id` is \"The Instagram professional acount ID, `<IG_ID>`, for your app user. This ID is value of the `id` field received in webhook notifications for this account.\" The missing letter in \"acount\" and the missing word are Meta's, on a page stamped 2024-12-02, reproduced here as read."
+      },
+      {
+        "type": "p",
+        "md": "The app-scoped id is well-formed, stable, and genuinely yours. It also matches no `entry.id` in any webhook payload and addresses nothing on `/{ig-id}/media`. What it builds is a handler that returns 200 to Meta forever without recognizing a single notification as belonging to the account it watches, next to a media listing that comes back empty rather than refused. Nothing raises. Both dashboards stay green."
+      },
+      {
+        "type": "p",
+        "md": "The call that works differs by one word:"
+      },
+      {
+        "type": "code",
+        "code": "GET https://graph.instagram.com/v26.0/me?fields=id       # the app-scoped id: matches nothing\nGET https://graph.instagram.com/v26.0/me?fields=user_id  # the id webhook payloads carry"
+      },
+      {
+        "type": "p",
+        "md": "I am not reporting this one from a safe distance. The research my own guide was built on had the wrong field, and the mistake survived until a second pass pulled Meta's raw field table rather than a summary of it. That pass found twelve errors in the research behind this one platform, and this was the expensive one, because it fails by producing nothing: no exception to search for, no wrong output to notice, just a handler that never fires."
+      },
+      {
+        "type": "h2",
+        "text": "No test catches it, because nothing is malformed"
+      },
+      {
+        "type": "p",
+        "md": "None of this surfaces in a test suite, because every altered value is legal. The escaped string is valid JSON holding a plausible sentence. The rewritten text is a plausible comment. The wrong id has the right shape and came from the right host with a 200. Catching any of the three means comparing the value inside your system against the person's screen, and no harness has the person's screen."
+      },
+      {
+        "type": "p",
+        "md": "The one comparison that would fail is the one nothing performs."
+      },
+      {
+        "type": "p",
+        "md": "Downstream, each consumer converts the alteration into its own damage. A reply that quotes the comment publishes it. A moderation rule sleeps through it. Sentiment, search and deduplication measure it instead of the text. A training set fixes it into a model. Each consumer sits one step further from the API response where the evidence is, which is why the person best placed to notice is outside the system entirely: a commenter reading their own words, misquoted back at them by an account they trusted."
+      },
+      {
+        "type": "callout",
+        "title": "The class in one line",
+        "md": "A platform that alters a value and raises nothing produces data that looks right forever. Where the alteration is disclosed at all, it is disclosed a level below the page an implementer opens to write the call: YouTube on the comments resource page, Reddit on the API overview, Meta in a field table two rows apart."
+      },
+      {
+        "type": "p",
+        "md": "Three of eight. The other five platforms' documentation, read the same way, shows no alteration of the comment body, which is a claim about what two reading passes found rather than a warranty about the platforms. And none of the three findings came from traffic. No API call was made and no live account was involved; every quotation above can be re-read today at its URL, which is the point. The whole class is discoverable from the documentation alone, before any code exists to inherit it."
+      },
+      {
+        "type": "h2",
+        "text": "Where the three were found"
+      },
+      {
+        "type": "p",
+        "md": "I hit these while researching connection guides for eight platforms' comment APIs, the groundwork for [commentdraft](https://github.com/Ab-Romia/commentdraft), a command line tool that drafts replies to comments and makes a person approve each one immediately before it is sent. Its one connector is built against fakes and has never been pointed at a live account. A tool whose entire promise is that a person read the exact comment has no defense against being handed the wrong comment, which is why the guides treat the body field as a primary source and carry a URL and a read date on every claim. The [guide index](/commentdraft) holds all eight, including the five where I found nothing."
+      },
+      {
+        "type": "p",
+        "md": "If a string in your system stands for a fact about a person, the words they typed, the account they are, go and find the sentence in the reference that says the field holds that fact. I went looking eight times, and three of those times the field did not hold it. The string cannot tell you which case you are in. The reference can."
+      }
+    ]
+  },
+  {
     "title": "commentdraft: replying in public on a client's behalf, and the eight guides that did not exist",
     "slug": "commentdraft-guides-that-did-not-exist",
     "description": "commentdraft started as paid work: drafting public replies on a client's behalf, where a wrong price in a reply is a bill the client pays. This is the long version of what that constraint built: the four ways the obvious build fails the person paying for it, the approval gate one platform's policy makes mandatory, a measured run where the bargain model billed 27 times more per comment, and the eight platform connection guides that did not exist until this project needed them.",
@@ -49,7 +172,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "What the job actually needed is [commentdraft](https://github.com/Ab-Romia/commentdraft), a command line tool on [PyPI](https://pypi.org/project/commentdraft/) under Apache-2.0, generalized from that engagement once its constraints turned out to have nothing to do with the client in particular. It reads the comments on a creator's own posts, decides for each one whether to reply, skip, or escalate to a person, and drafts the reply from one source document the operator supplies; a person approves every draft, one keystroke per reply, immediately before that one reply is sent. This post is the long version, the four failures and the design each one forced. If you want the shorter visual tour instead, the [case study](/projects/commentdraft) covers the same system with more screenshots and less argument."
+        "md": "What the job actually needed is [commentdraft](https://github.com/Ab-Romia/commentdraft), a command line tool on [PyPI](https://pypi.org/project/commentdraft/) under Apache-2.0, generalized from that job once its constraints turned out to have nothing to do with the client in particular. It reads the comments on a creator's own posts, decides for each one whether to reply, skip, or escalate to a person, and drafts the reply from one source document the operator supplies; a person approves every draft, one keystroke per reply, immediately before that one reply is sent. This post is the long version, the four failures and the design each one forced. If you want the shorter visual tour instead, the [case study](/projects/commentdraft) covers the same system with more screenshots and less argument."
       },
       {
         "type": "h2",
@@ -107,7 +230,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "A tool that quotes a comment back at its author has to know both of these, and almost nothing says so. The tutorials skip them because the demo still works. The escaped ampersand and the rewritten link stay invisible until a real comment comes back wrong, in public, under the client's name."
+        "md": "A tool that quotes a comment back at its author has to know both of these, and almost nothing says so. The tutorials skip them because the demo still works. The escaped ampersand and the rewritten link stay invisible until a real comment comes back wrong, in public, under the client's name. Both, and a third on Instagram that fails the same way, are written up with their sources in [their own post](/blog/text-nobody-wrote)."
       },
       {
         "type": "h2",
@@ -131,7 +254,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "That connector, for Facebook Pages, is the only one that exists. It is built and tested against fakes, and it has never been run against a live Page. The other seven platforms have guides, not code."
+        "md": "That connector, for Facebook Pages, is the only one. It is built and tested against fakes, it has never been run against a live Page, and the other seven platforms have guides, not code."
       },
       {
         "type": "h2",
@@ -155,7 +278,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "That pattern held across all eight: where the received wisdom names an obstacle, the named obstacle is out of date or standing in front of a different one, so the section worth reading on each guide is the one headed \"What is still unknown.\" The eight guides run to 7,036 lines, which is more than the 5,612 lines of Python they came out of. Line counts measure typing rather than truth, but the ratio says where the work went, and every endpoint, scope string, quota number and policy clause in those lines carries the URL it came from and the date it was read, 2026-08-01. The short version, what stands between an operator and a first working call on each platform and the order worth attempting them in, is at [/commentdraft](/commentdraft)."
+        "md": "That pattern held across all eight: where the received wisdom names an obstacle, the named obstacle is out of date or standing in front of a different one, so the section worth reading on each guide is the one headed \"What is still unknown.\" The eight guides run to 7,036 lines, which is more than the 5,612 lines of Python in the package. Line counts measure typing rather than truth, but the ratio says where the work went, and every endpoint, scope string, quota number and policy clause in those lines carries the URL it came from and the date it was read, 2026-08-01. The short version, what stands between an operator and a first working call on each platform and the order worth attempting them in, is at [/commentdraft](/commentdraft)."
       },
       {
         "type": "h2",
@@ -178,7 +301,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "The arithmetic is short. The `cheap` entry's input rate is 8.6 times the default's and its output rate 7.9 times, so sticker prices predict a gap somewhere near 8, not 27. The rest is the prompt cache. The prefix, 4,162 tokens holding the voice rules, the worked examples, the output contract and the entire source document, dominates the bill on every call, against a user message holding one comment and a reply of a sentence or two. The default's route served that prefix from cache on 28 of its 29 calls and billed it at the cached rate; the other two billed it at full input rate on all 29, because neither route served it from a cache at all. This is the no-retrieval decision arriving as a measurement rather than an argument: the prefix is assembled once and kept byte-identical across a run specifically so a provider can cache it, and on this run that property was worth more than the difference in sticker price between all three routes."
+        "md": "The arithmetic is short. The `cheap` entry's input rate is 8.6 times the default's and its output rate 7.9 times, so sticker prices predict a gap somewhere near 8, not 27. The rest is the prompt cache. The prefix, 4,112 tokens holding the voice rules, the worked examples, the output contract and the entire source document, dominates the bill on every call, against a user message holding one comment and a reply of a sentence or two. The default's route served that prefix from cache on 28 of its 29 calls and billed it at the cached rate; the other two billed it at full input rate on all 29, because neither route served it from a cache at all. This is the no-retrieval decision arriving as a measurement rather than an argument: the prefix is assembled once and kept byte-identical across a run specifically so a provider can cache it, and on this run that property was worth more than the difference in sticker price between all three routes."
       },
       {
         "type": "callout",
@@ -199,7 +322,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "h2",
-        "text": "What survived the engagement"
+        "text": "What survived the job"
       },
       {
         "type": "p",
@@ -207,7 +330,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and 707 tests that run offline with no API key. Its claims are written to be checked rather than believed. The review page above is the tool's own output; the run behind the table sits in the repository with the command that reproduces it; and the README is not allowed to say bot, auto-reply, engagement, or growth, because a test fails the build on each of those words. Every one of them would claim something the code does not do."
+        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and a suite of 703 tests in the repository that runs offline with no API key. Its claims are written to be checked rather than believed. The review page above is the tool's own output; the run behind the table is written up in the repository with the command that reproduces it; and the README is not allowed to say bot, auto-reply, engagement, or growth, because a test fails the build on each of those words. Every one of them would claim something the code does not do."
       },
       {
         "type": "p",
@@ -219,7 +342,7 @@ export const BLOG_POSTS: BlogPost[] = [
     "title": "Typeahead is not consent",
     "slug": "typeahead-is-not-consent",
     "description": "I built a tool that asks a person to approve every reply before it is sent. Then five characters, pasted before the screen had drawn anything, approved five replies nobody had read. The bug is in almost every confirmation prompt I have ever written, and the fix is four lines in a specific order.",
-    "date": "2026-08-05",
+    "date": "2026-08-02",
     "tags": [
       "CLI",
       "Terminal",

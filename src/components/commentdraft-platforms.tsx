@@ -9,7 +9,7 @@ import {
 
 /**
  * The eight platforms at reading width: what stands between an operator and a
- * first working call on each, and which single one has a connector.
+ * first working call on each, and which one has a connector.
  *
  * Compact by design. The full treatment, with what each costs and the order
  * worth attempting them in, is the /commentdraft route this links to.
@@ -21,8 +21,8 @@ export function CommentdraftPlatformList() {
         {COMMENTDRAFT_GUIDES.honesty}
       </p>
 
-      {/* One legend for all eight rows, rather than a chip on the single row
-          that would carry one. */}
+      {/* One legend for all eight rows, rather than a chip on each of the two
+          rows that carry one. */}
       <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs text-muted-foreground">
         <li className="flex items-center gap-1.5">
           <Check className="size-3.5 text-accent shrink-0" aria-hidden="true" />
@@ -47,9 +47,12 @@ export function CommentdraftPlatformList() {
             className="grid grid-cols-1 sm:grid-cols-[11.5rem_1fr] gap-x-5 gap-y-1.5 py-4 border-b border-border"
           >
             <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-              {p.connector === "ships" ? (
+              {/* Both marks where both are true. A shipped connector says
+                  nothing about whether the platform lets you in. */}
+              {p.connector === "ships" && (
                 <Check className="size-3.5 text-accent shrink-0" aria-hidden="true" />
-              ) : p.access === "gated" ? (
+              )}
+              {p.access === "gated" ? (
                 <Lock className="size-3.5 text-muted-foreground shrink-0" aria-hidden="true" />
               ) : (
                 <span

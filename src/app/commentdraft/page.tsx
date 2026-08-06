@@ -44,27 +44,28 @@ export const metadata: Metadata = {
   alternates: { canonical: "/commentdraft" },
 };
 
+/* The two facts are independent, so a row can carry both marks: a connector
+   existing says nothing about whether the platform lets you in. */
 function AccessMark({ platform }: { platform: (typeof COMMENTDRAFT_PLATFORMS)[number] }) {
-  if (platform.connector === "ships") {
-    return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-mono text-accent border border-accent/30 rounded-full px-2.5 py-1">
-        <Check className="size-3" aria-hidden="true" />
-        connector ships
-      </span>
-    );
-  }
-  if (platform.access === "gated") {
-    return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground border border-border rounded-full px-2.5 py-1">
-        <Lock className="size-3" aria-hidden="true" />
-        someone has to say yes
-      </span>
-    );
-  }
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground border border-border rounded-full px-2.5 py-1">
-      no permission needed
-    </span>
+    <>
+      {platform.connector === "ships" && (
+        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-accent border border-accent/30 rounded-full px-2.5 py-1">
+          <Check className="size-3" aria-hidden="true" />
+          connector ships
+        </span>
+      )}
+      {platform.access === "gated" ? (
+        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground border border-border rounded-full px-2.5 py-1">
+          <Lock className="size-3" aria-hidden="true" />
+          someone has to say yes
+        </span>
+      ) : (
+        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground border border-border rounded-full px-2.5 py-1">
+          no permission needed
+        </span>
+      )}
+    </>
   );
 }
 
