@@ -27,6 +27,14 @@ const nextConfig: NextConfig = {
         destination: "/blog/speaker-leakage-ravdess",
         permanent: true,
       },
+      // The typeahead write-up shipped as its own post and is now a section of
+      // the commentdraft post rather than a separate page. That URL is live, so
+      // it redirects instead of going missing.
+      {
+        source: "/blog/typeahead-is-not-consent",
+        destination: "/blog/commentdraft-guides-that-did-not-exist",
+        permanent: true,
+      },
     ];
   },
   async headers() {
