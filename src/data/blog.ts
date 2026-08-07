@@ -30,7 +30,7 @@ export type BlogPost = {
 
 /* Figures in the commentdraft post describe the public repository, not a local
    branch, because every one of them is a link away from being checked. Today
-   that is origin/main: 703 tests, 7,036 lines across the eight guides, 5,612
+   that is origin/main: 704 tests, 7,036 lines across the eight guides, 5,612
    lines of Python, and one connector. Re-derive rather than edit:
 
      git -C ~/commentdraft fetch && git -C ~/commentdraft worktree add /tmp/pub main
@@ -279,11 +279,11 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "Nothing stopped, nothing was rewritten, and no row was dropped, because the cap is an alarm and never a limiter; what holds the rate down is what the operator wrote in their voice file. The default model's report also named, row by row, the thirteen replies that closed on the same pointer and the six that opened on the same word, a repetition no per-comment call can prevent, since no call knows how any other call ended."
+        "md": "Nothing stopped, nothing was rewritten, and no row was dropped, because the cap is an alarm and never a limiter; what holds the rate down is what the operator wrote in their voice file. The default model's report also named, row by row, the thirteen replies that closed on the same pointer, the six that opened on the same word, and the three that opened on the price, a repetition no per-comment call can prevent, since no call knows how any other call ended."
       },
       {
         "type": "p",
-        "md": "The report does not catch everything, and the screenshot near the top of this post carries one it missed. Row 22 is a question in Polish. The voice file's first rule is to reply in the language of the comment, and the default model answered it in English. The two cheaper models both answered in Polish. So the entry this pass ranked first is the one that broke the rule, on the only row where the rule was tested, and no threshold in the report was watching for it. A report catches what somebody thought to count, and the row it misses is the row you find later by reading."
+        "md": "The report does not catch everything, and the screenshot near the top of this post carries one it missed. Row 22 is a question in Polish. The voice file's first rule is to reply in the language of the comment, and the default model answered it in English. The two cheaper models both answered in Polish. So the route the cost table favours is the one that broke the rule, on the only row where the rule was tested, and no threshold in the report was watching for it. A report catches what somebody thought to count, and the row it misses is the row you find later by reading."
       },
       {
         "type": "h2",
@@ -295,7 +295,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and a suite of 703 tests that runs offline with no API key. One thing to know before you install it: the release on PyPI is the drafting half. It reads a CSV, writes the page of drafts, and exits. The connector and the approval gate that most of this post is about are in the repository and not yet in a release, so `pip install` today gets the part that cannot send anything at all."
+        "md": "The general version is on PyPI as `pip install commentdraft`, Apache-2.0, with one runtime dependency, the OpenAI client pointed at whatever compatible gateway the config names, and a suite of 704 tests that runs offline with no API key. One thing to know before you install it: the release on PyPI is the drafting half. It reads a CSV, writes the page of drafts, and exits. The connector and the approval gate that most of this post is about are in the repository and not yet in a release, so `pip install` today gets the part that cannot send anything at all."
       },
       {
         "type": "p",
