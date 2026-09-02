@@ -750,10 +750,10 @@ export const EXPERIENCE = [
     period: "May 2025 – Present",
     description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on a FastAPI backend with PostgreSQL/Redis, multi-tenant isolation, and Docker deployment, built for MENA merchants selling on WhatsApp, Instagram, and web.",
     highlights: [
-      "Built the conversational AI in LangGraph as a single tool-calling agent with about 30 scoped tools across sales, support, and checkout, consolidated from an earlier multi-agent supervisor for reliability and easier reasoning",
+      "Built the conversational AI in LangGraph as a single tool-calling agent with about 35 scoped tools across sales, support, and checkout. An earlier multi-agent supervisor was kept behind a flag and deleted once it was clear the single agent was the only path ever serving a request",
       "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring",
       "Wrote the FastAPI Python backend and its service architecture, containerized with Docker for deployment",
-      "Built multi-tenant security: argon2id key auth, per-merchant row-level isolation across roughly 80 tables, and semgrep CI gates enforcing tenant scoping",
+      "Built multi-tenant security: argon2id key auth, per-merchant row-level isolation, and semgrep rules that fail CI on raw table access outside the repository layer",
       "Built a Postgres-backed saga engine with reverse-order compensation so a failed checkout step rolls back cleanly",
       "Batched rapid-fire WhatsApp messages in Redis into a single turn before invoking the agent, so it reads the whole thought at once instead of replying to each fragment",
     ],
@@ -890,7 +890,7 @@ export const COMPETITIONS = [
 export const LANGUAGES_SPOKEN = [
   { language: "English", level: "Fluent" },
   { language: "Arabic", level: "Native" },
-  { language: "German", level: "A2" },
+  { language: "German", level: "A1" },
   { language: "Spanish", level: "Conversational" },
 ] as const;
 
