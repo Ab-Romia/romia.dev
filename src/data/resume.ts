@@ -747,16 +747,16 @@ export const EXPERIENCE = [
   /* Tutanic, started 1 Sep 2026. Deliberately one line and no highlights: the
      role is days old, and every bullet that could pad it would either name a
      client engagement that is not cleared to be named, name a framework that is
-     still unsettled internally, or claim work that has not happened yet. The
-     note below says why the entry is short rather than letting the reader guess.
-     Add highlights when there is shipped work, not before. */
+     still unsettled internally, or claim work that has not happened yet. Add
+     highlights when there is shipped work, not before.
+     `focus` sits beside the role, not the company: it says what the work is.
+     `type` is the employment type and stays beside the company (see Scale AI). */
   {
     company: "Tutanic",
     role: "Software Engineer",
-    type: "AI Systems",
+    focus: "AI Systems",
     period: "Sep 2026 – Present",
     description: "Backend services and AI systems.",
-    note: "New as of September 2026. This entry stays short until there is shipped work worth describing.",
     highlights: [],
   },
   {

@@ -49,6 +49,13 @@ export function Experience() {
                       <div>
                         <h3 className="text-lg font-semibold leading-snug">
                           {entry.role}
+                          {/* What the work is, beside the role rather than the
+                              company. Employment type stays on the company line. */}
+                          {"focus" in entry && entry.focus && (
+                            <span className="text-muted-foreground font-normal">
+                              , {entry.focus}
+                            </span>
+                          )}
                         </h3>
                         <p className="text-sm text-muted-foreground mt-0.5">
                           {"url" in entry && entry.url ? (
@@ -102,14 +109,6 @@ export function Experience() {
                         </li>
                       ))}
                     </ul>
-                  )}
-
-                  {/* Note: why an entry is deliberately thin. Sits below the
-                      highlights so it reads as a caveat on the whole entry. */}
-                  {"note" in entry && entry.note && (
-                    <p className="text-xs text-muted-foreground/80 mt-4 leading-relaxed max-w-2xl">
-                      {entry.note}
-                    </p>
                   )}
                 </div>
               </SlideFromLeft>
