@@ -13,6 +13,7 @@ export const PERSONAL = {
 } as const;
 
 export const HERO_SIGNALS = [
+  { label: "Software Engineer", detail: "Tutanic" },
   { label: "Co-Founder", detail: "Zaylon AI" },
   { label: "B.Sc. Computer & Communications Engineering", detail: "AI concentration" },
 ] as const;
@@ -743,6 +744,21 @@ export function getAdjacentProjects(slug: string) {
 }
 
 export const EXPERIENCE = [
+  /* Tutanic, started 1 Sep 2026. Deliberately one line and no highlights: the
+     role is days old, and every bullet that could pad it would either name a
+     client engagement that is not cleared to be named, name a framework that is
+     still unsettled internally, or claim work that has not happened yet. The
+     note below says why the entry is short rather than letting the reader guess.
+     Add highlights when there is shipped work, not before. */
+  {
+    company: "Tutanic",
+    role: "Software Engineer",
+    type: "AI Systems",
+    period: "Sep 2026 – Present",
+    description: "Backend services and AI systems.",
+    note: "New as of September 2026. This entry stays short until there is shipped work worth describing.",
+    highlights: [],
+  },
   {
     company: "Zaylon AI",
     role: "Software Engineer & Co-Founder",
@@ -895,6 +911,6 @@ export const LANGUAGES_SPOKEN = [
 ] as const;
 
 export const ABOUT = {
-  bio: "I co-founded Zaylon AI and built its AI system and backend: the LangGraph agent that sells over WhatsApp and Instagram, the tri-lingual NLP, and the FastAPI backend behind them. I work across the stack but lean toward backend and AI. B.Sc. in Computer and Communications Engineering with an AI concentration from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
+  bio: "I'm a software engineer at Tutanic, working on backend services and AI systems. I co-founded Zaylon AI and built its AI system and backend: the LangGraph agent that sells over WhatsApp and Instagram, the tri-lingual NLP, and the FastAPI backend behind them. I work across the stack but lean toward backend and AI. B.Sc. in Computer and Communications Engineering with an AI concentration from Alexandria University. I speak English, Arabic, German, and Spanish, and I play guitar.",
 } as const;
 

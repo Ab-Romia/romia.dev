@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s | Abdelrahman Abouroumia",
   },
   description:
-    "Abdelrahman Abouroumia (Romia) is an AI & Backend Engineer and Co-Founder of Zaylon AI. Builds LLM agents, RAG systems, and the full-stack platforms and backends around them.",
+    "Abdelrahman Abouroumia (Romia), AI & Backend Engineer. Software Engineer at Tutanic and Co-Founder of Zaylon AI. Builds LLM agents, RAG systems, and the backends they run on.",
   keywords: [
     "Romia",
     "Romia developer",
@@ -50,6 +50,8 @@ export const metadata: Metadata = {
     "AI Engineer",
     "AI & Backend Engineer",
     "Co-Founder Zaylon AI",
+    "Tutanic",
+    "Software Engineer at Tutanic",
     "LangGraph",
     "Multi-Agent Systems",
     "FastAPI",
@@ -61,7 +63,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Abdelrahman Abouroumia (Romia) | AI & Backend Engineer",
     description:
-      "Abdelrahman Abouroumia (Romia). AI & Backend Engineer and Co-Founder of Zaylon AI. LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
+      "Abdelrahman Abouroumia (Romia). AI & Backend Engineer. Software Engineer at Tutanic and Co-Founder of Zaylon AI. LLM agents, RAG systems, full-stack platforms, and the backends behind them.",
     url: "https://romia.dev",
     siteName: "Abdelrahman Abouroumia - Portfolio",
     locale: "en_US",

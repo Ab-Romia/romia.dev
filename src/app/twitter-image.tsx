@@ -93,7 +93,7 @@ export default async function Image() {
           </span>
           <span style={{ color: "#3F3F46" }}>|</span>
           <span style={{ color: "#71717A", fontSize: "18px" }}>
-            Co-Founder, Zaylon AI
+            Software Engineer at Tutanic &middot; Co-Founder, Zaylon AI
           </span>
         </div>
       </div>

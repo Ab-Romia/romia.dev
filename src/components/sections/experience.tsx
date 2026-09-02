@@ -27,6 +27,7 @@ export function Experience() {
                     <div className="flex items-start gap-3">
                       {(() => {
                         const logoMap: Record<string, { src: string; bg: string }> = {
+                          "Tutanic": { src: "/logos/tutanic.png", bg: "#0C0C0C" },
                           "Zaylon AI": { src: "/logos/zaylon.png", bg: "#1B3A35" },
                           "Ejada": { src: "/logos/ejada.jpg", bg: "#fff" },
                           "Swift-ACT": { src: "/logos/swiftact.jpg", bg: "#fff" },
@@ -89,17 +90,27 @@ export function Experience() {
                   )}
 
                   {/* Highlights */}
-                  <ul className="mt-4 space-y-2.5 max-w-2xl">
-                    {entry.highlights.map((highlight) => (
-                      <li
-                        key={highlight}
-                        className="text-sm text-muted-foreground leading-relaxed flex gap-2.5"
-                      >
-                        <span className="text-accent mt-1 shrink-0 text-xs">&#9656;</span>
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {entry.highlights.length > 0 && (
+                    <ul className="mt-4 space-y-2.5 max-w-2xl">
+                      {entry.highlights.map((highlight) => (
+                        <li
+                          key={highlight}
+                          className="text-sm text-muted-foreground leading-relaxed flex gap-2.5"
+                        >
+                          <span className="text-accent mt-1 shrink-0 text-xs">&#9656;</span>
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* Note: why an entry is deliberately thin. Sits below the
+                      highlights so it reads as a caveat on the whole entry. */}
+                  {"note" in entry && entry.note && (
+                    <p className="text-xs text-muted-foreground/80 mt-4 leading-relaxed max-w-2xl">
+                      {entry.note}
+                    </p>
+                  )}
                 </div>
               </SlideFromLeft>
             );

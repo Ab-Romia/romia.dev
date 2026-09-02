@@ -21,7 +21,7 @@ const personSchema = {
   jobTitle: "AI & Backend Engineer",
   url: "https://romia.dev",
   description:
-    "AI & Backend Engineer and Co-Founder of Zaylon AI. Builds LLM agents, RAG systems, and the full-stack platforms and backends around them.",
+    "AI & Backend Engineer. Software Engineer at Tutanic and Co-Founder of Zaylon AI. Builds LLM agents, RAG systems, and the full-stack platforms and backends around them.",
   sameAs: [
     "https://linkedin.com/in/abdelrahman-abouroumia",
     "https://github.com/Ab-Romia",
@@ -63,11 +63,18 @@ const personSchema = {
     "@type": "EducationalOrganization",
     name: "Alexandria University, Faculty of Engineering",
   },
-  worksFor: {
-    "@type": "Organization",
-    name: "Zaylon AI",
-    url: "https://zaylon.ai",
-  },
+  // Both are current. Tutanic first, newest first, matching the timeline.
+  worksFor: [
+    {
+      "@type": "Organization",
+      name: "Tutanic",
+    },
+    {
+      "@type": "Organization",
+      name: "Zaylon AI",
+      url: "https://zaylon.ai",
+    },
+  ],
   hasOccupation: {
     "@type": "Occupation",
     name: "AI & Backend Engineer",
@@ -82,7 +89,7 @@ const websiteSchema = {
   alternateName: "romia.dev",
   url: "https://romia.dev",
   description:
-    "Portfolio of Abdelrahman Abouroumia (Romia), AI & Backend Engineer and Co-Founder of Zaylon AI.",
+    "Portfolio of Abdelrahman Abouroumia (Romia), AI & Backend Engineer. Software Engineer at Tutanic and Co-Founder of Zaylon AI.",
   author: { "@id": "https://romia.dev/#person" },
 };
 
