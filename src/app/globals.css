@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -8,265 +6,276 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-faint: var(--faint);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-muted: var(--accent-muted);
-  --color-destructive: var(--destructive);
   --color-border: var(--border);
-  --color-input: var(--input);
+  --color-border-strong: var(--border-strong);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-destructive: var(--destructive);
+
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-archivo);
+  --font-mono: var(--font-code);
 }
 
+/* Dark by default: near-black, warm off-white, one electric-blue accent. The
+   light theme is poster paper with a deeper Klein blue. Every text pairing
+   clears WCAG AA (muted-foreground 6.8:1 on dark, 5.9:1 on light; the accent
+   6.3:1 and 6.5:1). `faint` is decoration only, never text a reader needs. */
 :root {
-  --background: #FFFFFF;
-  --foreground: #09090B;
-  --card: #F4F4F5;
-  --card-foreground: #09090B;
-  --popover: #FFFFFF;
-  --popover-foreground: #09090B;
-  --primary: #09090B;
-  --primary-foreground: #FAFAFA;
-  --secondary: #F4F4F5;
-  --secondary-foreground: #09090B;
-  --muted: #F4F4F5;
-  --muted-foreground: #66666E;
-  --accent: #047857;
-  --accent-foreground: #FFFFFF;
-  --accent-muted: #065F46;
-  --destructive: #EF4444;
-  --border: #E4E4E7;
-  --input: #E4E4E7;
-  --ring: #A1A1AA;
-  --radius: 0.5rem;
+  color-scheme: light;
+  --background: #f2f0eb;
+  --foreground: #111111;
+  --card: #faf9f6;
+  --muted: #e8e5de;
+  --muted-foreground: #5f5c55;
+  --faint: #8a867c;
+  --border: #d9d5cc;
+  --border-strong: #b9b4a9;
+  --accent: #1f2bff;
+  --accent-foreground: #ffffff;
+  --accent-muted: #1520cc;
+  --ring: #1f2bff;
+  --destructive: #c4321f;
 }
 
 .dark {
-  --background: #09090B;
-  --foreground: #FAFAFA;
-  --card: #111113;
-  --card-foreground: #FAFAFA;
-  --popover: #111113;
-  --popover-foreground: #FAFAFA;
-  --primary: #FAFAFA;
-  --primary-foreground: #09090B;
-  --secondary: #18181B;
-  --secondary-foreground: #FAFAFA;
-  --muted: #18181B;
-  --muted-foreground: #A1A1AA;
-  --accent: #34D399;
-  --accent-foreground: #052E20;
-  --accent-muted: #10B981;
-  --destructive: #EF4444;
-  --border: #27272A;
-  --input: #27272A;
-  --ring: #3F3F46;
+  color-scheme: dark;
+  --background: #0a0b0d;
+  --foreground: #eceae4;
+  --card: #111214;
+  --muted: #17181b;
+  --muted-foreground: #9a978f;
+  --faint: #5f5d58;
+  --border: #222327;
+  --border-strong: #35373c;
+  --accent: #6b8aff;
+  --accent-foreground: #0a0b0d;
+  --accent-muted: #8aa4ff;
+  --ring: #6b8aff;
+  --destructive: #ff8a75;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-  :focus-visible {
-    @apply outline-2 outline-offset-2 outline-accent;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply scroll-smooth font-sans;
+    -webkit-text-size-adjust: 100%;
   }
-  section[id] {
-    scroll-margin-top: 5rem;
+  body {
+    @apply bg-background text-foreground antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 24%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  [id] {
+    scroll-margin-top: 5.5rem;
   }
 }
 
-.link-underline {
-  position: relative;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease-out;
-}
-.link-underline:hover::after,
-.link-underline:focus-visible::after {
-  transform: scaleX(1);
+/* ── Type ──────────────────────────────────────────────────────────────── */
+
+@utility display-xl {
+  font-family: var(--font-archivo);
+  font-weight: 800;
+  font-stretch: 118%;
+  font-size: clamp(2.1rem, 6vw, 5.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
-.section-divider {
+@utility display-lg {
+  font-family: var(--font-archivo);
+  font-weight: 800;
+  font-stretch: 115%;
+  font-size: clamp(1.7rem, 4vw, 3.3rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+@utility display-md {
+  font-family: var(--font-archivo);
+  font-weight: 700;
+  font-stretch: 110%;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+@utility display-sm {
+  font-family: var(--font-archivo);
+  font-weight: 700;
+  font-stretch: 106%;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* The poster name: set as wide and heavy as the face allows. */
+@utility poster {
+  font-family: var(--font-archivo);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+}
+
+/* Small uppercase label. Mono, so dates and figures line up beneath it. */
+@utility eyebrow {
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* An inline text link: underlined at rest so it reads as a link without
+   colour, and the underline darkens on hover. */
+@utility link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--border-strong);
+  transition:
+    text-decoration-color 0.15s ease,
+    color 0.15s ease;
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* A link that only underlines on hover or keyboard focus: navigation, meta. */
+@utility link-underline {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+  }
+}
+
+@utility section-divider {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--accent) 20%,
-    var(--accent) 80%,
-    transparent
-  );
-  opacity: 0.25;
+  background: var(--border);
 }
 
-.dot-grid-bg {
-  background-image: radial-gradient(circle, rgba(9, 9, 11, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-:is(.dark *) .dot-grid-bg,
-.dark .dot-grid-bg {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-}
+/* ── Motion ────────────────────────────────────────────────────────────── */
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.cursor-blink {
-  animation: blink 0.8s step-end infinite;
-}
-
-/* The Zaylon section used to carry its own emerald palette and background,
-   which read as a separate site. The --z-* names are kept so the section's
-   markup does not have to change, but every one now resolves to the global
-   token, so the section inherits the page's surface, text, and single accent. */
-.zaylon-section {
-  --z-bg: transparent;
-  --z-card: var(--card);
-  --z-primary: var(--border);
-  --z-secondary: var(--accent);
-  --z-tertiary: var(--accent);
-  --z-text: var(--foreground);
-  --z-text-muted: var(--muted-foreground);
-  --z-chip-bg: var(--muted);
-  --z-chip-border: var(--border);
-}
-
-.zaylon-section .z-chip {
-  background: var(--muted);
-  border: 1px solid var(--border);
-  color: var(--foreground);
-}
-
-.zaylon-section .z-chip-tech {
-  background: var(--muted);
-  border: 1px solid var(--border);
-  color: var(--accent);
-  transition: border-color 0.25s ease-out;
-}
-.zaylon-section .z-chip-tech:hover {
-  border-color: color-mix(in oklab, var(--accent) 40%, transparent);
-}
-
-/* Cards here match the solid card + border used by every other section. */
-.zaylon-section .z-glass,
-.zaylon-section .z-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  transition: border-color 0.2s ease-out;
-}
-
-.zaylon-section .z-card {
-  border-radius: 1rem;
-}
-
-.zaylon-section .z-glass:hover,
-.zaylon-section .z-card:hover {
-  border-color: color-mix(in oklab, var(--accent) 40%, transparent);
-}
-
-.zaylon-section .z-gradient-text {
-  color: var(--accent);
-}
-
-/* commentdraft reads as an instrument next to Zaylon's product: hairline rules,
-   mono labels, and a frame that looks like a terminal without dressing up as
-   one. Same tokens and the same single accent as every other section, so this
-   is a change of register rather than a second design language. */
-.cd-gate {
-  background: var(--card);
-  border: 1px solid var(--border);
-}
-
-.dark .cd-gate {
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
-    0 20px 50px -30px rgba(0, 0, 0, 0.8);
-}
-
-/* Orb presentation, matching zaylon.ai: the mask fades the scene into the page
-   so orbiting pills never end on a hard canvas edge, and the drop-shadow is the
-   orb's ambient glow. */
-.brain-orb-mask {
-  -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 75%);
-  mask-image: radial-gradient(circle at center, black 35%, transparent 75%);
-  filter: drop-shadow(0 0 60px rgba(52, 211, 153, 0.18));
-}
-
-/* The stage is a panel only in dark mode, where the orb's additive glow needs
-   something to sit on. In light mode the orb renders straight onto the page. */
-.brain-orb-stage {
-  padding: 1.5rem 1rem;
-}
-
-.dark .brain-orb-stage {
-  background: radial-gradient(
-    120% 120% at 50% 30%,
-    var(--muted) 0%,
-    var(--background) 55%,
-    var(--background) 100%
-  );
-  border: 1px solid var(--border);
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
-    inset 0 0 80px color-mix(in oklab, var(--accent) 6%, transparent),
-    0 24px 60px -24px rgba(0, 0, 0, 0.55);
-}
-
-@media (min-width: 640px) {
-  .brain-orb-stage {
-    padding: 2.5rem 2rem;
+/* One entrance, on page load, for the text under the hero statement. The
+   statement itself never animates: it is the largest paint on the page. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .brain-orb-mask {
-    filter: none;
+.rise {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+}
+
+/* ── Scroll ───────────────────────────────────────────────────────────── */
+
+/* Scroll-driven, CSS only. Where a browser lacks scroll timelines, or the
+   reader asks for less motion, every element simply sits in its final place,
+   so nothing is ever hidden from a reader or a crawler. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* Thin accent bar across the top: how far down the page you are. */
+    .scroll-progress {
+      display: block;
+      transform-origin: left;
+      animation: progress-grow linear both;
+      animation-timeline: scroll(root);
+    }
+
+    /* The poster name settles back as the page moves past it. */
+    .poster-scroll {
+      transform-origin: left bottom;
+      animation: poster-recede linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
+    }
+
+    /* Blocks rise into place as they enter the viewport. */
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+
+    /* Big numbers drift a little slower than the page around them. */
+    .drift {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+
+    /* The hero photo zooms in slightly as it scrolls away. */
+    .photo-zoom {
+      animation: photo-zoom linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
   }
 }
 
+.scroll-progress {
+  display: none;
+}
 
+@keyframes progress-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes poster-recede {
+  to { transform: translateY(-6%) scale(0.94); opacity: 0.35; }
+}
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes drift {
+  from { transform: translateY(28%); }
+  to { transform: translateY(-28%); }
+}
+@keyframes photo-zoom {
+  to { transform: scale(1.08); }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
-

@@ -1,260 +1,183 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  AnimatePresence,
-  m,
-  LayoutGroup,
-  useScroll,
-  useReducedMotion,
-} from "motion/react";
-import { Menu, X, Download } from "lucide-react";
+import { ArrowDownToLine, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS } from "@/data/resume";
+import { NAV_LINKS, PERSONAL } from "@/data/resume";
 import { SOCIAL_LINKS } from "@/components/social-icons";
-import { useScrollDirection } from "@/hooks/use-scroll-direction";
-import { useActiveSection } from "@/hooks/use-active-section";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useActiveSection } from "@/hooks/use-active-section";
+
+// Module scope so the hook sees a stable array and observes once.
+const SECTION_IDS = NAV_LINKS.filter((l) => l.href.startsWith("#")).map((l) =>
+  l.href.slice(1)
+);
+
+/** Hash links resolve against the homepage, so they work from every route. */
+function hrefFor(href: string) {
+  return href.startsWith("#") ? `/${href}` : href;
+}
 
 export function Navbar() {
-  const { direction, isAtTop } = useScrollDirection();
-  const { scrollYProgress } = useScroll();
-  const sectionIds = useMemo(
-    () => NAV_LINKS.map((link) => link.href.replace("#", "")),
-    []
-  );
-  const activeSection = useActiveSection(sectionIds);
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const reduceMotion = useReducedMotion();
-  const hamburgerRef = useRef<HTMLButtonElement>(null);
-  const wasOpen = useRef(false);
-
-  const closeMenu = () => setMobileOpen(false);
+  const activeSection = useActiveSection(SECTION_IDS);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const main = document.getElementById("main-content");
-    if (mobileOpen) {
-      wasOpen.current = true;
-      document.body.style.overflow = "hidden";
-      main?.toggleAttribute("inert", true);
-    } else {
-      document.body.style.overflow = "";
-      main?.toggleAttribute("inert", false);
-      // Restore focus only after the header's inert is gone; focusing an
-      // inert subtree is silently ignored.
-      if (wasOpen.current) {
-        wasOpen.current = false;
-        hamburgerRef.current?.focus();
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        menuButton.current?.focus();
       }
-    }
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenu();
     };
-    if (mobileOpen) window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = "";
-      main?.removeAttribute("inert");
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [mobileOpen]);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const isActive = (href: string) =>
+    href.startsWith("#")
+      ? pathname === "/" && activeSection === href.slice(1)
+      : pathname.startsWith(href);
 
   return (
-    <>
-      {/* Scroll progress bar */}
-      <m.div
-        className="fixed top-0 left-0 right-0 h-0.5 bg-accent z-[60] origin-left"
-        style={{ scaleX: scrollYProgress }}
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200",
+        open
+          ? "border-border bg-background"
+          : scrolled
+            ? "border-border bg-background/85 backdrop-blur-md"
+            : "border-transparent bg-background/0"
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className="scroll-progress absolute inset-x-0 top-0 h-0.5 bg-accent"
       />
-
-      <header
-        inert={mobileOpen}
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 h-16 transition-transform duration-300 motion-reduce:transition-none",
-          direction === "down" && !isAtTop && !mobileOpen
-            ? "-translate-y-full"
-            : "translate-y-0",
-          isAtTop
-            ? "bg-transparent"
-            : "bg-background/80 backdrop-blur-sm border-b border-border"
-        )}
+      <nav
+        aria-label="Main"
+        className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8"
       >
-        <nav className="max-w-5xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
-          <Link
-            href="/#hero"
-            aria-label="Romia home"
-            className="group flex items-center gap-2.5 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" className="size-7 shrink-0">
-              <defs>
-                <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#34D399"/>
-                  <stop offset="100%" stopColor="#10B981"/>
-                </linearGradient>
-              </defs>
-              <rect width="32" height="32" rx="7" fill="#111113" />
-              <path d="M7 11l6 5-6 5" fill="none" stroke="url(#logo-g)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="16" y1="21" x2="25" y2="21" stroke="url(#logo-g)" strokeWidth="2.5" strokeLinecap="round"/>
-            </svg>
-            <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground group-hover:text-accent transition-colors">
-              romia<span className="text-accent">.</span>dev
-            </span>
-          </Link>
+        <Link
+          href="/"
+          className="group flex items-center gap-2.5 rounded-full"
+          aria-label={`${PERSONAL.name}, home`}
+        >
+          <Image
+            src="/avatar.jpg"
+            alt=""
+            width={32}
+            height={32}
+            priority
+            className="size-8 rounded-full object-cover ring-1 ring-border"
+          />
+          {/* The full name wraps on the narrowest phones; the hero repeats it. */}
+          <span className="whitespace-nowrap text-[15px] font-medium tracking-[-0.005em]">
+            <span className="min-[400px]:hidden">{PERSONAL.displayName}</span>
+            <span className="hidden min-[400px]:inline">{PERSONAL.name}</span>
+          </span>
+        </Link>
 
-          {/* Desktop navigation. Breaks at lg rather than md: eight links plus
-              the theme toggle and the resume button do not fit a tablet. */}
-          <div className="hidden lg:flex items-center gap-1">
-            <LayoutGroup>
-              {NAV_LINKS.map((link) => {
-                const isRouteLink = !link.href.startsWith("#");
-                const isActive = isRouteLink
-                  ? pathname.startsWith(link.href)
-                  : pathname === "/" &&
-                    activeSection === link.href.replace("#", "");
-                const Comp = isRouteLink ? Link : "a";
-                const hrefProp = isRouteLink ? link.href : `/${link.href}`;
-                return (
-                  <Comp
-                    key={link.href}
-                    href={hrefProp}
-                    className={cn(
-                      "relative px-3 py-2 text-sm font-medium rounded-lg transition-colors",
-                      isActive
-                        ? "text-accent"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {link.label}
-                    {isActive && (
-                      <m.span
-                        layoutId="nav-underline"
-                        className="absolute -bottom-0.5 left-2 right-2 h-0.5 bg-accent rounded-full"
-                        transition={
-                          reduceMotion
-                            ? { duration: 0 }
-                            : { type: "spring", stiffness: 350, damping: 30 }
-                        }
-                      />
-                    )}
-                  </Comp>
-                );
-              })}
-            </LayoutGroup>
-            <ThemeToggle />
+        <div className="hidden items-center gap-1 lg:flex">
+          <ul className="flex items-center">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={hrefFor(link.href)}
+                  aria-current={isActive(link.href) ? "true" : undefined}
+                  className={cn(
+                    "rounded-md px-3 py-2 text-sm transition-colors",
+                    isActive(link.href)
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ThemeToggle />
+          <a
+            href="/resume.pdf"
+            download
+            className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-border-strong px-3.5 py-1.5 text-sm transition-colors hover:border-foreground"
+          >
+            Résumé
+            <ArrowDownToLine className="size-3.5" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="flex items-center lg:hidden">
+          <ThemeToggle />
+          <button
+            ref={menuButton}
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="-mr-2 p-2.5 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
+      </nav>
+
+      {open && (
+        <div id="mobile-menu" className="border-t border-border lg:hidden">
+          <ul className="mx-auto max-w-6xl px-5 py-3 sm:px-8">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={hrefFor(link.href)}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between border-b border-border py-3.5 display-md"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-5 pb-5 pt-2 sm:px-8">
             <a
               href="/resume.pdf"
               download
-              className="ml-1 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border-strong px-4 py-2 text-sm"
             >
-              <Download className="size-4" />
-              Resume
+              Résumé
+              <ArrowDownToLine className="size-3.5" aria-hidden="true" />
             </a>
-          </div>
-
-          {/* Mobile controls */}
-          <div className="lg:hidden flex items-center gap-1">
-            <ThemeToggle className="p-3.5" />
-            <button
-              ref={hamburgerRef}
-              onClick={() => setMobileOpen(true)}
-              className="p-3 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Open menu"
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-menu"
-            >
-              <Menu className="size-5" />
-            </button>
-          </div>
-        </nav>
-      </header>
-
-      {/* Mobile menu overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <m.div
-            id="mobile-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation menu"
-            initial={reduceMotion ? { opacity: 0 } : { x: "100%" }}
-            animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { x: "100%" }}
-            transition={
-              reduceMotion
-                ? { duration: 0.1 }
-                : { type: "spring", damping: 25, stiffness: 200 }
-            }
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md lg:hidden flex flex-col"
-          >
-            <div className="flex items-center justify-between h-16 px-6 shrink-0">
-              <span className="text-sm font-mono tracking-[0.15em] uppercase text-foreground">
-                romia<span className="text-accent">.</span>dev
-              </span>
-              <button
-                onClick={closeMenu}
-                className="p-3 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Close menu"
-                autoFocus
-              >
-                <X className="size-5" />
-              </button>
+            <div className="flex items-center">
+              {SOCIAL_LINKS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target={s.href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="p-2.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <s.Icon className="size-[18px]" aria-hidden="true" />
+                </a>
+              ))}
             </div>
-
-            <nav className="flex-1 flex flex-col items-center justify-center gap-6 overflow-y-auto overscroll-contain px-6 py-8">
-              {NAV_LINKS.map((link) => {
-                const isRouteLink = !link.href.startsWith("#");
-                const isActive = isRouteLink
-                  ? pathname.startsWith(link.href)
-                  : pathname === "/" &&
-                    activeSection === link.href.replace("#", "");
-                const Comp = isRouteLink ? Link : "a";
-                const hrefProp = isRouteLink ? link.href : `/${link.href}`;
-                return (
-                  <Comp
-                    key={link.href}
-                    href={hrefProp}
-                    onClick={closeMenu}
-                    className={cn(
-                      "text-2xl font-medium transition-colors",
-                      isActive
-                        ? "text-accent"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {link.label}
-                  </Comp>
-                );
-              })}
-              <a
-                href="/resume.pdf"
-                download
-                onClick={closeMenu}
-                className="inline-flex items-center gap-2 px-6 py-3 text-base font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-colors mt-4"
-              >
-                <Download className="size-5" />
-                Download Resume
-              </a>
-              <div className="flex items-center justify-center gap-2 mt-8">
-                {SOCIAL_LINKS.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={link.label}
-                    onClick={() => setMobileOpen(false)}
-                    className="p-3 text-muted-foreground hover:text-accent transition-colors"
-                  >
-                    <link.Icon className="size-5" aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-            </nav>
-          </m.div>
-        )}
-      </AnimatePresence>
-    </>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }

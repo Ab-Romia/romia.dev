@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { BLOG_POSTS, getPostBySlug, type ContentBlock } from "@/data/blog";
 import { PROJECTS } from "@/data/resume";
-import { FadeUp } from "@/components/motion-wrapper";
 import { DemoEmbed } from "@/components/demo-embed";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
+import { BackLink } from "@/components/case-study";
+import { formatDate } from "@/lib/utils";
 
 export async function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({ slug: post.slug }));
@@ -36,13 +36,6 @@ export async function generateMetadata({
   };
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 const slugify = (s: string) =>
   s
@@ -70,7 +63,7 @@ function renderMd(md: string): ReactNode[] {
         <a
           key={key++}
           href={href}
-          className="link-underline text-accent hover:text-accent-muted transition-colors"
+          className="link text-accent"
           {...(external
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
@@ -82,7 +75,7 @@ function renderMd(md: string): ReactNode[] {
       nodes.push(
         <code
           key={key++}
-          className="font-mono text-sm bg-muted text-foreground px-1.5 py-0.5 rounded"
+          className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em] text-foreground"
         >
           {m[3]}
         </code>
@@ -108,36 +101,32 @@ function Block({ block }: { block: ContentBlock }) {
   switch (block.type) {
     case "h2":
       return (
-        <h2
-          id={slugify(block.text)}
-          className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12"
-        >
+        <h2 id={slugify(block.text)} className="display-md mt-16">
           {block.text}
         </h2>
       );
     case "p":
       return (
-        <p className="text-muted-foreground leading-relaxed mt-5">
-          {renderMd(block.md)}
-        </p>
+        <p className="mt-5 text-[17px] leading-[1.75] text-foreground/90">{renderMd(block.md)}</p>
       );
     case "code":
       return (
-        <pre className="mt-5 overflow-x-auto rounded-lg border border-border bg-card p-4">
-          <code className="font-mono text-sm leading-relaxed text-foreground">
-            {block.code}
-          </code>
+        <pre className="mt-6 overflow-x-auto rounded-md border border-border bg-card p-4">
+          <code className="font-mono text-[13px] leading-relaxed text-foreground">{block.code}</code>
         </pre>
       );
     case "table":
       return (
         <figure className="mt-8">
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm border-collapse min-w-[640px]">
+          <div className="overflow-x-auto border-y border-border-strong">
+            <table className="w-full min-w-[640px] border-collapse text-sm">
               <thead>
-                <tr className="bg-muted/60 text-left">
+                <tr className="text-left">
                   {block.headers.map((h) => (
-                    <th key={h} className="font-semibold text-foreground px-4 py-3 whitespace-nowrap">
+                    <th
+                      key={h}
+                      className="whitespace-nowrap px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground"
+                    >
                       {h}
                     </th>
                   ))}
@@ -149,15 +138,23 @@ function Block({ block }: { block: ContentBlock }) {
                   return (
                     <tr
                       key={r}
-                      className={highlight ? "border-t border-border bg-accent/5" : "border-t border-border"}
+                      className={
+                        highlight
+                          ? "border-t border-border bg-accent/[0.07]"
+                          : "border-t border-border"
+                      }
                     >
                       {row.map((cell, c) => (
                         <td
                           key={c}
                           className={
-                            "px-4 py-3 " +
-                            (c === 1 ? "text-muted-foreground font-mono text-xs" : "font-mono ") +
-                            (highlight && c !== 1 ? "text-accent font-semibold" : c === 0 ? "text-foreground" : "text-muted-foreground")
+                            "px-3 py-3 " +
+                            (c === 1 ? "font-mono text-xs " : "font-mono ") +
+                            (highlight && c !== 1
+                              ? "font-medium text-accent"
+                              : c === 0
+                                ? "text-foreground"
+                                : "text-muted-foreground")
                           }
                         >
                           {cell}
@@ -170,7 +167,7 @@ function Block({ block }: { block: ContentBlock }) {
             </table>
           </div>
           {block.caption ? (
-            <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
+            <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
               {block.caption}
             </figcaption>
           ) : null}
@@ -178,31 +175,34 @@ function Block({ block }: { block: ContentBlock }) {
       );
     case "ul":
       return (
-        <ul className="mt-5 space-y-2">
+        <ul className="mt-5 space-y-2.5">
           {block.items.map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-2.5 text-muted-foreground leading-relaxed"
+              className="relative pl-5 text-[17px] leading-[1.75] text-foreground/90 before:absolute before:left-0 before:top-[0.85em] before:h-px before:w-2.5 before:bg-border-strong"
             >
-              <span className="size-1.5 rounded-full bg-accent shrink-0 mt-2.5" />
-              <span>{renderMd(item)}</span>
+              {renderMd(item)}
             </li>
           ))}
         </ul>
       );
     case "figure":
+      // The SVG diagrams are drawn light-on-dark and the PNG charts dark-on-white,
+      // so each sits on the plate it was drawn for, whatever the page theme.
       return (
-        <figure className="mt-8">
-          <div className="overflow-x-auto rounded-lg border border-border bg-card">
+        <figure className="mt-10">
+          <div
+            className={
+              block.src.endsWith(".svg")
+                ? "overflow-x-auto rounded-md border border-[#2a2925] bg-[#161613]"
+                : "overflow-x-auto rounded-md border border-border bg-white"
+            }
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={block.src}
-              alt={block.alt}
-              className="w-full min-w-[640px] p-4 md:p-6"
-            />
+            <img src={block.src} alt={block.alt} className="w-full min-w-[640px] p-4 md:p-6" />
           </div>
           {block.caption ? (
-            <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
+            <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
               {block.caption}
             </figcaption>
           ) : null}
@@ -210,13 +210,9 @@ function Block({ block }: { block: ContentBlock }) {
       );
     case "callout":
       return (
-        <aside className="mt-6 rounded-lg border border-accent/30 bg-accent/5 p-5">
-          {block.title ? (
-            <p className="text-sm font-semibold text-accent">{block.title}</p>
-          ) : null}
-          <p className="text-sm text-muted-foreground leading-relaxed mt-1.5">
-            {renderMd(block.md)}
-          </p>
+        <aside className="mt-8 border-l-2 border-accent pl-5">
+          {block.title ? <p className="font-medium">{block.title}</p> : null}
+          <p className="mt-1.5 text-[16px] leading-[1.7] text-muted-foreground">{renderMd(block.md)}</p>
         </aside>
       );
   }
@@ -262,104 +258,72 @@ export default async function BlogPostPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
       />
       <Navbar />
-      <main id="main-content" className="min-h-screen pt-24 pb-16">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <FadeUp>
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-            >
-              <ArrowLeft className="size-4" />
-              Back to Blog
-            </Link>
-          </FadeUp>
+      <main id="main-content" className="pb-24 pt-28 md:pt-36">
+        <article className="mx-auto max-w-6xl px-5 sm:px-8">
+          <BackLink href="/blog">All writing</BackLink>
 
-          <FadeUp delay={0.1}>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-muted-foreground mb-4">
-              <time dateTime={post.date}>{formatDate(post.date)}</time>
-              <span className="size-1 rounded-full bg-border" />
-              <span>{post.readingMinutes} min read</span>
-            </div>
-
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-              {post.title}
-            </h1>
-            <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
+          <header className="mt-10 max-w-4xl">
+            <p className="eyebrow">
+              <time dateTime={post.date}>{formatDate(post.date, "long")}</time>
+              <span className="mx-2" aria-hidden="true">·</span>
+              {post.readingMinutes} min read
+            </p>
+            <h1 className="display-lg mt-5">{post.title}</h1>
+            <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted-foreground md:text-xl md:leading-relaxed">
               {post.description}
             </p>
+            <p className="mt-6 font-mono text-xs text-muted-foreground">{post.tags.join("  ·  ")}</p>
+          </header>
 
-            <div className="flex flex-wrap gap-2 mt-6">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs font-mono bg-muted text-muted-foreground px-2.5 py-1 rounded"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
+          <div className="mt-14 grid gap-12 border-t border-border pt-12 lg:grid-cols-12 lg:gap-8">
             {headings.length > 1 && (
-              <details className="mt-6 rounded-lg border border-border bg-card/50">
-                <summary className="cursor-pointer px-4 py-3 text-sm font-mono text-muted-foreground">
-                  Contents
-                </summary>
-                <nav className="px-4 pb-3">
-                  <ul className="space-y-1.5">
-                    {headings.map((h) => (
-                      <li key={h.id}>
-                        <a
-                          href={`#${h.id}`}
-                          className="link-underline text-sm text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {h.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              </details>
+              <nav aria-label="Contents" className="hidden lg:col-span-3 lg:block">
+                <p className="eyebrow">Contents</p>
+                <ul className="sticky top-28 mt-4 space-y-2.5 text-sm">
+                  {headings.map((h) => (
+                    <li key={h.id}>
+                      <a
+                        href={`#${h.id}`}
+                        className="link-underline leading-snug text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             )}
-          </FadeUp>
 
-          <div className="section-divider mt-10 mb-2" />
+            <div className="min-w-0 lg:col-span-8 lg:col-start-5 [&>*:first-child]:mt-0">
+              {post.body.map((block, i) => (
+                <Block key={i} block={block} />
+              ))}
 
-          {/* Render the body directly. A single scroll-reveal wrapper around the
-              whole article cannot reliably cross its visibility threshold on a long
-              page, which left the post body invisible. */}
-          <article>
-            {post.body.map((block, i) => (
-              <Block key={i} block={block} />
-            ))}
-          </article>
+              {embed?.type === "iframe" && embed.src && (
+                <section>
+                  <h2 id="try-it" className="display-md mt-16">
+                    Try it
+                  </h2>
+                  <p className="mt-5 text-[17px] leading-[1.75] text-foreground/90">
+                    The live demo runs in your browser. It may take a few seconds to wake up.
+                  </p>
+                  <div className="mt-8">
+                    <DemoEmbed src={embed.src} title={`${demoProject!.title} demo`} />
+                  </div>
+                </section>
+              )}
+            </div>
+          </div>
 
-          {embed?.type === "iframe" && embed.src && (
-            <section>
-              <h2
-                id="try-it"
-                className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12"
-              >
-                Try it
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mt-3">
-                The live demo runs in your browser. It may take a few seconds to wake up.
-              </p>
-              <div className="mt-6">
-                <DemoEmbed src={embed.src} title={`${demoProject!.title} demo`} />
-              </div>
-            </section>
-          )}
-
-          <div className="section-divider mt-12 mb-8" />
-
-          <Link
-            href="/blog"
-            className="group inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Blog
-          </Link>
-        </div>
+          <div className="mt-24 border-t border-border pt-8">
+            <Link href="/blog" className="group">
+              <span className="eyebrow">Back to</span>
+              <span className="display-sm mt-2 block decoration-1 underline-offset-[0.2em] group-hover:underline">
+                All writing
+              </span>
+            </Link>
+          </div>
+        </article>
       </main>
       <Footer />
     </>

@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 /**
  * What the tool decided on one real run, read out of the run's own CSV.
  *
- * A single emerald carries all three states: solid for the replies it wrote,
- * half-strength for the ones it handed to a person, and the plain border for
- * the ones it left alone. Static, so there is nothing to operate: the point is
- * the judgement, and that most of what arrives gets no draft.
+ * The accent carries all three states: solid for the replies it wrote, hollow
+ * for the ones it handed to a person, and grey for the ones it left alone.
+ * Static, so there is nothing to operate: the point is the judgement, and that
+ * most of what arrives gets no draft.
  */
 
 /* Filled means a draft was written, hollow means it was handed to a person,
@@ -28,11 +28,9 @@ export function CommentdraftTriage() {
   const { label, total, counts, samples, closing, provenance } = COMMENTDRAFT_TRIAGE;
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
-      <p className="text-xs font-mono uppercase tracking-[0.16em] text-muted-foreground">
-        {label}
-        <span className="mx-2 text-border">/</span>
-        {total} comments
+    <div className="rounded-lg border border-border bg-card p-5 sm:p-7">
+      <p className="eyebrow">
+        {label}, {total} comments
       </p>
 
       {/* One bar, split by what the run decided */}
@@ -64,9 +62,7 @@ export function CommentdraftTriage() {
               aria-hidden="true"
             />
             <div className="min-w-0">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                {s.decision}
-              </p>
+              <p className="eyebrow">{s.decision}</p>
               <p className="text-sm text-foreground mt-1 leading-relaxed">
                 &ldquo;{s.comment}&rdquo;
               </p>
@@ -78,7 +74,7 @@ export function CommentdraftTriage() {
         ))}
       </div>
 
-      <p className="mt-5 border-t border-border pt-4 text-sm text-foreground">{closing}</p>
+      <p className="mt-6 border-t border-border pt-4 text-sm text-foreground">{closing}</p>
       <p className="mt-2 font-mono text-[11px] text-muted-foreground leading-relaxed">
         {provenance}
       </p>

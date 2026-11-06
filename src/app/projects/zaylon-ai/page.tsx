@@ -1,1071 +1,245 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowUpRight,
-  ArrowRight,
-  Check,
-  X,
-  Link2,
-  Settings,
-  Rocket,
-  BarChart3,
-  Bot,
-  Languages,
-  Eye,
-  ShoppingCart,
-  MessageSquare,
-  CreditCard,
-  LayoutDashboard,
-  Sparkles,
-  Globe,
-  Clock,
-  DollarSign,
-  Headphones,
-  Package,
-  type LucideIcon,
-} from "lucide-react";
-import { FadeUp, BlurIn } from "@/components/motion-wrapper";
+import type { ReactNode } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
-import { ZaylonBrainOrbLazy } from "@/components/zaylon-brain-orb-wrapper";
-import { getAdjacentProjects } from "@/data/resume";
+import { BackLink, ProjectPager } from "@/components/case-study";
+import { ZaylonTopology } from "@/components/figures/zaylon-topology";
+import { ZAYLON_SHOWCASE, getAdjacentProjects, getProjectBySlug } from "@/data/resume";
 
 export const metadata: Metadata = {
   title: "Zaylon AI: Conversational Commerce",
   description:
-    "Case study of Zaylon AI, a conversational commerce platform I co-founded that turns WhatsApp, Instagram, and Messenger into full sales channels for MENA merchants.",
+    "Case study of Zaylon AI, the conversational commerce platform Abdelrahman Abouroumia co-founded: one LangGraph agent that sells over WhatsApp and Instagram for MENA merchants, in English, Egyptian Arabic and Franco-Arabic.",
   openGraph: {
     title: "Zaylon AI | Case Study by Abdelrahman Abouroumia",
     description:
-      "Conversational commerce platform for MENA merchants. Co-founded and built across 6 e-commerce platforms, 5 messaging channels, and 3 dialects.",
+      "Conversational commerce for MENA merchants: one LangGraph agent, three dialects, six commerce platforms and five messaging channels.",
   },
   alternates: { canonical: "/projects/zaylon-ai" },
 };
 
-function SectionEyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="text-xs font-semibold uppercase tracking-[0.18em] mb-3"
-      style={{ color: "var(--z-tertiary)" }}
-    >
-      {children}
-    </p>
-  );
-}
+const DIALECTS = [
+  { lang: "English", sample: "Hi, is the M size back in stock?" },
+  { lang: "Egyptian Arabic", sample: "السلام عليكم، مقاس الميديوم متوفر؟", rtl: true },
+  { lang: "Franco-Arabic", sample: "salam, el medium raga3 el stock?" },
+];
 
-function SectionTitle({
-  id,
-  children,
-}: {
-  id?: string;
-  children: React.ReactNode;
-}) {
+const INTEGRATIONS = [
+  { group: "Messaging", items: "WhatsApp, Instagram, Messenger, TikTok, web chat" },
+  { group: "Commerce", items: "Shopify, Salla, WooCommerce, Odoo, YouCan, Zoho" },
+  { group: "Payments", items: "Stripe, Paymob, Fawry" },
+  { group: "Shipping", items: "Bosta, Aramex" },
+];
+
+const ROLE = [
+  "Conversational AI architecture and the LangGraph agent",
+  "FastAPI application, services, and API surface",
+  "Database schema, migrations, and multi-tenant isolation",
+  "Hybrid product search: keyword and vector retrieval with rank fusion",
+  "Tri-lingual NLP for English, Egyptian Arabic, and Franco-Arabic",
+  "Proactive engine that spots sales opportunities in a conversation",
+  "Auth, permissions, plan entitlements, and tenant security",
+  "Deployment, CI, and observability for the backend",
+];
+
+const SECTIONS = [
+  { id: "problem", label: "The problem" },
+  { id: "dialects", label: "Three dialects" },
+  { id: "approach", label: "Approach" },
+  { id: "decisions", label: "Decisions" },
+  { id: "capabilities", label: "What it does" },
+  { id: "integrations", label: "Integrations" },
+  { id: "role", label: "My role" },
+  { id: "results", label: "Where it stands" },
+];
+
+function Heading({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <h2
-      id={id}
-      className="scroll-mt-24 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]"
-      style={{ color: "var(--z-text)" }}
-    >
+    <h2 id={id} className="display-md mt-16 first:mt-0">
       {children}
     </h2>
   );
 }
 
-function SectionLead({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="text-base md:text-lg leading-relaxed mt-4 max-w-3xl"
-      style={{ color: "var(--z-text-muted)" }}
-    >
-      {children}
-    </p>
-  );
+function Prose({ children }: { children: ReactNode }) {
+  return <p className="mt-5 text-[17px] leading-[1.75] text-foreground/90">{children}</p>;
 }
 
-function Stat({
-  value,
-  label,
-  sublabel,
-}: {
-  value: string;
-  label: string;
-  sublabel?: string;
-}) {
+function DashList({ items, className }: { items: readonly string[]; className?: string }) {
   return (
-    <div className="flex flex-col">
-      <p className="text-3xl md:text-4xl font-bold z-gradient-text leading-none">{value}</p>
-      <p
-        className="text-xs font-mono uppercase tracking-wider mt-3"
-        style={{ color: "var(--z-text-muted)" }}
-      >
-        {label}
-      </p>
-      {sublabel && (
-        <p className="text-xs mt-1" style={{ color: "var(--z-text-muted)" }}>
-          {sublabel}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function FeatureCard({
-  Icon,
-  title,
-  body,
-}: {
-  Icon: LucideIcon;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="group relative z-card p-5 sm:p-6 rounded-2xl overflow-hidden h-full">
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
-        style={{
-          background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--accent) 6%, transparent), transparent)",
-        }}
-        aria-hidden="true"
-      />
-      <div className="relative">
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
-          style={{
-            background: "color-mix(in oklab, var(--accent) 12%, transparent)",
-          }}
+    <ul className={className}>
+      {items.map((item) => (
+        <li
+          key={item}
+          className="relative pl-5 text-[16px] leading-[1.7] text-foreground/90 before:absolute before:left-0 before:top-[0.8em] before:h-px before:w-2.5 before:bg-border-strong"
         >
-          <Icon className="w-5 h-5" style={{ color: "var(--z-tertiary)" }} />
-        </div>
-        <h3 className="text-base font-semibold mb-1.5" style={{ color: "var(--z-text)" }}>
-          {title}
-        </h3>
-        <p className="text-sm leading-relaxed" style={{ color: "var(--z-text-muted)" }}>
-          {body}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function StepCard({
-  step,
-  Icon,
-  title,
-  body,
-}: {
-  step: string;
-  Icon: LucideIcon;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="relative group">
-      <div className="flex justify-center mb-5">
-        <div
-          className="relative w-14 h-14 rounded-full flex items-center justify-center z-10 transition-colors"
-          style={{
-            background: "var(--z-card)",
-            border: "2px solid color-mix(in oklab, var(--accent) 35%, transparent)",
-          }}
-        >
-          <div
-            className="absolute inset-1.5 rounded-full animate-pulse"
-            style={{ background: "color-mix(in oklab, var(--accent) 40%, transparent)" }}
-            aria-hidden="true"
-          />
-          <Icon className="relative z-10 w-5 h-5" style={{ color: "var(--z-tertiary)" }} />
-        </div>
-      </div>
-      <div
-        className="z-card rounded-xl p-4 group-hover:-translate-y-0.5 transition-transform duration-300"
-      >
-        <span
-          className="text-[10px] font-mono font-bold tracking-widest"
-          style={{ color: "var(--z-tertiary)" }}
-        >
-          STEP {step}
-        </span>
-        <h3 className="text-lg font-semibold mt-1 mb-1.5" style={{ color: "var(--z-text)" }}>
-          {title}
-        </h3>
-        <p className="text-sm leading-relaxed" style={{ color: "var(--z-text-muted)" }}>
-          {body}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function IntegrationChip({ label }: { label: string }) {
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
-      style={{
-        background: "var(--muted)",
-        border: "1px solid var(--border)",
-        color: "var(--z-text)",
-      }}
-    >
-      <span
-        className="w-1.5 h-1.5 rounded-full"
-        style={{ background: "var(--z-tertiary)" }}
-        aria-hidden="true"
-      />
-      {label}
-    </span>
-  );
-}
-
-function DashboardMockup() {
-  return (
-    <div className="z-card relative rounded-2xl overflow-hidden">
-      <div
-        className="flex items-center gap-2 px-4 py-3"
-        style={{ borderBottom: "1px solid var(--border)" }}
-      >
-        <div className="flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-        </div>
-        <span
-          className="text-[10px] font-mono ml-2"
-          style={{ color: "var(--z-text-muted)" }}
-        >
-          zaylon.ai
-        </span>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-0">
-        <div
-          className="p-4 hidden sm:block"
-          style={{ borderRight: "1px solid var(--border)" }}
-        >
-          {[
-            { label: "Overview", items: ["Dashboard", "Inbox"] },
-            { label: "Commerce", items: ["Products", "Orders", "Recovery"] },
-            { label: "Engagement", items: ["Customers", "Leads", "Campaigns"] },
-            { label: "Intelligence", items: ["Feedback", "A/B Testing", "Insights"] },
-          ].map((group) => (
-            <div key={group.label} className="mb-3">
-              <p
-                className="text-[9px] font-mono uppercase tracking-wider mb-1.5"
-                style={{ color: "var(--z-text-muted)" }}
-              >
-                {group.label}
-              </p>
-              {group.items.map((item, idx) => (
-                <div
-                  key={item}
-                  className="text-[11px] py-1 px-2 rounded"
-                  style={{
-                    background:
-                      idx === 0 && group.label === "Overview" ? "var(--border)" : "transparent",
-                    color:
-                      idx === 0 && group.label === "Overview"
-                        ? "var(--z-tertiary)"
-                        : "var(--z-text-muted)",
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-
-        <div className="p-4 sm:p-5">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
-            {[
-              { label: "Threads today", value: "1,284", trend: "+12%" },
-              { label: "AI resolved", value: "87%", trend: "+3pp" },
-              { label: "Avg response", value: "4.2s", trend: "-0.8s" },
-              { label: "Revenue via chat", value: "$14.6k", trend: "+24%" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-lg p-2.5"
-                style={{
-                  background: "var(--z-primary)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                <p className="text-base sm:text-lg font-bold z-gradient-text leading-none">
-                  {stat.value}
-                </p>
-                <p className="text-[10px] mt-1.5" style={{ color: "var(--z-text-muted)" }}>
-                  {stat.label}
-                </p>
-                <p className="text-[9px] font-mono mt-0.5" style={{ color: "var(--z-tertiary)" }}>
-                  {stat.trend}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div
-            className="rounded-lg p-3"
-            style={{ background: "var(--z-primary)", border: "1px solid var(--border)" }}
-          >
-            <div className="flex items-center justify-between mb-2.5">
-              <p className="text-xs font-semibold" style={{ color: "var(--z-text)" }}>
-                Live inbox
-              </p>
-              <span
-                className="text-[9px] font-mono inline-flex items-center gap-1"
-                style={{ color: "var(--z-tertiary)" }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
-                3 active
-              </span>
-            </div>
-            <div className="space-y-1.5">
-              {[
-                { who: "Hala M.", via: "WhatsApp", msg: "كام سعر المقاس M؟", state: "AI replying" },
-                { who: "Omar S.", via: "Instagram", msg: "هل عندكم توصيل للإسكندرية؟", state: "Resolved" },
-                { who: "Nour A.", via: "Messenger", msg: "Order #1248 status?", state: "Human assigned" },
-              ].map((row) => (
-                <div
-                  key={row.who}
-                  className="flex items-center justify-between gap-2 py-1.5 px-2 rounded"
-                  style={{ background: "var(--border)" }}
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[9px] font-bold"
-                      style={{
-                        background: "color-mix(in oklab, var(--accent) 35%, transparent)",
-                        color: "var(--z-text)",
-                      }}
-                    >
-                      {row.who
-                        .split(" ")
-                        .map((p) => p[0])
-                        .join("")}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-medium truncate" style={{ color: "var(--z-text)" }}>
-                        {row.who}{" "}
-                        <span className="font-mono" style={{ color: "var(--z-text-muted)" }}>
-                          &middot; {row.via}
-                        </span>
-                      </p>
-                      <p className="text-[10px] truncate" style={{ color: "var(--z-text-muted)" }}>
-                        {row.msg}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className="text-[9px] font-mono whitespace-nowrap"
-                    style={{ color: "var(--z-tertiary)" }}
-                  >
-                    {row.state}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <p
-        className="text-[10px] font-mono px-4 py-2 text-center"
-        style={{
-          color: "var(--z-text-muted)",
-          borderTop: "1px solid var(--border)",
-        }}
-      >
-        Representative illustration, not measured results.
-      </p>
-    </div>
+          {item}
+        </li>
+      ))}
+    </ul>
   );
 }
 
 export default function ZaylonCaseStudyPage() {
+  const project = getProjectBySlug("zaylon-ai")!;
+  const cs = project.caseStudy;
   const { prev, next } = getAdjacentProjects("zaylon-ai");
 
   return (
     <>
       <Navbar />
-      <main id="main-content" className="zaylon-section relative overflow-hidden">
-        <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-28 pb-20 z-10">
-          {/* Back link */}
-          <FadeUp>
-            <Link
-              href="/#projects"
-              className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-              style={{ color: "var(--z-text-muted)" }}
-            >
-              <ArrowLeft className="size-4" />
-              Back to projects
-            </Link>
-          </FadeUp>
+      <main id="main-content" className="pb-24 pt-28 md:pt-36">
+        <article className="mx-auto max-w-6xl px-5 sm:px-8">
+          <BackLink href="/#projects">All work</BackLink>
 
-          {/* ───── Hero ───── */}
-          <section className="mt-10 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
-            <div>
-              <BlurIn>
-                <span
-                  className="inline-flex items-center gap-2 z-glass rounded-full px-4 py-2 text-xs font-mono uppercase tracking-[0.15em]"
-                  style={{ color: "var(--z-tertiary)" }}
-                >
-                  <span
-                    className="size-2 rounded-full"
-                    style={{ background: "var(--z-secondary)" }}
-                  />
-                  Pre-launch &middot; Co-Founded
-                </span>
-              </BlurIn>
-
-              <FadeUp delay={0.1}>
-                <h1
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mt-5"
-                  style={{ color: "var(--z-text)" }}
-                >
-                  <span className="z-gradient-text">Zaylon AI</span>
-                </h1>
-                <p
-                  className="text-xl md:text-2xl mt-3 font-medium"
-                  style={{ color: "var(--z-text)" }}
-                >
-                  An AI sales team for WhatsApp, Instagram, and Messenger
-                </p>
-                <p
-                  className="text-base md:text-lg leading-relaxed mt-5 max-w-xl"
-                  style={{ color: "var(--z-text-muted)" }}
-                >
-                  A conversational commerce platform I co-founded that replies to MENA customers
-                  in Egyptian Arabic, Franco, or English, and closes the order without ever
-                  leaving the chat.
-                </p>
-              </FadeUp>
-
-              <FadeUp delay={0.2}>
-                <div className="flex flex-wrap items-center gap-3 mt-7">
-                  <a
-                    href="https://zaylon.ai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
-                  >
-                    Visit zaylon.ai
-                    <ArrowUpRight className="size-4" />
-                  </a>
-                </div>
-              </FadeUp>
-            </div>
-
-            {/* Orb */}
-            <FadeUp delay={0.15}>
-              <div className="brain-orb-stage relative rounded-3xl overflow-hidden">
-                <div
-                  dir="ltr"
-                  className="brain-orb-mask relative mx-auto aspect-square w-[min(70vw,300px)] sm:w-[min(48vw,340px)] lg:w-[min(30vw,380px)]"
-                >
-                  <ZaylonBrainOrbLazy />
-                </div>
-              </div>
-            </FadeUp>
-          </section>
-
-          {/* ───── Stat strip ───── */}
-          <FadeUp delay={0.2}>
-            <div
-              className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 pt-8"
-              style={{ borderTop: "1px solid var(--border)" }}
-            >
-              <Stat value="24/7" label="Always online" sublabel="Never misses a message" />
-              <Stat value="<5s" label="Reply target" sublabel="Designed for, on every channel" />
-              <Stat value="6" label="Platforms" sublabel="Shopify, Salla, Odoo, more" />
-              <Stat value="3" label="Dialects" sublabel="English, Arabic, Franco" />
-            </div>
-          </FadeUp>
-
-          {/* ───── The problem ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>The problem</SectionEyebrow>
-              <SectionTitle id="problem">
-                MENA customers shop in chat,{" "}
-                <span className="z-gradient-text">and chat never sleeps</span>
-              </SectionTitle>
-              <SectionLead>
-                In the Gulf and Egypt, customers open WhatsApp before they open a website. But
-                generic chatbots fail at Egyptian Arabic and Franco, can&apos;t take payments, and
-                push customers to an external checkout they abandon. The shops that do well pay
-                humans to cover the inbox around the clock, and still lose conversations while
-                they sleep.
-              </SectionLead>
-            </FadeUp>
-          </section>
-
-          {/* How it works: 4 step flow */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>How it works</SectionEyebrow>
-              <SectionTitle id="how-it-works">
-                From connected store to first sale in{" "}
-                <span className="z-gradient-text">one afternoon</span>
-              </SectionTitle>
-            </FadeUp>
-
-            <div className="mt-12 relative">
-              {/* Horizontal connector on desktop */}
-              <div
-                className="hidden lg:block absolute top-7 left-0 right-0 h-px"
-                aria-hidden="true"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--accent) 40%, transparent) 15%, color-mix(in oklab, var(--accent) 40%, transparent) 85%, transparent 100%)",
-                }}
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-                <FadeUp delay={0.05}>
-                  <StepCard
-                    step="01"
-                    Icon={Link2}
-                    title="Connect"
-                    body="The merchant links a Shopify, Salla, WooCommerce, Odoo, YouCan, or Zoho store and the messaging channels their customers already use."
-                  />
-                </FadeUp>
-                <FadeUp delay={0.1}>
-                  <StepCard
-                    step="02"
-                    Icon={Settings}
-                    title="Configure"
-                    body="Tone, policies, and payment gateways are set once. The AI picks up the catalog automatically and learns the product details."
-                  />
-                </FadeUp>
-                <FadeUp delay={0.15}>
-                  <StepCard
-                    step="03"
-                    Icon={Rocket}
-                    title="Launch"
-                    body="Go live in minutes. The AI handles customer questions in English, Egyptian Arabic, and Franco, and closes orders inside the chat."
-                  />
-                </FadeUp>
-                <FadeUp delay={0.2}>
-                  <StepCard
-                    step="04"
-                    Icon={BarChart3}
-                    title="Grow"
-                    body="Revenue attributed to chat, in one dashboard: what&apos;s working, what&apos;s converting, and where to nudge."
-                  />
-                </FadeUp>
-              </div>
-            </div>
-          </section>
-
-          {/* ───── What it does ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>What it does</SectionEyebrow>
-              <SectionTitle id="what-it-does">
-                A full sales team,{" "}
-                <span className="z-gradient-text">packaged into a chat window</span>
-              </SectionTitle>
-              <SectionLead>
-                Zaylon works as a product advisor, a support rep, and a cashier in one
-                conversation, so the customer never has to repeat themselves.
-              </SectionLead>
-            </FadeUp>
-
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                {
-                  Icon: Bot,
-                  title: "Product advisor",
-                  body: "Answers spec questions, shows variants, recommends what pairs with what, and remembers the customer's preferences between conversations.",
-                },
-                {
-                  Icon: Languages,
-                  title: "Dialect-aware replies",
-                  body: "Replies in the customer's own dialect, whether they wrote in English, Egyptian Arabic, or Franco-Arabic. Voice notes too.",
-                },
-                {
-                  Icon: Eye,
-                  title: "Visual search",
-                  body: "A customer sends a photo of the product they want. Zaylon matches it against your catalog and offers the closest in-stock items.",
-                },
-                {
-                  Icon: ShoppingCart,
-                  title: "Cart and checkout",
-                  body: "Builds the cart, collects shipping details, charges the card, and drops a tracking number, all inside the same conversation.",
-                },
-                {
-                  Icon: CreditCard,
-                  title: "Every MENA payment",
-                  body: "Stripe for cards, Paymob and Fawry for MENA, mobile wallets, cash on delivery. The customer picks what they trust.",
-                },
-                {
-                  Icon: Headphones,
-                  title: "Human handover",
-                  body: "When a conversation needs a human, it escalates cleanly with full context. Your team takes over without the customer noticing.",
-                },
-              ].map((f) => (
-                <FadeUp key={f.title} delay={0.05}>
-                  <FeatureCard Icon={f.Icon} title={f.title} body={f.body} />
-                </FadeUp>
-              ))}
-            </div>
-          </section>
-
-          {/* ───── Before / After ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>Before and after</SectionEyebrow>
-              <SectionTitle id="before-after">
-                What changes when{" "}
-                <span className="z-gradient-text">Zaylon turns on</span>
-              </SectionTitle>
-            </FadeUp>
-
-            <FadeUp delay={0.1}>
-              <div className="relative mt-10">
-                <div
-                  className="absolute -inset-2 rounded-3xl blur-2xl"
-                  aria-hidden="true"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, var(--border), color-mix(in oklab, var(--accent) 35%, transparent), var(--border))",
-                  }}
-                />
-                <div
-                  className="relative z-card rounded-2xl overflow-hidden"
-                  style={{ borderColor: "var(--border)" }}
-                >
-                  <div className="hidden sm:grid grid-cols-2">
-                    <div
-                      className="p-4 md:p-5"
-                      style={{ borderBottom: "1px solid var(--border)" }}
-                    >
-                      <span className="text-sm font-medium" style={{ color: "var(--z-text-muted)" }}>
-                        Without Zaylon
-                      </span>
-                    </div>
-                    <div
-                      className="p-4 md:p-5"
-                      style={{
-                        borderBottom: "1px solid var(--border)",
-                        background: "var(--border)",
-                      }}
-                    >
-                      <span
-                        className="text-sm font-semibold"
-                        style={{ color: "var(--z-tertiary)" }}
-                      >
-                        With Zaylon
-                      </span>
-                    </div>
-                  </div>
-
-                  {[
-                    {
-                      before: "Customers wait hours for a reply, or don’t get one after midnight",
-                      after: "Every message answered in seconds, 24/7, in the customer’s dialect",
-                    },
-                    {
-                      before: "Team juggles WhatsApp, Instagram, Messenger, and web chat in separate apps",
-                      after: "One inbox, one conversation history, one customer record across all channels",
-                    },
-                    {
-                      before: "Orders closed by sending a link to a checkout page the customer abandons",
-                      after: "Orders closed inside the chat with the payment method the customer prefers",
-                    },
-                    {
-                      before: "No clear picture of what chat is actually contributing to revenue",
-                      after: "Revenue attributed by channel, by customer, by campaign, by agent action",
-                    },
-                  ].map((row, idx, arr) => (
-                    <div
-                      key={row.before}
-                      className="grid grid-cols-1 sm:grid-cols-2"
-                      style={{
-                        borderBottom:
-                          idx < arr.length - 1 ? "1px solid var(--border)" : undefined,
-                      }}
-                    >
-                      <div
-                        className="p-4 md:p-5 text-sm leading-relaxed flex items-start gap-2"
-                        style={{ color: "var(--z-text-muted)" }}
-                      >
-                        <X className="size-4 shrink-0 mt-0.5 text-red-500/70" aria-hidden="true" />
-                        <span>{row.before}</span>
-                      </div>
-                      <div
-                        className="p-4 md:p-5 text-sm leading-relaxed flex items-start gap-2"
-                        style={{
-                          color: "var(--z-text)",
-                          background: "var(--border)",
-                        }}
-                      >
-                        <Check
-                          className="size-4 shrink-0 mt-0.5 text-emerald-500 dark:text-emerald-400"
-                          aria-hidden="true"
-                        />
-                        <span>{row.after}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </FadeUp>
-          </section>
-
-          {/* ───── Dialects ───── */}
-          <section className="mt-24">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 items-center">
-              <FadeUp>
-                <SectionEyebrow>Built for MENA</SectionEyebrow>
-                <SectionTitle id="dialects">
-                  Three dialects,{" "}
-                  <span className="z-gradient-text">one conversation</span>
-                </SectionTitle>
-                <SectionLead>
-                  Egyptian customers rarely write in Modern Standard Arabic. They mix dialect,
-                  Franco-Arabic, and English, sometimes all in one sentence. Zaylon picks up the
-                  dominant language in every turn and replies in the same register.
-                </SectionLead>
-              </FadeUp>
-
-              <FadeUp delay={0.1}>
-                <div className="space-y-3">
-                  {[
-                    { lang: "English", sample: "Hi, is the M size back in stock?" },
-                    { lang: "Egyptian Arabic", sample: "السلام عليكم، مقاس الميديوم متوفر؟" },
-                    { lang: "Franco-Arabic", sample: "salam, el medium raga3 el stock?" },
-                  ].map((row) => (
-                    <div
-                      key={row.lang}
-                      className="z-card rounded-xl p-4"
-                    >
-                      <p
-                        className="text-[10px] font-mono uppercase tracking-wider mb-1.5"
-                        style={{ color: "var(--z-tertiary)" }}
-                      >
-                        {row.lang}
-                      </p>
-                      <p className="text-base" style={{ color: "var(--z-text)" }}>
-                        {row.sample}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </FadeUp>
-            </div>
-          </section>
-
-          {/* ───── Works with your stack ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <div className="text-center">
-                <SectionEyebrow>Works with your stack</SectionEyebrow>
-                <h2
-                  className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]"
-                  style={{ color: "var(--z-text)" }}
-                >
-                  Built to plug into the{" "}
-                  <span className="z-gradient-text">MENA commerce stack</span>
-                </h2>
-                <p
-                  className="text-base md:text-lg leading-relaxed mt-4 max-w-2xl mx-auto"
-                  style={{ color: "var(--z-text-muted)" }}
-                >
-                  Every merchant&apos;s stack is different. Zaylon meets it where it is.
-                </p>
-              </div>
-            </FadeUp>
-
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {[
-                {
-                  Icon: MessageSquare,
-                  title: "Messaging",
-                  items: ["WhatsApp", "Instagram", "Messenger", "TikTok", "Web chat"],
-                },
-                {
-                  Icon: Package,
-                  title: "E-commerce",
-                  items: ["Shopify", "Salla", "WooCommerce", "Odoo", "YouCan", "Zoho"],
-                },
-                {
-                  Icon: CreditCard,
-                  title: "Payments",
-                  items: ["Stripe", "Paymob", "Fawry", "Mobile wallets", "COD"],
-                },
-                {
-                  Icon: Globe,
-                  title: "Shipping",
-                  items: ["Bosta", "Aramex", "Custom providers"],
-                },
-              ].map((group) => (
-                <FadeUp key={group.title} delay={0.05}>
-                  <div className="z-card rounded-2xl p-5 h-full">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div
-                        className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                        style={{
-                          background:
-                            "color-mix(in oklab, var(--accent) 12%, transparent)",
-                        }}
-                      >
-                        <group.Icon className="w-4 h-4" style={{ color: "var(--z-tertiary)" }} />
-                      </div>
-                      <h3 className="text-base font-semibold" style={{ color: "var(--z-text)" }}>
-                        {group.title}
-                      </h3>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {group.items.map((item) => (
-                        <IntegrationChip key={item} label={item} />
-                      ))}
-                    </div>
-                  </div>
-                </FadeUp>
-              ))}
-            </div>
-          </section>
-
-          {/* ───── Dashboard ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>The control room</SectionEyebrow>
-              <SectionTitle id="dashboard">
-                A merchant dashboard that{" "}
-                <span className="z-gradient-text">speaks Arabic first</span>
-              </SectionTitle>
-              <SectionLead>
-                Live inbox, revenue analytics, customer segments, campaign tools, and a proactive
-                action queue. Bilingual from day one, Arabic default with full RTL, English
-                one click away.
-              </SectionLead>
-            </FadeUp>
-
-            <FadeUp delay={0.1}>
-              <div className="mt-10">
-                <DashboardMockup />
-              </div>
-            </FadeUp>
-
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                {
-                  Icon: MessageSquare,
-                  title: "Unified inbox",
-                  body: "WhatsApp, Instagram, Messenger, TikTok, and web chat in one view, with human takeover and canned replies.",
-                },
-                {
-                  Icon: BarChart3,
-                  title: "Revenue attribution",
-                  body: "See exactly what chat contributes to revenue, by channel, campaign, customer segment, and agent action.",
-                },
-                {
-                  Icon: Sparkles,
-                  title: "Proactive suggestions",
-                  body: "The platform watches for patterns and suggests the right nudge at the right time, queued for the merchant's approval.",
-                },
-              ].map((f) => (
-                <FadeUp key={f.title} delay={0.05}>
-                  <FeatureCard Icon={f.Icon} title={f.title} body={f.body} />
-                </FadeUp>
-              ))}
-            </div>
-          </section>
-
-          {/* ───── Why it matters ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>Why it matters</SectionEyebrow>
-              <SectionTitle id="why-it-matters">
-                Four outcomes,{" "}
-                <span className="z-gradient-text">designed in from day one</span>
-              </SectionTitle>
-            </FadeUp>
-
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                {
-                  Icon: DollarSign,
-                  title: "Lower cost per conversation",
-                  body: "One platform replaces a shift of human agents on low-intent messages, and assists them on high-intent ones.",
-                },
-                {
-                  Icon: Sparkles,
-                  title: "More capacity, no hiring",
-                  body: "Built to handle 10x the inbound volume without 10x the headcount, so campaigns can scale without scaling the inbox team.",
-                },
-                {
-                  Icon: Clock,
-                  title: "Replies in seconds",
-                  body: "Designed for a first reply under five seconds on every channel, at every hour, in every dialect the customer writes in.",
-                },
-                {
-                  Icon: LayoutDashboard,
-                  title: "Learn as you go",
-                  body: "Every conversation becomes data. See what customers actually ask, what converts, and what to fix in the catalog.",
-                },
-              ].map((f) => (
-                <FadeUp key={f.title} delay={0.05}>
-                  <FeatureCard Icon={f.Icon} title={f.title} body={f.body} />
-                </FadeUp>
-              ))}
-            </div>
-          </section>
-
-          {/* ───── My role ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <SectionEyebrow>My role</SectionEyebrow>
-              <SectionTitle id="role">
-                Co-founder and{" "}
-                <span className="z-gradient-text">backend engineering lead</span>
-              </SectionTitle>
-              <SectionLead>
-                I co-founded Zaylon and built its AI system and backend. I designed the
-                conversational architecture, implemented the LangGraph agent that runs it, built the
-                tri-lingual NLP, and wrote the FastAPI application, its database layer, and the
-                multi-tenant security around it.
-              </SectionLead>
-            </FadeUp>
-
-            <FadeUp delay={0.1}>
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  "Conversational AI architecture and the LangGraph agent",
-                  "FastAPI application, services, and API surface",
-                  "Database schema, migrations, and multi-tenant isolation",
-                  "Hybrid product search: keyword + vector retrieval with rank fusion",
-                  "Tri-lingual NLP pipeline for English, Arabic, and Franco",
-                  "Proactive engine that detects sales opportunities in chat",
-                  "Auth, permissions, plan entitlements, and tenant security",
-                  "Deployment, CI, and observability for the backend",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-start gap-2.5 rounded-lg px-3 py-2.5"
-                    style={{
-                      background: "var(--muted)",
-                      border: "1px solid var(--border)",
-                    }}
-                  >
-                    <Check
-                      className="size-4 shrink-0 mt-0.5 text-emerald-500 dark:text-emerald-400"
-                      aria-hidden="true"
-                    />
-                    <span className="text-sm leading-relaxed" style={{ color: "var(--z-text)" }}>
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </FadeUp>
-
-            <FadeUp delay={0.15}>
-              <p
-                className="text-xs font-mono uppercase tracking-wider mt-8 mb-3"
-                style={{ color: "var(--z-text-muted)" }}
-              >
-                Backend stack
+          <header className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-8">
+            <div className="lg:col-span-8">
+              <p className="eyebrow flex flex-wrap gap-x-3">
+                <span>Co-founder</span>
+                <span>{project.year}</span>
+                <span>{project.status}</span>
               </p>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  "Python",
-                  "FastAPI",
-                  "LangGraph",
-                  "LangChain",
-                  "PostgreSQL",
-                  "pgvector",
-                  "Redis",
-                  "Supabase",
-                  "Docker",
-                  "Alembic",
-                  "Pytest",
-                ].map((tech) => (
-                  <span
-                    key={tech}
-                    className="text-xs font-mono px-3 py-1.5 rounded-full"
-                    style={{
-                      background: "var(--muted)",
-                      color: "var(--z-tertiary)",
-                      border: "1px solid var(--border)",
-                    }}
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </FadeUp>
-          </section>
+              <h1 className="display-xl mt-5">Zaylon AI</h1>
+              <p className="mt-5 text-2xl font-medium leading-snug md:text-[1.75rem]">
+                {ZAYLON_SHOWCASE.subtitle}.
+              </p>
+              <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-muted-foreground">
+                {ZAYLON_SHOWCASE.description}
+              </p>
+            </div>
 
-          {/* ───── CTAs ───── */}
-          <section className="mt-24">
-            <FadeUp>
-              <div
-                className="z-card rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
-                style={{
-                  background:
-                    "color-mix(in oklab, var(--accent) 12%, transparent)",
-                }}
-              >
-                <div>
-                  <h2
-                    className="text-2xl md:text-3xl font-bold tracking-tight"
-                    style={{ color: "var(--z-text)" }}
-                  >
-                    See it for yourself
-                  </h2>
-                  <p className="text-sm mt-2" style={{ color: "var(--z-text-muted)" }}>
-                    Take a look at the product site.
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <dl className="space-y-5 self-end text-[15px] lg:col-span-3 lg:col-start-10">
+              <div className="border-t border-border pt-4">
+                <dt className="eyebrow">Built</dt>
+                <dd className="mt-2 leading-relaxed">The AI system and the backend behind it</dd>
+              </div>
+              <div className="border-t border-border pt-4">
+                <dt className="eyebrow">Stack</dt>
+                <dd className="mt-2 leading-relaxed">{ZAYLON_SHOWCASE.techStack.join(", ")}</dd>
+              </div>
+              <div className="border-t border-border pt-4">
+                <dt className="eyebrow">Product</dt>
+                <dd className="mt-2">
                   <a
-                    href="https://zaylon.ai"
+                    href={ZAYLON_SHOWCASE.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
+                    className="inline-flex items-center gap-1 transition-colors hover:text-accent"
                   >
-                    Visit zaylon.ai
-                    <ArrowUpRight className="size-4" />
+                    <span className="link-underline">zaylon.ai</span>
+                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
                   </a>
-                </div>
+                </dd>
               </div>
-            </FadeUp>
+            </dl>
+          </header>
 
-            {/* Prev / next */}
-            <div
-              className="mt-12 pt-8 flex items-center justify-between"
-              style={{ borderTop: "1px solid var(--border)" }}
-            >
-              {prev ? (
-                <Link
-                  href={`/projects/${prev.slug}`}
-                  className="group flex min-w-0 items-center gap-2 text-sm transition-opacity hover:opacity-75"
-                  style={{ color: "var(--z-text-muted)" }}
-                >
-                  <ArrowLeft className="size-4 shrink-0 group-hover:-translate-x-1 transition-transform" />
-                  <span className="truncate">{prev.title}</span>
-                </Link>
-              ) : (
-                <div />
-              )}
-              {next ? (
-                <Link
-                  href={`/projects/${next.slug}`}
-                  className="group flex min-w-0 items-center gap-2 text-sm transition-opacity hover:opacity-75"
-                  style={{ color: "var(--z-text-muted)" }}
-                >
-                  <span className="truncate">{next.title}</span>
-                  <ArrowRight className="size-4 shrink-0 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              ) : (
-                <div />
-              )}
+          <div className="mt-14">
+            <ZaylonTopology />
+          </div>
+
+          <div className="mt-16 grid gap-12 border-t border-border pt-14 lg:grid-cols-12 lg:gap-8">
+            <nav aria-label="On this page" className="hidden lg:col-span-3 lg:block">
+              <ul className="sticky top-28 space-y-2 text-sm">
+                {SECTIONS.map((s) => (
+                  <li key={s.id}>
+                    <a
+                      href={`#${s.id}`}
+                      className="link-underline text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="min-w-0 lg:col-span-8 lg:col-start-5">
+              <Heading id="problem">The problem</Heading>
+              <Prose>{cs.problem}</Prose>
+
+              <Heading id="dialects">Three dialects, one conversation</Heading>
+              <Prose>
+                Egyptian customers rarely write in Modern Standard Arabic. They mix dialect,
+                Franco-Arabic, and English, sometimes in one sentence. Zaylon detects the dominant
+                language on every turn and replies in the same register, so the same question can
+                arrive three ways and get the same answer back in the way it was asked.
+              </Prose>
+              <dl className="mt-8 border-t border-border">
+                {DIALECTS.map((d) => (
+                  <div
+                    key={d.lang}
+                    className="grid gap-x-6 gap-y-1 border-b border-border py-4 sm:grid-cols-[10rem_1fr]"
+                  >
+                    <dt className="eyebrow pt-1">{d.lang}</dt>
+                    <dd
+                      lang={d.rtl ? "ar" : undefined}
+                      dir={d.rtl ? "rtl" : undefined}
+                      className="text-lg sm:text-left"
+                    >
+                      {d.sample}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <Heading id="approach">Approach</Heading>
+              <Prose>{cs.approach}</Prose>
+
+              <Heading id="decisions">Decisions</Heading>
+              <ol className="mt-8 border-t border-border">
+                {cs.decisions?.map((d, i) => (
+                  <li
+                    key={d.title}
+                    className="grid gap-x-5 gap-y-2 border-b border-border py-8 sm:grid-cols-[2.5rem_1fr]"
+                  >
+                    <span className="pt-1 font-mono text-xs text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3 className="display-sm">{d.title}</h3>
+                      <p className="mt-3 text-[16px] leading-[1.75] text-foreground/85">{d.reasoning}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <Heading id="capabilities">What it does</Heading>
+              <DashList items={ZAYLON_SHOWCASE.features} className="mt-6 space-y-3" />
+
+              <Heading id="integrations">Integrations</Heading>
+              <Prose>
+                Every merchant&apos;s stack is different, so the agent works through the systems a
+                merchant already runs rather than asking them to move.
+              </Prose>
+              <dl className="mt-8 border-t border-border">
+                {INTEGRATIONS.map((g) => (
+                  <div
+                    key={g.group}
+                    className="grid gap-x-6 gap-y-1 border-b border-border py-4 sm:grid-cols-[10rem_1fr]"
+                  >
+                    <dt className="eyebrow pt-0.5">{g.group}</dt>
+                    <dd className="text-[16px] leading-relaxed">{g.items}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <Heading id="role">My role</Heading>
+              <Prose>
+                I co-founded Zaylon and built its AI system and backend: the conversational
+                architecture, the LangGraph agent that runs it, the tri-lingual NLP, and the FastAPI
+                application with its database layer and the multi-tenant security around it.
+              </Prose>
+              <DashList items={ROLE} className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2" />
+
+              <Heading id="results">Where it stands</Heading>
+              <Prose>{cs.results}</Prose>
             </div>
-          </section>
-        </div>
+          </div>
+
+          <ProjectPager prev={prev} next={next} />
+        </article>
       </main>
       <Footer />
     </>

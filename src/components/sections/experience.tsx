@@ -1,121 +1,106 @@
-"use client";
-
 import Image from "next/image";
 import { EXPERIENCE } from "@/data/resume";
-import { SlideFromLeft, BlurIn } from "@/components/motion-wrapper";
+import { Section, SectionHeader } from "@/components/section";
 
+const LOGOS: Record<string, { src: string; bg: string }> = {
+  Tutanic: { src: "/logos/tutanic.png", bg: "#0C0C0C" },
+  "Zaylon AI": { src: "/logos/zaylon.png", bg: "#1B3A35" },
+  Ejada: { src: "/logos/ejada.jpg", bg: "#FFFFFF" },
+  "Swift-ACT": { src: "/logos/swiftact.jpg", bg: "#FFFFFF" },
+};
+
+function Logo({ company }: { company: string }) {
+  const logo = LOGOS[company];
+  if (!logo) {
+    return (
+      <span
+        aria-hidden="true"
+        className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-muted font-display text-lg"
+      >
+        {company[0]}
+      </span>
+    );
+  }
+  return (
+    <span
+      aria-hidden="true"
+      className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md ring-1 ring-border"
+      style={{ background: logo.bg }}
+    >
+      <Image src={logo.src} alt="" width={24} height={24} className="object-contain" />
+    </span>
+  );
+}
 
 export function Experience() {
   return (
-    <section id="experience" className="py-20 md:py-28">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <BlurIn>
-          <h2 className="text-3xl font-bold tracking-tight leading-tight">
-            Experience
-          </h2>
-        </BlurIn>
+    <Section id="experience">
+      <SectionHeader index="03" title="Experience" />
 
-        <div className="mt-8 space-y-6">
-          {EXPERIENCE.map((entry, i) => {
-            const isCurrent = entry.period.includes("Present");
+      <ol className="mt-12 border-t border-border md:mt-16">
+        {EXPERIENCE.map((entry) => (
+          <li
+            key={entry.company}
+            className="reveal grid gap-x-8 gap-y-4 border-b border-border py-9 md:grid-cols-12"
+          >
+            <p className="font-mono text-xs leading-6 text-muted-foreground md:col-span-3">
+              {entry.period}
+            </p>
 
-            return (
-              <SlideFromLeft key={entry.company} delay={i * 0.08}>
-                <div className="group relative border border-border rounded-lg p-6 bg-card transition-colors duration-200 hover:border-accent/40">
-                  {/* Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                    <div className="flex items-start gap-3">
-                      {(() => {
-                        const logoMap: Record<string, { src: string; bg: string }> = {
-                          "Tutanic": { src: "/logos/tutanic.png", bg: "#0C0C0C" },
-                          "Zaylon AI": { src: "/logos/zaylon.png", bg: "#1B3A35" },
-                          "Ejada": { src: "/logos/ejada.jpg", bg: "#fff" },
-                          "Swift-ACT": { src: "/logos/swiftact.jpg", bg: "#fff" },
-                        };
-                        const logo = logoMap[entry.company];
-                        if (logo) {
-                          return (
-                            <div className="size-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center" style={{ background: logo.bg }}>
-                              <Image src={logo.src} alt="" width={28} height={28} className="object-contain" />
-                            </div>
-                          );
-                        }
-                        return (
-                          <div className="size-10 rounded-lg flex items-center justify-center shrink-0 bg-accent/10">
-                            <span className="text-accent text-sm font-bold">&gt;</span>
-                          </div>
-                        );
-                      })()}
-                      <div>
-                        <h3 className="text-lg font-semibold leading-snug">
-                          {entry.role}
-                          {/* What the work is, beside the role rather than the
-                              company. Employment type stays on the company line. */}
-                          {"focus" in entry && entry.focus && (
-                            <span className="text-muted-foreground font-normal">
-                              , {entry.focus}
-                            </span>
-                          )}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-0.5">
-                          {"url" in entry && entry.url ? (
-                            <a
-                              href={entry.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-accent transition-colors link-underline inline-block py-2 -my-2"
-                            >
-                              {entry.company}
-                            </a>
-                          ) : (
-                            <span>{entry.company}</span>
-                          )}
-                          {"type" in entry && entry.type && (
-                            <span className="text-muted-foreground"> · {entry.type}</span>
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 sm:mt-1">
-                      <span className="text-xs text-muted-foreground font-mono">
-                        {entry.period}
-                      </span>
-                      {isCurrent && (
-                        <span className="text-[10px] font-mono text-green-800 dark:text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/30 flex items-center gap-1">
-                          <span className="size-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
-                          Current
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  {"description" in entry && entry.description && (
-                    <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-2xl">
-                      {entry.description}
-                    </p>
-                  )}
-
-                  {/* Highlights */}
-                  {entry.highlights.length > 0 && (
-                    <ul className="mt-4 space-y-2.5 max-w-2xl">
-                      {entry.highlights.map((highlight) => (
-                        <li
-                          key={highlight}
-                          className="text-sm text-muted-foreground leading-relaxed flex gap-2.5"
-                        >
-                          <span className="text-accent mt-1 shrink-0 text-xs">&#9656;</span>
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+            <div className="md:col-span-9">
+              <div className="flex items-start gap-3.5">
+                <Logo company={entry.company} />
+                <div>
+                  <h3 className="text-lg font-medium leading-snug">
+                    {entry.role}
+                    {"focus" in entry && entry.focus && (
+                      <span className="font-normal text-muted-foreground">, {entry.focus}</span>
+                    )}
+                  </h3>
+                  <p className="text-[15px] text-muted-foreground">
+                    {"url" in entry && entry.url ? (
+                      <a
+                        href={entry.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-underline transition-colors hover:text-foreground"
+                      >
+                        {entry.company}
+                      </a>
+                    ) : (
+                      entry.company
+                    )}
+                    {"type" in entry && entry.type && <span> · {entry.type}</span>}
+                  </p>
                 </div>
-              </SlideFromLeft>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+              </div>
+
+              <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">
+                {entry.description}
+              </p>
+
+              {"stack" in entry && entry.stack && (
+                <p className="mt-4 max-w-2xl font-mono text-xs leading-relaxed text-muted-foreground">
+                  {entry.stack.join("  ·  ")}
+                </p>
+              )}
+
+              {entry.highlights.length > 0 && (
+                <ul className="mt-5 max-w-2xl space-y-2.5">
+                  {entry.highlights.map((h) => (
+                    <li
+                      key={h}
+                      className="relative pl-5 text-[15px] leading-relaxed text-muted-foreground before:absolute before:left-0 before:top-[0.8em] before:h-px before:w-2.5 before:bg-border-strong"
+                    >
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
   );
 }

@@ -1,19 +1,17 @@
-import { ImageResponse } from "next/og";
-import { getPostBySlug } from "@/data/blog";
-import { ogCard, OG_SIZE } from "@/app/og-card";
+import { BLOG_POSTS, getPostBySlug } from "@/data/blog";
+import { ogImage, OG_SIZE } from "@/app/og-card";
 
-export const runtime = "edge";
-export const alt = "Abdelrahman Abouroumia (Romia)";
+export const alt = "Writing by Abdelrahman Abouroumia (Romia)";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
-export default async function Image({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+// One card per post, drawn at build time.
+export function generateStaticParams() {
+  return BLOG_POSTS.map((post) => ({ slug: post.slug }));
+}
+
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
-  const title = post?.title ?? "Abdelrahman Abouroumia (Romia)";
-  return new ImageResponse(ogCard(title), { ...OG_SIZE });
+  return ogImage({ eyebrow: "Writing", title: post?.title ?? "Abdelrahman Abouroumia (Romia)" });
 }

@@ -2,18 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  ArrowLeft,
   ArrowRight,
+  ArrowUpRight,
   Upload,
   FileCog,
   Layers,
   ListFilter,
   Quote,
-  BookOpen,
 } from "lucide-react";
-import { FadeUp, BlurIn } from "@/components/motion-wrapper";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
+import { BackLink, ProjectPager } from "@/components/case-study";
 import { getAdjacentProjects } from "@/data/resume";
 
 export const metadata: Metadata = {
@@ -39,7 +38,7 @@ function GitHubIcon({ className }: { className?: string }) {
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs font-mono uppercase tracking-[0.18em] text-accent mb-3">
+    <p className="eyebrow mb-4">
       {children}
     </p>
   );
@@ -47,13 +46,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">{children}</h2>
+    <h2 className="display-md">{children}</h2>
   );
 }
 
 function Lead({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-base md:text-lg text-muted-foreground leading-relaxed mt-4 max-w-3xl">
+    <p className="mt-5 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl md:leading-relaxed">
       {children}
     </p>
   );
@@ -61,7 +60,7 @@ function Lead({ children }: { children: React.ReactNode }) {
 
 function Body({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-base text-muted-foreground leading-relaxed mt-4 max-w-3xl">
+    <p className="mt-5 max-w-3xl text-[17px] leading-[1.75] text-foreground/90">
       {children}
     </p>
   );
@@ -84,7 +83,7 @@ function Shot({
 }) {
   return (
     <figure className="mt-8">
-      <div className="rounded-xl border border-border overflow-hidden bg-card">
+      <div className="overflow-hidden rounded-md bg-card ring-1 ring-border">
         <Image
           src={src}
           alt={alt}
@@ -95,7 +94,7 @@ function Shot({
           className="w-full h-auto"
         />
       </div>
-      <figcaption className="mt-3 text-center text-xs font-mono text-muted-foreground">
+      <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
         {caption}
       </figcaption>
     </figure>
@@ -222,89 +221,67 @@ export default function TalosCaseStudyPage() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          {/* Back link */}
-          <FadeUp>
-            <Link
-              href="/#projects"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-            >
-              <ArrowLeft className="size-4" />
-              Back to projects
-            </Link>
-          </FadeUp>
+      <main id="main-content" className="pb-24 pt-28 md:pt-36">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8 [&>*]:max-w-4xl">
+          <BackLink href="/#projects">All work</BackLink>
 
-          {/* Hero */}
-          <FadeUp delay={0.1}>
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded border bg-muted text-muted-foreground border-border">
-                Completed
-              </span>
-              <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
-                Graduation project, 2026
-              </span>
-              <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
-                AI/ML
-              </span>
-              <span className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
-                Backend
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Talos</h1>
-            <p className="text-lg md:text-xl text-foreground mt-3 font-medium">
+          <header className="mt-10">
+            <p className="eyebrow flex flex-wrap gap-x-3">
+              <span>Graduation project, team</span>
+              <span>2025–26</span>
+              <span>Completed, A+</span>
+            </p>
+            <h1 className="display-xl mt-5">Talos</h1>
+            <p className="mt-5 text-2xl font-medium leading-snug md:text-[1.75rem]">
               A team chat platform whose assistant answers from your own documents, with citations.
             </p>
-            <p className="text-base text-muted-foreground mt-4 leading-relaxed max-w-3xl">
+            <p className="mt-5 max-w-3xl text-lg leading-relaxed text-muted-foreground">
               Talos is workspaces, channels, DMs, and threaded messaging with an in-channel
               assistant that retrieves, reranks, and answers from a team&apos;s uploaded files.
               It was our graduation project. I owned the AI, retrieval, and evaluation track, and
               the one thing I&apos;m proudest of is that the retrieval isn&apos;t asserted to work.
               I measured it.
             </p>
-          </FadeUp>
 
-          {/* Tags + role note + source */}
-          <FadeUp delay={0.15}>
-            <div className="flex flex-wrap gap-2 mt-6">
-              {["FastAPI", "Python 3.13", "LangChain", "Milvus", "MinIO", "taskiq / Redis", "HTTP streaming"].map(
-                (tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs font-mono bg-muted text-muted-foreground px-2.5 py-1 rounded"
+            <dl className="mt-10 grid gap-6 border-t border-border pt-6 text-[15px] sm:grid-cols-3">
+              <div>
+                <dt className="eyebrow">My track</dt>
+                <dd className="mt-2 leading-relaxed">
+                  The assistant: ingestion, retrieval, and the evaluation that proved the fix.
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow">Stack</dt>
+                <dd className="mt-2 leading-relaxed">
+                  FastAPI, Python 3.13, LangChain, Milvus, MinIO, taskiq with Redis, HTTP streaming
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow">Links</dt>
+                <dd className="mt-2 space-y-1">
+                  <a
+                    href="https://github.com/Ab-Romia/talos"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 transition-colors hover:text-accent"
                   >
-                    {tag}
-                  </span>
-                )
-              )}
-            </div>
-            <p className="text-sm text-accent font-mono mt-4 flex items-start gap-2">
-              <span className="size-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
-              My track: retrieval-augmented assistant, ingestion and retrieval, and the evaluation
-              that proved the fix.
-            </p>
-
-            <div className="flex flex-wrap gap-4 mt-5">
-              <a
-                href="https://github.com/Ab-Romia/talos"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <GitHubIcon className="size-4" /> Source Code
-              </a>
-              <Link
-                href="/blog/talos-rag-retrieval-evaluation"
-                className="inline-flex items-center gap-1.5 text-sm text-accent hover:text-accent-muted transition-colors"
-              >
-                <BookOpen className="size-4" /> Read the write-up
-              </Link>
-            </div>
-          </FadeUp>
+                    <span className="link-underline">Source on GitHub</span>
+                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                  </a>
+                  <Link
+                    href="/blog/talos-rag-retrieval-evaluation"
+                    className="flex items-center gap-1 transition-colors hover:text-accent"
+                  >
+                    <span className="link-underline">Read the write-up</span>
+                    <ArrowRight className="size-3.5" aria-hidden="true" />
+                  </Link>
+                </dd>
+              </div>
+            </dl>
+          </header>
 
           {/* Hero shot */}
-          <FadeUp delay={0.2}>
+          <div>
             <Shot
               src="/projects/talos/01-chat-ai-answer.png"
               alt="A team channel where a user asks the Talos assistant how it decides which document chunks to use, and it replies with a grounded answer citing its sources."
@@ -313,16 +290,16 @@ export default function TalosCaseStudyPage() {
               height={1371}
               priority
             />
-          </FadeUp>
+          </div>
 
-          <div className="section-divider mt-14 mb-14" />
+          <div className="section-divider my-16" />
 
           {/* The problem */}
           <section>
-            <BlurIn>
+            <div>
               <Eyebrow>The problem</Eyebrow>
               <H2>A team&apos;s real knowledge lives in its own files</H2>
-            </BlurIn>
+            </div>
             <Body>
               A general chatbot is useless for a specific team, because the answers it needs are in
               that team&apos;s own documents, not in the model&apos;s training data. We wanted the
@@ -335,10 +312,10 @@ export default function TalosCaseStudyPage() {
 
           {/* What we built */}
           <section className="mt-16">
-            <BlurIn>
+            <div>
               <Eyebrow>What we built</Eyebrow>
               <H2>A chat platform, with a grounded assistant inside it</H2>
-            </BlurIn>
+            </div>
             <Lead>
               The platform is the usual team surface: workspaces, channels, direct messages, group
               chats, threads, and mentions that turn into notifications. Sign-in runs over passwords,
@@ -388,36 +365,33 @@ export default function TalosCaseStudyPage() {
 
           {/* How it works */}
           <section className="mt-16">
-            <BlurIn>
+            <div>
               <Eyebrow>How it works</Eyebrow>
               <H2>Upload, process, retrieve, rerank, answer</H2>
-            </BlurIn>
+            </div>
             <Lead>
               A file goes in once and gets processed out of band. A question runs through two
               retrieval stages before the model ever sees it. Here is the whole path.
             </Lead>
 
-            {/* Pipeline diagram */}
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {/* The pipeline, one stage per row */}
+            <ol className="mt-10 border-t border-border">
               {PIPELINE.map((step, i) => (
-                <FadeUp key={step.title} delay={0.05 * i}>
-                  <div className="relative h-full bg-card border border-border rounded-xl p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-accent/10 border border-accent/20 shrink-0">
-                        <step.Icon className="w-4 h-4 text-accent" />
-                      </div>
-                      <span className="text-[10px] font-mono text-muted-foreground">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <h3 className="text-sm font-semibold text-foreground">{step.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed mt-1.5">
-                      {step.body}
-                    </p>
-                  </div>
-                </FadeUp>
+                <li
+                  key={step.title}
+                  className="grid gap-x-5 gap-y-1.5 border-b border-border py-5 sm:grid-cols-[2.5rem_8rem_1fr]"
+                >
+                  <span className="pt-1 font-mono text-xs text-muted-foreground">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="flex items-center gap-2 font-medium">
+                    <step.Icon className="size-4 text-accent" aria-hidden="true" />
+                    {step.title}
+                  </h3>
+                  <p className="text-[15px] leading-relaxed text-muted-foreground">{step.body}</p>
+                </li>
               ))}
-            </div>
+            </ol>
 
             <Body>
               Processing is asynchronous on purpose. The upload endpoint returns immediately and a
@@ -439,10 +413,10 @@ export default function TalosCaseStudyPage() {
 
           {/* The hard problem: centerpiece */}
           <section className="mt-16">
-            <BlurIn>
+            <div>
               <Eyebrow>The hard problem</Eyebrow>
               <H2>The assistant gave weak answers, so I measured why</H2>
-            </BlurIn>
+            </div>
             <Body>
               Early on, the in-channel assistant kept giving thin, hand-wavy answers on a workspace
               whose corpus was a single 90-page guide. It wasn&apos;t the model and it wasn&apos;t
@@ -465,23 +439,23 @@ export default function TalosCaseStudyPage() {
             </Body>
 
             {/* Results table */}
-            <div className="mt-8 overflow-x-auto rounded-xl border border-border">
+            <div className="mt-8 overflow-x-auto border-y border-border-strong">
               <table className="w-full text-sm border-collapse min-w-[640px]">
                 <caption className="sr-only">
                   Judged answer correctness across five end-to-end evaluation arms.
                 </caption>
                 <thead>
-                  <tr className="bg-muted/60 text-left">
-                    <th className="font-semibold text-foreground px-4 py-3">Arm</th>
-                    <th className="font-semibold text-foreground px-4 py-3">Config</th>
-                    <th className="font-semibold text-foreground px-4 py-3 whitespace-nowrap">
+                  <tr className="text-left">
+                    <th className="px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground">Arm</th>
+                    <th className="px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground">Config</th>
+                    <th className="whitespace-nowrap px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground">
                       Correctness
                     </th>
-                    <th className="font-semibold text-foreground px-4 py-3">&Delta;</th>
-                    <th className="font-semibold text-foreground px-4 py-3 whitespace-nowrap">
+                    <th className="px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground">&Delta;</th>
+                    <th className="whitespace-nowrap px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground">
                       Wilcoxon p
                     </th>
-                    <th className="font-semibold text-foreground px-4 py-3">Effect r</th>
+                    <th className="px-3 py-3 font-mono text-xs font-normal uppercase tracking-[0.08em] text-muted-foreground">Effect r</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -490,38 +464,38 @@ export default function TalosCaseStudyPage() {
                       key={row.arm}
                       className={
                         row.winner
-                          ? "border-t border-border bg-accent/5"
+                          ? "border-t border-border bg-accent/[0.07]"
                           : "border-t border-border"
                       }
                     >
                       <td
                         className={
-                          "px-4 py-3 font-mono whitespace-nowrap " +
+                          "px-3 py-3 font-mono whitespace-nowrap " +
                           (row.winner ? "text-accent font-semibold" : "text-foreground")
                         }
                       >
                         {row.arm}
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground font-mono text-xs">
+                      <td className="px-3 py-3 text-muted-foreground font-mono text-xs">
                         {row.config}
                       </td>
                       <td
                         className={
-                          "px-4 py-3 font-mono " +
+                          "px-3 py-3 font-mono " +
                           (row.winner ? "text-accent font-semibold" : "text-foreground")
                         }
                       >
                         {row.correctness}
                       </td>
-                      <td className="px-4 py-3 font-mono text-muted-foreground">{row.delta}</td>
-                      <td className="px-4 py-3 font-mono text-muted-foreground">{row.p}</td>
-                      <td className="px-4 py-3 font-mono text-muted-foreground">{row.r}</td>
+                      <td className="px-3 py-3 font-mono text-muted-foreground">{row.delta}</td>
+                      <td className="px-3 py-3 font-mono text-muted-foreground">{row.p}</td>
+                      <td className="px-3 py-3 font-mono text-muted-foreground">{row.r}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-xs font-mono text-muted-foreground text-center">
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               Judged correctness is the gpt-4o judge&apos;s score against the reference answer, paired
               per question across 83 questions.
             </p>
@@ -536,9 +510,9 @@ export default function TalosCaseStudyPage() {
             </Body>
 
             {/* Caveats callout */}
-            <aside className="mt-8 rounded-lg border border-accent/30 bg-accent/5 p-5">
-              <p className="text-sm font-semibold text-accent">What this does and doesn&apos;t prove</p>
-              <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+            <aside className="mt-8 max-w-3xl border-l-2 border-accent pl-5">
+              <p className="font-medium">What this does and doesn&apos;t prove</p>
+              <p className="mt-1.5 text-[16px] leading-[1.7] text-muted-foreground">
                 The questions and the judge are both LLMs, so there are no human relevance labels
                 here. And it&apos;s one corpus in one domain, so the +19.8-point headline is specific
                 to this document&apos;s particular problem. Don&apos;t quote it as a general benchmark.
@@ -551,10 +525,10 @@ export default function TalosCaseStudyPage() {
 
           {/* Where it runs: Slack + MCP */}
           <section className="mt-16">
-            <BlurIn>
+            <div>
               <Eyebrow>Where it runs</Eyebrow>
               <H2>The same assistant, in Slack</H2>
-            </BlurIn>
+            </div>
             <Lead>
               A team doesn&apos;t always live in a new app, so the assistant meets them where they
               already are. An MCP server exposes Jira, GitHub, filesystem, chat, and RAG tools, and a
@@ -580,10 +554,10 @@ export default function TalosCaseStudyPage() {
 
           {/* Outcome & reflection */}
           <section className="mt-16">
-            <BlurIn>
+            <div>
               <Eyebrow>Outcome</Eyebrow>
               <H2>A+, demoed live, then decommissioned</H2>
-            </BlurIn>
+            </div>
             <Body>
               The project got an A+. I deployed the stack for the defense, a Dockerized backend,
               worker, and scheduler on Railway with managed Milvus on Zilliz Cloud, and we ran the
@@ -601,10 +575,10 @@ export default function TalosCaseStudyPage() {
 
           {/* Contributors */}
           <section className="mt-16">
-            <BlurIn>
+            <div>
               <Eyebrow>Contributors</Eyebrow>
               <H2>The team</H2>
-            </BlurIn>
+            </div>
             <Lead>
               Talos was a team project. I owned the AI, retrieval, evaluation, and deployment track;
               here is everyone who built it.
@@ -612,10 +586,10 @@ export default function TalosCaseStudyPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
               {CONTRIBUTORS.map((c) => (
-                <FadeUp key={c.name} delay={0.05}>
-                  <div className="h-full rounded-xl border p-5 bg-card border-border">
+                <div key={c.name}>
+                  <div className="h-full rounded-lg border border-border bg-card p-5">
                     <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-sm font-semibold text-foreground">{c.name}</h3>
+                      <h3 className="font-medium">{c.name}</h3>
                       <a
                         href={c.github}
                         target="_blank"
@@ -626,42 +600,14 @@ export default function TalosCaseStudyPage() {
                         <GitHubIcon className="size-4" />
                       </a>
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed mt-2">{c.role}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.role}</p>
                   </div>
-                </FadeUp>
+                </div>
               ))}
             </div>
           </section>
 
-          <div className="section-divider mt-16 mb-8" />
-
-          {/* Prev / next */}
-          <div className="flex items-center justify-between">
-            {prev ? (
-              <Link
-                href={prev.blog ?? `/projects/${prev.slug}`}
-                className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-                <span className="hidden sm:inline">{prev.title}</span>
-                <span className="sm:hidden">Previous</span>
-              </Link>
-            ) : (
-              <div />
-            )}
-            {next ? (
-              <Link
-                href={next.blog ?? `/projects/${next.slug}`}
-                className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span className="hidden sm:inline">{next.title}</span>
-                <span className="sm:hidden">Next</span>
-                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            ) : (
-              <div />
-            )}
-          </div>
+          <ProjectPager prev={prev} next={next} />
         </div>
       </main>
       <Footer />

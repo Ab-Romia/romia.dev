@@ -1,14 +1,13 @@
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/sections/hero";
-import { ZaylonShowcase } from "@/components/sections/zaylon-showcase";
-import { CommentdraftShowcase } from "@/components/sections/commentdraft-showcase";
+import { Systems } from "@/components/sections/systems";
 import { Projects } from "@/components/sections/projects";
 import { Experience } from "@/components/sections/experience";
-import { Skills } from "@/components/sections/skills";
 import { Writing } from "@/components/sections/writing";
 import { About } from "@/components/sections/about";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
+import { AWARDS } from "@/data/resume";
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -20,6 +19,8 @@ const personSchema = {
   alternateName: ["Romia", "Ab-Romia", "Abouroumia"],
   jobTitle: "AI & Backend Engineer",
   url: "https://romia.dev",
+  image: "https://romia.dev/avatar.jpg",
+  award: AWARDS.map((a) => `${a.title}, ${a.event}`),
   description:
     "AI & Backend Engineer. Software Engineer at Tutanic and Co-Founder of Zaylon AI. Builds LLM agents, RAG systems, and the full-stack platforms and backends around them.",
   sameAs: [
@@ -93,10 +94,6 @@ const websiteSchema = {
   author: { "@id": "https://romia.dev/#person" },
 };
 
-function SectionDivider() {
-  return <div className="section-divider max-w-5xl mx-auto" />;
-}
-
 export default function Home() {
   return (
     <>
@@ -111,24 +108,16 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
       <Navbar />
-      <main id="main-content" className="pt-16">
+      <main id="main-content">
         <Hero />
+        <Systems />
         <Projects />
-        <ZaylonShowcase />
-        <SectionDivider />
-        <CommentdraftShowcase />
-        <SectionDivider />
         <Experience />
-        <SectionDivider />
-        <Skills />
-        <SectionDivider />
         <Writing />
-        <SectionDivider />
         <About />
-        <SectionDivider />
         <Contact />
       </main>
-      <Footer showSocials={false} />
+      <Footer />
     </>
   );
 }

@@ -19,7 +19,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   if (!mounted) {
     return (
-      <div className={cn("p-2", className)}>
+      <div className={cn("p-2.5", className)}>
         <div className="size-4" />
       </div>
     );
@@ -29,7 +29,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className={cn(
-        "p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors",
+        "p-2.5 rounded-full text-muted-foreground transition-colors hover:text-foreground",
         className
       )}
       aria-label="Toggle theme"

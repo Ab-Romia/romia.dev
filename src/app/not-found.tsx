@@ -1,35 +1,33 @@
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/sections/footer";
 
 export default function NotFound() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen flex flex-col items-center justify-center px-6">
-        <p className="font-mono text-sm text-accent mb-3">
-          &gt; route not found
-        </p>
-        <h1 className="text-8xl md:text-9xl font-bold text-accent tracking-tight">
-          404
-        </h1>
-        <p className="text-lg text-muted-foreground mt-4">
-          Page not found
-        </p>
-        <div className="mt-8 flex items-center gap-3">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors px-6 py-3 rounded-lg border border-border hover:border-accent/30"
-          >
-            Home
-          </Link>
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors px-6 py-3 rounded-lg border border-border hover:border-accent/30"
-          >
-            Blog
-          </Link>
+      <main id="main-content" className="flex flex-1 items-center">
+        <div className="mx-auto w-full max-w-6xl px-5 py-40 sm:px-8">
+          <p className="eyebrow">404</p>
+          <h1 className="display-xl mt-5 max-w-[14ch]">This page isn&apos;t here.</h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            The link may be old, or the page may have moved. Everything that exists is one click
+            from the front page.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-[15px]">
+            <Link href="/" className="link">
+              Home
+            </Link>
+            <Link href="/#projects" className="link">
+              Work
+            </Link>
+            <Link href="/blog" className="link">
+              Writing
+            </Link>
+          </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

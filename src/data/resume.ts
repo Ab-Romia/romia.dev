@@ -3,8 +3,9 @@ export const PERSONAL = {
   displayName: "Romia",
   title: "AI & Backend Engineer",
   email: "aabouroumia@gmail.com",
-  tagline:
-    "I build LLM agents, RAG systems, and the backends they run on. At Zaylon AI, the company I co-founded, the agent I built takes a shopper from the first product question to a paid order inside WhatsApp and Instagram, in their own dialect.",
+  headline: "Backend and AI systems engineer.",
+  intro:
+    "Software Engineer at Tutanic, working on backend services and AI systems: microservices, event streaming, and the Kubernetes they deploy to. Co-founder of Zaylon AI, where I built the agent that sells over WhatsApp and Instagram in the customer's own dialect.",
   links: {
     linkedin: "https://linkedin.com/in/abdelrahman-abouroumia",
     github: "https://github.com/Ab-Romia",
@@ -12,19 +13,57 @@ export const PERSONAL = {
   },
 } as const;
 
-export const HERO_SIGNALS = [
-  { label: "Software Engineer", detail: "Tutanic" },
-  { label: "Co-Founder", detail: "Zaylon AI" },
-  { label: "B.Sc. Computer & Communications Engineering", detail: "AI concentration" },
+export interface Award {
+  title: string;
+  event: string;
+  issuer: string;
+  /** ISO date printed on the certificate. */
+  date: string;
+  citation: string;
+  /** The project the award was won with. */
+  projectSlug: string;
+  certificate: { src: string; width: number; height: number };
+}
+
+export const MICRO1_AWARD: Award = {
+  title: "Best Demonstrated Improvement",
+  event: "micro1 Frontier Engineering Challenge 2026",
+  issuer: "micro1",
+  date: "2026-09-10",
+  citation: "For outstanding engineering judgment, creativity, and execution.",
+  projectSlug: "advisorydrift",
+  certificate: {
+    src: "/certs/micro1-frontier-engineering-challenge-2026.jpg",
+    width: 1600,
+    height: 1044,
+  },
+};
+
+export const AWARDS: Award[] = [MICRO1_AWARD];
+
+/* The three facts beside the hero photo. Zaylon sits beside Tutanic, not
+   below it: both are current. */
+export const HERO_FACTS = [
+  {
+    label: "Currently",
+    lines: ["Software Engineer at Tutanic", "Co-founder of Zaylon AI"],
+  },
+  {
+    label: "Award",
+    lines: [MICRO1_AWARD.title, MICRO1_AWARD.event],
+    href: `/projects/${MICRO1_AWARD.projectSlug}`,
+  },
+  {
+    label: "Works with",
+    lines: ["FastAPI, Django, NATS JetStream", "LangGraph, CopilotKit, MCP on AWS"],
+  },
 ] as const;
 
 export const NAV_LINKS = [
-  { label: "Projects", href: "#projects" },
-  { label: "Zaylon", href: "#zaylon" },
-  { label: "commentdraft", href: "#commentdraft" },
+  { label: "Systems", href: "#systems" },
+  { label: "Work", href: "#projects" },
   { label: "Experience", href: "#experience" },
-  { label: "Skills", href: "#skills" },
-  { label: "Blog", href: "/blog" },
+  { label: "Writing", href: "/blog" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ] as const;
@@ -52,8 +91,8 @@ export const ZAYLON_SHOWCASE = {
     "Each merchant's data is encrypted on its own and isolated at the row level, so tenants never see each other.",
   ],
   techStack: [
-    "LangGraph", "FastAPI", "Supabase", "Next.js", "PostgreSQL",
-    "pgvector", "Redis", "GPT-4o", "Gemini", "Docker",
+    "LangGraph", "FastAPI", "Kafka", "Redis", "PostgreSQL", "pgvector",
+    "Supabase", "Next.js", "CopilotKit", "GPT-4o", "Gemini", "Docker", "Railway",
   ],
 } as const;
 
@@ -371,6 +410,10 @@ interface CaseStudy {
 
 export interface Project {
   title: string;
+  /** Year or range shown beside the title in the work index. */
+  year: string;
+  /** What Romia was on it, when that is not obvious: shown above the title. */
+  role?: string;
   description: string;
   tags: string[];
   slug: string;
@@ -384,6 +427,7 @@ export interface Project {
   demo?: string;
   /** Internal path to a related blog write-up, e.g. "/blog/<slug>". */
   blog?: string;
+  award?: Award;
   caseStudy: CaseStudy;
 }
 
@@ -391,20 +435,22 @@ export const PROJECTS: Project[] = [
   {
     title: "Zaylon AI",
     slug: "zaylon-ai",
+    role: "Co-founder",
+    year: "Since 2025",
     categories: ["AI/ML", "Backend", "Full-Stack"],
     description:
       "An AI that sells over WhatsApp and Instagram for MENA merchants, carrying a customer from the first product question to a confirmed payment, all inside the chat.",
-    tags: ["LangGraph", "Python", "FastAPI", "Shopify", "Next.js"],
+    tags: ["LangGraph", "FastAPI", "Kafka", "Redis", "CopilotKit", "Railway"],
     url: "https://zaylon.ai",
     status: "Pre-launch",
     badge: "Co-Founded",
     featured: true,
-    impact: "LangGraph tool-calling agent and tri-lingual NLP on a multi-tenant FastAPI backend",
+    impact: "A LangGraph tool-calling agent and tri-lingual NLP on multi-tenant FastAPI microservices that talk over Kafka, deployed service by service on Railway",
     caseStudy: {
       problem:
         "MENA shoppers do a lot of their buying over WhatsApp and Instagram, but merchants can't sit in those chats around the clock. Off-the-shelf chatbots fall apart on Egyptian Arabic and Franco-Arabic, and they can't carry someone from a question all the way to a paid order.",
       approach:
-        "I built it in LangGraph as one tool-calling agent with about 30 scoped tools spanning sales, support, and checkout. It began as a multi-agent supervisor that routed to separate Sales, Support, and Checkout agents; I consolidated it into a single agent that proved more reliable and easier to reason about. Dialect detection runs first, so the customer is answered in the language they wrote in, and the same flow carries a conversation from the first product question to a confirmed payment.",
+        "I built it in LangGraph as one tool-calling agent with about 35 scoped tools spanning sales, support, and checkout. It began as a multi-agent supervisor that routed to separate Sales, Support, and Checkout agents; I consolidated it into a single agent that proved more reliable and easier to reason about. Dialect detection runs first, so the customer is answered in the language they wrote in, and the same flow carries a conversation from the first product question to a confirmed payment.",
       decisions: [
         {
           title: "LangGraph over plain LangChain",
@@ -423,9 +469,68 @@ export const PROJECTS: Project[] = [
         "Integrates 6 commerce platforms and 5 messaging channels, handling product discovery, support, and checkout across three dialects. Launching commercially in 2026.",
     },
   },
+  /* AdvisoryDrift. Every figure below is from the verified table in the
+     case-study handoff and reproduces from the public repository. Two rules
+     from that handoff hold here: the 32% gpt-oss figure (shared 38 cases) never
+     appears beside its 27% full-corpus figure, and no human time saving is
+     claimed, because no timed human control was run. */
+  {
+    title: "AdvisoryDrift",
+    slug: "advisorydrift",
+    role: "Competition entry",
+    year: "2026",
+    categories: ["AI/ML", "Backend"],
+    description:
+      "An agent that corrects the affected-version ranges of public security advisories from repository evidence, and the held-out benchmark that measures whether it works. Built in four days for the micro1 Frontier Engineering Challenge.",
+    tags: ["Python", "Agents", "Git", "Evaluation", "Security"],
+    github: "https://github.com/Ab-Romia/advisorydrift",
+    status: "Completed",
+    badge: "Award",
+    featured: true,
+    award: MICRO1_AWARD,
+    impact:
+      "Matched 15 of 38 held-out corrections exactly, against 5 for an oracle-best deterministic baseline. McNemar exact p = 0.0063.",
+    caseStudy: {
+      problem:
+        "A security advisory says which versions of a package are affected, and every scanner downstream repeats it. When an advisory says a flaw was fixed in 26.6.0 and the fix actually shipped in 26.4.13 and 26.6.3, thousands of teams get the wrong answer, and somebody has to work out the truth by reading git history one maintenance branch at a time. The answer is not in the advisory. It is in the repository, spread across branches that were each patched separately, and 38% of corrected advisories name no fixing commit at all, so the obvious automation cannot take its first step.",
+      approach:
+        "The agent gets the advisory with its answer stripped out, a local clone of the project, and nothing else: six typed, read-only git functions, no shell and no network. That boundary exists first for the evaluation, because the answer key is one unauthenticated request away and any tool that could reach it would void every number. A hand-written loop asks for one tool call or one answer per turn. What comes out is not a score but a page a maintainer can approve or reject without trusting the model: each proposed boundary, the commit that fixed it on each maintenance line, and the git show commands that check it. It never publishes anything. The benchmark is built from 430 corrections merged into the GitHub Advisory Database, frozen as 112 hashed answer keys, 44 of them scorable and 38 scored on the run reported here. Scoring is strict exact-set match: no partial credit, an abstention counts as wrong, both arms see the same cases, and the test is paired.",
+      decisions: [
+        {
+          title: "Compare against an upper bound, not a strawman",
+          reasoning:
+            "The advisory as published scores zero by construction on a corpus built from corrections, so the comparison is against what a competent engineer would script in an afternoon: pull the corrected value out of the advisory text, or parse the fixing commit and ask git which tags contain it. The baseline is credited whenever either of its arms is right, which no real system could do without already knowing the answer. Against that upper bound the agent matched 15 of 38 cases exactly and the baseline 5, a gap a paired McNemar test puts at p = 0.0063.",
+        },
+        {
+          title: "The tool surface did the work, not the loop",
+          reasoning:
+            "What moved accuracy was letting the agent search the repository's history itself, so it never needs the advisory to hand it a fixing commit. Of the 11 cases the agent gets right and the baseline gets wrong, 5 have no commit in the references for a script to parse. The agent goes and finds it. That is why the six git functions are the design decision worth defending, and the loop around them is not.",
+        },
+        {
+          title: "A gate that lost on the metric, reported anyway",
+          reasoning:
+            "The agent was finding the true boundaries and then adding later releases it should have left out: recall was fine, precision was not. A boundary gate fixes that by emitting a version only when the repository shows the flaw present just before it and absent at it. On the defined metric the gate loses, 37% against 39%, so it ships off by default. It is reported because of what it buys: over-reports fall from 5 to 0 and wrong values from 9 to 2. For a correction a person signs onto a public advisory, \"I cannot evidence this boundary\" is a better failure than a confident wrong range.",
+        },
+        {
+          title: "A model anyone can afford",
+          reasoning:
+            "The headline run used claude-opus-5 through a subscription nobody else can repeat, so the agent was also run against a pinned open-weight model. openai/gpt-oss-120b matched 12 of the same 38 cases, statistically indistinguishable from the headline model (paired p = 0.5488), at a measured $0.00231 per advisory. That is parity with the expensive model, not a second proof against the baseline, and the write-up says so. All model selection and the official run together cost $0.9214 across 551 provider calls.",
+        },
+        {
+          title: "Distrust the first number",
+          reasoning:
+            "The first run looked like a headline and was noise: the agent and the baseline had been scored on different case sets, and on the same cases the gap disappeared inside its own interval. Every number believed halfway through the build moved once the full corpus ran, and the reason was always too few cases. An evaluation at 13 cases tells you which failure modes exist and nothing about how often they happen, which is why every comparison in the repository is same-case and paired.",
+        },
+      ],
+      results:
+        "Won Best Demonstrated Improvement at the micro1 Frontier Engineering Challenge 2026. The headline reproduces offline from a clean clone in seconds, using only the Python standard library: no API key, no network, no repository clones. It is a competition entry with a working benchmark, not a deployed product, and the repository names the limitations it froze with instead of fixing them after the fact.",
+    },
+  },
   {
     title: "commentdraft",
     slug: "commentdraft",
+    role: "Open source",
+    year: "2026",
     categories: ["AI/ML", "Backend"],
     description:
       "A command line tool that triages comments on your own posts into reply, skip, or escalate, drafts the reply from one source document, and sends nothing a person has not approved one keystroke at a time.",
@@ -485,6 +590,8 @@ export const PROJECTS: Project[] = [
   {
     title: "Talos: Workspace-Grounded RAG Assistant",
     slug: "talos",
+    role: "Team project, AI track",
+    year: "2025–26",
     categories: ["AI/ML", "Backend"],
     description:
       "Graduation project (team): a team chat platform with a workspace-grounded RAG assistant that answers from your own documents, with citations. I owned the AI, retrieval, evaluation, and deployment.",
@@ -519,6 +626,7 @@ export const PROJECTS: Project[] = [
   {
     title: "ContextIQ: Hybrid-Retrieval RAG",
     slug: "contextiq-rag",
+    year: "2025–26",
     categories: ["AI/ML"],
     description:
       "A worked example of production RAG that runs on CPU: dense and lexical retrieval fused with reciprocal rank fusion, cross-encoder reranking, grounded citations, and an evaluation harness that measures the difference.",
@@ -559,6 +667,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Virtual Banking Microservices",
     slug: "virtual-banking",
+    year: "2025–26",
     categories: ["Backend", "Full-Stack"],
     description:
       "An event-driven banking system: a Spring Cloud Gateway fronting four core services, with a transfer saga over Kafka that holds up under concurrency, retries, and restarts, and tests that prove it.",
@@ -603,6 +712,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Multimodal Emotion Recognition",
     slug: "emotion-recognition",
+    year: "2025–26",
     categories: ["AI/ML"],
     description:
       "Speaker-independent speech emotion recognition on RAVDESS, rebuilt to remove a speaker-leakage flaw that inflates most published results. WavLM-large audio with learnable layer-weighting, fused with a facial-expression model.",
@@ -639,6 +749,7 @@ export const PROJECTS: Project[] = [
   {
     title: "VoicePrint: Authorship Stylometry",
     slug: "voiceprint",
+    year: "2025–26",
     categories: ["AI/ML"],
     description:
       "An engine that measures the fingerprint of how you write from your own samples, then adapts your own drafts toward that voice. Interpretable stylometric features paired with a StyleDistance neural style embedding and an in-context rewrite.",
@@ -675,6 +786,7 @@ export const PROJECTS: Project[] = [
   {
     title: "Connect4 AI Agent",
     slug: "connect4-ai",
+    year: "2025",
     categories: ["Games/Puzzles"],
     description:
       "A Connect 4 agent that searches the game tree with minimax and alpha-beta pruning.",
@@ -703,6 +815,7 @@ export const PROJECTS: Project[] = [
   {
     title: "CSP Sudoku Solver",
     slug: "sudoku-solver",
+    year: "2025",
     categories: ["Games/Puzzles"],
     description:
       "Constraint satisfaction solver using backtracking, AC-3 arc consistency, and MRV heuristic for efficient puzzle solving.",
@@ -735,6 +848,11 @@ export function getProjectBySlug(slug: string): Project | undefined {
   return PROJECTS.find((p) => p.slug === slug);
 }
 
+/** Where a project's write-up lives: its blog post if it has one. */
+export function projectHref(p: Project) {
+  return p.blog ?? `/projects/${p.slug}`;
+}
+
 export function getAdjacentProjects(slug: string) {
   const idx = PROJECTS.findIndex((p) => p.slug === slug);
   return {
@@ -757,6 +875,11 @@ export const EXPERIENCE = [
     focus: "AI Systems",
     period: "Sep 2026 – Present",
     description: "Backend services and AI systems.",
+    stack: [
+      "Microservices", "FastAPI", "Django", "NATS JetStream", "PostgreSQL", "PgBouncer",
+      "Dragonfly", "LangGraph", "CopilotKit", "MCP", "AWS Bedrock", "Amazon S3",
+      "Kubernetes", "Helm",
+    ],
     highlights: [],
   },
   {
@@ -764,7 +887,7 @@ export const EXPERIENCE = [
     role: "Software Engineer & Co-Founder",
     url: "https://zaylon.ai",
     period: "May 2025 – Present",
-    description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on a FastAPI backend with PostgreSQL/Redis, multi-tenant isolation, and Docker deployment, built for MENA merchants selling on WhatsApp, Instagram, and web.",
+    description: "Co-founded Zaylon and built its AI system and backend: a LangGraph tool-calling agent and tri-lingual NLP on FastAPI microservices that talk over Kafka, with PostgreSQL, Redis, multi-tenant isolation, and per-service Railway deployment, built for MENA merchants selling on WhatsApp, Instagram, and web.",
     highlights: [
       "Built the conversational AI in LangGraph as a single tool-calling agent with about 35 scoped tools across sales, support, and checkout. An earlier multi-agent supervisor was kept behind a flag and deleted once it was clear the single agent was the only path ever serving a request",
       "Built hybrid product search combining keyword matching, semantic vector similarity, and Reciprocal Rank Fusion scoring",
@@ -811,16 +934,16 @@ export const EXPERIENCE = [
 
 export const SKILLS = {
   Backend: [
-    "Spring Boot", "FastAPI", "Microservices", "Kafka",
-    "REST APIs", "PostgreSQL", "Redis", "Webhooks",
+    "FastAPI", "Django", "Spring Boot", "Microservices", "NATS JetStream", "Kafka",
+    "PostgreSQL", "PgBouncer", "Redis", "Dragonfly", "REST APIs",
   ],
   "AI / ML": [
-    "LangGraph", "LangChain", "PyTorch", "RAG",
-    "ChromaDB", "pgvector", "NLP", "Computer Vision",
+    "LangGraph", "LangChain", "CopilotKit", "MCP", "AWS Bedrock", "RAG",
+    "PyTorch", "ChromaDB", "pgvector", "NLP", "Computer Vision",
   ],
-  "DevOps & Cloud": [
-    "Docker", "Git", "GitHub Actions", "Railway",
-    "Linux", "Bash",
+  "Infrastructure & Cloud": [
+    "Kubernetes", "Helm", "Docker", "AWS (Bedrock, S3)", "GitHub Actions", "Railway",
+    "Linux", "Git",
   ],
   Languages: ["Python", "Java", "SQL", "TypeScript", "C/C++"],
 } as const;
@@ -829,6 +952,7 @@ export const EDUCATION = {
   university: "Alexandria University, Faculty of Engineering",
   degree: "B.Sc. in Computer and Communications Engineering, AI concentration",
   gpa: "3.75 / 4.0",
+  graduated: "July 2026",
 } as const;
 
 export const CERTIFICATIONS = [
@@ -862,6 +986,7 @@ export const CERTIFICATIONS = [
     certificates: [
       {
         src: "/certs/aws-cloud-foundations.png",
+        label: "Cloud Foundations",
         width: 1600,
         height: 1236,
         verifyUrl: "https://www.credly.com/go/vM9Vw99o",
@@ -869,6 +994,7 @@ export const CERTIFICATIONS = [
       },
       {
         src: "/certs/aws-ml-foundations.png",
+        label: "ML Foundations",
         width: 1600,
         height: 1236,
         verifyUrl: "https://www.credly.com/go/brqqLkmU",

@@ -1,47 +1,36 @@
-import { NAV_LINKS } from "@/data/resume";
+import { PERSONAL } from "@/data/resume";
 import { SOCIAL_LINKS } from "@/components/social-icons";
 
-// showSocials: on the homepage the Contact section directly above already
-// renders the same icon row, so the homepage opts out; every other route
-// keeps the footer as its only path to the profiles.
-export function Footer({ showSocials = true }: { showSocials?: boolean }) {
+export function Footer() {
   return (
-    <footer className="border-t border-border py-10 mt-auto">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <div className="flex flex-wrap justify-center gap-6 mb-6">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href.startsWith("#") ? `/${link.href}` : link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline inline-block py-2 -my-2"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-
-        {showSocials && (
-          <div className="flex items-center justify-center gap-2 mb-6">
-            {SOCIAL_LINKS.map((link) => (
+    <footer className="mt-auto border-t border-border">
+      <div className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-10 sm:px-8 md:flex-row md:items-center md:justify-between">
+        <p className="text-sm text-muted-foreground">
+          &copy; {new Date().getFullYear()} {PERSONAL.name}
+        </p>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          {SOCIAL_LINKS.map((s) => (
+            <li key={s.label}>
               <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
+                href={s.href}
+                target={s.href.startsWith("mailto:") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                aria-label={link.label}
-                className="p-2.5 text-muted-foreground hover:text-foreground transition-colors"
+                className="link-underline text-muted-foreground transition-colors hover:text-foreground"
               >
-                <link.Icon className="size-5" aria-hidden="true" />
+                {s.label}
               </a>
-            ))}
-          </div>
-        )}
-
-        <div className="pt-6 border-t border-border text-center">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Abdelrahman Abouroumia. All rights reserved.
-          </p>
-        </div>
+            </li>
+          ))}
+          <li>
+            <a
+              href="/resume.pdf"
+              download
+              className="link-underline text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Résumé
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   );

@@ -8,14 +8,9 @@ export default function manifest(): MetadataRoute.Manifest {
       "Portfolio of Abdelrahman Abouroumia (Romia), AI & Backend Engineer. Software Engineer at Tutanic and Co-Founder of Zaylon AI.",
     start_url: "/",
     display: "standalone",
-    background_color: "#09090B",
-    theme_color: "#09090B",
+    background_color: "#0A0B0D",
+    theme_color: "#0A0B0D",
     icons: [
-      {
-        src: "/icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-      },
       {
         src: "/icon-192.png",
         sizes: "192x192",

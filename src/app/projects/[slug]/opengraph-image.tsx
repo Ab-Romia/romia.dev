@@ -1,19 +1,19 @@
-import { ImageResponse } from "next/og";
 import { getProjectBySlug } from "@/data/resume";
-import { ogCard, OG_SIZE } from "@/app/og-card";
+import { generateStaticParams as pageParams } from "./page";
+import { ogImage, OG_SIZE } from "@/app/og-card";
 
-export const runtime = "edge";
-export const alt = "Abdelrahman Abouroumia (Romia)";
+export const alt = "A case study by Abdelrahman Abouroumia (Romia)";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
-export default async function Image({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+// One card per case study, drawn at build time.
+export const generateStaticParams = pageParams;
+
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
-  const title = project?.title ?? "Abdelrahman Abouroumia (Romia)";
-  return new ImageResponse(ogCard(title), { ...OG_SIZE });
+  return ogImage({
+    eyebrow: project?.award ? `Case study · ${project.award.title}` : "Case study",
+    title: project?.title ?? "Abdelrahman Abouroumia (Romia)",
+  });
 }

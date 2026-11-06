@@ -1,87 +1,53 @@
-"use client";
-
-import { useState } from "react";
+import { ArrowDownToLine, ArrowUpRight } from "lucide-react";
 import { PERSONAL } from "@/data/resume";
-import { BlurIn, FadeUp } from "@/components/motion-wrapper";
-import { Mail, Check, Copy, Download } from "lucide-react";
 import { SOCIAL_LINKS } from "@/components/social-icons";
 
 export function Contact() {
-  const [copied, setCopied] = useState(false);
-  const copyEmail = async () => {
-    await navigator.clipboard.writeText(PERSONAL.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
-    <section id="contact" className="relative py-20 md:py-28 overflow-hidden">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
-        <BlurIn>
-          <h2 className="text-3xl font-bold tracking-tight leading-tight">
-            Let&apos;s Connect
-          </h2>
-          <p className="text-muted-foreground font-light mt-4 max-w-lg mx-auto leading-relaxed">
-            I like building systems that actually ship. If you&apos;re working on
-            agents, backend infrastructure, or AI products, or hiring for one,
-            say hi.
-          </p>
-        </BlurIn>
-
-        <FadeUp delay={0.1}>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={`mailto:${PERSONAL.email}`}
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
-            >
-              <Mail className="size-4" />
-              Email Me
-            </a>
+    <section id="contact" className="border-t-2 border-foreground">
+      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-36">
+        <p className="eyebrow flex items-center gap-3 text-accent">
+          06
+          <span aria-hidden="true" className="h-px w-10 bg-current" />
+        </p>
+        <h2 className="display-lg mt-4">Get in touch</h2>
+        <p className="mt-6 max-w-2xl text-xl leading-relaxed text-muted-foreground md:text-[1.375rem] md:leading-[1.6]">
+          If you are building agents, backend infrastructure or AI products, or hiring for one,
+          I would like to hear about it. Email reaches me fastest.
+        </p>
+        <p className="reveal mt-8">
+          <a
+            href={`mailto:${PERSONAL.email}`}
+            className="break-words font-extrabold text-[clamp(1.6rem,6.2vw,4.8rem)] leading-none tracking-[-0.035em] [font-stretch:115%] underline decoration-accent decoration-[3px] underline-offset-[0.14em] transition-colors hover:text-accent"
+          >
+            {PERSONAL.email}
+          </a>
+        </p>
+        <ul className="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-[15px]">
+          {SOCIAL_LINKS.filter((s) => !s.href.startsWith("mailto:")).map((s) => (
+            <li key={s.label}>
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <span className="link-underline">{s.label}</span>
+                <ArrowUpRight className="size-3.5" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+          <li>
             <a
               href="/resume.pdf"
               download
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-lg border border-border text-foreground hover:border-accent/40 hover:text-accent transition-[transform,border-color,color] active:scale-[0.97]"
+              className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
             >
-              <Download className="size-4" />
-              Download Resume
+              <span className="link-underline">Résumé (PDF)</span>
+              <ArrowDownToLine className="size-3.5" aria-hidden="true" />
             </a>
-          </div>
-        </FadeUp>
-
-        <FadeUp delay={0.15}>
-          <div className="mt-6 inline-flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-2.5 hover:border-accent/40 transition-colors">
-            <span className="text-xs font-mono text-muted-foreground">{PERSONAL.email}</span>
-            <button
-              onClick={copyEmail}
-              className="p-2.5 -m-2 rounded hover:bg-muted transition-colors active:scale-90"
-              aria-label={copied ? "Email copied" : "Copy email"}
-            >
-              {copied ? (
-                <Check className="size-3.5 text-green-600 dark:text-green-400" />
-              ) : (
-                <Copy className="size-3.5 text-muted-foreground" />
-              )}
-            </button>
-            <span aria-live="polite" className="sr-only">{copied ? "Email copied to clipboard" : ""}</span>
-          </div>
-        </FadeUp>
-
-        <FadeUp delay={0.2}>
-          <div className="flex items-center justify-center gap-2 mt-8">
-            {SOCIAL_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="p-3 text-muted-foreground hover:text-accent transition-colors"
-              >
-                <link.Icon className="size-5" aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-        </FadeUp>
+          </li>
+        </ul>
       </div>
     </section>
   );

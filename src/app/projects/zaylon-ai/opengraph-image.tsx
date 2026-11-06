@@ -1,11 +1,9 @@
-import { ImageResponse } from "next/og";
-import { ogCard, OG_SIZE } from "@/app/og-card";
+import { ogImage, OG_SIZE } from "@/app/og-card";
 
-export const runtime = "edge";
-export const alt = "Zaylon AI";
+export const alt = "Zaylon AI, a case study by Abdelrahman Abouroumia (Romia)";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
 export default function Image() {
-  return new ImageResponse(ogCard("Zaylon AI"), { ...OG_SIZE });
+  return ogImage({ eyebrow: "Case study", title: "Zaylon AI" });
 }

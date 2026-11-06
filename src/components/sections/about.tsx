@@ -1,257 +1,199 @@
-"use client";
-
-import { useState } from "react";
+import type { ReactNode } from "react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 import {
   ABOUT,
-  EDUCATION,
+  AWARDS,
   CERTIFICATIONS,
   COMPETITIONS,
+  EDUCATION,
   LANGUAGES_SPOKEN,
   REFERENCES,
+  SKILLS,
 } from "@/data/resume";
-import Image from "next/image";
-import { ChevronDown, ArrowUpRight, Mail, Phone } from "lucide-react";
-import { BlurIn, ScaleUp } from "@/components/motion-wrapper";
+import { Section, SectionHeader, ArrowLink } from "@/components/section";
 
-function CertRow({ cert }: { cert: (typeof CERTIFICATIONS)[number] }) {
-  const [open, setOpen] = useState(false);
-  const certificates = "certificates" in cert ? cert.certificates : undefined;
-
-  const inner = (
-    <>
-      {cert.logo.endsWith(".svg") ? (
-        // Brand SVGs sit on a white chip so dark logo marks stay legible in
-        // dark mode, matching the orb's integration pills.
-        <div className="size-8 rounded-md bg-white p-1.5 shrink-0 flex items-center justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={cert.logo} alt="" className="w-full h-full object-contain" />
-        </div>
-      ) : (
-        <div className="size-8 rounded-md overflow-hidden shrink-0">
-          <Image src={cert.logo} alt="" width={32} height={32} className="w-full h-full object-cover" />
-        </div>
-      )}
-      <div className="min-w-0 text-left">
-        <p className="text-sm font-medium leading-tight">{cert.name}</p>
-        <p className="text-xs text-muted-foreground">
-          {cert.issuer}
-          {"year" in cert && cert.year && ` · ${cert.year}`}
-        </p>
-      </div>
-      {certificates && (
-        <ChevronDown
-          aria-hidden="true"
-          className={`size-4 text-muted-foreground ml-auto shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      )}
-    </>
-  );
-
-  if (!certificates) {
-    return <div className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">{inner}</div>;
-  }
-
+function ExternalLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <div>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        className="w-full flex items-center gap-3 p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-      >
-        {inner}
-      </button>
-      {open && (
-        <div className="mt-2 space-y-3">
-          {certificates.map((c) => (
-            <div key={c.src}>
-              <div className="rounded-lg overflow-hidden border border-border">
-                <Image
-                  src={c.src}
-                  alt={`${cert.name} certificate`}
-                  width={c.width}
-                  height={c.height}
-                  className="w-full h-auto"
-                />
-              </div>
-              {"verifyUrl" in c && c.verifyUrl && (
-                <a
-                  href={c.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1 mt-2 p-2 -m-2"
-                >
-                  {c.verifyLabel} <ArrowUpRight className="size-3" />
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-0.5 text-muted-foreground transition-colors hover:text-foreground"
+    >
+      <span className="link-underline">{children}</span>
+      <ArrowUpRight className="size-3" aria-hidden="true" />
+    </a>
+  );
+}
+
+function Fact({ term, children }: { term: string; children: ReactNode }) {
+  return (
+    <div className="border-t-2 border-foreground pt-5">
+      <dt className="eyebrow text-accent">{term}</dt>
+      <dd className="mt-3 text-[15px] leading-relaxed">{children}</dd>
     </div>
   );
 }
 
-function InfoCard({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <div className={className}>{children}</div>;
+function Recognition() {
+  return (
+    <div className="mt-14 border-t border-border pt-8">
+      <p className="eyebrow">Recognition</p>
+      {AWARDS.map((award) => (
+        <div
+          key={award.event}
+          className="mt-6 grid items-start gap-6 sm:grid-cols-[minmax(0,15rem)_1fr]"
+        >
+          <a
+            href={award.certificate.src}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open the ${award.event} certificate`}
+            className="block overflow-hidden rounded-[3px] ring-1 ring-border transition-opacity hover:opacity-90"
+          >
+            <Image
+              src={award.certificate.src}
+              alt={`Certificate of Achievement from ${award.issuer}: ${award.title}, presented to Abdelrahman Abouroumia`}
+              width={award.certificate.width}
+              height={award.certificate.height}
+              sizes="(min-width: 640px) 240px, 100vw"
+              className="h-auto w-full"
+            />
+          </a>
+          <div>
+            <p className="display-sm">{award.title}</p>
+            <p className="mt-1.5 text-[15px] text-muted-foreground">
+              {award.event},{" "}
+              {new Date(award.date).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+                timeZone: "UTC",
+              })}
+            </p>
+            <blockquote className="mt-4 border-l-2 border-accent pl-4 text-lg font-medium leading-snug">
+              &ldquo;{award.citation}&rdquo;
+            </blockquote>
+            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+              <ArrowLink href={`/projects/${award.projectSlug}`}>The project it was for</ArrowLink>
+              <ExternalLink href={award.certificate.src}>Certificate</ExternalLink>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export function About() {
   return (
-    <section id="about" className="py-20 md:py-28">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <BlurIn>
-          <h2 className="text-3xl font-bold tracking-tight leading-tight">
-            About Romia
-          </h2>
-        </BlurIn>
+    <Section id="about">
+      <SectionHeader index="05" title="About" />
 
-        <div className="flex flex-col-reverse md:flex-row gap-8 mt-6">
-          <BlurIn delay={0.1}>
-            <p className="text-muted-foreground leading-relaxed max-w-2xl">
-              {ABOUT.bio}
-            </p>
-          </BlurIn>
-
-          <ScaleUp delay={0.15}>
-            <div className="relative size-32 md:size-40 rounded-full overflow-hidden border-2 border-accent/30 shrink-0 mx-auto md:mx-0">
-              <Image
-                src="/photo.jpeg"
-                alt="Abdelrahman Abouroumia (Romia)"
-                width={160}
-                height={160}
-                className="w-full h-full object-cover"
-                priority={false}
-              />
-            </div>
-          </ScaleUp>
+      <div className="mt-12 grid gap-14 md:mt-16 lg:grid-cols-12 lg:gap-12">
+        <div className="reveal lg:col-span-7">
+          <p className="text-xl leading-relaxed md:text-[1.375rem] md:leading-[1.6]">{ABOUT.bio}</p>
+          <Recognition />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-          <ScaleUp delay={0.1}>
-            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-accent" />
-                Education
-              </h3>
-              <p className="font-semibold text-sm">{EDUCATION.degree}</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                {EDUCATION.university}
-              </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                GPA: {EDUCATION.gpa}
-              </p>
-            </InfoCard>
-          </ScaleUp>
+        <dl className="reveal space-y-10 lg:col-span-4 lg:col-start-9">
+          <Fact term="Education">
+            {EDUCATION.degree}
+            <span className="block text-muted-foreground">{EDUCATION.university}</span>
+            <span className="block text-muted-foreground">
+              GPA {EDUCATION.gpa}, graduated {EDUCATION.graduated}
+            </span>
+          </Fact>
 
-          <ScaleUp delay={0.15}>
-            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-accent" />
-                Spoken Languages
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {LANGUAGES_SPOKEN.map((lang) => (
-                  <div key={lang.language} className="flex items-center gap-2 text-sm">
-                    <span className="text-foreground">{lang.language}</span>
-                    <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full hover:bg-accent/10 hover:text-accent transition-colors">
-                      {lang.level}
+          <Fact term="Certifications">
+            <ul className="space-y-3">
+              {CERTIFICATIONS.map((cert) => (
+                <li key={cert.name}>
+                  {cert.name}
+                  <span className="block text-sm text-muted-foreground">
+                    {cert.issuer}, {cert.year}
+                  </span>
+                  {"certificates" in cert && (
+                    <span className="mt-1 flex flex-wrap gap-x-4 text-sm">
+                      {cert.certificates.map((c) => (
+                        <ExternalLink key={c.src} href={"verifyUrl" in c ? c.verifyUrl : c.src}>
+                          {"label" in c ? c.label : "verifyUrl" in c ? "Verify" : "Certificate"}
+                        </ExternalLink>
+                      ))}
                     </span>
-                  </div>
-                ))}
-              </div>
-            </InfoCard>
-          </ScaleUp>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Fact>
 
-          <ScaleUp delay={0.2}>
-            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-accent" />
-                Certifications
-              </h3>
-              <div className="space-y-3">
-                {CERTIFICATIONS.map((cert) => (
-                  <CertRow key={cert.name} cert={cert} />
-                ))}
-              </div>
-            </InfoCard>
-          </ScaleUp>
+          <Fact term="Competitions">
+            <ul className="space-y-2">
+              {COMPETITIONS.map((c) => (
+                <li key={c.name}>
+                  {c.name}
+                  <span className="text-muted-foreground">, {c.detail}</span>
+                </li>
+              ))}
+            </ul>
+          </Fact>
 
-          <ScaleUp delay={0.25}>
-            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-accent" />
-                Competitions & Hackathons
-              </h3>
-              <div className="space-y-2">
-                {COMPETITIONS.map((comp) => (
-                  <div key={comp.name} className="flex items-start gap-2 text-sm">
-                    <span className="text-accent mt-0.5 shrink-0">&#9656;</span>
-                    <span>
-                      <span className="text-foreground">{comp.name}</span>
-                      <span className="text-muted-foreground"> · {comp.detail}</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </InfoCard>
-          </ScaleUp>
+          <Fact term="Languages">
+            {LANGUAGES_SPOKEN.map((l, i) => (
+              <span key={l.language}>
+                {l.language} <span className="text-muted-foreground">({l.level})</span>
+                {i < LANGUAGES_SPOKEN.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </Fact>
+        </dl>
+      </div>
 
-          <ScaleUp delay={0.3} className="md:col-span-2">
-            <InfoCard className="bg-card border border-border rounded-lg p-6 h-full transition-colors duration-200 hover:border-accent/40">
-              <h3 className="text-sm font-mono text-accent uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-accent" />
-                References
-              </h3>
-              <div className="space-y-4">
-                {REFERENCES.map((ref) => (
-                  <div key={ref.name}>
-                    <p className="text-sm font-medium leading-snug">
-                      {ref.name}
-                      <span className="text-muted-foreground font-normal"> ({ref.alsoKnownAs})</span>
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {ref.title ? `${ref.title}, ` : null}
-                      <a
-                        href={ref.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="link-underline text-foreground/90 hover:text-accent transition-colors"
-                      >
-                        {ref.organization}
-                      </a>
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1">{ref.credential}</p>
-                    <p className="text-sm text-muted-foreground mt-1">{ref.relationship}</p>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
-                      <a
-                        href={`mailto:${ref.email}`}
-                        className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1.5 p-2 -m-2"
-                      >
-                        <Mail className="size-3.5 shrink-0" aria-hidden="true" />
-                        {ref.email}
-                      </a>
-                      <a
-                        href={ref.phoneHref}
-                        className="text-xs font-mono text-accent hover:text-accent-muted transition-colors inline-flex items-center gap-1.5 p-2 -m-2"
-                      >
-                        <Phone className="size-3.5 shrink-0" aria-hidden="true" />
-                        {ref.phone}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </InfoCard>
-          </ScaleUp>
+      <div id="skills" className="reveal mt-20 grid gap-8 lg:grid-cols-12 lg:gap-12">
+        <h3 className="display-sm lg:col-span-3">Stack</h3>
+        <dl className="border-t-2 border-foreground lg:col-span-9">
+          {Object.entries(SKILLS).map(([group, items]) => (
+            <div key={group} className="grid gap-1.5 border-b border-border py-4 sm:grid-cols-[10rem_1fr]">
+              <dt className="eyebrow pt-0.5">{group}</dt>
+              <dd className="text-[15px] leading-relaxed">{items.join(", ")}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div className="mt-20 grid gap-8 lg:grid-cols-12 lg:gap-12">
+        <h3 className="display-sm lg:col-span-3">References</h3>
+        <div className="space-y-8 border-t-2 border-foreground pt-6 lg:col-span-9">
+          {REFERENCES.map((ref) => (
+            <div key={ref.name}>
+              <p className="text-lg font-medium">
+                {ref.name} <span className="font-normal text-muted-foreground">({ref.alsoKnownAs})</span>
+              </p>
+              <p className="mt-1 text-[15px] text-muted-foreground">
+                {ref.title ? `${ref.title}, ` : null}
+                <a
+                  href={ref.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link text-foreground"
+                >
+                  {ref.organization}
+                </a>
+                . {ref.credential}.
+              </p>
+              <p className="mt-1 text-[15px] text-muted-foreground">{ref.relationship}</p>
+              <p className="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-sm">
+                <a href={`mailto:${ref.email}`} className="link">
+                  {ref.email}
+                </a>
+                <a href={ref.phoneHref} className="link">
+                  {ref.phone}
+                </a>
+              </p>
+            </div>
+          ))}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

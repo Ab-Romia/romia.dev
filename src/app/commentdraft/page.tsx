@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Lock } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, Lock } from "lucide-react";
 import {
   COMMENTDRAFT_SHOWCASE,
   COMMENTDRAFT_GUIDES,
@@ -9,10 +9,10 @@ import {
   COMMENTDRAFT_FINDINGS,
   commentdraftGuideUrl,
 } from "@/data/resume";
-import { FadeUp, BlurIn, StaggerContainer, StaggerItem } from "@/components/motion-wrapper";
 import { GitHubIcon } from "@/components/social-icons";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
+import { BackLink } from "@/components/case-study";
 
 export const metadata: Metadata = {
   title: COMMENTDRAFT_GUIDES_PAGE.metaTitle,
@@ -73,108 +73,98 @@ export default function CommentdraftGuidesPage() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen pt-24 pb-16">
-        <div className="max-w-5xl mx-auto px-6 lg:px-8">
-          <FadeUp>
-            <Link
-              href="/#commentdraft"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-            >
-              <ArrowLeft className="size-4" />
-              Back to commentdraft
-            </Link>
-          </FadeUp>
+      <main id="main-content" className="pb-24 pt-28 md:pt-36">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8 [&>*]:max-w-5xl">
+          <BackLink href="/projects/commentdraft">commentdraft</BackLink>
 
-          <BlurIn>
-            <p className="text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground">
-              commentdraft / docs / platforms
-            </p>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mt-3 text-balance">
+          <div className="mt-10">
+            <p className="eyebrow">commentdraft / docs / platforms</p>
+            <h1 className="display-lg mt-5 max-w-4xl text-balance">
               {COMMENTDRAFT_GUIDES_PAGE.title}
             </h1>
-            <p className="text-base text-muted-foreground mt-4 leading-relaxed max-w-3xl">
+            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl md:leading-relaxed">
               {COMMENTDRAFT_GUIDES_PAGE.lede}
             </p>
-          </BlurIn>
+          </div>
 
-          <FadeUp delay={0.1}>
-            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-border">
+          <div>
+            <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-border pt-6 sm:grid-cols-4">
               {COMMENTDRAFT_GUIDES_PAGE.meta.map((m) => (
                 <div key={m.label}>
-                  <dd className="text-lg font-semibold tabular-nums">{m.value}</dd>
-                  <dt className="text-xs font-mono uppercase tracking-wider text-muted-foreground mt-1.5">
+                  <dd className="display-md tabular-nums">{m.value}</dd>
+                  <dt className="eyebrow mt-1.5">
                     {m.label}
                   </dt>
                 </div>
               ))}
             </dl>
-          </FadeUp>
+          </div>
 
-          <FadeUp delay={0.15}>
-            <p className="mt-8 text-base leading-relaxed text-foreground/90 border-l-2 border-accent/40 pl-5 max-w-3xl">
+          <div>
+            <p className="mt-10 max-w-3xl border-l-2 border-accent pl-5 text-[17px] leading-[1.7] text-foreground/90">
               {COMMENTDRAFT_GUIDES.honesty}
             </p>
-          </FadeUp>
+          </div>
 
-          <div className="section-divider mt-12 mb-12" />
+          <div className="section-divider my-16" />
 
           {/* The pattern that only shows up across all eight */}
-          <FadeUp>
-            <h2 className="text-2xl font-bold tracking-tight">
+          <div>
+            <h2 className="display-md">
               {COMMENTDRAFT_GUIDES_PAGE.lessonHeading}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground max-w-3xl">
+            <p className="mt-5 max-w-3xl text-[17px] leading-[1.75] text-foreground/90">
               {COMMENTDRAFT_GUIDES.lesson}
             </p>
-          </FadeUp>
+          </div>
 
           {/* The eight, in the order worth attempting them in */}
           <div className="mt-16">
-            <BlurIn>
-              <h2 className="text-2xl font-bold tracking-tight">
+            <div>
+              <h2 className="display-md">
                 {COMMENTDRAFT_GUIDES_PAGE.orderHeading}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground max-w-3xl">
+              <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
                 {COMMENTDRAFT_GUIDES_PAGE.orderIntro}
               </p>
-            </BlurIn>
+            </div>
 
-            <StaggerContainer className="mt-8 space-y-4">
+            <div className="mt-8 space-y-4">
               {COMMENTDRAFT_PLATFORMS.map((p, i) => (
-                <StaggerItem key={p.slug}>
-                  <article className="rounded-xl border border-border bg-card p-5 sm:p-6 transition-colors hover:border-accent/40">
+                <div key={p.slug}>
+                  <article className="rounded-lg border border-border bg-card p-5 sm:p-7">
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                       <span className="font-mono text-xs text-muted-foreground tabular-nums">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <h3 className="text-lg font-semibold tracking-tight">{p.name}</h3>
+                      <h3 className="display-sm">{p.name}</h3>
                       <AccessMark platform={p} />
                     </div>
 
                     <dl className="mt-4 space-y-3">
                       <div className="grid grid-cols-1 sm:grid-cols-[7.5rem_1fr] gap-x-5 gap-y-1">
-                        <dt className="text-xs font-mono uppercase tracking-[0.14em] text-muted-foreground sm:pt-0.5">
+                        <dt className="eyebrow sm:pt-0.5">
                           In the way
                         </dt>
-                        <dd className="text-sm leading-relaxed text-foreground/90">{p.blocker}</dd>
+                        <dd className="text-[15px] leading-relaxed text-foreground/90">{p.blocker}</dd>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-[7.5rem_1fr] gap-x-5 gap-y-1">
-                        <dt className="text-xs font-mono uppercase tracking-[0.14em] text-muted-foreground sm:pt-0.5">
+                        <dt className="eyebrow sm:pt-0.5">
                           Reply path
                         </dt>
-                        <dd className="text-sm leading-relaxed text-muted-foreground">{p.reply}</dd>
+                        <dd className="text-[15px] leading-relaxed text-muted-foreground">{p.reply}</dd>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-[7.5rem_1fr] gap-x-5 gap-y-1">
-                        <dt className="text-xs font-mono uppercase tracking-[0.14em] text-muted-foreground sm:pt-0.5">
+                        <dt className="eyebrow sm:pt-0.5">
                           Cost
                         </dt>
-                        <dd className="text-sm leading-relaxed text-muted-foreground">{p.cost}</dd>
+                        <dd className="text-[15px] leading-relaxed text-muted-foreground">{p.cost}</dd>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-[7.5rem_1fr] gap-x-5 gap-y-1">
-                        <dt className="text-xs font-mono uppercase tracking-[0.14em] text-muted-foreground sm:pt-0.5">
+                        <dt className="eyebrow sm:pt-0.5">
                           Worth knowing
                         </dt>
-                        <dd className="text-sm leading-relaxed text-muted-foreground">
+                        <dd className="text-[15px] leading-relaxed text-muted-foreground">
                           {p.attempt}
                         </dd>
                       </div>
@@ -184,59 +174,59 @@ export default function CommentdraftGuidesPage() {
                       href={commentdraftGuideUrl(p.slug)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 mt-5 text-sm font-mono text-accent hover:text-accent-muted transition-colors"
+                      className="mt-5 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:text-accent"
                     >
                       Read the {p.name} guide
                       <ArrowUpRight className="size-3.5" />
                     </a>
                   </article>
-                </StaggerItem>
+                </div>
               ))}
-            </StaggerContainer>
+            </div>
 
-            <FadeUp delay={0.1}>
-              <p className="mt-8 text-sm leading-relaxed text-foreground/90 max-w-3xl">
+            <div>
+              <p className="mt-8 max-w-3xl text-[15px] leading-relaxed text-foreground/90">
                 {COMMENTDRAFT_GUIDES.closing}
               </p>
-            </FadeUp>
+            </div>
           </div>
 
           {/* Corrections that came out of checking rather than trusting */}
           <div className="mt-16">
-            <BlurIn>
-              <h2 className="text-2xl font-bold tracking-tight">
+            <div>
+              <h2 className="display-md">
                 {COMMENTDRAFT_FINDINGS.heading}
               </h2>
-            </BlurIn>
+            </div>
 
-            <StaggerContainer className="grid sm:grid-cols-2 gap-4 mt-8">
+            <div className="grid sm:grid-cols-2 gap-4 mt-8">
               {COMMENTDRAFT_FINDINGS.items.map((f) => (
-                <StaggerItem key={f.platform}>
-                  <div className="h-full rounded-xl border border-border bg-card p-5">
-                    <p className="text-xs font-mono uppercase tracking-[0.15em] text-accent">
+                <div key={f.platform}>
+                  <div className="h-full rounded-lg border border-border bg-card p-5 sm:p-6">
+                    <p className="eyebrow">
                       {f.platform}
                     </p>
-                    <p className="text-base font-semibold mt-2.5 leading-snug">{f.title}</p>
-                    <p className="text-sm leading-relaxed text-muted-foreground mt-2">{f.body}</p>
+                    <p className="display-sm mt-3">{f.title}</p>
+                    <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">{f.body}</p>
                   </div>
-                </StaggerItem>
+                </div>
               ))}
-            </StaggerContainer>
+            </div>
 
-            <FadeUp delay={0.1}>
-              <p className="mt-6 text-sm leading-relaxed text-foreground/90 max-w-3xl">
+            <div>
+              <p className="mt-6 max-w-3xl text-[15px] leading-relaxed text-foreground/90">
                 {COMMENTDRAFT_FINDINGS.closing}
               </p>
-            </FadeUp>
+            </div>
           </div>
 
-          <div className="section-divider mt-14 mb-10" />
+          <div className="section-divider my-16" />
 
-          <FadeUp>
-            <h2 className="text-lg font-semibold tracking-tight">
+          <div>
+            <h2 className="display-sm">
               {COMMENTDRAFT_GUIDES_PAGE.closingHeading}
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground max-w-3xl">
+            <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
               {COMMENTDRAFT_GUIDES_PAGE.closing}
             </p>
             <div className="flex flex-wrap items-center gap-3 mt-6">
@@ -244,20 +234,20 @@ export default function CommentdraftGuidesPage() {
                 href={COMMENTDRAFT_SHOWCASE.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 transition-[transform,background-color] active:scale-[0.97]"
+                className="inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-[opacity,transform] hover:opacity-90 active:scale-[0.98]"
               >
                 <GitHubIcon className="size-4" />
                 The repository
               </a>
               <Link
                 href="/projects/commentdraft"
-                className="inline-flex items-center gap-1.5 text-sm font-mono text-accent group py-2.5"
+                className="group inline-flex items-center gap-1.5 py-2.5 text-sm font-medium"
               >
                 How the tool itself is built
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
-          </FadeUp>
+          </div>
         </div>
       </main>
       <Footer />

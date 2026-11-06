@@ -17,7 +17,7 @@ import {
 export function CommentdraftPlatformList() {
   return (
     <div>
-      <p className="text-sm leading-relaxed text-foreground/90 border-l-2 border-accent/40 pl-5">
+      <p className="border-l-2 border-accent pl-5 text-[15px] leading-relaxed text-foreground/90">
         {COMMENTDRAFT_GUIDES.honesty}
       </p>
 
@@ -78,13 +78,13 @@ export function CommentdraftPlatformList() {
         ))}
       </ul>
 
-      <p className="mt-5 text-sm leading-relaxed text-foreground/90">
+      <p className="mt-5 text-[15px] leading-relaxed text-foreground/90">
         {COMMENTDRAFT_GUIDES.closing}
       </p>
 
       <Link
         href={COMMENTDRAFT_SHOWCASE.guidesHref}
-        className="inline-flex items-center gap-1.5 mt-4 text-sm font-mono text-accent group py-2.5 -my-0.5"
+        className="group mt-4 -my-0.5 inline-flex items-center gap-1.5 py-2.5 text-sm font-medium"
       >
         All eight guides, and what each one costs
         <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />

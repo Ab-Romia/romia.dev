@@ -1,34 +1,24 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { PROJECTS, getProjectBySlug, getAdjacentProjects } from "@/data/resume";
-import { FadeUp, BlurIn, StaggerContainer, StaggerItem } from "@/components/motion-wrapper";
+import { ArrowUpRight, Medal } from "lucide-react";
+import { PROJECTS, getAdjacentProjects, getProjectBySlug } from "@/data/resume";
 import { DemoEmbed } from "@/components/demo-embed";
 import { CommentdraftPlatformList } from "@/components/commentdraft-platforms";
 import { Connect4Wrapper } from "@/components/connect4-wrapper";
 import { SudokuWrapper } from "@/components/sudoku-wrapper";
+import { AdvisoryDriftResult } from "@/components/figures/advisorydrift-result";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/sections/footer";
-import { cn } from "@/lib/utils";
+import { BackLink, ProjectPager } from "@/components/case-study";
 
-const statusColors: Record<string, string> = {
-  "Pre-launch": "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
-  "Live demo": "bg-muted text-muted-foreground border-border",
-  "Case study": "bg-muted text-muted-foreground border-border",
-  Deployed: "bg-muted text-muted-foreground border-border",
-  Completed: "bg-muted text-muted-foreground border-border",
-};
-
+/* zaylon-ai and talos have their own pages, and projects with a blog write-up
+   redirect to it (next.config.ts), so neither gets a page from this template. */
 export async function generateStaticParams() {
-  // zaylon-ai and talos each have their own dedicated case-study page
-  // (/projects/zaylon-ai/page.tsx, /projects/talos/page.tsx). Projects with a
-  // blog write-up redirect to the blog (see next.config.ts), so they get no
-  // case-study page here.
-  return PROJECTS.filter((p) => p.slug !== "zaylon-ai" && p.slug !== "talos" && !p.blog).map((p) => ({
-    slug: p.slug,
-  }));
+  return PROJECTS.filter((p) => p.slug !== "zaylon-ai" && p.slug !== "talos" && !p.blog).map(
+    (p) => ({ slug: p.slug })
+  );
 }
 
 export async function generateMetadata({
@@ -42,269 +32,255 @@ export async function generateMetadata({
 
   return {
     title: project.title,
-    description: project.caseStudy.problem,
+    description: project.description,
     openGraph: {
       title: `${project.title} | Abdelrahman Abouroumia`,
-      description: project.caseStudy.problem,
+      description: project.description,
     },
     alternates: { canonical: `/projects/${slug}` },
   };
 }
 
-function GitHubIcon({ className }: { className?: string }) {
+/** The one figure that should be seen before the prose, where a project has it. */
+const LEAD_FIGURES: Record<string, ReactNode> = {
+  advisorydrift: <AdvisoryDriftResult />,
+};
+
+function Heading({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z" />
-    </svg>
+    <h2 id={id} className="display-md mt-16 first:mt-0">
+      {children}
+    </h2>
   );
 }
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+function Prose({ children }: { children: ReactNode }) {
+  return <p className="mt-5 text-[17px] leading-[1.75] text-foreground/90">{children}</p>;
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
   const { prev, next } = getAdjacentProjects(slug);
   const cs = project.caseStudy;
+  const lead = LEAD_FIGURES[slug];
+
+  const sections = [
+    { id: "problem", label: "The problem" },
+    { id: "approach", label: "Approach" },
+    ...(cs.decisions?.length ? [{ id: "decisions", label: "Decisions" }] : []),
+    ...(cs.reference ? [{ id: "reference", label: cs.reference.heading }] : []),
+    { id: "results", label: "Results" },
+    ...(cs.embedDemo ? [{ id: "demo", label: "Try it" }] : []),
+  ];
+
+  const links = [
+    project.url && { label: project.url.includes("pypi.org") ? "PyPI" : "Website", href: project.url },
+    project.github && { label: "Source on GitHub", href: project.github },
+    project.demo && { label: "Live demo", href: project.demo },
+  ].filter(Boolean) as { label: string; href: string }[];
 
   return (
     <>
-    <Navbar />
-    <main id="main-content" className="min-h-screen pt-24 pb-16">
-      <div className="max-w-3xl mx-auto px-6 lg:px-8">
-        {/* Back link */}
-        <FadeUp>
-          <Link
-            href="/#projects"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-          >
-            <ArrowLeft className="size-4" />
-            Back to projects
-          </Link>
-        </FadeUp>
+      <Navbar />
+      <main id="main-content" className="pb-24 pt-28 md:pt-36">
+        <article className="mx-auto max-w-6xl px-5 sm:px-8">
+          <BackLink href="/#projects">All work</BackLink>
 
-        {/* Hero */}
-        <FadeUp delay={0.1}>
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            <span
-              className={cn(
-                "text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded border",
-                statusColors[project.status]
+          <header className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-8">
+            <div className="lg:col-span-8">
+              <p className="eyebrow flex flex-wrap gap-x-3">
+                {project.role && <span>{project.role}</span>}
+                <span>{project.year}</span>
+                <span>{project.status}</span>
+              </p>
+              <h1 className="display-xl mt-5">{project.title}</h1>
+              {project.award && (
+                <p className="mt-5 flex items-start gap-2 text-[15px] text-accent">
+                  <Medal className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  {project.award.title}, {project.award.event}
+                </p>
               )}
-            >
-              {project.status}
-            </span>
-            {project.categories.map((cat) => (
-              <span key={cat} className="text-xs font-mono text-muted-foreground px-2 py-0.5 rounded bg-muted">
-                {cat}
-              </span>
-            ))}
-            {project.badge && (
-              <span className="text-xs font-mono text-accent border border-accent/30 px-2 py-0.5 rounded">
-                {project.badge}
-              </span>
-            )}
-          </div>
+              <p className="mt-6 max-w-[60ch] text-lg leading-relaxed text-muted-foreground md:text-xl md:leading-relaxed">
+                {project.description}
+              </p>
+            </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            {project.title}
-          </h1>
-          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
-            {project.description}
-          </p>
-          {project.impact && (
-            <p className="text-sm text-accent font-mono mt-4 flex items-start gap-2">
-              <span className="size-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
+            <dl className="space-y-5 self-end text-[15px] lg:col-span-3 lg:col-start-10">
+              <div className="border-t border-border pt-4">
+                <dt className="eyebrow">Stack</dt>
+                <dd className="mt-2 leading-relaxed">{project.tags.join(", ")}</dd>
+              </div>
+              {links.length > 0 && (
+                <div className="border-t border-border pt-4">
+                  <dt className="eyebrow">Links</dt>
+                  <dd className="mt-2 space-y-1">
+                    {links.map((l) => (
+                      <a
+                        key={l.href}
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 transition-colors hover:text-accent"
+                      >
+                        <span className="link-underline">{l.label}</span>
+                        <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                      </a>
+                    ))}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </header>
+
+          {lead && <div className="mt-14">{lead}</div>}
+
+          {project.impact && !lead && (
+            <p className="mt-14 border-l-2 border-accent pl-5 text-2xl font-semibold leading-snug md:text-[1.75rem]">
               {project.impact}
             </p>
           )}
-        </FadeUp>
 
-        {/* Tags + Links */}
-        <FadeUp delay={0.15}>
-          <div className="flex flex-wrap gap-2 mt-6">
-            {project.tags.map((tag) => (
-              <span key={tag} className="text-xs font-mono bg-muted text-muted-foreground px-2.5 py-1 rounded">
-                {tag}
-              </span>
-            ))}
-          </div>
+          <div className="mt-16 grid gap-12 border-t border-border pt-14 lg:grid-cols-12 lg:gap-8">
+            <nav aria-label="On this page" className="hidden lg:col-span-3 lg:block">
+              <ul className="sticky top-28 space-y-2 text-sm">
+                {sections.map((s) => (
+                  <li key={s.id}>
+                    <a
+                      href={`#${s.id}`}
+                      className="link-underline text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-          <div className="flex flex-wrap gap-3 mt-4">
-            {project.url && (
-              <a href={project.url} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-accent hover:text-accent-muted transition-colors">
-                <ArrowUpRight className="size-4" /> Visit Site
-              </a>
-            )}
-            {project.github && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <GitHubIcon className="size-4" /> Source Code
-              </a>
-            )}
-            {project.demo && (
-              <a href={project.demo} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <ArrowUpRight className="size-4" /> Live Demo
-              </a>
-            )}
-          </div>
-        </FadeUp>
+            <div className="min-w-0 lg:col-span-8 lg:col-start-5">
+              <Heading id="problem">The problem</Heading>
+              <Prose>{cs.problem}</Prose>
 
-        <div className="section-divider mt-10 mb-10" />
+              <Heading id="approach">Approach</Heading>
+              <Prose>{cs.approach}</Prose>
 
-        {/* The Problem */}
-        <BlurIn>
-          <h2 id="problem" className="scroll-mt-24 text-2xl font-bold tracking-tight">The problem</h2>
-          <p className="text-muted-foreground leading-relaxed mt-3">{cs.problem}</p>
-        </BlurIn>
+              {cs.figure && (
+                <figure className="mt-10">
+                  <a
+                    href={cs.figure.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open the full-size image: ${cs.figure.alt}`}
+                    className="block overflow-hidden rounded-md ring-1 ring-border transition-opacity hover:opacity-95"
+                  >
+                    <Image
+                      src={cs.figure.src}
+                      alt={cs.figure.alt}
+                      width={cs.figure.width}
+                      height={cs.figure.height}
+                      sizes="(min-width: 1024px) 720px, 100vw"
+                      className="h-auto w-full"
+                    />
+                  </a>
+                  <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {cs.figure.caption}{" "}
+                    <a href={cs.figure.src} target="_blank" rel="noopener noreferrer" className="link">
+                      Open it full size
+                    </a>
+                    .
+                  </figcaption>
+                </figure>
+              )}
 
-        {/* Architecture & Approach */}
-        <FadeUp delay={0.1}>
-          <h2 id="architecture" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
-            Architecture and approach
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mt-3">{cs.approach}</p>
-        </FadeUp>
+              {cs.decisions && cs.decisions.length > 0 && (
+                <>
+                  <Heading id="decisions">Decisions</Heading>
+                  <ol className="mt-8 border-t border-border">
+                    {cs.decisions.map((d, i) => (
+                      <li
+                        key={d.title}
+                        className="grid gap-x-5 gap-y-2 border-b border-border py-8 sm:grid-cols-[2.5rem_1fr]"
+                      >
+                        <span className="pt-1 font-mono text-xs text-muted-foreground">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <h3 className="display-sm">{d.title}</h3>
+                          <p className="mt-3 text-[16px] leading-[1.75] text-foreground/85">
+                            {d.reasoning}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </>
+              )}
 
-        {/* A real artefact from the project, when one is worth showing. It
-            breaks out of the prose column, because a screenshot dense enough to
-            be worth showing is not legible at reading width, and links to the
-            full-size file for anyone who wants to read it properly. */}
-        {cs.figure && (
-          <FadeUp delay={0.1}>
-            <figure className="mt-8 lg:-mx-24">
-              <a
-                href={cs.figure.src}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open the full-size image: ${cs.figure.alt}`}
-                className="block rounded-xl border border-border bg-card p-2 overflow-hidden transition-colors hover:border-accent/40"
-              >
-                <Image
-                  src={cs.figure.src}
-                  alt={cs.figure.alt}
-                  width={cs.figure.width}
-                  height={cs.figure.height}
-                  sizes="(min-width: 1024px) 896px, (min-width: 768px) 704px, 100vw"
-                  className="w-full h-auto rounded-lg"
-                />
-              </a>
-              <figcaption className="text-sm text-muted-foreground mt-3 leading-relaxed">
-                {cs.figure.caption}{" "}
-                <a
-                  href={cs.figure.src}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent link-underline whitespace-nowrap"
-                >
-                  Open it full size
-                </a>
-                .
-              </figcaption>
-            </figure>
-          </FadeUp>
-        )}
-
-        {/* Key Technical Decisions */}
-        {cs.decisions && cs.decisions.length > 0 && (
-          <>
-            <FadeUp delay={0.15}>
-              <h2 id="decisions" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
-                Key technical decisions
-              </h2>
-            </FadeUp>
-            <StaggerContainer className="space-y-4 mt-6">
-              {cs.decisions.map((d) => (
-                <StaggerItem key={d.title}>
-                  <div className="bg-card border border-border rounded-lg p-5">
-                    <h3 className="text-sm font-semibold text-foreground">
-                      {d.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                      {d.reasoning}
-                    </p>
+              {cs.reference && (
+                <>
+                  <Heading id="reference">{cs.reference.heading}</Heading>
+                  <Prose>{cs.reference.intro}</Prose>
+                  <div className="mt-8">
+                    {cs.reference.component === "commentdraft-platforms" && <CommentdraftPlatformList />}
                   </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </>
-        )}
+                </>
+              )}
 
-        {/* A project-specific reference block, when the case study declares one */}
-        {cs.reference && (
-          <FadeUp delay={0.1}>
-            <h2 id="reference" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
-              {cs.reference.heading}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mt-3">{cs.reference.intro}</p>
-            <div className="mt-6">
-              {cs.reference.component === "commentdraft-platforms" && <CommentdraftPlatformList />}
+              <Heading id="results">Results</Heading>
+              <Prose>{cs.results}</Prose>
+
+              {project.award && (
+                <figure className="mt-10">
+                  <a
+                    href={project.award.certificate.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open the certificate full size"
+                    className="block overflow-hidden rounded-md ring-1 ring-border transition-opacity hover:opacity-95"
+                  >
+                    <Image
+                      src={project.award.certificate.src}
+                      alt={`Certificate of Achievement from ${project.award.issuer}: ${project.award.title}, ${project.award.event}, presented to Abdelrahman Abouroumia`}
+                      width={project.award.certificate.width}
+                      height={project.award.certificate.height}
+                      sizes="(min-width: 1024px) 720px, 100vw"
+                      className="h-auto w-full"
+                    />
+                  </a>
+                  <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    The certificate, dated{" "}
+                    {new Date(project.award.date).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      timeZone: "UTC",
+                    })}
+                    : &ldquo;{project.award.citation}&rdquo;
+                  </figcaption>
+                </figure>
+              )}
+
+              {cs.embedDemo && (
+                <>
+                  <Heading id="demo">Try it</Heading>
+                  <div className="mt-8">
+                    {cs.embedDemo.type === "iframe" && cs.embedDemo.src && (
+                      <DemoEmbed src={cs.embedDemo.src} title={`${project.title} demo`} />
+                    )}
+                    {cs.embedDemo.component === "connect4" && <Connect4Wrapper />}
+                    {cs.embedDemo.component === "sudoku" && <SudokuWrapper />}
+                  </div>
+                </>
+              )}
             </div>
-          </FadeUp>
-        )}
+          </div>
 
-        {/* Results */}
-        <FadeUp>
-          <h2 id="results" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">Results</h2>
-          <p className="text-muted-foreground leading-relaxed mt-3">{cs.results}</p>
-        </FadeUp>
-
-        {/* Embedded Demo */}
-        {cs.embedDemo && (
-          <FadeUp>
-            <h2 id="demo" className="scroll-mt-24 text-2xl font-bold tracking-tight mt-12">
-              Interactive demo
-            </h2>
-            <div className="mt-6">
-              {cs.embedDemo.type === "iframe" && cs.embedDemo.src && (
-                <DemoEmbed src={cs.embedDemo.src} title={`${project.title} Demo`} />
-              )}
-              {cs.embedDemo.type === "component" && cs.embedDemo.component === "connect4" && (
-                <Connect4Wrapper />
-              )}
-              {cs.embedDemo.type === "component" && cs.embedDemo.component === "sudoku" && (
-                <SudokuWrapper />
-              )}
-            </div>
-          </FadeUp>
-        )}
-
-        <div className="section-divider mt-12 mb-8" />
-
-        {/* Previous / Next */}
-        <div className="flex items-center justify-between">
-          {prev ? (
-            <Link
-              href={prev.blog ?? `/projects/${prev.slug}`}
-              className="group flex min-w-0 items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="size-4 shrink-0 group-hover:-translate-x-1 transition-transform" />
-              <span className="truncate">{prev.title}</span>
-            </Link>
-          ) : (
-            <div />
-          )}
-          {next ? (
-            <Link
-              href={next.blog ?? `/projects/${next.slug}`}
-              className="group flex min-w-0 items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <span className="truncate">{next.title}</span>
-              <ArrowRight className="size-4 shrink-0 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          ) : (
-            <div />
-          )}
-        </div>
-      </div>
-    </main>
-    <Footer />
+          <ProjectPager prev={prev} next={next} />
+        </article>
+      </main>
+      <Footer />
     </>
   );
 }

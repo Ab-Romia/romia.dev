@@ -1,271 +1,211 @@
-"use client";
-
-import { useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { PROJECTS } from "@/data/resume";
-import {
-  BlurIn,
-  FadeUp,
-} from "@/components/motion-wrapper";
-import { ArrowUpRight, BookOpen } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { GitHubIcon } from "@/components/social-icons";
-import { Connect4Wrapper } from "@/components/connect4-wrapper";
-import { SudokuWrapper } from "@/components/sudoku-wrapper";
+import { ArrowUpRight, Medal } from "lucide-react";
+import { PROJECTS, projectHref, type Project } from "@/data/resume";
+import { Section, SectionHeader, ArrowLink } from "@/components/section";
+import { ZaylonTopology } from "@/components/figures/zaylon-topology";
+import { AdvisoryDriftResult } from "@/components/figures/advisorydrift-result";
+import { CommentdraftTriage } from "@/components/commentdraft-triage";
 
-export const statusColors: Record<string, string> = {
-  "Pre-launch": "bg-accent/10 text-emerald-800 dark:text-accent border-accent/30",
-  "Live demo": "bg-muted text-muted-foreground border-border",
-  "Case study": "bg-muted text-muted-foreground border-border",
-  Deployed: "bg-muted text-muted-foreground border-border",
-  Completed: "bg-muted text-muted-foreground border-border",
-};
-
-const categories = ["All", "AI/ML", "Backend", "Full-Stack", "Games/Puzzles"] as const;
-
-export function Projects() {
-  const [filter, setFilter] = useState<string>("All");
-
-  const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.categories.includes(filter as never));
-  // The two playable demos share one card. On their own they were a pair of
-  // half-height stragglers under a grid of full cards, which read as leftovers
-  // and left the last row of that grid short.
-  const games = filtered.filter((p) => p.categories.includes("Games/Puzzles"));
-  const rest = filtered.filter((p) => !p.categories.includes("Games/Puzzles"));
-  const featured = rest.filter((p) => p.featured);
-  const others = rest.filter((p) => !p.featured);
-
-  return (
-    <section id="projects" className="py-20 md:py-28">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <BlurIn>
-          <h2 className="text-3xl font-bold tracking-tight leading-tight">
-            Projects
-          </h2>
-        </BlurIn>
-
-        {/* Category filters */}
-        <FadeUp delay={0.05}>
-          <div className="flex flex-wrap gap-2 mt-6">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                aria-pressed={filter === cat}
-                className={cn(
-                  "text-xs font-mono px-3 py-1.5 min-h-11 md:min-h-0 rounded-full border transition-all duration-200",
-                  filter === cat
-                    ? "bg-accent text-accent-foreground border-accent"
-                    : "text-muted-foreground border-border hover:border-accent/30 hover:text-foreground"
-                )}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          <p aria-live="polite" className="sr-only">
-            {filtered.length} {filtered.length === 1 ? "project" : "projects"}
-          </p>
-        </FadeUp>
-
-        {/* Projects grid. The games card takes one cell like any other, so the
-            grid stays even instead of ending on an orphan plus two offcuts. */}
-        <div className="mt-6 space-y-6">
-          {(featured.length > 0 || games.length > 0) && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {featured.map((project) => (
-                <ProjectCard key={project.slug} project={project} />
-              ))}
-              {games.length > 0 && <GamesCard games={games} />}
-            </div>
-          )}
-
-          {others.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {others.map((project) => (
-                <ProjectCard key={project.slug} project={project} compact />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {filtered.length === 0 && (
-          <p className="text-muted-foreground text-sm mt-8">No projects in this category.</p>
-        )}
-
-        {/* Playable demos appear only when the Games/Puzzles filter is chosen */}
-        {filter === "Games/Puzzles" && (
-          <div className="mt-12 space-y-12">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Connect 4 vs the AI</h3>
-              <Connect4Wrapper />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Sudoku solver</h3>
-              <SudokuWrapper />
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
+function bySlug(slug: string) {
+  const p = PROJECTS.find((x) => x.slug === slug);
+  if (!p) throw new Error(`Unknown project: ${slug}`);
+  return p;
 }
 
-/** One card, split between the two playable demos. Both are client-side search
- *  problems and both are secondary to the rest of the grid, so they share a
- *  slot rather than each taking one. */
-function GamesCard({ games }: { games: typeof PROJECTS }) {
-  return (
-    <div className="group relative border rounded-lg h-full overflow-hidden bg-card border-border transition-colors duration-200 hover:border-accent/40 p-6 flex flex-col">
-      <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5">
-        <h3 className="font-semibold text-lg">Games and puzzles</h3>
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border bg-muted text-muted-foreground border-border">
-          Playable
-        </span>
-      </div>
-      <p className="text-sm text-muted-foreground leading-relaxed mt-2">
-        Two classical search problems, both running entirely in your browser.
-      </p>
+type ExternalLink = { label: string; href: string };
 
-      <div className="mt-4 flex-1 divide-y divide-border border-t border-border">
-        {games.map((game) => (
-          <div key={game.slug} className="py-4 first:pt-4">
-            <h4 className="text-sm font-semibold">
-              <Link
-                href={`/projects/${game.slug}`}
-                className="hover:text-accent transition-colors inline-flex items-center gap-1"
-              >
-                {game.title}
-                <ArrowUpRight className="size-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
-            </h4>
-            <p className="text-xs text-muted-foreground leading-relaxed mt-1.5">
-              {game.description}
-            </p>
-            <div className="flex items-center gap-3 mt-2">
-              {game.github && (
-                <a
-                  href={game.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${game.title} source on GitHub`}
-                  className="p-2 -m-2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <GitHubIcon className="size-4" />
-                </a>
-              )}
-              {game.demo && (
-                <a
-                  href={game.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-mono text-accent hover:text-accent-muted transition-colors p-2 -m-2"
-                >
-                  Demo
-                </a>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+/* The three that lead, each with the one artefact that shows what it is. The
+   ids keep old deep links (/#zaylon, /#commentdraft) working. */
+const FEATURES: {
+  slug: string;
+  figure: ReactNode;
+  links: ExternalLink[];
+  extra?: { label: string; href: string };
+  /** The figure runs the full width under the text instead of beside it. */
+  wide?: boolean;
+}[] = [
+  {
+    slug: "zaylon-ai",
+    figure: <ZaylonTopology />,
+    wide: true,
+    links: [{ label: "zaylon.ai", href: "https://zaylon.ai" }],
+  },
+  {
+    slug: "advisorydrift",
+    figure: <AdvisoryDriftResult />,
+    links: [{ label: "Source", href: "https://github.com/Ab-Romia/advisorydrift" }],
+  },
+  {
+    slug: "commentdraft",
+    figure: <CommentdraftTriage />,
+    links: [
+      { label: "Source", href: "https://github.com/Ab-Romia/commentdraft" },
+      { label: "PyPI", href: "https://pypi.org/project/commentdraft/" },
+    ],
+    extra: { label: "The eight platform guides", href: "/commentdraft" },
+  },
+];
 
-function ProjectCard({
+const FEATURED = new Set(FEATURES.map((f) => f.slug));
+const isGame = (p: Project) => p.categories.includes("Games/Puzzles");
+
+function Feature({
+  index,
   project,
-  compact = false,
+  figure,
+  links,
+  extra,
+  wide = false,
 }: {
-  project: (typeof PROJECTS)[number];
-  compact?: boolean;
+  index: number;
+  project: Project;
+  figure: ReactNode;
+  links: ExternalLink[];
+  extra?: { label: string; href: string };
+  wide?: boolean;
 }) {
-  return (
-    <div
-      className={cn(
-        "group relative border rounded-lg h-full overflow-hidden bg-card border-border transition-colors duration-200 hover:border-accent/40",
-        compact ? "p-4" : "p-6"
-      )}
-    >
-      {/* Wraps rather than clips: a long title beside a badge and a status chip
-          does not fit a 320px card, and the card is overflow-hidden. */}
-      <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5">
-        <h3 className={cn("font-semibold", compact ? "text-sm" : "text-lg")}>
-          <Link
-            href={project.blog ?? `/projects/${project.slug}`}
-            className="hover:text-accent transition-colors inline-flex items-center gap-1 py-1.5 -my-1.5"
-          >
-            {project.title}
-            <ArrowUpRight className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </Link>
-        </h3>
-        <div className="flex items-center gap-2 shrink-0">
-          {project.badge && (
-            <span className="text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 px-1.5 py-0.5 rounded">
-              {project.badge}
-            </span>
-          )}
-          <span
-            className={cn(
-              "text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border inline-flex items-center gap-1",
-              statusColors[project.status]
-            )}
-          >
-            {project.status}
-          </span>
-        </div>
-      </div>
+  const anchor = project.slug === "zaylon-ai" ? "zaylon" : project.slug;
 
-      <p className={cn("text-muted-foreground leading-relaxed mt-2", compact ? "text-xs" : "text-sm")}>
-        {project.description}
+  const identity = (
+    <>
+      <p aria-hidden="true" className="poster drift text-[5rem] text-accent md:text-[6.5rem]">
+        {String(index).padStart(2, "0")}
       </p>
-
-      {!compact && project.impact && (
-        <p className="text-sm leading-relaxed mt-3 flex gap-2">
-          <span className="text-accent shrink-0" aria-hidden>&#8594;</span>
-          <span className="text-foreground/90">{project.impact}</span>
+      <p className="eyebrow mt-6 flex flex-wrap gap-x-3">
+        {project.role && <span>{project.role}</span>}
+        <span>{project.year}</span>
+      </p>
+      <h3 className="display-lg mt-3">
+        <Link href={projectHref(project)} className="link-underline">
+          {project.title}
+        </Link>
+      </h3>
+      {project.award && (
+        <p className="mt-3 flex items-start gap-2 text-sm leading-snug text-accent">
+          <Medal className="mt-px size-4 shrink-0" aria-hidden="true" />
+          <span>
+            {project.award.title}, {project.award.event}
+          </span>
         </p>
       )}
+    </>
+  );
 
-      <div className="flex items-center justify-between mt-4">
-        <div className="flex flex-wrap gap-2">
-          {project.tags.slice(0, compact ? 3 : undefined).map((tag) => (
-            <span key={tag} className="text-xs font-mono bg-muted text-muted-foreground px-2 py-1 rounded">
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className="flex items-center gap-2 shrink-0 ml-2">
-          {project.demo && (
-            <a href={project.demo} target="_blank" rel="noopener noreferrer"
-              className="text-xs font-mono text-accent hover:text-accent-muted transition-colors p-2 -m-2">
-              Demo
-            </a>
-          )}
-          {project.github && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer"
-              aria-label={`${project.title} source on GitHub`}
-              className="p-2 -m-2 text-muted-foreground hover:text-foreground transition-colors">
-              <GitHubIcon className="size-4" />
-            </a>
-          )}
-          {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer"
-              aria-label={`Visit ${project.title}`}
-              className="p-2 -m-2 text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowUpRight className="size-4" />
-            </a>
-          )}
-        </div>
+  const body = (
+    <>
+      <p className="leading-relaxed text-muted-foreground">{project.description}</p>
+      {project.impact && <p className="mt-4 leading-relaxed">{project.impact}</p>}
+      <p className="mt-5 font-mono text-xs leading-relaxed text-muted-foreground">
+        {project.tags.join("  ·  ")}
+      </p>
+      <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <ArrowLink href={projectHref(project)}>Read the case study</ArrowLink>
+        {extra && <ArrowLink href={extra.href}>{extra.label}</ArrowLink>}
+        {links.map((l) => (
+          <a
+            key={l.href}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <span className="link-underline">{l.label}</span>
+            <ArrowUpRight className="size-3.5" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </>
+  );
+
+  return (
+    <article
+      id={anchor}
+      className="grid gap-10 border-t-2 border-foreground py-14 first:border-t-0 first:pt-0 md:py-20 lg:grid-cols-12 lg:gap-12"
+    >
+      {wide ? (
+        <>
+          <div className="reveal lg:col-span-5">{identity}</div>
+          <div className="reveal lg:col-span-7 lg:self-end">{body}</div>
+          <div className="reveal lg:col-span-12">{figure}</div>
+        </>
+      ) : (
+        <>
+          <div className="reveal lg:col-span-5">
+            {identity}
+            <div className="mt-5">{body}</div>
+          </div>
+          <div className="reveal lg:col-span-7">{figure}</div>
+        </>
+      )}
+    </article>
+  );
+}
+
+export function Projects() {
+  const more = PROJECTS.filter((p) => !FEATURED.has(p.slug) && !isGame(p));
+  const games = PROJECTS.filter(isGame);
+
+  return (
+    <Section id="projects">
+      <SectionHeader
+        index="02"
+        title="Selected work"
+        intro="The company I co-founded, the agent that won micro1's Best Demonstrated Improvement, and a tool I published on PyPI. Each one is shown with the artefact that explains it best."
+      />
+
+      <div className="mt-14 md:mt-20">
+        {FEATURES.map(({ slug, ...rest }, i) => (
+          <Feature key={slug} index={i + 1} project={bySlug(slug)} {...rest} />
+        ))}
       </div>
 
-      {(project.blog || project.slug) && (
-        <Link
-          href={project.blog ?? `/projects/${project.slug}`}
-          className="text-xs font-mono text-accent hover:text-accent-muted transition-colors -m-2 mt-1 p-2 inline-flex items-center gap-1"
-        >
-          <BookOpen className="size-3" /> Read the write-up <ArrowUpRight className="size-3" />
-        </Link>
-      )}
-    </div>
+      <div className="mt-6 border-t-2 border-foreground pt-14 md:pt-20">
+        <h3 className="display-md">More projects</h3>
+        <ul className="mt-8 border-t border-border">
+          {more.map((p) => (
+            <li key={p.slug} className="reveal border-b border-border">
+              <Link
+                href={projectHref(p)}
+                className="group -mx-3 grid gap-x-8 gap-y-2 rounded-sm px-3 py-6 transition-colors hover:bg-muted/60 md:grid-cols-12"
+              >
+                <span className="md:col-span-4">
+                  <span className="display-sm block">
+                    {p.title}
+                  </span>
+                  <span className="mt-1.5 block font-mono text-xs text-muted-foreground">
+                    {p.year}
+                    {p.role ? `  ·  ${p.role}` : ""}
+                  </span>
+                </span>
+                <span className="text-[15px] leading-relaxed text-muted-foreground md:col-span-7">
+                  {p.description}
+                </span>
+                <span className="hidden justify-self-end pt-1 md:col-span-1 md:block">
+                  <ArrowUpRight
+                    className="size-4 text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {games.length === 2 && (
+          <p className="mt-8 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
+            Smaller things: a{" "}
+            <Link href={projectHref(games[0])} className="link text-foreground">
+              Connect 4 agent
+            </Link>{" "}
+            that searches with minimax and alpha-beta pruning, and a{" "}
+            <Link href={projectHref(games[1])} className="link text-foreground">
+              Sudoku solver
+            </Link>{" "}
+            built on constraint propagation. Both play in the browser.
+          </p>
+        )}
+      </div>
+    </Section>
   );
 }
