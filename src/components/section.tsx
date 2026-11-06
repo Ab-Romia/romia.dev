@@ -14,7 +14,7 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className={cn("border-t-2 border-foreground", className)}>
+    <section id={id} className={cn("border-t border-border", className)}>
       <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 md:py-28">{children}</div>
     </section>
   );

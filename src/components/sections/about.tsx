@@ -29,7 +29,7 @@ function ExternalLink({ href, children }: { href: string; children: ReactNode })
 
 function Fact({ term, children }: { term: string; children: ReactNode }) {
   return (
-    <div className="border-t-2 border-foreground pt-5">
+    <div className="border-t border-border pt-5">
       <dt className="eyebrow text-accent">{term}</dt>
       <dd className="mt-3 text-[15px] leading-relaxed">{children}</dd>
     </div>
@@ -151,7 +151,7 @@ export function About() {
 
       <div id="skills" className="reveal mt-20 grid gap-8 lg:grid-cols-12 lg:gap-12">
         <h3 className="display-sm lg:col-span-3">Stack</h3>
-        <dl className="border-t-2 border-foreground lg:col-span-9">
+        <dl className="border-t border-border lg:col-span-9">
           {Object.entries(SKILLS).map(([group, items]) => (
             <div key={group} className="grid gap-1.5 border-b border-border py-4 sm:grid-cols-[10rem_1fr]">
               <dt className="eyebrow pt-0.5">{group}</dt>
@@ -163,7 +163,7 @@ export function About() {
 
       <div className="mt-20 grid gap-8 lg:grid-cols-12 lg:gap-12">
         <h3 className="display-sm lg:col-span-3">References</h3>
-        <div className="space-y-8 border-t-2 border-foreground pt-6 lg:col-span-9">
+        <div className="space-y-8 border-t border-border pt-6 lg:col-span-9">
           {REFERENCES.map((ref) => (
             <div key={ref.name}>
               <p className="text-lg font-medium">

@@ -69,10 +69,8 @@ function Feature({
 
   const identity = (
     <>
-      <p aria-hidden="true" className="poster drift text-[5rem] text-accent md:text-[6.5rem]">
-        {String(index).padStart(2, "0")}
-      </p>
-      <p className="eyebrow mt-6 flex flex-wrap gap-x-3">
+      <p className="eyebrow flex flex-wrap gap-x-3">
+        <span className="text-accent">{String(index).padStart(2, "0")}</span>
         {project.role && <span>{project.role}</span>}
         <span>{project.year}</span>
       </p>
@@ -121,21 +119,21 @@ function Feature({
   return (
     <article
       id={anchor}
-      className="grid gap-10 border-t-2 border-foreground py-14 first:border-t-0 first:pt-0 md:py-20 lg:grid-cols-12 lg:gap-12"
+      className="grid gap-10 border-t border-border py-14 first:border-t-0 first:pt-0 md:py-20 lg:grid-cols-12 lg:gap-12"
     >
       {wide ? (
         <>
-          <div className="reveal lg:col-span-5">{identity}</div>
-          <div className="reveal lg:col-span-7 lg:self-end">{body}</div>
-          <div className="reveal lg:col-span-12">{figure}</div>
+          <div className="reveal min-w-0 lg:col-span-5">{identity}</div>
+          <div className="reveal min-w-0 lg:col-span-7 lg:self-end">{body}</div>
+          <div className="reveal min-w-0 lg:col-span-12">{figure}</div>
         </>
       ) : (
         <>
-          <div className="reveal lg:col-span-5">
+          <div className="reveal min-w-0 lg:col-span-5">
             {identity}
             <div className="mt-5">{body}</div>
           </div>
-          <div className="reveal lg:col-span-7">{figure}</div>
+          <div className="reveal min-w-0 lg:col-span-7">{figure}</div>
         </>
       )}
     </article>
@@ -160,7 +158,7 @@ export function Projects() {
         ))}
       </div>
 
-      <div className="mt-6 border-t-2 border-foreground pt-14 md:pt-20">
+      <div className="mt-6 border-t border-border pt-14 md:pt-20">
         <h3 className="display-md">More projects</h3>
         <ul className="mt-8 border-t border-border">
           {more.map((p) => (

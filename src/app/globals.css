@@ -126,15 +126,6 @@
   letter-spacing: -0.015em;
 }
 
-/* The poster name: set as wide and heavy as the face allows. */
-@utility poster {
-  font-family: var(--font-archivo);
-  font-weight: 900;
-  font-stretch: 125%;
-  line-height: 0.8;
-  letter-spacing: -0.045em;
-}
-
 /* Small uppercase label. Mono, so dates and figures line up beneath it. */
 @utility eyebrow {
   font-family: var(--font-code);
@@ -213,13 +204,6 @@
       animation-timeline: scroll(root);
     }
 
-    /* The poster name settles back as the page moves past it. */
-    .poster-scroll {
-      transform-origin: left bottom;
-      animation: poster-recede linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 70vh;
-    }
 
     /* Blocks rise into place as they enter the viewport. */
     .reveal {
@@ -228,19 +212,7 @@
       animation-range: entry 0% entry 40%;
     }
 
-    /* Big numbers drift a little slower than the page around them. */
-    .drift {
-      animation: drift linear both;
-      animation-timeline: view();
-      animation-range: cover;
-    }
 
-    /* The hero photo zooms in slightly as it scrolls away. */
-    .photo-zoom {
-      animation: photo-zoom linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 100%;
-    }
   }
 }
 
@@ -252,19 +224,9 @@
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
-@keyframes poster-recede {
-  to { transform: translateY(-6%) scale(0.94); opacity: 0.35; }
-}
 @keyframes reveal-up {
   from { opacity: 0; transform: translateY(48px); }
   to { opacity: 1; transform: none; }
-}
-@keyframes drift {
-  from { transform: translateY(28%); }
-  to { transform: translateY(-28%); }
-}
-@keyframes photo-zoom {
-  to { transform: scale(1.08); }
 }
 @media (prefers-reduced-motion: reduce) {
   html {

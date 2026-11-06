@@ -22,7 +22,7 @@ export function Systems() {
         <div className="reveal lg:col-span-7">
           <Terminal />
         </div>
-        <dl className="reveal border-t-2 border-foreground lg:col-span-5">
+        <dl className="reveal border-t border-border lg:col-span-5">
           {STACK.map((row) => (
             <div key={row.term} className="grid grid-cols-[6.5rem_1fr] gap-3 border-b border-border py-3.5">
               <dt className="eyebrow pt-0.5">{row.term}</dt>
