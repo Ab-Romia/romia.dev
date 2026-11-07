@@ -3,7 +3,7 @@
 % PACKAGES
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[top=0.30in, bottom=0.22in, left=0.45in, right=0.45in]{geometry}
+\usepackage[top=0.34in, bottom=0.30in, left=0.45in, right=0.45in]{geometry}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{xcolor}
@@ -14,6 +14,7 @@
 \definecolor{primarycolor}{RGB}{34, 34, 85}
 \definecolor{secondarycolor}{RGB}{50, 110, 160}
 \definecolor{rulecolor}{RGB}{160, 170, 190}
+\definecolor{mutedcolor}{RGB}{90, 90, 100}
 
 % HYPERLINK SETUP
 \hypersetup{colorlinks=true, linkcolor=secondarycolor, urlcolor=secondarycolor, citecolor=secondarycolor}
@@ -28,113 +29,118 @@
   {}
   {0em}
   {}[\vspace{1pt}{\color{rulecolor}\titlerule[0.6pt]}]
-\titlespacing{\section}{0pt}{3pt}{1.5pt}
+\titlespacing{\section}{0pt}{6pt}{3pt}
 
 % LIST SPACING
-\setlist[itemize]{leftmargin=11pt, itemsep=0.5pt, topsep=0.5pt, parsep=0pt, partopsep=0pt}
+\setlist[itemize]{leftmargin=12pt, itemsep=1pt, topsep=1.5pt, parsep=0pt, partopsep=0pt}
+
+% ENTRY HELPERS
+% \entry{role}{dates}{organisation line}
+\newcommand{\entry}[3]{\textbf{#1} \hfill {\small\color{mutedcolor}#2}\\ \textit{#3}}
+% \project{title}{right-hand side: context and links}
+\newcommand{\project}[2]{\textbf{#1} \hfill {\small #2}}
+\newcommand{\gap}{\vspace{3.5pt}}
+\newcommand{\sep}{\ \textbar\ \ }
 
 \begin{document}
 
 % -------------------- HEADER --------------------
 \begin{center}
-    {\LARGE\bfseries\color{primarycolor} Abdelrahman Abouroumia}\\[2pt]
-    {\normalsize\bfseries\color{secondarycolor} AI \& Backend Engineer}\\[3pt]
+    {\LARGE\bfseries\color{primarycolor} Abdelrahman Abouroumia}\\[3pt]
+    {\normalsize\bfseries\color{secondarycolor} AI \& Backend Engineer}\\[4pt]
     \small
-    Email: \href{mailto:aabouroumia@gmail.com}{aabouroumia@gmail.com} \ \textbar\ \ Phone: +20 110 047 1572 \\[2pt]
-    LinkedIn: \href{https://linkedin.com/in/abdelrahman-abouroumia}{linkedin.com/in/abdelrahman-abouroumia} \ \textbar\ \ GitHub: \href{https://github.com/Ab-Romia}{github.com/Ab-Romia} \ \textbar\ \ Hugging Face: \href{https://huggingface.co/Ab-Romia}{huggingface.co/Ab-Romia} \\[2pt]
-    Portfolio: \href{https://romia.dev}{\textbf{\color{secondarycolor}romia.dev}} \ \textbar\ \ case studies, architecture breakdowns, and live demos
+    \href{mailto:aabouroumia@gmail.com}{aabouroumia@gmail.com} \sep \href{https://romia.dev}{\textbf{romia.dev}} \sep \href{https://linkedin.com/in/abdelrahman-abouroumia}{linkedin.com/in/abdelrahman-abouroumia} \sep \href{https://github.com/Ab-Romia}{github.com/Ab-Romia}
 \end{center}
+
+\vspace{1pt}
+Software engineer building backend services and AI systems. Builds Python microservices at Tutanic. Co-founded Zaylon AI and built its AI sales agent and the backend behind it.
 
 % -------------------- EXPERIENCE --------------------
 \section{Experience}
 
-\textbf{Software Engineer \& Co-Founder} \hfill \textbf{May 2025 to Present} \\
-\textit{\href{https://zaylon.ai}{Zaylon AI}}
+\entry{Software Engineer, AI Systems}{Sep 2026 to Present}{Tutanic \sep Backend services and AI systems.}
 \begin{itemize}
-\item Owned the architecture, the code reviews and the deploys. Built the FastAPI backend behind them, with CI that load-tests the service nightly and smoke-probes the deployment every 30 minutes.
-\item Built the agent first as a multi-agent supervisor, then deliberately collapsed it into one LangGraph tool-calling agent with about 30 scoped tools, because one agent proved more reliable and far easier to evaluate.
-\item Made cross-tenant access structurally impossible rather than merely filtered, across about 80 tables, and added semgrep rules that fail the build when anyone writes a raw cross-tenant query.
-\item Wrote the dialect layer so a customer is answered in the language they actually typed, including Egyptian Arabic and Franco-Arabic written in Latin script, which general models handle badly.
-\item Verified every payment webhook by HMAC, and wrote a Postgres saga that unwinds a half-finished checkout in reverse.
+\item Build backend microservices in Python (FastAPI, Django) that talk to each other through NATS JetStream.
+\item Build AI features with LangGraph on AWS Bedrock, and deploy services to Kubernetes using Helm.
 \end{itemize}
 
-\vspace{1pt}
-\textbf{AI Coding Expert} \hfill \textbf{Sep 2024 to Feb 2026} \\
-\textit{Scale AI (Contract)}
+\gap
+\entry{Software Engineer \& Co-Founder}{May 2025 to Present}{\href{https://zaylon.ai}{Zaylon AI} \sep AI sales assistant for online stores on WhatsApp, Instagram and web chat}
 \begin{itemize}
-\item Reviewed and ranked code across languages, for 18 months, in the RLHF pipelines that train frontier models.
-\item Wrote the test suites that decided whether a submission was correct, efficient, and honest about its edge cases.
+\item Led engineering and designed the backend: Python microservices that communicate through Kafka.
+\item Built the AI agent (LangGraph) that answers shoppers, finds products and completes orders inside the chat.
+\item Made the agent understand and reply in Egyptian Arabic and Franco-Arabic (Arabic typed in Latin letters).
+\item Connected 6 e-commerce platforms, including Shopify and WooCommerce, and 3 payment providers, including Stripe.
+\item Kept every store's data fully separate from other stores, with automated checks that block unsafe code.
 \end{itemize}
 
-\vspace{1pt}
-\textbf{Software Integration Engineering Intern} \hfill \textbf{Jul 2025} \\
-\textit{Ejada}
+\gap
+\entry{AI Coding Expert}{Sep 2024 to Feb 2026}{Scale AI \sep Contract}
 \begin{itemize}
-\item Built core-banking REST APIs in Spring Boot, tuning the slow queries and adding Redis caching.
-\item Ran Kafka producers and consumers for async messaging; secured the gateway with OAuth2 and rate limiting on WSO2.
+\item Reviewed and ranked AI-generated code for 18 months, used to train leading AI models.
+\item Wrote tests to decide whether each code answer was correct, efficient and handled edge cases.
 \end{itemize}
 
-\vspace{1pt}
-\textbf{Automotive Cybersecurity Intern} \hfill \textbf{Aug 2024 to Oct 2024} \\
-\textit{Swift-ACT}
+\gap
+\entry{Software Integration Engineering Intern}{Jul 2025}{Ejada}
 \begin{itemize}
-\item Wrote threat-model catalogues and mitigations for CAN bus and ECU in-vehicle networks.
-\item Ran spoofing, replay and denial-of-service simulations in Dyna4 and CARLA, with ECU validation on Vector CANoe.
+\item Built banking REST APIs in Spring Boot; sped up slow database queries and added Redis caching.
+\item Used Kafka to pass messages between services, and secured the API gateway with OAuth2 and rate limits.
+\end{itemize}
+
+\gap
+\entry{Automotive Cybersecurity Intern}{Aug 2024 to Oct 2024}{Swift-ACT}
+\begin{itemize}
+\item Mapped security threats to in-car networks (CAN bus) and simulated attacks on them in CARLA and CANoe.
 \end{itemize}
 
 % -------------------- PROJECTS --------------------
 \section{Projects}
 
-\textbf{Talos: Team Chat Platform with a RAG Assistant} \hfill \textit{Graduation project, five-person team} \ \textbar\ \ \href{https://github.com/Ab-Romia/talos}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/talos}{Case Study}
+\project{AdvisoryDrift: AI Agent That Corrects Security Advisories}{\textit{Award winner} \sep \href{https://github.com/Ab-Romia/advisorydrift}{GitHub} \sep \href{https://romia.dev/projects/advisorydrift}{Case Study}}
 \begin{itemize}
-\item Owned the assistant: ingestion through a taskiq worker into Milvus, hybrid dense and BM25 retrieval fused with reciprocal rank fusion, a cross-encoder rerank, and answers that cite the passage they came from.
-\item The answers were weak, so I measured instead of guessing. I built an evaluation harness with a judge calibrated against my own blind grading, and proved a chunking fix moved judged correctness from 0.657 to 0.855.
-\item Containerized the worker and the scheduler for the team's Railway deploy, and ran Milvus on Zilliz Cloud.
+\item Built an AI agent that finds the right affected versions for published security alerts by reading git history.
+\item Tested on real past corrections, it got 15 of 38 fully right, three times as many as a scripted approach.
 \end{itemize}
 
-\vspace{1pt}
-\textbf{commentdraft} \hfill \textit{Published package} \ \textbar\ \ \href{https://pypi.org/project/commentdraft/}{PyPI} \ \textbar\ \ \href{https://github.com/Ab-Romia/commentdraft}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/commentdraft}{Case Study}
+\gap
+\project{Talos: Team Chat App with an AI Assistant}{\textit{Graduation project} \sep \href{https://github.com/Ab-Romia/talos}{GitHub} \sep \href{https://romia.dev/projects/talos}{Case Study}}
 \begin{itemize}
-\item Published a Python package on PyPI that triages comments on a creator's own posts into reply, skip or escalate, drafting each reply strictly from a source document so it declines what it cannot source.
-\item Made approval structural rather than configurable: no bulk-approve flag exists, one keystroke sends one reply, and a pty test proves keys typed before a draft renders approve nothing, after terminal typeahead defeated the first version.
-\item Wrote eight platform connection guides from primary sources, every claim carrying its URL and the date read, correcting published errors on the Instagram, TikTok, YouTube and Reddit comment APIs.
+\item Built the AI assistant that answers questions from the team's own documents and shows where each answer came from.
+\item Built tests that score answer quality, and used them to find and fix why early answers were weak.
 \end{itemize}
 
-\vspace{1pt}
-\textbf{Virtual Banking Microservices} \hfill \href{https://github.com/Ab-Romia/Virtual-Bank-System}{GitHub} \ \textbar\ \ \href{https://romia.dev/projects/virtual-banking}{Case Study}
+\gap
+\project{Virtual Banking Microservices}{\href{https://github.com/Ab-Romia/Virtual-Bank-System}{GitHub} \sep \href{https://romia.dev/projects/virtual-banking}{Case Study}}
 \begin{itemize}
-\item Built a gateway and four Spring Boot services with a Kafka transfer saga: outbox, idempotent consumers, RS256 JWT.
-\item Proved the transfers were genuinely atomic with pessimistic locking, a balance constraint and Testcontainers tests.
+\item Built a banking system from Spring Boot microservices, where money transfers are processed through Kafka.
+\item Made sure a transfer either completes fully or rolls back fully, and can be traced end to end.
 \end{itemize}
 
-\vspace{1pt}
-\textbf{ContextIQ: Hybrid-Retrieval RAG} \hfill \href{https://github.com/Ab-Romia/ContextIQ-RAG}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/Context-Aware-AI}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/contextiq-rag}{Case Study}
+\gap
+\project{commentdraft}{\textit{Published package} \sep \href{https://pypi.org/project/commentdraft/}{PyPI} \sep \href{https://github.com/Ab-Romia/commentdraft}{GitHub} \sep \href{https://romia.dev/projects/commentdraft}{Case Study}}
 \begin{itemize}
-\item Built a retrieval service that runs entirely on CPU through ONNX, and made it abstain rather than guess when the retrieved context does not support an answer, tested against deliberately confusable distractors.
-\end{itemize}
-
-\vspace{1pt}
-\textbf{Multimodal Emotion Recognition} \hfill \href{https://github.com/Ab-Romia/RAVDESS-emotion-recognition}{GitHub} \ \textbar\ \ \href{https://huggingface.co/spaces/Ab-Romia/RAVDESS-emotion-recognition}{Demo} \ \textbar\ \ \href{https://romia.dev/projects/emotion-recognition}{Case Study}
-\begin{itemize}
-\item Speaker-independent audio and facial pipeline on frozen WavLM-large, late fusion, unit-tested for leakage.
+\item Python tool that drafts replies to social media comments from your own notes; nothing is sent without approval.
 \end{itemize}
 
 % -------------------- EDUCATION --------------------
 \section{Education}
-\textbf{Alexandria University, Faculty of Engineering} \hfill \textbf{Graduated Jul 2026} \\
-B.Sc. in Computer \& Communications Engineering (AI Concentration) \ \textbar\ \ Cumulative GPA: \textbf{3.75 / 4.0}
+\textbf{Alexandria University, Faculty of Engineering} \hfill {\small\color{mutedcolor}Graduated Jul 2026}\\
+B.Sc. in Computer \& Communications Engineering, AI Concentration \sep GPA \textbf{3.75 / 4.0}
 
-% -------------------- TECHNICAL SKILLS --------------------
-\section{Technical Skills}
-\textbf{Languages:} Python, Java, SQL, JavaScript/TypeScript, C/C++ \\[1pt]
-\textbf{Backend:} FastAPI, Spring Boot, Microservices, Event-Driven Architecture, Kafka, REST APIs, PostgreSQL, Redis \\[1pt]
-\textbf{AI / ML:} LangGraph, LangChain, PyTorch, RAG, LLM Agents, Agent Evaluation, LLM Orchestration, NLP, pgvector, Milvus \\[1pt]
-\textbf{Infrastructure \& Tooling:} Docker, Railway, Git, GitHub Actions, CI/CD, Linux, pytest, semgrep, Testcontainers
+% -------------------- SKILLS --------------------
+\section{Skills}
+\textbf{Languages:} Python, Java, TypeScript, JavaScript, SQL, C/C++ \\[2pt]
+\textbf{Backend:} FastAPI, Django, Spring Boot, Microservices, Event-Driven Architecture, Kafka, NATS JetStream, REST APIs \\[2pt]
+\textbf{Data:} PostgreSQL, PgBouncer, pgvector, Redis, Dragonfly, Milvus, Amazon S3 \\[2pt]
+\textbf{AI:} LangGraph, LangChain, MCP, CopilotKit, AWS Bedrock, RAG, LLM Agents, Agent Evaluation, PyTorch, NLP \\[2pt]
+\textbf{Infrastructure:} Kubernetes, Helm, Docker, AWS, Railway, GitHub Actions, CI/CD, Linux, pytest, Testcontainers
 
-% -------------------- BOTTOM --------------------
-\vspace{1pt}
-\textbf{Certifications:} micro1 Certified Software Engineer \ \textbar\ \ \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{Google AI Agents} \ \textbar\ \ Meta Back-end \ \textbar\ \ AWS Cloud \& ML \\[0.5pt]
-\textbf{Competitions:} MTC-AIC3 BCI (Egypt National AI) \ \textbar\ \ ECPC (3x) \ \textbar\ \ Hepsiburada NLP Hackathon (TEKNOFEST) \\[1pt]
-\textbf{Languages:} English (Fluent) \ \textbar\ \ Arabic (Native) \ \textbar\ \ German (A2) \ \textbar\ \ Spanish (Conversational)
+% -------------------- MORE --------------------
+\section{Additional}
+\textbf{Award:} \href{https://romia.dev/projects/advisorydrift}{Best Demonstrated Improvement, micro1 Frontier Engineering Challenge 2026} \\[2pt]
+\textbf{Certifications:} micro1 Certified Software Engineer \sep \href{https://www.kaggle.com/certification/badges/abdelrahmanromia/105}{Google AI Agents} \sep Meta Back-end \sep AWS Cloud \& ML Foundations \\[2pt]
+\textbf{Competitions:} MTC-AIC3 BCI (Egypt National AI) \sep ECPC (3x) \sep Hepsiburada NLP Hackathon (TEKNOFEST) \\[2pt]
+\textbf{Spoken languages:} English (Fluent) \sep Arabic (Native) \sep German (A1) \sep Spanish (Conversational)
 
 \end{document}
